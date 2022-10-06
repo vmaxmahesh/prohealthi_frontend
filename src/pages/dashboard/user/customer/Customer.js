@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, Outlet, Route, Routes, useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import Footer from '../../../../shared/Footer';
+import { ToastContainer, toast } from 'react-toastify';
+
 
 function Customer() {
     const location = useLocation();
@@ -926,7 +928,7 @@ export function Strategy(props) {
 
                                     <select className="form-select" {...register("Prescriber_Grouping_id", {
                                         required: true,
-                                    })} name="Prescriber_Verification_Options_2">
+                                    })} name="Prescriber_Grouping_id">
                                         <option value="">--select--</option>
                                         <option value="1">None</option>
                                         <option value="2">Validate DEA Code</option>
@@ -1641,14 +1643,80 @@ export function Exceptions(props) {
     const onSubmit = data => {
 
 
-
         var Exceptionsid = customer;
         Exceptionsid['Exceptions'] = data;
         setCustomer(Exceptionsid);
+        // console.log(customer);
+
+        // console.log(process.env.REACT_APP_API_BASEURL);
+        console.log('mahesh');
+        postTOBackend(customer);
+
+    }
+
+
+
+    console.log(process.env.REACT_APP_API_BASEURL)
+
+    const postTOBackend = customer => {
         console.log(customer);
+        alert('mahesh');
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(customer)
+        };
+        fetch(process.env.REACT_APP_API_BASEURL + '/api/customer/add', requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                alert(response);
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    return Promise.reject(error);
+                }
+
+                console.log(data);
 
 
+                if(response==='200'){
+                    toast.success(response.data.message, {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        
+                        
+                        });
+                }
 
+                // props.onChange(data);
+                // navigate("/dashboard/user/customer/strategy");
+
+                // this.setState({ postId: data.id })
+            })
+            .catch(error => {
+                // this.setState({ errorMessage: error.toString() });
+                console.error('There was an error!', error);
+
+                toast.error(error.response.data.message, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    
+                    
+                    });
+            });
     }
     return (
         <>
@@ -1917,6 +1985,9 @@ export function Exceptions(props) {
                     <button type='submit' className="btn btn-theme pt-2 pb-2" style={{ width: '100%' }}>Submit</button>
                 </div>
             </form>
+
+            <ToastContainer />
+
         </>
     )
 }
