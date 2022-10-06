@@ -1,14 +1,30 @@
-import React from 'react';
-import { Link, Outlet, Route, Routes, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { Link, Outlet, Route, Routes, useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import Footer from '../../../../shared/Footer';
+import { ToastContainer, toast } from 'react-toastify';
 
 export default function Client() {
     const location = useLocation(); 
     const currentpath = location.pathname.split('/').pop();
 
+    const [count, setCount] = useState(null);
+
+    const [client, setClient] = useState([]);
+
+
+
+const getSearch = () => {
+    
+    setCount(1);
+   
+
+};
+
     return (
         <>
             <div className="row">
+
                 <div className="col-md-6 mb-3">
                     <div className="breadcrum">
                         <ul>
@@ -64,13 +80,20 @@ export default function Client() {
                             <div className="col-md-2">
                                 <div className="form-group">
                                     <small>&nbsp;</small><br />
-                                    <button type="submit" className="btn m-0 p-2 btn-theme" style={{ width: '100%', fontSize: '12px' }}>Search</button>
+                                    <button type="submit" onClick={getSearch} className="btn m-0 p-2 btn-theme" style={{ width: '100%', fontSize: '12px' }}>Search</button>
+
+
+                                    {/* <button  type="submit"  >show table</button> */}
+
+
+
                                 </div>
                             </div>
                         </div>
                     </form>
 
-                    <div className="row">
+
+                    {count &&  <div className="row">
                         <div className="col-md-12">
                             <table className="table table-striped table-bordered">
                                 <thead>
@@ -115,7 +138,10 @@ export default function Client() {
                                 </tbody>
                             </table>
                         </div>
-                    </div>
+                    </div> }
+
+
+                   
                 </div>
             </div>
 
@@ -129,7 +155,13 @@ export default function Client() {
 
                     
                 </div>
+
                 <div className="tab-content" id="nav-tabContent">
+                <Outlet context={[client, setClient]} />
+
+
+
+
                     {/* <div className="tab-pane fade show active" id="Identification" role="tabpanel" aria-labelledby="nav-home-tab">
 
                     </div>
@@ -143,7 +175,6 @@ export default function Client() {
                         {/* // indicators */}
                     {/* </div> */} 
                     
-                    <Outlet/>
                 </div>
             </div>
 
@@ -155,8 +186,25 @@ export default function Client() {
 }
 
 export function Indicators(params) {
+
+    const { register, handleSubmit, formState: { errors } } = useForm();
+
+    const [client, setClient] = useOutletContext();
+
+
+    const onSubmit = data => {
+
+        console.log(data);
+        // var Eligibilitystatid = customer;
+        // Eligibilitystatid['Eligibility'] = data;
+        // setCustomer(Eligibilitystatid);
+        // console.log(customer);
+
+    }
     return (
         <>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+
             <div className="card mt-3 mb-3">
                 <div className="card-body">
                     <div className='row'>
@@ -165,7 +213,7 @@ export function Indicators(params) {
                         </div>
                         <div className="col-md-6 mb-2">
                             <small>Secondary Coverage indicator</small>
-                            <select className="form-select">
+                            <select className="form-select"  {...register('secondary_coverage_indicator')} name="secondary_coverage_indicator">
                                 <option value=""></option>
                                 <option value=""></option>
                                 <option value=""></option>
@@ -271,6 +319,7 @@ export function Indicators(params) {
             <div className="col-md-1 float-end">
                 <a href="" className="btn btn-theme pt-2 pb-2" style={{ width: '100%' }}>Next</a>
             </div>
+            </form>
         </>
     )
 }
@@ -535,8 +584,30 @@ export function Coverage(params) {
 }
 
 export function Identification(params) {
+    const { register, handleSubmit, formState: { errors } } = useForm();
+
+
+
+
+    const onSubmit = data => {
+
+
+        console.log(data);
+
+        // const id = customer;
+        // id['identification'] = data;
+        // setCustomer(id);
+        // console.log(customer);
+
+
+
+
+    }
+
     return (
         <>
+            <form onSubmit={handleSubmit(onSubmit)}>
+
             <div className="card mt-3 mb-3">
                 <div className="card-body">
                     <div className='row'>
@@ -544,18 +615,18 @@ export function Identification(params) {
                             <h5 className="mb-2">Customer ID</h5>
 
                             <div className="row">
-                                <div className="col-md-6">
+                                <div className="col-md-12">
                                     <div className="form-group mb-2">
                                         <small>Customer ID</small>
-                                        <input type="text" className="form-control" name="" id="" placeholder="Customer ID" readOnly />
+                                        <input  type="text" {...register('customer_id',{
+                                            required:true,
+                                        })} className="form-control" name="customer_id" id="" placeholder="Customer ID"  />
+
+                                {errors.customer_id?.type === 'required' && <p role="alert" className="notvalid"> Customer Id is  required</p>}
+
                                     </div>
                                 </div>
-                                <div className="col-md-6">
-                                    <div className="form-group mb-2">
-                                        <small>&nbsp;</small>
-                                        <input type="text" className="form-control" name="" id="" placeholder="Customer ID" readOnly />
-                                    </div>
-                                </div>
+                               
                             </div>
 
                             <div className="row">
@@ -565,30 +636,46 @@ export function Identification(params) {
                                 <div className="col-md-6">
                                     <div className="form-group mb-2">
                                         <small>Name</small>
-                                        <input type="text" className="form-control" name="" id="" placeholder="Name" readOnly />
+                                        <input type="text" className="form-control" name="customer_name" {...register('customer_name',{
+                                            required:true,
+                                        })} id="" placeholder="Name" readOnly />
+                                        {errors.customer_name?.type === 'required' && <p role="alert" className="notvalid"> Customer Name is  required</p>}
+
                                     </div>
                                 </div>
                                 <div className="col-md-6">
                                     <div className="form-group mb-2">
                                         <small>Address 1</small>
-                                        <input type="text" className="form-control" name="" id="" placeholder="Address 1" readOnly />
+                                        <input type="text" className="form-control" {...register('address1',{
+                                            required:true,
+                                        })} name="address1" id="" placeholder="Address 1" readOnly />
+                                        {errors.address1?.type === 'required' && <p role="alert" className="notvalid"> Address  is  required</p>}
+
                                     </div>
                                 </div>
                                 <div className="col-md-6">
                                     <div className="form-group mb-2">
                                         <small>Address 2</small>
-                                        <input type="text" className="form-control" name="" id="" placeholder="Address 2" readOnly />
+                                        <input type="text" className="form-control" name="address2" {...register('address2',{
+                                            required:true,
+                                        })} id="" placeholder="Address 2" readOnly />
+                                        {errors.address2?.type === 'required' && <p role="alert" className="notvalid"> Address  is  required</p>}
+
                                     </div>
                                 </div>
                                 <div className="col-md-6">
                                     <div className="form-group mb-2">
                                         <small>City / State</small>
-                                        <select className="form-select">
+                                        <select className="form-select" name="city" {...register('city',{
+                                            required:true,
+                                        })}>
                                             <option value="">Select City</option>
                                             <option value="">Select City</option>
                                             <option value="">Select City</option>
                                             <option value="">Select City</option>
                                         </select>
+                                        {errors.city?.type === 'required' && <p role="alert" className="notvalid"> City  is  required</p>}
+
                                     </div>
                                 </div>
                                 <div className="col-md-6">
@@ -724,8 +811,9 @@ export function Identification(params) {
                 </div>
             </div>
             <div className="col-md-1 float-end">
-                <a href="" className="btn btn-theme pt-2 pb-2" style={{ width: '100%' }}>Next</a>
+                <button type="submit" className="btn btn-theme pt-2 pb-2" style={{ width: '100%' }}>Next</button>
             </div>
+            </form>
         </>
     )
 }

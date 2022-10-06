@@ -9,11 +9,7 @@ function Customer() {
     const location = useLocation();
     const currentpath = location.pathname.split('/').pop();
 
-
-
     const [customer, setCustomer] = useState([]);
-
-
 
 
     return (
