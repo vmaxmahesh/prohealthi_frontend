@@ -337,8 +337,7 @@ export function Identification(props) {
                                             <input type="date" {...register("effectivedate", {
                                                 required: true,
                                             })} className="form-control" onChange={StartDateChange} name="effectivedate" id="" placeholder="Address 1" />
-                                            {errors.effectivedate?.type === 'required' && <p role="alert" className="notvalid">Effective Date  is  required</p>}
-
+Effective Date
                                         </div>
                                     </div>
                                     <div className="col-md-6">

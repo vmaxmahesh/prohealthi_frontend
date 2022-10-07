@@ -16,7 +16,7 @@ export default function Client() {
 
     const getSearch = () => {
 
-        // setCount(1);
+        setCount(1);
 
 
     };
@@ -439,7 +439,7 @@ export function Eligibility(params) {
 
                         <div className="form-group mb-3">
 
-                            <button style={successbtnstyle} className='btn btn-success float-right'>Search</button>
+                            <button  style={successbtnstyle} className='btn btn-success float-right'>Search</button>
 
                         </div>
 
@@ -1112,10 +1112,10 @@ export function Identification(params) {
         setClient(id);
         console.log(client);
 
-
-
-
     }
+
+
+  
 
     return (
         <>
@@ -1133,9 +1133,13 @@ export function Identification(params) {
                                             <small>Customer ID</small>
                                             <input type="text" {...register('customer_id', {
                                                 required: true,
+                                                pattern: /^(0|[1-9][0-9]*)$/,
+
                                             })} className="form-control" name="customer_id" id="" placeholder="Customer ID" />
 
                                             {errors.customer_id?.type === 'required' && <p role="alert" className="notvalid"> Customer Id is  required</p>}
+                                            {errors.customer_id?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
+
 
                                         </div>
                                     </div>
@@ -1180,6 +1184,7 @@ export function Identification(params) {
                                         <div className="form-group mb-2">
                                             <small>City / State</small>
                                             <select className="form-select" name="city" {...register('city', {
+                                                required:true,
                                             })}>
                                                 <option value="">Select City</option>
                                                 <option value="1">Hyderabad</option>
@@ -1197,53 +1202,88 @@ export function Identification(params) {
                                             <select className="form-select" name="country" {...register('country', {
                                                 required: true,
                                             })}>
-                                                <option value="">Select City</option>
+                                                <option value="">Select Country</option>
                                                 <option value="1">india</option>
                                                 <option value="2">united states</option>
                                             </select>
+                                            {errors.country?.type === 'required' && <p role="alert" className="notvalid"> Country  is  required</p>}
+
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>ZIP Code</small>
                                             <input type="text" className="form-control" name="zip_code"  {...register('zip_code', {
+                                                required:true,
+                                                pattern:/^[a-z0-9]+$/i
                                             })} id="" placeholder="ZIP Code" />
+                                            {errors.zip_code?.type === 'required' && <p role="alert" className="notvalid"> ZIP Code  is  required</p>}
+                                            {errors.zip_code?.type === 'pattern' && <p role="alert" className="notvalid">This field Must Alpha Numeric </p>}
+
+
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Phone</small>
-                                            <input type="text" className="form-control" {...register('phone')} name="phone" id="" placeholder="Phone" />
+                                            <input type="text" className="form-control" {...register('phone',{
+                                                required:true,
+                                                pattern:/^\d{10}$/,
+                                            })} name="phone" id=""   placeholder="Phone" />
+                                            {errors.phone?.type === 'required' && <p role="alert" className="notvalid"> Phone Number   is  required</p>}
+                                            {errors.phone?.type === 'pattern' && <p role="alert" className="notvalid"> Invalid phone  Number format</p>}
+
+
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Fax</small>
-                                            <input type="text" className="form-control" name="fax" {...register('fax')} id="" placeholder="Fax" />
+                                            <input type="text" className="form-control" name="fax" {...register('fax',{
+                                                required:true,
+                                            })} id="" placeholder="Fax" />
+                                            {errors.fax?.type === 'required' && <p role="alert" className="notvalid"> Fax   is  required</p>}
+
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>EDI Address</small>
-                                            <input type="text" className="form-control" name="edi_address" {...register('edi_address')} id="" placeholder="EDI Address" />
+                                            <input type="text" className="form-control" name="edi_address" {...register('edi_address',{
+                                                required:true,
+                                            })} id="" placeholder="EDI Address" />
+                                            {errors.edi_address?.type === 'required' && <p role="alert" className="notvalid"> EDI Address  is  required</p>}
+
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Contact</small>
-                                            <input type="text" className="form-control" name="contact" {...register('contact')} id="" placeholder="Contact" />
+                                            <input type="text" className="form-control" name="contact" {...register('contact',{
+                                                required:true,
+                                            })} id="" placeholder="Contact" />
+                                            {errors.contact?.type === 'required' && <p role="alert" className="notvalid">  Contact  is  required</p>}
+
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Test</small>
-                                            <input type="text" className="form-control" name="test" {...register('test')} id="" placeholder="Test" />
+                                            <input type="text" className="form-control" name="test" {...register('test',{
+                                                required:true,
+                                            })} id="" placeholder="Test" />
+                                            {errors.test?.type === 'required' && <p role="alert" className="notvalid">  Test field  is  required</p>}
+
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Type</small>
-                                            <input type="text" className="form-control" name="type" {...register('type')} id="" placeholder="Type" />
+                                            <input type="text" className="form-control" name="type" {...register('type',{
+                                                required:true,
+                                            })} id="" placeholder="Type" />
+                                            {errors.type?.type === 'required' && <p role="alert" className="notvalid">  Type field  is  required</p>}
+
                                         </div>
                                     </div>
                                 </div>
@@ -1254,13 +1294,21 @@ export function Identification(params) {
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Effective Date</small>
-                                            <input type="date" className="form-control" name="effective_date" {...register('effective_date')} id="" placeholder="Address 1" />
+                                            <input type="date" className="form-control" name="effective_date" {...register('effective_date',{
+                                                required:true,
+                                            })} id="" placeholder="Address 1" />
+                                            {errors.effective_date?.type === 'required' && <p role="alert" className="notvalid">Effective Date  is  required</p>}
+
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Termination Date</small>
-                                            <input type="date" className="form-control" name="termination_date"  {...register('termination_date')} id="" placeholder="Address 2" />
+                                            <input type="date" className="form-control" name="termination_date"  {...register('termination_date',{
+                                                required:true,
+                                            })} id="" placeholder="Address 2" />
+                                            {errors.termination_date?.type === 'required' && <p role="alert" className="notvalid">Termination Date  is  required</p>}
+
                                         </div>
                                     </div>
                                     <div className="col-md-6">
@@ -1284,12 +1332,22 @@ export function Identification(params) {
                                                 <option value="11">November</option>
                                                 <option value="12">December</option>
                                             </select>
+                                            {errors.policyannmonth?.type === 'required' && <p role="alert" className="notvalid">Policy Annual Month  is  required</p>}
+
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Policy Ann. Day</small>
-                                            <input type="text" className="form-control" name="policy_ann_day" {...register('policy_ann_day')} id="" placeholder="Enter" />
+                                            <input type="text" className="form-control" name="policy_ann_day" {...register('policy_ann_day',{
+                                                required:true,
+                                                pattern: /^(0|[1-9][0-9]*)$/,
+
+                                            })} id="" placeholder="Enter" />
+                                            {errors.policy_ann_day?.type === 'required' && <p role="alert" className="notvalid">Policy Annual Day  is  required</p>}
+                                            {errors.policy_ann_day?.type === 'pattern' && <p role="alert" className="notvalid">Enter Number Only..</p>}
+
+
                                         </div>
                                     </div>
                                 </div>
@@ -1298,43 +1356,71 @@ export function Identification(params) {
                                     <div className="col-md-12">
                                         <div className="form-group mb-2">
                                             <small>Census Date</small>
-                                            <input type="text" className="form-control" name="census" {...register('census')} id="" placeholder="Census Date" />
+                                            <input type="text" className="form-control" name="census" {...register('census',{
+                                                required:true,
+                                            })} id="" placeholder="Census Date" />
+                                            {errors.census?.type === 'required' && <p role="alert" className="notvalid">  Census Date   is  required</p>}
+
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Active Contracts</small>
-                                            <input type="text" className="form-control" name="active_contracts" {...register('active_contracts')} id="" placeholder="Active Contracts" />
+                                            <input type="text" className="form-control" name="active_contracts" {...register('active_contracts',{
+                                                required:true,
+                                            })} id="" placeholder="Active Contracts" />
+                                            {errors.active_contracts?.type === 'required' && <p role="alert" className="notvalid">  Active Contracts   is  required</p>}
+
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Active Memebers</small>
-                                            <input type="text" className="form-control" name="active_members" {...register('active_members')} id="" placeholder="Active Memebers" />
+                                            <input type="text" className="form-control" name="active_members" {...register('active_members',{
+                                                required:true,
+                                            })} id="" placeholder="Active Memebers" />
+                                            {errors.active_members?.type === 'required' && <p role="alert" className="notvalid">  Active Memebers   is  required</p>}
+
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Termed Contracts</small>
-                                            <input type="text" className="form-control" name="terminated_contracts" {...register('terminated_contracts')} id="" placeholder="Termed Contracts" />
+                                            <input type="text" className="form-control" name="terminated_contracts" {...register('terminated_contracts',{
+                                                required:true,
+                                            })} id="" placeholder="Termed Contracts" />
+                                            {errors.terminated_contracts?.type === 'required' && <p role="alert" className="notvalid">  Termed Contracts  is  required</p>}
+
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Termed Memebers</small>
-                                            <input type="text" className="form-control" name="terminated_members" {...register('terminated_members')} id="" placeholder="Termed Memebers" />
+                                            <input type="text" className="form-control" name="terminated_members" {...register('terminated_members',{
+                                                required:true,
+                                            })} id="" placeholder="Termed Memebers" />
+                                            {errors.terminated_members?.type === 'required' && <p role="alert" className="notvalid">  Termed Memebers is  required</p>}
+
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Pending Contracts</small>
-                                            <input type="text" className="form-control" name="pending_contracts" {...register('pending_contracts')} id="" placeholder="Pending Contracts" />
+                                            <input type="text" className="form-control" name="pending_contracts" {...register('pending_contracts',{
+                                                required:true,
+                                            })} id="" placeholder="Pending Contracts" />
+                                            {errors.pending_contracts?.type === 'required' && <p role="alert" className="notvalid">  Pending Contracts is  required</p>}
+
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Pending Memebers</small>
-                                            <input type="text" className="form-control" name="pending_members" {...register('pending_members')} id="" placeholder="Pending Members" />
+                                            <input type="text" className="form-control" name="pending_members" {...register('pending_members',{
+                                                required:true,
+                                            })} id="" placeholder="Pending Members" />
+                                            {errors.pending_members?.type === 'required' && <p role="alert" className="notvalid">  Pending Memebers is  required</p>}
+
                                         </div>
                                     </div>
                                 </div>
