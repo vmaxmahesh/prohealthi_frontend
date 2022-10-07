@@ -725,9 +725,10 @@ export function Coverage(params) {
                                             <input type="text"  {...register2("plan_id", {
                                                 required: true,
                                             })} className="form-control" name="plan_id" id="" />
-                                            {errors2.plan_id?.type === 'required' && <p role="alert" className="notvalid">Plan Id is required </p>}
 
                                         </div>
+                                        {errors2.plan_id?.type === 'required' && <p role="alert" className="notvalid">Plan Id is required </p>}
+
                                     </div>
 
 
@@ -845,19 +846,31 @@ export function Coverage(params) {
                             <div className="col-md-3">
                                 <div className="form-group mb-3">
                                     <small>Tier 1</small>
-                                    <input type="date" className="form-control" name="tier_1" {...register('tier_1')} id="" />
+                                    <input type="date" className="form-control" name="tier_1" {...register('tier_1',{
+                                        required:true,
+                                    })} id="" />
+                                    {errors.tier_1?.type === 'required' && <p role="alert" className="notvalid">Cov Eff Date is  required</p>}
+
                                 </div>
                             </div>
                             <div className="col-md-3">
                                 <div className="form-group mb-3">
                                     <small>Tier 2</small>
-                                    <input type="date" className="form-control" name="tier_2"  {...register('tier_2')} id="" />
+                                    <input type="date" className="form-control" name="tier_2"  {...register('tier_2',{
+                                        required:true,
+                                    })} id="" />
+                                    {errors.tier_2?.type === 'required' && <p role="alert" className="notvalid">Cov Eff Date is  required</p>}
+
                                 </div>
                             </div>
                             <div className="col-md-3">
                                 <div className="form-group mb-3">
                                     <small>Tier 3</small>
-                                    <input type="date" className="form-control" name="tier_3" {...register('tier_3')} id="" />
+                                    <input type="date" className="form-control" name="tier_3" {...register('tier_3',{
+                                        required:true,
+                                    })} id="" />
+                                    {errors.tier_3?.type === 'required' && <p role="alert" className="notvalid">Cov Eff Date is  required</p>}
+
                                 </div>
                             </div>
 
@@ -866,26 +879,39 @@ export function Coverage(params) {
                             </div>
                             <div className="col-md-3">
                                 <div className="form-group mb-3">
-                                    <input type="text" className="form-control" name="plan_id_1" {...register('plan_id_1')} id="" />
-                                    <a href=""><span className="fa fa-search form-icon"></span></a>
+                                    <input type="text" className="form-control" name="plan_id_1" {...register('plan_id_1',{
+                                        required:true,
+                                    })} id="" />
                                     <a href="" data-bs-toggle="modal" data-bs-target="#planidmodal"><span className="fa fa-search form-icon"></span></a>
+
+                                </div>
+                                {errors.plan_id_1?.type === 'required' && <p role="alert" className="notvalid">Plan Id  is  required</p>}
+
+                            </div>
+                            <div className="col-md-3">
+                                <div className="form-group mb-3">
+                                    <div className="form-group mb-3">
+                                        <input type="text" className="form-control" name="plan_id_2"  {...register('plan_id_2',{
+                                            required:true,
+                                        })} id="" />
+                                        <a href="" data-bs-toggle="modal" data-bs-target="#planidmodal"><span className="fa fa-search form-icon"></span></a>
+
+                                    </div>
+                                    {errors.plan_id_2?.type === 'required' && <p role="alert" className="notvalid">Plan Id  is  required</p>}
 
                                 </div>
                             </div>
                             <div className="col-md-3">
                                 <div className="form-group mb-3">
                                     <div className="form-group mb-3">
-                                        <input type="text" className="form-control" name="plan_id_2"  {...register('plan_id_2')} id="" />
+                                        <input type="text" className="form-control" name="plan_id_3"  {...register('plan_id_3',{
+                                            required:true,
+                                        })} id="" />
                                         <a href="" data-bs-toggle="modal" data-bs-target="#planidmodal"><span className="fa fa-search form-icon"></span></a>
+
                                     </div>
-                                </div>
-                            </div>
-                            <div className="col-md-3">
-                                <div className="form-group mb-3">
-                                    <div className="form-group mb-3">
-                                        <input type="text" className="form-control" name="plan_id_3"  {...register('plan_id_3')} id="" />
-                                        <a href="" data-bs-toggle="modal" data-bs-target="#planidmodal"><span className="fa fa-search form-icon"></span></a>
-                                    </div>
+                                    {errors.plan_id_3?.type === 'required' && <p role="alert" className="notvalid">Plan Id  is  required</p>}
+
                                 </div>
                             </div>
 
@@ -894,17 +920,29 @@ export function Coverage(params) {
                             </div>
                             <div className="col-md-3">
                                 <div className="form-group mb-3">
-                                    <input type="text" className="form-control" {...register('miscellaneous_data_1')} name="miscellaneous_data_1"  {...register('miscellaneous_data_1')} id="" />
+                                    <input type="text" className="form-control" {...register('miscellaneous_data_1')} name="miscellaneous_data_1"  {...register('miscellaneous_data_1',{
+                                        required:true,
+                                    })} id="" />
+                                    {errors.miscellaneous_data_1?.type === 'required' && <p role="alert" className="notvalid">Miscellaneous Data  is  required</p>}
+
                                 </div>
                             </div>
                             <div className="col-md-3">
                                 <div className="form-group mb-3">
-                                    <input type="text" className="form-control" {...register('miscellaneous_data_2')} name="miscellaneous_data_2"  {...register('miscellaneous_data_2')} id="" />
+                                    <input type="text" className="form-control" {...register('miscellaneous_data_2',{
+                                        required:true,
+                                    })} name="miscellaneous_data_2"  {...register('miscellaneous_data_2')} id="" />
+                                    {errors.miscellaneous_data_2?.type === 'required' && <p role="alert" className="notvalid">Miscellaneous Data  is  required</p>}
+
                                 </div>
                             </div>
                             <div className="col-md-3">
                                 <div className="form-group mb-3">
-                                    <input type="text" className="form-control" {...register('miscellaneous_data_3')} name="miscellaneous_data_3"  {...register('miscellaneous_data_3')} id="" />
+                                    <input type="text" className="form-control" {...register('miscellaneous_data_3',{
+                                        required:true,
+                                    })} name="miscellaneous_data_3"  {...register('miscellaneous_data_3')} id="" />
+                                    {errors.miscellaneous_data_3?.type === 'required' && <p role="alert" className="notvalid">Miscellaneous Data  is  required</p>}
+
                                 </div>
                             </div>
 
@@ -917,7 +955,7 @@ export function Coverage(params) {
                                 <div className="form-group mb-3">
                                     <small>Provider Options</small>
                                     <select className="form-select" {...register("provider_vefification_option", {
-                                        // required: true
+                                        required: true
                                     })} name="provider_vefification_option">
                                         <option value="">--select--</option>
                                         <option value="1">No Provider Check</option>
@@ -926,15 +964,22 @@ export function Coverage(params) {
                                         <option value="4">Must exist in Provider Network</option>
                                         <option value="5">Validate Provider In/Out of Network</option>
                                     </select>
+                                    {errors.provider_vefification_option?.type === 'required' && <p role="alert" className="notvalid">Provider Options  is  required</p>}
+
                                 </div>
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group mb-3">
                                     <small>Super Provider Networks</small>
-                                    <input type="text" className="form-control" name="" id="" />
+                                    <input type="text" className="form-control" {...register('super_provider_networks',{
+                                        required:true,
+                                    })} name="super_provider_networks" id="" />
                                     <a href="" data-bs-toggle="modal" data-bs-target="#superprovidermodal"><span className="fa fa-search form-icon"></span></a>
 
+
                                 </div>
+                                {errors.super_provider_networks?.type === 'required' && <p role="alert" className="notvalid">Super Provider Networks  is  required</p>}
+
                             </div>
 
                             <div className="clearfix mb-2"></div>
@@ -946,7 +991,7 @@ export function Coverage(params) {
                                 <div className="form-group mb-3">
                                     <small>Prescriber Options</small>
                                     <select className="form-select" {...register("Prescriber_Verification_Options_1", {
-                                        // required: true,
+                                        required: true,
                                     })} name="Prescriber_Verification_Options_1" >
                                         <option value="">--select--</option>
                                         <option value="1">None</option>
@@ -955,13 +1000,15 @@ export function Coverage(params) {
                                         <option value="4">Must Exist in Prescriber Master</option>
 
                                     </select>
+                                    {errors.Prescriber_Verification_Options_1?.type === 'required' && <p role="alert" className="notvalid">Prescriber Options  is  required</p>}
+
                                 </div>
                             </div>
                             <div className="col-md-4">
                                 <div className="form-group mb-3">
                                     <small>Prescriber Options 2</small>
                                     <select className="form-select" {...register("Prescriber_Verification_Options_2", {
-                                        // required: true,
+                                        required: true,
                                     })} name="Prescriber_Verification_Options_2">
                                         <option value="">--select--</option>
                                         <option value="1">None</option>
@@ -969,20 +1016,25 @@ export function Coverage(params) {
                                         <option value="3">primary Prescriber Validation</option>
                                         <option value="4">Must Exist in Prescriber Master</option>
                                     </select>
+                                    {errors.Prescriber_Verification_Options_2?.type === 'required' && <p role="alert" className="notvalid">Prescriber Options  is  required</p>}
+
                                 </div>
                             </div>
                             <div className="col-md-4">
                                 <div className="form-group mb-3">
                                     <small>Prescriber Grouping ID</small>
                                     <select className="form-select" {...register("Prescriber_Grouping_id", {
-                                        // required: true,
+                                        required: true,
                                     })} name="Prescriber_Grouping_id">
                                         <option value="">--select--</option>
                                         <option value="1">None</option>
                                         <option value="2">Validate DEA Code</option>
                                         <option value="3">primary Prescriber Validation</option>
                                         <option value="4">Must Exist in Prescriber Master</option>
-                                    </select>                            </div>
+                                    </select>        
+                                    {errors.Prescriber_Grouping_id?.type === 'required' && <p role="alert" className="notvalid">Prescriber Group Id  is  required</p>}
+
+                                 </div>
                             </div>
 
 
