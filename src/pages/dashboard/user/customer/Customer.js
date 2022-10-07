@@ -1212,7 +1212,7 @@ export function Eligibility(props) {
 
 
                                 <select className="form-select" {...register("auto_termination_level", {
-                                    required: true,
+                                    // required: true,
                                 })} name="auto_termination_level" >
                                     <option value="">--select--</option>
                                     <option value="0">Overlap Allowed Within Database</option>
@@ -1274,10 +1274,10 @@ export function Eligibility(props) {
                             </div>
                             <div className="col-md-4 mb-2">
                                 <small>Overlap Coverage Tie Breaker</small>
-                                <select className="form-select" {...register("membership_processing_willbe_done", {
+                                <select className="form-select" {...register("Overlap Coverage Tie Breaker", {
                                     required: true,
 
-                                })} name="membership_processing_willbe_done">
+                                })} name="Overlap Coverage Tie Breaker">
                                     <option value="">--select--</option>
                                     <option value="1">use group submitted by provider .if Nomatch -use last added</option>
                                     <option value="2">use member record last added</option>
@@ -1652,7 +1652,7 @@ export function Exceptions(props) {
 
 
 
-    console.log(process.env.REACT_APP_API_BASEURL)
+    console.log(process.env.REACT_APP_API_BASEURL);
 
     const postTOBackend = customer => {
         console.log(customer);
