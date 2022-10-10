@@ -4,6 +4,7 @@ import { Link, Outlet, Route, Routes, useLocation, useNavigate, useOutletContext
 import Footer from '../../../../shared/Footer';
 import { ToastContainer, toast } from 'react-toastify';
 
+
 export default function Client() {
     const location = useLocation();
     const currentpath = location.pathname.split('/').pop();
@@ -204,7 +205,70 @@ export function Indicators(params) {
         Indicatorsid['Indicators'] = data;
         setClient(Indicatorsid);
         console.log(client);
+        postTOBackend(client);
 
+    }
+
+
+    const postTOBackend = client => {
+        console.log(client);
+        alert('mahesh');
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(client)
+        };
+        fetch(process.env.REACT_APP_API_BASEURL + '/api/customer/add', requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                alert(response);
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    return Promise.reject(error);
+                }
+
+                console.log(data);
+
+
+                if(response==='200'){
+                    toast.success(response.data.message, {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        
+                        
+                        });
+                }
+
+                // props.onChange(data);
+                // navigate("/dashboard/user/customer/strategy");
+
+                // this.setState({ postId: data.id })
+            })
+            .catch(error => {
+                // this.setState({ errorMessage: error.toString() });
+                console.error('There was an error!', error);
+
+                toast.error(error.response.data.message, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    
+                    
+                    });
+            });
     }
     return (
         <>
@@ -300,7 +364,7 @@ export function Indicators(params) {
                                     <small>Number of Days from Date Written to First Fill</small>
                                     <input type="text" className="form-control" name="no_of_days_to_first_fill" {...register("no_of_days_to_first_fill")} id="" placeholder="" required="" />
 
-                                    {errors.Bypass_Member_Eligibility?.type === 'required' && <p role="alert" className="notvalid">Number of Days from Date Written to First Fill is   required</p>}
+                                    {errors.no_of_days_to_first_fill?.type === 'required' && <p role="alert" className="notvalid">Number of Days from Date Written to First Fill is   required</p>}
 
                                 </div>
                             </div>
@@ -693,6 +757,15 @@ export function Coverage(params) {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [client, setClient] = useOutletContext();
 
+    const[tiervalue,tiersetValue]=useState(null);
+    const[tier1value,tier1setValue]=useState(null);
+    const[tier2value,tier2setValue]=useState(null);
+
+    const[defaulttiervalue,defaulttiersetValue]=useState(null);
+
+
+
+  
 
 
     const {
@@ -716,7 +789,77 @@ export function Coverage(params) {
     }
 
 
+    const  customdateFormat=(inputDate, format)=>{
 
+        const date = new Date(inputDate);
+
+    //extract the parts of the date
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();    
+
+    //replace the month
+    format = format.replace("MM", month.toString().padStart(2,"0"));        
+
+    //replace the year
+    if (format.indexOf("yyyy") > -1) {
+        format = format.replace("yyyy", year.toString());
+    } else if (format.indexOf("yy") > -1) {
+        format = format.replace("yy", year.toString().substr(2,2));
+    }
+
+    //replace the day
+    format = format.replace("dd", day.toString().padStart(2,"0"));
+
+    return format;
+
+
+    }
+        
+    
+
+
+    const tiersMove=()=>{
+      var val1= new Date(document.getElementById("tier_1").value);
+      var val2=  new Date(document.getElementById("tier_2").value);
+      var val3=  new Date(document.getElementById("tier_3").value);
+
+
+    
+      const tier1_formated_date=val1.toLocaleDateString("en-US");
+      const tier1_date= customdateFormat(tier1_formated_date,'yyyy-MM-dd')
+      tier1setValue(tier1_date);
+
+      const tier2_formated_date=val2.toLocaleDateString("en-US");
+      const tier2_date= customdateFormat(tier2_formated_date,'yyyy-MM-dd')
+      tier2setValue(tier2_date);
+
+      var today=new Date(0);
+
+      tiersetValue(today);
+
+
+
+    }
+
+    const handlechangetier1=(e)=>{
+        tiersetValue(e.target.value);
+    }
+
+
+    const handlechangetier2=(e)=>{
+        tier1setValue(e.target.value);
+    }
+
+
+    const handlechangetier3=(e)=>{
+        tier2setValue(e.target.value);
+    }
+
+
+
+
+   
     const onSubmit = data => {
 
 
@@ -869,7 +1012,7 @@ export function Coverage(params) {
                                 <h5 className="mb-2">Coverage Strategy</h5>
                             </div>
                             <div className="col-md-1 mb-1">
-                                <a href="" className="btn btn-theme btn-sm p-1" style={{ width: '100%' }}>Add <i className="fa fa-plus"></i></a>
+                                <button onClick={tiersMove} className="btn btn-theme btn-sm p-1" style={{ width: '100%' }}>Add <i className="fa fa-plus"></i></button>
                             </div>
                         </div>
                         <div className="row align-items-center">
@@ -879,9 +1022,9 @@ export function Coverage(params) {
                             <div className="col-md-3">
                                 <div className="form-group mb-3">
                                     <small>Tier 1</small>
-                                    <input type="date" className="form-control" name="tier_1" {...register('tier_1', {
+                                    <input type="date" className="form-control" onInput={handlechangetier1}   value={tiervalue} id="tier_1"   name="tier_1" {...register('tier_1', {
                                         required: true,
-                                    })} id="" />
+                                    })}  />
                                     {errors.tier_1?.type === 'required' && <p role="alert" className="notvalid">Cov Eff Date is  required</p>}
 
                                 </div>
@@ -889,9 +1032,9 @@ export function Coverage(params) {
                             <div className="col-md-3">
                                 <div className="form-group mb-3">
                                     <small>Tier 2</small>
-                                    <input type="date" className="form-control" name="tier_2"  {...register('tier_2', {
+                                    <input type="date" className="form-control"  onInput={handlechangetier2}  value={tier1value} name="tier_2"  {...register('tier_2', {
                                         required: true,
-                                    })} id="" />
+                                    })} id="tier_2" />
                                     {errors.tier_2?.type === 'required' && <p role="alert" className="notvalid">Cov Eff Date is  required</p>}
 
                                 </div>
@@ -899,9 +1042,9 @@ export function Coverage(params) {
                             <div className="col-md-3">
                                 <div className="form-group mb-3">
                                     <small>Tier 3</small>
-                                    <input type="date" className="form-control" name="tier_3" {...register('tier_3', {
+                                    <input type="date" className="form-control" onInput={handlechangetier3}  value={tier2value}  name="tier_3" {...register('tier_3', {
                                         required: true,
-                                    })} id="" />
+                                    })} id="tier_3" />
                                     {errors.tier_3?.type === 'required' && <p role="alert" className="notvalid">Cov Eff Date is  required</p>}
 
                                 </div>
