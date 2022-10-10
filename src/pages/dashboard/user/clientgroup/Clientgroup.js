@@ -1,10 +1,16 @@
-import React from 'react';
-import { Link, Outlet, Route, Routes, useLocation } from 'react-router-dom';
+
+import React, { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { Link, Outlet, Route, Routes, useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import Footer from '../../../../shared/Footer';
+import { ToastContainer, toast } from 'react-toastify';
 
 export default function Clientgroup() {
-    const location = useLocation(); 
+    const location = useLocation();
     const currentpath = location.pathname.split('/').pop();
+
+    const [clientgroup, setClientgroup] = useState([]);
+
 
     return (
         <>
@@ -110,11 +116,11 @@ export default function Clientgroup() {
             <div>
                 <div className="nav nav-tabs" id="nav-tab" role="tablist">
 
-                    <Link className={'nav-link' + (currentpath == 'identification' ? ' active' : '') } to="identification">Identification</Link>
-                    <Link className={'nav-link' + (currentpath == 'strategy' ? ' active' : '') } to="strategy">Strategy</Link>
-                    <Link className={'nav-link' + (currentpath == 'eligibility' ? ' active' : '') } to="eligibility">Eligibility</Link>
-                    <Link className={'nav-link' + (currentpath == 'indicators' ? ' active' : '') } to="indicators">Indicators</Link>
-                    <Link className={'nav-link' + (currentpath == 'charges' ? ' active' : '') } to="charges">Charges/Misc</Link>
+                    <Link className={'nav-link' + (currentpath == 'identification' ? ' active' : '')} to="identification">Identification</Link>
+                    <Link className={'nav-link' + (currentpath == 'strategy' ? ' active' : '')} to="strategy">Strategy</Link>
+                    <Link className={'nav-link' + (currentpath == 'eligibility' ? ' active' : '')} to="eligibility">Eligibility</Link>
+                    <Link className={'nav-link' + (currentpath == 'indicators' ? ' active' : '')} to="indicators">Indicators</Link>
+                    <Link className={'nav-link' + (currentpath == 'charges' ? ' active' : '')} to="charges">Charges/Misc</Link>
 
                     {/* <button className="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#Identification" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Identification</button>
                     <button className="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#Strategy" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Strategy</button>
@@ -123,25 +129,15 @@ export default function Clientgroup() {
                     <button className="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#Charges" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Charges/Misc</button> */}
                 </div>
                 <div className="tab-content" id="nav-tabContent">
-                    {/* <div className="tab-pane fade show active" id="Identification" role="tabpanel" aria-labelledby="nav-home-tab">
 
-                    </div>
-                    <div className="tab-pane fade" id="Strategy" role="tabpanel" aria-labelledby="nav-profile-tab">
+                    <Outlet context={[clientgroup, setClientgroup]} />
 
-                    </div>
-                    <div className="tab-pane fade" id="Eligibility" role="tabpanel" aria-labelledby="nav-contact-tab">
 
-                    </div>
-                    <div className="tab-pane fade" id="Indicators" role="tabpanel" aria-labelledby="nav-contact-tab">
 
-                    </div>
-                    <div className="tab-pane fade" id="Charges" role="tabpanel" aria-labelledby="nav-contact-tab">
 
-                    </div> */}
-                    <Outlet/>
                 </div>
             </div>
-            <Footer/>
+            <Footer />
 
         </>
     );
@@ -385,7 +381,7 @@ export function Indicators(params) {
                 </div>
             </div>
             <div className="col-md-1 float-end">
-                <a href="" className="btn btn-theme pt-2 pb-2" style={{ width: '100%' }}>Next</a>
+                <button type="submit" className="btn btn-theme pt-2 pb-2" style={{ width: '100%' }}>Next</button>
             </div>
         </>
     )
@@ -626,221 +622,355 @@ export function Strategy(params) {
 }
 
 export function Identification(params) {
+
+    const { register, handleSubmit, formState: { errors } } = useForm();
+
+    const [clientgroup, setClientgroup] = useOutletContext();
+    const [startDate, setStartDate] = useState(new Date());
+    const [afterDate, setAfterDate] = useState(new Date());
+
+
+    const onSubmit = data => {
+
+
+        // console.log(Identificationdata);
+
+        const id = clientgroup;
+        id['identification'] = data;
+        console.log(clientgroup);
+
+
+
+
+    }
+
+
+
     return (
         <>
-            <div className="card mt-3 mb-3">
-                <div className="card-body">
-                    <div className='row'>
-                        <div className="col-md-7 mb-3">
-                            <h5 className="mb-2">Customer ID</h5>
+            <form onSubmit={handleSubmit(onSubmit)}>
 
-                            <div className="row">
-                                <div className="col-md-6">
-                                    <div className="form-group mb-2">
-                                        <small>Customer ID</small>
-                                        <input type="text" className="form-control" name="" id="" placeholder="Customer ID" readOnly />
-                                    </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="form-group mb-2">
-                                        <small>&nbsp;</small>
-                                        <input type="text" className="form-control" name="" id="" placeholder="Customer ID" readOnly />
-                                    </div>
-                                </div>
-                            </div>
+                <div className="card mt-3 mb-3">
+                    <div className="card-body">
+                        <div className='row'>
+                            <div className="col-md-7 mb-3">
+                                <h5 className="mb-2">Customer ID</h5>
 
-                            <div className="row">
-                                <div className="col-md-12">
-                                    <h5 className="mb-1">Address</h5>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="form-group mb-2">
-                                        <small>Name</small>
-                                        <input type="text" className="form-control" name="" id="" placeholder="Name" readOnly />
+                                <div className="row">
+                                    <div className="col-md-12">
+                                        <div className="form-group mb-2">
+                                            <small>Customer ID</small>
+                                            <input {...register('customer_id', {
+                                                required: true,
+                                            })} type="text" className="form-control" name="customer_id" id="" placeholder="Customer ID" />
+
+                                            {errors.customer_id?.type === 'required' && <p role="alert" className="notvalid">customer id   required</p>}
+
+                                        </div>
                                     </div>
+
                                 </div>
-                                <div className="col-md-6">
-                                    <div className="form-group mb-2">
-                                        <small>Address 1</small>
-                                        <input type="text" className="form-control" name="" id="" placeholder="Address 1" readOnly />
+
+                                <div className="row">
+                                    <div className="col-md-12">
+                                        <h5 className="mb-1">Address</h5>
                                     </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="form-group mb-2">
-                                        <small>Address 2</small>
-                                        <input type="text" className="form-control" name="" id="" placeholder="Address 2" readOnly />
+                                    <div className="col-md-6">
+                                        <div className="form-group mb-2">
+                                            <small>Name</small>
+                                            <input type="text" className="form-control" {...register('customer_name', {
+                                                required: true,
+                                            })} name="customer_name" id="" placeholder="Name" readOnly />
+                                            {errors.customer_name?.type === 'required' && <p role="alert" className="notvalid">customer name is   required</p>}
+
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="form-group mb-2">
-                                        <small>City / State</small>
-                                        <select className="form-select">
-                                            <option value="">Select City</option>
-                                            <option value="">Select City</option>
-                                            <option value="">Select City</option>
-                                            <option value="">Select City</option>
-                                        </select>
+                                    <div className="col-md-6">
+                                        <div className="form-group mb-2">
+                                            <small>Address 1</small>
+                                            <input type="text" className="form-control" {...register('address_1', {
+                                                required: true,
+                                            })} name="address_1" id="" placeholder="Address 1" readOnly />
+                                            {errors.address_1?.type === 'required' && <p role="alert" className="notvalid">address is  required</p>}
+
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="form-group mb-2">
-                                        <small>Country</small>
-                                        <input type="text" className="form-control" name="" id="" placeholder="Country" readOnly />
+                                    <div className="col-md-6">
+                                        <div className="form-group mb-2">
+                                            <small>Address 2</small>
+                                            <input type="text" className="form-control" {...register('address_2', {
+                                                required: true,
+                                            })} name="address_2" id="" placeholder="Address 2" readOnly />
+                                            {errors.address_2?.type === 'required' && <p role="alert" className="notvalid">address is  required</p>}
+
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="form-group mb-2">
-                                        <small>ZIP Code</small>
-                                        <input type="text" className="form-control" name="" id="" placeholder="ZIP Code" readOnly />
+                                    <div className="col-md-6">
+                                        <div className="form-group mb-2">
+                                            <small>City / State</small>
+                                            <select className="form-select" {...register('city', {
+                                                required: true,
+                                            })} name="city">
+                                                <option value="">Select City</option>
+                                                <option value="1">Select City</option>
+                                                <option value="2">Select City</option>
+                                                <option value="3">Select City</option>
+                                            </select>
+                                        </div>
+                                        {errors.city?.type === 'required' && <p role="alert" className="notvalid">city is  required</p>}
+
                                     </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="form-group mb-2">
-                                        <small>Phone</small>
-                                        <input type="text" className="form-control" name="" id="" placeholder="Phone" readOnly />
+                                    <div className="col-md-6">
+                                        <div className="form-group mb-2">
+                                            <small>Country</small>
+                                            <input type="text" {...register('country', {
+                                                required: true,
+                                            })} className="form-control" name="country" id="" placeholder="Country" readOnly />
+                                            {errors.country?.type === 'required' && <p role="alert" className="notvalid">Country is  required</p>}
+
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="form-group mb-2">
-                                        <small>Fax</small>
-                                        <input type="text" className="form-control" name="" id="" placeholder="Fax" readOnly />
+                                    <div className="col-md-6">
+                                        <div className="form-group mb-2">
+                                            <small>ZIP Code</small>
+                                            <input type="text" {...register('zipcode', {
+                                                required: true,
+                                            })} className="form-control" name="zipcode" id="" placeholder="ZIP Code" readOnly />
+                                            {errors.zipcode?.type === 'required' && <p role="alert" className="notvalid">Zip code  is  required</p>}
+
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="form-group mb-2">
-                                        <small>EDI Address</small>
-                                        <input type="text" className="form-control" name="" id="" placeholder="EDI Address" readOnly />
+                                    <div className="col-md-6">
+                                        <div className="form-group mb-2">
+                                            <small>Phone</small>
+                                            <input {...register('phone', {
+                                                required: true,
+                                            })} type="text" className="form-control" name="phone" id="" placeholder="Phone" readOnly />
+                                            {errors.phone?.type === 'required' && <p role="alert" className="notvalid">phone  is  required</p>}
+
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="form-group mb-2">
-                                        <small>Contact</small>
-                                        <input type="text" className="form-control" name="" id="" placeholder="Contact" readOnly />
+                                    <div className="col-md-6">
+                                        <div className="form-group mb-2">
+                                            <small>Fax</small>
+                                            <input type="text" {...register('fax', {
+                                                required: true,
+                                            })} className="form-control" name="fax" id="" placeholder="Fax" readOnly />
+                                            {errors.phone?.type === 'required' && <p role="alert" className="notvalid">fax  is  required</p>}
+
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="form-group mb-2">
-                                        <small>Test</small>
-                                        <input type="text" className="form-control" name="" id="" placeholder="Test" readOnly />
+                                    <div className="col-md-6">
+                                        <div className="form-group mb-2">
+                                            <small>EDI Address</small>
+                                            <input type="text" {...register('edi_address', {
+                                                required: true,
+                                            })} className="form-control" name="edi_address" id="" placeholder="EDI Address" readOnly />
+                                            {errors.edi_address?.type === 'required' && <p role="alert" className="notvalid">EDI Address is  required</p>}
+
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="form-group mb-2">
-                                        <small>Type</small>
-                                        <input type="text" className="form-control" name="" id="" placeholder="Type" readOnly />
+                                    <div className="col-md-6">
+                                        <div className="form-group mb-2">
+                                            <small>Contact</small>
+                                            <input  {...register('contact', {
+                                                required: true,
+                                            })} type="text" className="form-control" name="contact" id="" placeholder="Contact" readOnly />
+                                            {errors.contact?.type === 'required' && <p role="alert" className="notvalid">Contact is  required</p>}
+
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-5 mb-3">
-                            <h5 className="mb-1">Data Ranges</h5>
-                            <div className="row">
-                                <div className="col-md-6">
-                                    <div className="form-group mb-2">
-                                        <small>Effective Date</small>
-                                        <input type="date" className="form-control" name="" id="" placeholder="Address 1" readOnly />
+                                    <div className="col-md-6">
+                                        <div className="form-group mb-2">
+                                            <small>Test</small>
+                                            <input {...register('test', {
+                                                required: true,
+                                            })} type="text" className="form-control" name="test" id="" placeholder="Test" readOnly />
+                                            {errors.contact?.type === 'required' && <p role="alert" className="notvalid">Test is  required</p>}
+
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="form-group mb-2">
-                                        <small>Termination Date</small>
-                                        <input type="date" className="form-control" name="" id="" placeholder="Address 2" readOnly />
-                                    </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="form-group mb-2">
-                                        <small>Policy Ann. Month</small>
-                                        <select className="form-select">
-                                            <option value="">Policy Ann. Month</option>
-                                            <option value="">Select City</option>
-                                            <option value="">Select City</option>
-                                            <option value="">Select City</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="form-group mb-2">
-                                        <small>Policy Ann. Day</small>
-                                        <input type="text" className="form-control" name="" id="" placeholder="Enter" readOnly />
-                                    </div>
-                                </div>
-                            </div>
-                            <h5 className="mb-1">Census</h5>
-                            <div className="row">
-                                <div className="col-md-12">
-                                    <div className="form-group mb-2">
-                                        <small>Census Date</small>
-                                        <input type="text" className="form-control" name="" id="" placeholder="Census Date" readOnly />
-                                    </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="form-group mb-2">
-                                        <small>Active Contracts</small>
-                                        <input type="text" className="form-control" name="" id="" placeholder="Active Contracts" readOnly />
-                                    </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="form-group mb-2">
-                                        <small>Active Memebers</small>
-                                        <input type="text" className="form-control" name="" id="" placeholder="Active Memebers" readOnly />
-                                    </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="form-group mb-2">
-                                        <small>Termed Contracts</small>
-                                        <input type="text" className="form-control" name="" id="" placeholder="Termed Contracts" readOnly />
-                                    </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="form-group mb-2">
-                                        <small>Termed Memebers</small>
-                                        <input type="text" className="form-control" name="" id="" placeholder="Termed Memebers" readOnly />
-                                    </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="form-group mb-2">
-                                        <small>Pending Contracts</small>
-                                        <input type="text" className="form-control" name="" id="" placeholder="Pending Contracts" readOnly />
-                                    </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="form-group mb-2">
-                                        <small>Pending Memebers</small>
-                                        <input type="text" className="form-control" name="" id="" placeholder="Pending Members" readOnly />
+                                    <div className="col-md-6">
+                                        <div className="form-group mb-2">
+                                            <small>Type</small>
+                                            <input type="text"  {...register('type', {
+                                                required: true,
+                                            })} className="form-control" name="type" id="" placeholder="Type" readOnly />
+                                            {errors.type?.type === 'required' && <p role="alert" className="notvalid">Type is  required</p>}
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <hr />
-                        <div className="col-md-4">
-                            <div className="form-group mb-2">
-                                <small>Marketing Group</small>
-                                <input type="text" className="form-control" name="" id="" placeholder="Pending Members" required />
+                            <div className="col-md-5 mb-3">
+                                <h5 className="mb-1">Data Ranges</h5>
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <div className="form-group mb-2">
+                                            <small>Effective Date</small>
+                                            <input type="date" className="form-control"  {...register('effective_date',{
+                                                required:true,
+                                            })} name="effective_date" id="" placeholder="Address 1" readOnly />
+                                            {errors.effective_date?.type === 'required' && <p role="alert" className="notvalid">Effective Date is  required</p>}
+
+                                        </div>
+                                    </div>
+                                    <div className="col-md-6">
+                                        <div className="form-group mb-2">
+                                            <small>Termination Date</small>
+                                            <input {...register('termination_date',{
+                                                required:true,
+                                            })} type="date" className="form-control" name="termination_date" id="" placeholder="Address 2" readOnly />
+                                            {errors.termination_date?.type === 'required' && <p role="alert" className="notvalid">Termination date is  required</p>}
+
+                                        </div>
+                                    </div>
+                                    <div className="col-md-6">
+                                        <div className="form-group mb-2">
+                                            <small>Policy Ann. Month</small>
+                                            <select className="form-select"  {...register('policy_name_month',{
+                                                required:true,
+                                            })} name="policy_name_month" >
+                                                <option value="">Policy Ann. Month</option>
+                                                <option value="">Select City</option>
+                                                <option value="">Select City</option>
+                                                <option value="">Select City</option>
+                                            </select>
+                                            {errors.policy_name_month?.type === 'required' && <p role="alert" className="notvalid">Policy Ann. Month is  required</p>}
+
+                                        </div>
+                                    </div>
+                                    <div className="col-md-6">
+                                        <div className="form-group mb-2">
+                                            <small>Policy Ann. Day</small>
+                                            <input type="text" className="form-control" name="policy_ann_day" {...register('policy_ann_day',{
+                                                required:true,
+                                            })} id="" placeholder="Enter" readOnly />
+                                            {errors.policy_ann_day?.type === 'required' && <p role="alert" className="notvalid">Policy Ann. Day is  required</p>}
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <h5 className="mb-1">Census</h5>
+                                <div className="row">
+                                    <div className="col-md-12">
+                                        <div className="form-group mb-2">
+                                            <small>Census Date</small>
+                                            <input type="text" {...register('census',{
+                                                required:true,
+                                            })} className="form-control" name="census" id="" placeholder="Census Date" readOnly />
+
+                                            {errors.census?.type === 'required' && <p role="alert" className="notvalid">Census Date is  required</p>}
+
+                                        </div>
+                                    </div>
+                                    <div className="col-md-6">
+                                        <div className="form-group mb-2">
+                                            <small>Active Contracts</small>
+                                            <input type="text" className="form-control"  {...register('active_contracts',{
+                                                required:true,
+                                            })} name="active_contracts" id="" placeholder="Active Contracts"  />
+                                            {errors.active_contracts?.type === 'required' && <p role="alert" className="notvalid">Active Contracts is  required</p>}
+
+                                        </div>
+                                    </div>
+                                    <div className="col-md-6">
+                                        <div className="form-group mb-2">
+                                            <small>Active Memebers</small>
+                                            <input type="text" className="form-control"  name="active_members" {...register('active_members',{
+                                                required:true,
+                                            })}  id="" placeholder="Active Memebers"  />
+                                            {errors.active_members?.type === 'required' && <p role="alert" className="notvalid">Active Memebers is  required</p>}
+
+                                        </div>
+                                    </div>
+                                    <div className="col-md-6">
+                                        <div className="form-group mb-2">
+                                            <small>Termed Contracts</small>
+                                            <input type="text" className="form-control" {...register('termed_contracts',{
+                                                required:true,
+                                            })} name="termed_contracts" id="" placeholder="Termed Contracts"  />
+                                            {errors.termed_contracts?.type === 'required' && <p role="alert" className="notvalid">Termed  Contracts is  required</p>}
+
+                                        </div>
+                                    </div>
+                                    <div className="col-md-6">
+                                        <div className="form-group mb-2">
+                                            <small>Termed Memebers</small>
+                                            <input type="text" className="form-control" {...register('termed_members',{
+                                                required:true,
+                                            })} name="termed_members" id="" placeholder="Termed Memebers" readOnly />
+
+                                            {errors.termed_members?.type === 'required' && <p role="alert" className="notvalid">Termed  Memebers is  required</p>}
+
+                                        </div>
+                                    </div>
+                                    <div className="col-md-6">
+                                        <div className="form-group mb-2">
+                                            <small>Pending Contracts</small>
+                                            <input type="text" className="form-control" {...register('pending_contracts',{
+                                                required:true,
+                                            })} name="pending_contracts" id="" placeholder="Pending Contracts" readOnly />
+                                            {errors.pending_contracts?.type === 'required' && <p role="alert" className="notvalid">Pending Contracts is  required</p>}
+
+                                        </div>
+                                    </div>
+                                    <div className="col-md-6">
+                                        <div className="form-group mb-2">
+                                            <small>Pending Memebers</small>
+                                            <input type="text" {...register('pending_members',{
+                                                required:true,
+                                            })} className="form-control" name="pending_members" id="" placeholder="Pending Members" readOnly />
+                                            {errors.pending_members?.type === 'required' && <p role="alert" className="notvalid">pending members   is  required</p>}
+
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div className="col-md-4">
-                            <div className="form-group mb-2">
-                                <small>Anniversary Date</small>
-                                <input type="date" className="form-control" name="" id="" placeholder="Pending Members" required />
+                            <hr />
+                            <div className="col-md-4">
+                                <div className="form-group mb-2">
+                                    <small>Marketing Group</small>
+                                    <input  {...register('marketing_group',{
+                                                required:true,
+                                            })} type="text" className="form-control" name="marketing_group" id="" placeholder="Pending Members" />
+                                    {errors.marketing_group?.type === 'required' && <p role="alert" className="notvalid">Marketing Group is  required</p>}
+
+                                </div>
                             </div>
-                        </div>
-                        <div className="col-md-4">
-                            <div className="form-group mb-2">
-                                <small>Plan Classification</small>
-                                <select className="form-select">
-                                    <option value="">Choose plan</option>
-                                    <option value="">Select City</option>
-                                    <option value="">Select City</option>
-                                    <option value="">Select City</option>
-                                </select>
+                            <div className="col-md-4">
+                                <div className="form-group mb-2">
+                                    <small>Anniversary Date</small>
+                                    <input type="date" className="form-control" {...register('anniversary_date',{
+                                        required:true,
+                                    })} name="anniversary_date" id="" placeholder="Pending Members" />
+                                    {errors.marketing_group?.type === 'required' && <p role="alert" className="notvalid">Anniversary Date is  required</p>}
+
+                                </div>
+                            </div>
+                            <div className="col-md-4">
+                                <div className="form-group mb-2">
+                                    <small>Plan Classification</small>
+                                    <select className="form-select" name="plan_classification" {...register('plan_classification',{
+                                        required:true,
+                                    })}>
+                                        <option value="">Choose plan</option>
+                                        <option value="">Select City</option>
+                                        <option value="">Select City</option>
+                                        <option value="">Select City</option>
+                                    </select>
+                                    {errors.plan_classification?.type === 'required' && <p role="alert" className="notvalid">plan classification  is  required</p>}
+
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="col-md-1 float-end">
-                <a href="" className="btn btn-theme pt-2 pb-2" style={{ width: '100%' }}>Next</a>
-            </div>
+                <div className="col-md-1 float-end">
+                    <button className="btn btn-theme pt-2 pb-2" style={{ width: '100%' }}>Next</button>
+                </div>
+            </form>
+
         </>
     )
 }
