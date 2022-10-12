@@ -8,6 +8,13 @@ import Clientgroup, { Charges as CGCharges, Identification as Cgi, Eligibility a
 import Customer, { Eligibility, Exceptions, Identification, Indicators, Strategy } from './pages/dashboard/user/customer/Customer';
 import Client, { Eligibility as Ce, Identification as Ci, Indicators as Cin, Coverage as CS } from './pages/dashboard/user/client/Client';
 import Member, { ChnageLog, ClaimHistory, Coverage, CoverageHistory, Health, MemberForm, Notes, Overrides, PriorAuthorisation, ProviderSearch } from './pages/dashboard/members/Member';
+
+import SearchProvider, { Provider,Effectivedates,PharmistSystem } from './pages/dashboard/user/provider/SearchProvider';
+
+
+
+
+
 import Membership, { SearchById, SearchByName } from './pages/dashboard/members/Membership';
 import PlanAuthorisation, { Authorisation, PANotes, Pricing } from './pages/dashboard/members/PlanAuthorisation';
 import PlanValidation from './pages/dashboard/members/PlanValidation';
@@ -99,12 +106,49 @@ function App() {
             <Route path='notes' element={<PANotes />} />
           </Route>
 
+
+
           <Route path="plan-validations" element={<PlanValidation />}>
 
           </Route>
 
+
+          <Route path='user/searchprovider' element={<SearchProvider />}>
+          <Route index element={<Navigate to="provider" replace />} />
+
+
+
+            <Route path='provider' element={<Provider />} />
+            <Route path='effectivedates' element={<Effectivedates />} />
+            <Route path='pharmistsystem' element={<PharmistSystem />} />
+
+
+
+          </Route>
+
+
+
+
+
         </Route>
-      </Routes>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </Routes>
     </>
 
   );
