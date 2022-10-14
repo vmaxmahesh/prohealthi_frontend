@@ -15,6 +15,8 @@ function SearchProvider() {
 
 
 
+
+
     const fillProviderData = (e) => {
         // API  
         // var staticProviderType =; 
@@ -187,7 +189,7 @@ function SearchProvider() {
                         <Link to="provider" className={'nav-link' + (currentpath == 'provider' ? ' active' : '')}>Provider</Link>
                         <Link to="effectivedates" className={'nav-link' + (currentpath == 'effectivedates' ? ' active' : '')}>Effective Dates</Link>
                         <Link to="pharmistsystem" className={'nav-link' + (currentpath == 'pharmistsystem' ? ' active' : '')}>Pharmacist/System</Link>
-                        <Link to="indicators" className={'nav-link' + (currentpath == 'indicators' ? ' active' : '')}>Network Participation</Link>
+                        <Link to="networkparticipation" className={'nav-link' + (currentpath == 'networkparticipation' ? ' active' : '')}>Network Participation</Link>
                         <Link to="exceptions" className={'nav-link' + (currentpath == 'exceptions' ? ' active' : '')}>Exception Lists / Charges</Link>
 
                     </div>
@@ -881,36 +883,36 @@ export function Effectivedates(props) {
 }
 
 
-export  function PharmistSystem() {
+export function PharmistSystem(props) {
 
     const mystyle = {
         color: "black",
         padding: "10px",
-        border:"1px"
-      };
+        border: "1px"
+    };
 
 
- 
-      const [formData, setFormData] = useState({
+
+    const [formData, setFormData] = useState({
         name: 'mahesh',
-        title:'test title',
-        note:'dfasdfasdfasdfsdafsdf',
-        transmit_all:true,
-        claims_3rd_party:'sdfasdfasdfsdf',
-        claims_3rd_party_select:'1',
-        claims_cash:'989898',
-        switch_provider:'1',
-        store_hours:'5',
-        switch_trans_rate:'53453',
-        open24_hours:true,
-        injectable_prov:true,
-        system_version:'15.33',
-        operating_system:'2',
-        modem_type:'test',
-        modem_speed:'1',
-        terminals:'hgfghf'
+        title: 'test title',
+        note: 'dfasdfasdfasdfsdafsdf',
+        transmit_all: true,
+        claims_3rd_party: 'sdfasdfasdfsdf',
+        claims_3rd_party_select: '1',
+        claims_cash: '989898',
+        switch_provider: '1',
+        store_hours: '5',
+        switch_trans_rate: '53453',
+        open24_hours: true,
+        injectable_prov: true,
+        system_version: '15.33',
+        operating_system: '2',
+        modem_type: 'test',
+        modem_speed: '1',
+        terminals: 'hgfghf'
 
-       
+
     });
 
 
@@ -929,13 +931,13 @@ export  function PharmistSystem() {
                                 <div class="col-md-6 mb-2">
                                     <div class="form-group mb-3">
                                         <small>Name</small>
-                                        <input type="text"  class="form-control" name="name" value={formData.name}  placeholder="" id="" required=""/>
+                                        <input type="text" class="form-control" name="name" value={formData.name} placeholder="" id="" required="" />
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-2">
                                     <div class="form-group mb-3">
                                         <small>Title</small>
-                                        <input type="text" class="form-control" name="title" value={formData.title} placeholder="" id="" required=""/>
+                                        <input type="text" class="form-control" name="title" value={formData.title} placeholder="" id="" required="" />
                                     </div>
                                 </div>
 
@@ -946,15 +948,15 @@ export  function PharmistSystem() {
                                 </div>
                                 <div class="col-md-12 mb-3">
                                     <div class="form-group mt-2">
-                                        <input type="checkbox" id="Transmit" name="transmit_all" defaultChecked={formData.transmit_all}  class="d-none"/>
-                                            <label for="Transmit">Transmit All Claims</label>
+                                        <input type="checkbox" id="Transmit" name="transmit_all" defaultChecked={formData.transmit_all} class="d-none" />
+                                        <label for="Transmit">Transmit All Claims</label>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-group mb-2">
                                         <small>% Claims 3rd Party</small>
-                                        <input type="text" class="form-control" name="claims_3rd_party" value={formData.claims_3rd_party} placeholder="" id="" required=""/>
+                                        <input type="text" class="form-control" name="claims_3rd_party" value={formData.claims_3rd_party} placeholder="" id="" required="" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -971,7 +973,7 @@ export  function PharmistSystem() {
                                 <div class="col-md-6">
                                     <div class="form-group mb-2">
                                         <small>% Claims Cash</small>
-                                        <input type="text" class="form-control"  name="claims_cash" value={formData.claims_cash} placeholder="" id="" required=""/>
+                                        <input type="text" class="form-control" name="claims_cash" value={formData.claims_cash} placeholder="" id="" required="" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -988,7 +990,7 @@ export  function PharmistSystem() {
                                 <div class="col-md-6">
                                     <div class="form-group mb-2">
                                         <small>Store Hours</small>
-                                        <input type="text" class="form-control" name="store_hours" value={formData.store_hours} placeholder="" id="" required=""/>
+                                        <input type="text" class="form-control" name="store_hours" value={formData.store_hours} placeholder="" id="" required="" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -997,89 +999,360 @@ export  function PharmistSystem() {
                                         <input type="text" class="form-control" name="switch_trans_rate" value={formData.switch_trans_rate} placeholder="" id="" required="" />
                                     </div>
                                 </div>
-                                    
 
 
-                                    <div className="col-md-12 mb-2">
-                                        
-                                        <div className="form-group mt-2">
-                                        <input type="checkbox" id="Open" class="d-none" name="open24_hours" defaultChecked={formData.open24_hours}/>
-                                            <label for="Open">Open 24 Hours</label> 
 
-                                        </div>
-                                        <div className="form-group mb-2">
-                                        <input type="checkbox" id="Injectable"  name="injectable_prov" defaultChecked={formData.injectable_prov}  class="d-none" />
+                                <div className="col-md-12 mb-2">
+
+                                    <div className="form-group mt-2">
+                                        <input type="checkbox" id="Open" class="d-none" name="open24_hours" defaultChecked={formData.open24_hours} />
+                                        <label for="Open">Open 24 Hours</label>
+
+                                    </div>
+                                    <div className="form-group mb-2">
+                                        <input type="checkbox" id="Injectable" name="injectable_prov" defaultChecked={formData.injectable_prov} class="d-none" />
                                         <label for="Injectable">Injectable Prov</label>
-                                        </div>
                                     </div>
-                                    
-
-                                    <div class="clearfix mb-2"></div>
-
-                                    <div class="col-md-12 mb-2">
-                                        <h5>Provider System</h5>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="form-group mb-2">
-                                            <small>System Version</small>
-                                            <input type="text" class="form-control" name="system_version" value={formData.system_version} placeholder="" id="" required="" />
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="form-group mb-2">
-                                            <small>Operating System</small>
-                                            <select class="form-select" name="operating_system" value={formData.operating_system}>
-                                                <option value="">Select System</option>
-                                                <option value="1">windows</option>
-                                                <option value="2">Linux</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group mb-2">
-                                            <small>Modem Type</small>
-                                            <input type="text" class="form-control" name="modem_type" value={formData.modem_type} placeholder="" id="" required="" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group mb-2">
-                                            <small>Modem Speed</small>
-                                            <select class="form-select" name="modem_speed" value={formData.modem_speed}>
-                                                <option value="">Select Speed</option>
-                                                <option value="1">10</option>
-                                                <option value="2">20</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group mb-2">
-                                            <small>Terminals</small>
-                                            <input type="text" class="form-control" name="terminals" value={formData.terminals} placeholder="" id="" required="" />
-                                        </div>
-                                    </div>
-
-
                                 </div>
+
+
+                                <div class="clearfix mb-2"></div>
+
+                                <div class="col-md-12 mb-2">
+                                    <h5>Provider System</h5>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group mb-2">
+                                        <small>System Version</small>
+                                        <input type="text" class="form-control" name="system_version" value={formData.system_version} placeholder="" id="" required="" />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group mb-2">
+                                        <small>Operating System</small>
+                                        <select class="form-select" name="operating_system" value={formData.operating_system}>
+                                            <option value="">Select System</option>
+                                            <option value="1">windows</option>
+                                            <option value="2">Linux</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group mb-2">
+                                        <small>Modem Type</small>
+                                        <input type="text" class="form-control" name="modem_type" value={formData.modem_type} placeholder="" id="" required="" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group mb-2">
+                                        <small>Modem Speed</small>
+                                        <select class="form-select" name="modem_speed" value={formData.modem_speed}>
+                                            <option value="">Select Speed</option>
+                                            <option value="1">10</option>
+                                            <option value="2">20</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group mb-2">
+                                        <small>Terminals</small>
+                                        <input type="text" class="form-control" name="terminals" value={formData.terminals} placeholder="" id="" required="" />
+                                    </div>
+                                </div>
+
+
                             </div>
-                            <div class="col-md-3">
-                                <div class="mb-2">
-                                    <h5>Notes</h5>
-                                </div>
-                                <div class="form-group">
-                                    <textarea name="note" value={formData.note} class="form-control" rows="25" style={mystyle} />
-                                </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-2">
+                                <h5>Notes</h5>
+                            </div>
+                            <div class="form-group">
+                                <textarea name="note" value={formData.note} class="form-control" rows="25" style={mystyle} />
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-            </>
-            )
+        </>
+    )
+
+}
+
+
+export function NetworkParticipation(props) {
+
+    const { register, handleSubmit, formState: { errors } } = useForm();
+    // const [customer, setCustomer] = useOutletContext();
+
+
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const traditionalhandleShow = () => setShow(true);
+    const [networkData, setNetworkData] = useState([]);
+
+
+    const fillProviderData = (e) => {
+        // API  
+        // var staticProviderType =; 
+        var arr = [
+            { traditional_id: '123', name: 'Mahesh', priceschedule: '101', denied: 'Hyderabad',effective_date:'2022-08-2022',termination_date:'02-20-2022' },
+
+        ];
+
+        // setNetworkData(arr);
+    }
+
+    useEffect(() => {
+    }, [networkData]);
+   
+
+
+    const onSubmit = data => {
+      
+        setNetworkData([data]);
+
+        
+    }
+
+ 
+
+
+    return (
+        <>
+
+
+<form onSubmit={handleSubmit(onSubmit)}>
+
+
+<div class="card mt-3 mb-3">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12 mb-2">
+                            <h5>Treditional Networks</h5>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-2">
+                                <small>Treditional ID</small>
+                                <input type="text" class="form-control" name="traditional_id" {...register('traditional_id',{
+                                    required:true,
+                                })} id="" required="" />
+                                <a href=""><span class="fa fa-search form-icon"></span></a>
+
+                                {errors.traditional_id?.type === 'required' && <p role="alert" className="notvalid">Treditional ID is required </p>}
+
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-2">
+                                <small>Network Name</small>
+                                <input type="text" class="form-control" name="network_name" {...register('network_name',{
+                                    required:true,
+                                })} id=""  />
+                                {errors.network_name?.type === 'required' && <p role="alert" className="notvalid">Network Name is required </p>}
+
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-2">
+                                <small>Price Schedule</small>
+                                <input type="text" class="form-control" name="price_schedule" {...register('price_schedule',{
+                                    required:true,
+                                })} id="" required="" />
+                                <a href=""><span class="fa fa-search form-icon"></span></a>
+                                {errors.price_schedule?.type === 'required' && <p role="alert" className="notvalid">Price Schedule is required </p>}
+
+                            </div>
+
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mt-4">
+                                <input type="checkbox" name="denied" id="Denied" {...register('denied',{
+                                    required:true,
+                                })} class="d-none" />
+                                <label for="Denied">Participation Denied</label>
+                                {errors.denied?.type === 'required' && <p role="alert" className="notvalid">Participation Denied is required </p>}
+
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-2">
+                                <small>Effective Date</small>
+                                <input type="date" class="form-control" name="effective_date" {...register('effective_date',{
+                                        required:true,
+                                })} id=""  />
+                                {errors.effective_date?.type === 'required' && <p role="alert" className="notvalid">Effective Date is required </p>}
+
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-2">
+                                <small>Termination Date</small>
+                                <input type="date" class="form-control" name="termination_date"  {...register('termination_date',{
+                                    required:true,
+                                })} id="" required="" />
+                                {errors.termination_date?.type === 'required' && <p role="alert" className="notvalid">Termination Date is required </p>}
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 mt-3 mb-3 text-end">
+                            {/* <button class="btn btn-sm btn-warning">Remove Item</button> &nbsp;&nbsp; */}
+                            <button type="submit" class="btn btn-sm btn-info">Add Item</button>
+                        </div>
+
+                        {/* <div class="col-md-12">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Price Schedule</th>
+                                        <th>Denied</th>
+                                        <th>Effective Date</th>
+                                        <th>Termination Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>GOJ_Pre</td>
+                                        <td>GOJ</td>
+                                        <td>--</td>
+                                        <td>No</td>
+                                        <td>2010-01-01</td>
+                                        <td>9999-12-31</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div> */}
+
+
+                        {/* {networkData.length > 0 ? */}
+                            <TraditionalResults  typedata={networkData} />
+                            {/* // : ''} */}
+
+
+                    </div>
+                </div>
+            </div>
+
+        
+
+
             
+        </form>
+
+            
+        </>
+    )
 }
 
 
 
- export default SearchProvider;
+
+function TraditionalResults(props) {
+
+
+
+    
+    var networkData = [];
+    for (let index = 0; index < props.typedata.length; index++) {
+        networkData.push(<TraditionalTypeRow datar={props.typedata[index]}
+        />);
+    }
+
+
+    
+
+    return (
+        <>
+
+        <form>
+            
+        </form>
+            <div className="card mt-3 mb-3 data" >
+                <div className="card-body">
+                    <div className="row">
+                        <div className="col-md-12">
+                            <table className="table table-striped table-
+bordered">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Price Schedule</th>
+                                        <th>Denied</th>
+                                        <th>Effective Date</th>
+                                        <th>Termination Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {networkData}
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div className="col-md-3 ms-auto text-end">
+                            {/* <button className="btn  btn-info" data-bs-
+toggle="modal" data-bs-target="#exampleModal"> 
+                                Add Provider Types <i className="fa fa-plus-
+circle"></i></button> */}
+                            {/* <button className="btn  btn-info" onClick={e =>
+                                handleShow()}>
+                                Add Provider Types <i className="fa fa-plus-
+circle"></i></button> */}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* <Add show={show} handleClose={handleClose()}/> */}
+            {/* <Add props={modalData} /> */}
+        </>
+    )
+}
+
+function TraditionalTypeRow(props) {
+
+
+    const currentpath = location.pathname.split('/').pop();
+    const ischecked = true;
+
+
+   const deleteRow=(e)=>{
+
+        alert(e.currentTarget.value);
+
+    }
+
+    return (
+        <>
+            <tr>
+                <td>{props.datar.traditional_id}</td>
+                <td>{props.datar.network_name}</td>
+                <td>{props.datar.price_schedule}</td>
+                {props.datar.denied == ischecked ? (
+       <td>Yes</td>
+      ) : (
+
+        <td>No</td>
+       
+      )}
+                <td>{props.datar.effective_date}</td>
+                <td>{props.datar.termination_date}</td>
+                <td><button  onClick={deleteRow}  value={props.datar.traditional_id}  className='btn btn-sm btn-warning'><i className='fa fa-trash-alt'></i></button></td>
+
+
+
+            </tr>
+        </>
+    )
+}
+
+
+
+export default SearchProvider;

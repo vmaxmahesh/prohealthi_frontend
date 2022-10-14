@@ -9,7 +9,7 @@ import Customer, { Eligibility, Exceptions, Identification, Indicators, Strategy
 import Client, { Eligibility as Ce, Identification as Ci, Indicators as Cin, Coverage as CS } from './pages/dashboard/user/client/Client';
 import Member, { ChnageLog, ClaimHistory, Coverage, CoverageHistory, Health, MemberForm, Notes, Overrides, PriorAuthorisation, ProviderSearch } from './pages/dashboard/members/Member';
 
-import SearchProvider, { Provider,Effectivedates,PharmistSystem } from './pages/dashboard/user/provider/SearchProvider';
+import SearchProvider, { Provider,Effectivedates,PharmistSystem,NetworkParticipation } from './pages/dashboard/user/provider/SearchProvider';
 
 
 
@@ -121,6 +121,12 @@ function App() {
             <Route path='provider' element={<Provider />} />
             <Route path='effectivedates' element={<Effectivedates />} />
             <Route path='pharmistsystem' element={<PharmistSystem />} />
+
+            <Route path='networkparticipation' element={<NetworkParticipation />} />
+
+
+
+
 
 
 
