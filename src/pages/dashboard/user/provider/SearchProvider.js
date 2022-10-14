@@ -190,7 +190,6 @@ function SearchProvider() {
                         <Link to="effectivedates" className={'nav-link' + (currentpath == 'effectivedates' ? ' active' : '')}>Effective Dates</Link>
                         <Link to="pharmistsystem" className={'nav-link' + (currentpath == 'pharmistsystem' ? ' active' : '')}>Pharmacist/System</Link>
                         <Link to="networkparticipation" className={'nav-link' + (currentpath == 'networkparticipation' ? ' active' : '')}>Network Participation</Link>
-                        <Link to="exceptions" className={'nav-link' + (currentpath == 'exceptions' ? ' active' : '')}>Exception Lists / Charges</Link>
 
                     </div>
 
@@ -1085,6 +1084,17 @@ export function PharmistSystem(props) {
 
 export function NetworkParticipation(props) {
 
+
+
+
+    const {
+        register: register2,
+        formState: { errors: errors2 },
+        handleSubmit: handleSubmit2,
+    } = useForm({
+        mode: "onBlur",
+    });
+
     const { register, handleSubmit, formState: { errors } } = useForm();
     // const [customer, setCustomer] = useOutletContext();
 
@@ -1094,12 +1104,15 @@ export function NetworkParticipation(props) {
     const traditionalhandleShow = () => setShow(true);
     const [networkData, setNetworkData] = useState([]);
 
+    const [flexibleData, setFlexibleData] = useState([]);
+
+
 
     const fillProviderData = (e) => {
         // API  
         // var staticProviderType =; 
         var arr = [
-            { traditional_id: '123', name: 'Mahesh', priceschedule: '101', denied: 'Hyderabad',effective_date:'2022-08-2022',termination_date:'02-20-2022' },
+            { traditional_id: '123', name: 'Mahesh', priceschedule: '101', denied: 'Hyderabad', effective_date: '2022-08-2022', termination_date: '02-20-2022' },
 
         ];
 
@@ -1107,104 +1120,116 @@ export function NetworkParticipation(props) {
     }
 
     useEffect(() => {
-    }, [networkData]);
-   
-
+    }, [flexibleData]);
 
     const onSubmit = data => {
-      
-        setNetworkData([data]);
 
-        
+        setNetworkData([data]);
+        console.log(data);
+
+
     }
 
- 
+    const onSubmit2 = data => {
+
+        console.log(data);
+        setFlexibleData([data]);
+
+
+
+
+    }
+
+
+
+
+
 
 
     return (
         <>
 
 
-<form onSubmit={handleSubmit(onSubmit)}>
+            <form key={1} onSubmit={handleSubmit(onSubmit)}>
 
 
-<div class="card mt-3 mb-3">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12 mb-2">
-                            <h5>Treditional Networks</h5>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group mb-2">
-                                <small>Treditional ID</small>
-                                <input type="text" class="form-control" name="traditional_id" {...register('traditional_id',{
-                                    required:true,
-                                })} id="" required="" />
-                                <a href=""><span class="fa fa-search form-icon"></span></a>
+                <div class="card mt-3 mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12 mb-2">
+                                <h5>Treditional Networks</h5>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-2">
+                                    <small>Treditional ID</small>
+                                    <input type="text" class="form-control" name="traditional_id" {...register('traditional_id', {
+                                        required: true,
+                                    })} id="" required="" />
+                                    <a href=""><span class="fa fa-search form-icon"></span></a>
 
-                                {errors.traditional_id?.type === 'required' && <p role="alert" className="notvalid">Treditional ID is required </p>}
+                                    {errors.traditional_id?.type === 'required' && <p role="alert" className="notvalid">Treditional ID is required </p>}
+
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-2">
+                                    <small>Network Name</small>
+                                    <input type="text" class="form-control" name="network_name" {...register('network_name', {
+                                        required: true,
+                                    })} id="" />
+                                    {errors.network_name?.type === 'required' && <p role="alert" className="notvalid">Network Name is required </p>}
+
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-2">
+                                    <small>Price Schedule</small>
+                                    <input type="text" class="form-control" name="price_schedule" {...register('price_schedule', {
+                                        required: true,
+                                    })} id="" required="" />
+                                    <a href=""><span class="fa fa-search form-icon"></span></a>
+                                    {errors.price_schedule?.type === 'required' && <p role="alert" className="notvalid">Price Schedule is required </p>}
+
+                                </div>
 
                             </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group mb-2">
-                                <small>Network Name</small>
-                                <input type="text" class="form-control" name="network_name" {...register('network_name',{
-                                    required:true,
-                                })} id=""  />
-                                {errors.network_name?.type === 'required' && <p role="alert" className="notvalid">Network Name is required </p>}
+                            <div class="col-md-4">
+                                <div class="form-group mt-4">
+                                    <input type="checkbox" name="denied" id="Denied" {...register('denied', {
+                                        required: true,
+                                    })} class="d-none" />
+                                    <label for="Denied">Participation Denied</label>
+                                    {errors.denied?.type === 'required' && <p role="alert" className="notvalid">Participation Denied is required </p>}
 
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group mb-2">
-                                <small>Price Schedule</small>
-                                <input type="text" class="form-control" name="price_schedule" {...register('price_schedule',{
-                                    required:true,
-                                })} id="" required="" />
-                                <a href=""><span class="fa fa-search form-icon"></span></a>
-                                {errors.price_schedule?.type === 'required' && <p role="alert" className="notvalid">Price Schedule is required </p>}
+                            <div class="col-md-4">
+                                <div class="form-group mb-2">
+                                    <small>Effective Date</small>
+                                    <input type="date" class="form-control" name="effective_date" {...register('effective_date', {
+                                        required: true,
+                                    })} id="" />
+                                    {errors.effective_date?.type === 'required' && <p role="alert" className="notvalid">Effective Date is required </p>}
 
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-2">
+                                    <small>Termination Date</small>
+                                    <input type="date" class="form-control" name="termination_date"  {...register('termination_date', {
+                                        required: true,
+                                    })} id="" required="" />
+                                    {errors.termination_date?.type === 'required' && <p role="alert" className="notvalid">Termination Date is required </p>}
+
+                                </div>
                             </div>
 
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group mt-4">
-                                <input type="checkbox" name="denied" id="Denied" {...register('denied',{
-                                    required:true,
-                                })} class="d-none" />
-                                <label for="Denied">Participation Denied</label>
-                                {errors.denied?.type === 'required' && <p role="alert" className="notvalid">Participation Denied is required </p>}
-
+                            <div class="col-md-12 mt-3 mb-3 text-end">
+                                {/* <button class="btn btn-sm btn-warning">Remove Item</button> &nbsp;&nbsp; */}
+                                <button type="submit" class="btn btn-sm btn-info">Add Item</button>
                             </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group mb-2">
-                                <small>Effective Date</small>
-                                <input type="date" class="form-control" name="effective_date" {...register('effective_date',{
-                                        required:true,
-                                })} id=""  />
-                                {errors.effective_date?.type === 'required' && <p role="alert" className="notvalid">Effective Date is required </p>}
 
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group mb-2">
-                                <small>Termination Date</small>
-                                <input type="date" class="form-control" name="termination_date"  {...register('termination_date',{
-                                    required:true,
-                                })} id="" required="" />
-                                {errors.termination_date?.type === 'required' && <p role="alert" className="notvalid">Termination Date is required </p>}
-
-                            </div>
-                        </div>
-
-                        <div class="col-md-12 mt-3 mb-3 text-end">
-                            {/* <button class="btn btn-sm btn-warning">Remove Item</button> &nbsp;&nbsp; */}
-                            <button type="submit" class="btn btn-sm btn-info">Add Item</button>
-                        </div>
-
-                        {/* <div class="col-md-12">
+                            {/* <div class="col-md-12">
                             <table class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
@@ -1230,22 +1255,106 @@ export function NetworkParticipation(props) {
                         </div> */}
 
 
-                        {/* {networkData.length > 0 ? */}
-                            <TraditionalResults  typedata={networkData} />
+                            {/* {networkData.length > 0 ? */}
+                            <TraditionalResults typedata={networkData} />
                             {/* // : ''} */}
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+            </form>
+
+            <form key={2} onSubmit={handleSubmit2(onSubmit2)}>
+                <div class="card-body">
+                    <div class="row">
+
+
+                        <div class="clearfix mb-3"></div>
+
+
+                        <div class="col-md-12 mb-2">
+                            <h5>Flexible Networks</h5>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-2">
+                                <small>Flexible Network ID</small>
+                                <input type="text" class="form-control"   {...register2('flexible_network_id', {
+                                    required: true,
+                                })} name="flexible_network_id" id="" />
+                                <a href=""><span class="fa fa-search form-icon"></span></a>
+                                {errors2.flexible_network_id?.type === 'required' && <p role="alert" className="notvalid">Flexible Network ID is required </p>}
+
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-2">
+                                <small>Network Name</small>
+                                <input type="text" class="form-control" {...register2('flexible_network_name', {
+                                    required: true,
+
+                                })} name="flexible_network_name" id="" required="" />
+                                {errors2.flexible_network_name?.type === 'required' && <p role="alert" className="notvalid">Network Name is required </p>}
+
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-2">
+                                <small>Price Schedule</small>
+                                <input type="text" class="form-control" {...register2('flexible_price_schedule', {
+                                    required: true,
+
+                                })} name="flexible_price_schedule" id="" required="" />
+                                <a href=""><span class="fa fa-search form-icon"></span></a>
+                                {errors2.flexible_price_schedule?.type === 'required' && <p role="alert" className="notvalid">Price Schedule is required </p>}
+
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-2">
+                                <small>Inclusion By</small>
+                                <input type="date" class="form-control" {...register2('inclusion_by', {
+                                    required: true,
+
+                                })} name="inclusion_by" id="" required="" />
+                                                                {errors2.inclusion_by?.type === 'required' && <p role="alert" className="notvalid">Inclusion By is required </p>}
+
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-2">
+                                <small>Exclusion By</small>
+                                <input type="date" class="form-control" {...register2('exclusion_by', {
+                                    required: true,
+
+                                })} name="exclusion_by" id="" required="" />
+                                                                {errors2.exclusion_by?.type === 'required' && <p role="alert" className="notvalid">Exclusion By is required </p>}
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 mt-3 mb-3 text-end">
+                            <button type="submit" class="btn btn-sm btn-info">add Item</button>
+                        </div>
+
+
+
+                        {/* {networkData.length > 0 ? */}
+                        <FlexibleResults typedata={flexibleData} />
+                        {/* // : ''} */}
+
 
 
                     </div>
                 </div>
-            </div>
-
-        
+            </form>
 
 
-            
-        </form>
-
-            
         </>
     )
 }
@@ -1257,7 +1366,7 @@ function TraditionalResults(props) {
 
 
 
-    
+
     var networkData = [];
     for (let index = 0; index < props.typedata.length; index++) {
         networkData.push(<TraditionalTypeRow datar={props.typedata[index]}
@@ -1265,14 +1374,14 @@ function TraditionalResults(props) {
     }
 
 
-    
+
 
     return (
         <>
 
-        <form>
-            
-        </form>
+            <form>
+
+            </form>
             <div className="card mt-3 mb-3 data" >
                 <div className="card-body">
                     <div className="row">
@@ -1316,6 +1425,69 @@ circle"></i></button> */}
     )
 }
 
+
+function FlexibleResults(props) {
+
+
+
+    var networkData = [];
+    for (let index = 0; index < props.typedata.length; index++) {
+        networkData.push(<FlexibleTypeRow datar={props.typedata[index]}
+        />);
+    }
+
+
+
+
+    return (
+        <>
+
+            <form>
+
+            </form>
+            <div className="card mt-3 mb-3 data" >
+                <div className="card-body">
+                    <div className="row">
+                        <div className="col-md-12">
+                            <table className="table table-striped table-
+bordered">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Price Schedule</th>
+                                        {/* <th>Denied</th> */}
+                                        <th>Inclusion By</th>
+                                        <th>Exclusion By</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {networkData}
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div className="col-md-3 ms-auto text-end">
+                            {/* <button className="btn  btn-info" data-bs-
+toggle="modal" data-bs-target="#exampleModal"> 
+                                Add Provider Types <i className="fa fa-plus-
+circle"></i></button> */}
+                            {/* <button className="btn  btn-info" onClick={e =>
+                                handleShow()}>
+                                Add Provider Types <i className="fa fa-plus-
+circle"></i></button> */}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* <Add show={show} handleClose={handleClose()}/> */}
+            {/* <Add props={modalData} /> */}
+        </>
+    )
+}
+
 function TraditionalTypeRow(props) {
 
 
@@ -1323,7 +1495,7 @@ function TraditionalTypeRow(props) {
     const ischecked = true;
 
 
-   const deleteRow=(e)=>{
+    const deleteRow = (e) => {
 
         alert(e.currentTarget.value);
 
@@ -1336,15 +1508,15 @@ function TraditionalTypeRow(props) {
                 <td>{props.datar.network_name}</td>
                 <td>{props.datar.price_schedule}</td>
                 {props.datar.denied == ischecked ? (
-       <td>Yes</td>
-      ) : (
+                    <td>Yes</td>
+                ) : (
 
-        <td>No</td>
-       
-      )}
+                    <td>No</td>
+
+                )}
                 <td>{props.datar.effective_date}</td>
                 <td>{props.datar.termination_date}</td>
-                <td><button  onClick={deleteRow}  value={props.datar.traditional_id}  className='btn btn-sm btn-warning'><i className='fa fa-trash-alt'></i></button></td>
+                <td><button onClick={deleteRow} value={props.datar.traditional_id} className='btn btn-sm btn-warning'><i className='fa fa-trash-alt'></i></button></td>
 
 
 
@@ -1353,6 +1525,36 @@ function TraditionalTypeRow(props) {
     )
 }
 
+function FlexibleTypeRow(props) {
+
+
+    const currentpath = location.pathname.split('/').pop();
+    const ischecked = true;
+
+
+    const flexdeleteRow = (e) => {
+
+        alert(e.currentTarget.value);
+
+    }
+
+    return (
+        <>
+            <tr>
+                <td>{props.datar.flexible_network_id}</td>
+                <td>{props.datar.flexible_network_name}</td>
+                <td>{props.datar.flexible_price_schedule}</td>
+
+                <td>{props.datar.inclusion_by}</td>
+                <td>{props.datar.exclusion_by}</td>
+                <td><button onClick={flexdeleteRow} value={props.datar.flexible_network_id} className='btn btn-sm btn-warning'><i className='fa fa-trash-alt'></i></button></td>
+
+
+
+            </tr>
+        </>
+    )
+}
 
 
 export default SearchProvider;

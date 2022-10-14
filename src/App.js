@@ -11,7 +11,7 @@ import Member, { ChnageLog, ClaimHistory, Coverage, CoverageHistory, Health, Mem
 
 import SearchProvider, { Provider,Effectivedates,PharmistSystem,NetworkParticipation } from './pages/dashboard/user/provider/SearchProvider';
 
-
+import TraditionalNetworks,{Network} from './pages/dashboard/user/provider/TraditionalNetworks';
 
 
 
@@ -116,8 +116,6 @@ function App() {
           <Route path='user/searchprovider' element={<SearchProvider />}>
           <Route index element={<Navigate to="provider" replace />} />
 
-
-
             <Route path='provider' element={<Provider />} />
             <Route path='effectivedates' element={<Effectivedates />} />
             <Route path='pharmistsystem' element={<PharmistSystem />} />
@@ -125,8 +123,14 @@ function App() {
             <Route path='networkparticipation' element={<NetworkParticipation />} />
 
 
+          </Route>
 
 
+          <Route path='user/provider/traditionalnetworks' element={<TraditionalNetworks />}>
+          <Route index element={<Navigate to="network" replace />} />
+
+            <Route path='network' element={<Network />} />
+            <Route path='providers' element={<Network />} />
 
 
 
