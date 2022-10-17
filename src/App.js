@@ -11,9 +11,9 @@ import Member, { ChnageLog, ClaimHistory, Coverage, CoverageHistory, Health, Mem
 
 import SearchProvider, { Provider,Effectivedates,PharmistSystem,NetworkParticipation } from './pages/dashboard/user/provider/SearchProvider';
 
-import TraditionalNetworks,{Network} from './pages/dashboard/user/provider/TraditionalNetworks';
+import TraditionalNetworks,{Network,Providers} from './pages/dashboard/user/provider/TraditionalNetworks';
 
-
+import FlexibleNetworks from './pages/dashboard/user/provider/FlexibleNetworks';
 
 import Membership, { SearchById, SearchByName } from './pages/dashboard/members/Membership';
 import PlanAuthorisation, { Authorisation, PANotes, Pricing } from './pages/dashboard/members/PlanAuthorisation';
@@ -130,7 +130,19 @@ function App() {
           <Route index element={<Navigate to="network" replace />} />
 
             <Route path='network' element={<Network />} />
-            <Route path='providers' element={<Network />} />
+            <Route path='providers' element={<Providers />} />
+
+
+
+          </Route>
+
+
+
+          <Route path='user/provider/flexiblenetworks' element={<FlexibleNetworks  />}>
+          <Route index element={<Navigate to="network" replace />} />
+
+            {/* <Route path='network' element={<Network />} />
+            <Route path='providers' element={<Network />} /> */}
 
 
 
