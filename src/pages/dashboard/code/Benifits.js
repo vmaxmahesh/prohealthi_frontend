@@ -11,7 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 export default function Benifits() {
 
-    const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
+    const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
     const [benifitsData, setBenifitData] = useState([]);
 
@@ -20,25 +20,15 @@ export default function Benifits() {
         console.log(benefit_data);
     }
 
-
-
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    // useEffect(() => {
-
-    //     if(added) {
-    //         console.log('added');
-    //         reset();
-    //     }
-    // }, [added, reset]);
-
     const onSubmit = (data) => {
-        // var arr = [
-        //     { code: '1112', description: 'benifit description 1' },
-        //     { code: '2341', description: 'benifit description 2' },
-        // ];
+        var arr = [
+            { code: '1112', description: 'benifit description 1' },
+            { code: '2341', description: 'benifit description 2' },
+        ];
         //         const encodedValue = encodeURIComponent(someVariable);
         // fetch(`https://example.com/foo?bar=${encodedValue}`);
 
@@ -50,13 +40,13 @@ export default function Benifits() {
         };
         // console.log(watch(data)); 
 
-        if (process.env.REACT_APP_API_BASEURL != 'NOT') {
+        if (process.env.REACT_APP_API_BASEURL == 'NOT') {
             fetch(process.env.REACT_APP_API_BASEURL + `/api/codes/benefits?${objToQueryString(data)}`, requestOptions)
                 .then(async response => {
                     const isJson = response.headers.get('content-type')?.includes('application/json');
                     const data = isJson && await response.json();
-                    console.log(data);
-                    setBenifitData(data.data);
+                    console.log(response);
+
                     // check for error response
                     if (!response.ok) {
                         // get error message from body or default to response status
@@ -64,24 +54,24 @@ export default function Benifits() {
                         return Promise.reject(error);
                     }
                     console.log(process.env.REACT_APP_API_BASEURL);
-                    // if (process.env.REACT_APP_API_BASEURL == 'NOT') {
-                    //     response.message = 'Successfully added';
-                    // }
+                    if (process.env.REACT_APP_API_BASEURL == 'NOT') {
+                        response.message = 'Successfully added';
+                    }
 
 
 
-                    // if (response === '200') {
-                    //     toast.success(response.message, {
-                    //         position: "bottom-center",
-                    //         autoClose: 5000,
-                    //         hideProgressBar: false,
-                    //         closeOnClick: true,
-                    //         pauseOnHover: true,
-                    //         draggable: true,
-                    //         progress: undefined,
+                    if (response === '200') {
+                        toast.success(response.message, {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
 
-                    //     });
-                    // }
+                        });
+                    }
 
                     // props.onChange(data);
                     // navigate("/dashboard/user/customer/strategy");
@@ -105,18 +95,18 @@ export default function Benifits() {
                     //     });
                 });
 
-           
+            setBenifitData(arr);
         } else {
-            // toast.success('Added successfully.', {
-            //     position: "top-right",
-            //     autoClose: 5000,
-            //     hideProgressBar: false,
-            //     closeOnClick: true,
-            //     pauseOnHover: true,
-            //     draggable: true,
-            //     progress: undefined,
+            toast.success('Added successfully.', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
 
-            // });
+            });
         }
     }
 
@@ -125,7 +115,6 @@ export default function Benifits() {
     return (
         <>
             <div className='dashboard-content clearfix'>
-
                 <div className="row">
                     <div className="col-md-6 mb-3">
                         <div className="breadcrum">
@@ -173,9 +162,9 @@ export default function Benifits() {
                                 </div>
 
                                 <div className="col-md-6 ms-auto text-end mb-3 mt-3">
-                                    {/* <a href="" className="btn btn-secondary">Cancel</a>&nbsp;&nbsp;
+                                    <a href="" className="btn btn-secondary">Cancel</a>&nbsp;&nbsp;
                                     <a href="" className="btn btn-danger">Select</a>&nbsp;&nbsp;
-                                    <a href="" className="btn btn-warning ">Clear</a>&nbsp;&nbsp; */}
+                                    <a href="" className="btn btn-warning ">Clear</a>&nbsp;&nbsp;
                                     {/* <button href="provider-search.html" className="btn btn-info" onClick={e => fillBenifitsData()}>Search</button> */}
                                     <button type="submit" href="provider-search.html" className="btn btn-info" >Search</button>
                                 </div>
@@ -239,7 +228,7 @@ function BenifitRow(props) {
     return (
         <>
             <tr>
-                <td>{props.benifitRowData.benefit_code}</td>
+                <td>{props.benifitRowData.code}</td>
                 <td>{props.benifitRowData.description}</td>
             </tr>
         </>
@@ -249,16 +238,7 @@ function BenifitRow(props) {
 function AddBenifit(props) {
     const [code, setCode] = useState();
     const [description, setDescription] = useState();
-    const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
-    const [added, setAdded] = useState(false);
-
-    useEffect(() => {
-
-        if(added) {
-            console.log('added');
-            reset();
-        }
-    }, [added, reset]);
+    const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
     const addCode = (data) => {
         console.log(data);
@@ -271,7 +251,7 @@ function AddBenifit(props) {
         };
         // console.log(watch(data)); 
         if (process.env.REACT_APP_API_BASEURL == 'NOT') {
-            toast.success('Added Successfully...!', {
+                    toast.success('Added Successfully...!', {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -282,7 +262,6 @@ function AddBenifit(props) {
 
             });
         } else {
-            
             fetch(process.env.REACT_APP_API_BASEURL + `/api/codes/benefits/submit`, requestOptions)
                 .then(async response => {
                     const isJson = response.headers.get('content-type')?.includes('application/json');
@@ -294,32 +273,17 @@ function AddBenifit(props) {
                         // get error message from body or default to response status
                         const error = (data && data.message) || response.status;
                         return Promise.reject(error);
-                    } else {
-                        setAdded(true);
-                        toast.success(data.message, {
-                            position: "bottom-center",
-                            autoClose: 5000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-
-                        });
-
-                        return true;
                     }
 
 
-                    if (response.status == '200') {
-
+                    if (response === '200') {
                     }
 
                 })
                 .catch(error => {
                     console.error('There was an error!', error);
                 });
-        }
+    }
 
     }
     const onSubmit = (e) => {
@@ -360,7 +324,7 @@ function AddBenifit(props) {
                         <Button variant="secondary" onClick={props.handleClose}>
                             Close
                         </Button>
-                        <button type="submit" className="btn btn-info">Add Benefit Codes</button>
+                        <button type="submit" className="btn btn-info">Add Procedure Codes</button>
 
                     </Modal.Footer>
                 </form>

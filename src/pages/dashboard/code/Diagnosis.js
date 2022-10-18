@@ -4,7 +4,6 @@ import Modal from 'react-bootstrap/Modal';
 import {useState, useEffect} from 'react';
 import { useForm } from "react-hook-form";
 import { objToQueryString } from '../../../hooks/healper';
-import { toast } from 'react-toastify';
 
 export default function Diagnosis() {
 
@@ -13,11 +12,11 @@ export default function Diagnosis() {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
-    const fillDiagnosisData = (fdata) => {
+    const fillDiagnosisData = (data) => {
         var arr = [
-            // {code : '1234', description : 'diagnosis code 1'},
-            // {code : '2901', description : 'diagnosis 2'},
-            // {code : '8236', description : 'diagnosis code 8236'},
+            {code : '1234', description : 'diagnosis code 1'},
+            {code : '2901', description : 'diagnosis 2'},
+            {code : '8236', description : 'diagnosis code 8236'},
         ];
 
         const requestOptions = {
@@ -26,9 +25,9 @@ export default function Diagnosis() {
             headers: { 'Content-Type': 'application/json' },
             // body: encodeURIComponent(data)
         };
-        console.log(watch(fdata)); 
+        console.log(watch(data)); 
 
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/codes/diagnosis?${objToQueryString(fdata)}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/codes/diagnosis?${objToQueryString(data)}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
@@ -39,8 +38,6 @@ export default function Diagnosis() {
                     // get error message from body or default to response status
                     const error = (data && data.message) || response.status;
                     return Promise.reject(error);
-                } else {
-                    setDiagnosisData(data.data);
                 }
 
 
@@ -51,7 +48,7 @@ export default function Diagnosis() {
                 console.error('There was an error!', error);
             });
 
-        
+        setDiagnosisData(arr);
     }
 
     useEffect(() => {},[diagnosisData]);
@@ -107,9 +104,9 @@ export default function Diagnosis() {
                             </div>
 
                             <div className="col-md-6 ms-auto text-end mb-3 mt-3">
-                                {/* <a href="" className="btn btn-secondary">Cancel</a>&nbsp;&nbsp;
+                                <a href="" className="btn btn-secondary">Cancel</a>&nbsp;&nbsp;
                                 <a href="" className="btn btn-danger">Select</a>&nbsp;&nbsp;
-                                <a href="" className="btn btn-warning ">Clear</a>&nbsp;&nbsp; */}
+                                <a href="" className="btn btn-warning ">Clear</a>&nbsp;&nbsp;
                                 <button className="btn btn-info" type="submit">Search</button>
                             </div>
                         </div>
@@ -166,7 +163,7 @@ function DiagRow(props)
     return(
         <>
             <tr>
-                <td>{props.diagData.diagnosis_id}</td>
+                <td>{props.diagData.code}</td>
                 <td>{props.diagData.description}</td>
             </tr>
         </>
@@ -175,18 +172,7 @@ function DiagRow(props)
 
 function AddDiagnosisCode(props)
 {
-    const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
-    const [added, setAdded] = useState(false);
-
-    useEffect(() => {
-
-        if(added) {
-            console.log('added');
-            reset();
-        }
-    }, [added, reset]);
-
-
+    const { register, handleSubmit, watch, formState: { errors } } = useForm();
     const addDiagnosis = (data) => {
         console.log(data);
         const requestOptions = {
@@ -207,20 +193,6 @@ function AddDiagnosisCode(props)
                     // get error message from body or default to response status
                     const error = (data && data.message) || response.status;
                     return Promise.reject(error);
-                } else {
-                    setAdded(true);
-                    toast.success(data.message, {
-                        position: "bottom-center",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-
-                    });
-
-                    return true;
                 }
 
 

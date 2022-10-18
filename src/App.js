@@ -29,7 +29,13 @@ import ServiceType from './pages/dashboard/code/ServiceType';
 import ProviderType from './pages/dashboard/code/ProviderType';
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-
+import PriceSchedule from './pages/dashboard/third party pricing/PriceSchedule';
+import MacList from './pages/dashboard/third party pricing/MacList';
+import TaxSchedule from './pages/dashboard/third party pricing/TaxSchedule';
+import CopayStepSchedule from './pages/dashboard/third party pricing/CopayStepSchedule';
+import CopaySchedule from './pages/dashboard/third party pricing/CopaySchedule';
+import ProcedureUCRList from './pages/dashboard/third party pricing/ProcedureUCRList';
+import RVAList from './pages/dashboard/third party pricing/RVAList';
 
 
 function setToken(userToken) {
@@ -153,11 +159,63 @@ function App() {
             <Route path='network' element={<Network />} />
             <Route path='rules' element={<Rules />} />
 
-
-
           </Route>
 
+          {/* codes routes start  */}
 
+          <Route path="code/benefits" element={<Benifits />}>
+            
+          </Route>
+
+          <Route path="code/procedure" element={<Procedure />}>
+           
+          </Route>
+
+          <Route path="code/diagnosis" element={<Diagnosis />}>
+           
+          </Route>
+
+          <Route path="code/reason" element={<Reason />}>
+           
+          </Route>
+
+          <Route path="code/cause-of-loss" element={<CauseOfLoss />}>
+          </Route>
+
+          <Route path="code/service-modifiers" element={<ServiceModifiers />}>
+          </Route>
+
+          <Route path="code/service-type" element={<ServiceType />}>
+          </Route>
+
+          <Route path="code/provider-type" element={<ProviderType />}>
+          </Route>
+    
+          {/* codes routes ends  */}
+
+          {/* third party pricing started  */}
+          <Route path="third-party-pricing/price-schedule" element={<PriceSchedule />}>
+          </Route>
+
+          <Route path="third-party-pricing/copay-schedule" element={<CopaySchedule />}>
+          </Route>
+
+          <Route path="third-party-pricing/copay-step-schedule" element={<CopayStepSchedule />}>
+          </Route>
+
+          <Route path="third-party-pricing/MAC-list" element={<MacList />}>
+          </Route>
+
+          <Route path="third-party-pricing/procedure-UCR-list" element={<ProcedureUCRList />}>
+          </Route>
+
+          <Route path="third-party-pricing/tax-schedule" element={<TaxSchedule />}>
+          </Route>
+
+          <Route path="third-party-pricing/RAV-list" element={<RVAList />}>
+          </Route>
+
+          {/* third party pricing ends  */}
 
 
 

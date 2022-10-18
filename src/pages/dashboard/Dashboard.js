@@ -40,6 +40,19 @@ export default function Dashboard() {
                                 <Link to="/dashboard/code/provider-type" className={'dashboard-nav-dropdown-item' + (currentpath == 'customer' ? ' active' : '')}>Provider Types</Link>
                             </div>
                         </div>
+                        <div className='dashboard-nav-dropdown'>
+                            <a href="#!" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
+                                <i className="fa-solid fa-calendar-days"></i> Third Party Pricing </a>
+                            <div className='dashboard-nav-dropdown-menu'>
+                                <a href="/dashboard/third-party-pricing/copay-schedule" className="dashboard-nav-dropdown-item">Copay Schedule</a>
+                                <a href="/dashboard/third-party-pricing/copay-step-schedule" className="dashboard-nav-dropdown-item">Copay Step Schedule</a>
+                                <a href="/dashboard/third-party-pricing/MAC-list" className="dashboard-nav-dropdown-item">MAC List</a>
+                                <a href="/dashboard/third-party-pricing/tax-schedule" className="dashboard-nav-dropdown-item">Tax Schedule</a>
+                                <a href="/dashboard/third-party-pricing/procedure-UCR-list" className="dashboard-nav-dropdown-item">Procedure UCR List</a>
+                                <a href="/dashboard/third-party-pricing/RAV-list" className="dashboard-nav-dropdown-item">RVA List</a>
+                                <a href="/dashboard/third-party-pricing/price-schedule" className="dashboard-nav-dropdown-item">Price Schedule</a>
+                            </div>
+                        </div>
                         <div className={'dashboard-nav-dropdown' + (['subpath', 'subpath2'].includes(currentpath) ? ' show' : '')}>
                             <a href="#!" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
                                 <i className="fa-solid fa-prescription-bottle-medical"></i> Drug Information </a>
