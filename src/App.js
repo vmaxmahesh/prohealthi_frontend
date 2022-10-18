@@ -12,6 +12,16 @@ import Membership, { SearchById, SearchByName } from './pages/dashboard/members/
 import PlanAuthorisation, { Authorisation, PANotes, Pricing } from './pages/dashboard/members/PlanAuthorisation';
 import PlanValidation from './pages/dashboard/members/PlanValidation';
 import useToken from './hooks/useToken';
+import Benifits from './pages/dashboard/code/Benifits';
+import Procedure from './pages/dashboard/code/Procedure';
+import Diagnosis from './pages/dashboard/code/Diagnosis';
+import Reason from './pages/dashboard/code/Reason';
+import CauseOfLoss from './pages/dashboard/code/CauseOfLoss';
+import ServiceModifiers from './pages/dashboard/code/ServiceModifiers';
+import ServiceType from './pages/dashboard/code/ServiceType';
+import ProviderType from './pages/dashboard/code/ProviderType';
+import { ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 
 
@@ -99,15 +109,79 @@ function App() {
             <Route path='notes' element={<PANotes />} />
           </Route>
 
+
           <Route path="plan-validations" element={<PlanValidation />}>
 
           </Route>
 
+          <Route path="code/benefits" element={<Benifits />}>
+
+          </Route>
+
+          <Route path="code/procedure" element={<Procedure />}>
+
+          </Route>
+
+          <Route path="code/diagnosis" element={<Diagnosis />}>
+
+          </Route>
+
+          <Route path="code/reason" element={<Reason />}>
+
+          </Route>
+
+          <Route path="code/cause-of-loss" element={<CauseOfLoss />}>
+          </Route>
+
+          <Route path="code/service-modifiers" element={<ServiceModifiers />}>
+          </Route>
+
+          <Route path="code/service-type" element={<ServiceType />}>
+          </Route>
+
+          <Route path="code/provider-type" element={<ProviderType />}>
+          </Route>
+
+          <></>
+
         </Route>
       </Routes>
+      <ToastContainer
+        position="bottom-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      {/* Same as */}
+      <ToastContainer />
+      {/* <Loading/> */}
     </>
 
   );
+}
+
+export function Loading(props) {
+  return (
+    <>
+      <svg 
+        style={{margin: 'auto', background: 'rgb(255, 255, 255)', display: 'block', shapRendering: 'auto', animationPlayState: 'running', animationDelay: '0s'}}
+        width="200px" height="200px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+        <path fill="none" stroke="#e90c59" stroke-width="8" stroke-dasharray="42.76482137044271 42.76482137044271"
+          d="M24.3 30C11.4 30 5 43.3 5 50s6.4 20 19.3 20c19.3 0 32.1-40 51.4-40 C88.6 30 95 43.3 95 50s-6.4 20-19.3 20C56.4 70 43.6 30 24.3 30z"
+          stroke-linecap="round"
+          style={{transform: 'scale(0.8)', transformOrigin: '50px 50px',  animationPlayState: 'running', animationDelay: '0s'}}>
+          <animate attributeName="stroke-dashoffset" repeatCount="indefinite" dur="1s" keyTimes="0;1"
+            values="0;256.58892822265625" style="animation-play-state: running; animation-delay: 0s;"></animate>
+        </path>
+      </svg>
+    </>
+  )
 }
 
 export function UnAuthRoutes(params) {

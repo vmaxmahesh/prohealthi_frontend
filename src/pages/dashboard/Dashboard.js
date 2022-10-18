@@ -28,13 +28,16 @@ export default function Dashboard() {
                         </div>
                         <div className={'dashboard-nav-dropdown' + (['subpath', 'subpath2'].includes(currentpath) ? ' show' : '')}>
                             <a href="#!" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
-                                <i className="fas fa-table"></i> Code Tables </a>
+                                <i className="fas fa-table"></i> Code </a>
                             <div className='dashboard-nav-dropdown-menu'>
-                                <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>All</a>
-                                <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Subscribed</a>
-                                <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Non-subscribed</a>
-                                <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Banned</a>
-                                <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>New</a>
+                                <Link to="/dashboard/code/benefits" className={'dashboard-nav-dropdown-item' + (currentpath == 'customer' ? ' active' : '')}>Benifit Codes</Link>
+                                <Link to="/dashboard/code/procedure" className={'dashboard-nav-dropdown-item' + (currentpath == 'customer' ? ' active' : '')}>Procedure Codes</Link>
+                                <Link to="/dashboard/code/diagnosis" className={'dashboard-nav-dropdown-item' + (currentpath == 'customer' ? ' active' : '')}>Diagnosis Codes</Link>
+                                <Link to="/dashboard/code/reason" className={'dashboard-nav-dropdown-item' + (currentpath == 'customer' ? ' active' : '')}>Reason Codes</Link>
+                                <Link to="/dashboard/code/cause-of-loss" className={'dashboard-nav-dropdown-item' + (currentpath == 'customer' ? ' active' : '')}>Cause Of Loss Codes</Link>
+                                <Link to="/dashboard/code/service-modifiers" className={'dashboard-nav-dropdown-item' + (currentpath == 'customer' ? ' active' : '')}>Service Modifiers</Link>
+                                <Link to="/dashboard/code/service-type" className={'dashboard-nav-dropdown-item' + (currentpath == 'customer' ? ' active' : '')}>Service Types</Link>
+                                <Link to="/dashboard/code/provider-type" className={'dashboard-nav-dropdown-item' + (currentpath == 'customer' ? ' active' : '')}>Provider Types</Link>
                             </div>
                         </div>
                         <div className={'dashboard-nav-dropdown' + (['subpath', 'subpath2'].includes(currentpath) ? ' show' : '')}>

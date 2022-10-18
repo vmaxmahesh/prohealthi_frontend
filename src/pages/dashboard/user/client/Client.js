@@ -4,6 +4,7 @@ import { Link, Outlet, Route, Routes, useLocation, useNavigate, useOutletContext
 import Footer from '../../../../shared/Footer';
 import { ToastContainer, toast } from 'react-toastify';
 
+
 export default function Client() {
     const location = useLocation();
     const currentpath = location.pathname.split('/').pop();
@@ -173,14 +174,11 @@ export default function Client() {
                     <Link className={'nav-link' + (currentpath == 'strategy' ? ' active' : '')} to='strategy'>Strategy</Link>
                     <Link className={'nav-link' + (currentpath == 'eligibility' ? ' active' : '')} to='eligibility'>Eligibility</Link>
                     <Link className={'nav-link' + (currentpath == 'indicators' ? ' active' : '')} to='indicators'>Indicators</Link>
-
-
                 </div>
                 
 
                 <div className="tab-content" id="nav-tabContent">
                     <Outlet context={[client, setClient]} />
-
                 </div>
             </div>}
 
@@ -204,7 +202,70 @@ export function Indicators(params) {
         Indicatorsid['Indicators'] = data;
         setClient(Indicatorsid);
         console.log(client);
+        postTOBackend(client);
 
+    }
+
+
+    const postTOBackend = client => {
+        console.log(client);
+        alert('mahesh');
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(client)
+        };
+        fetch(process.env.REACT_APP_API_BASEURL + '/api/customer/add', requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                alert(response);
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    return Promise.reject(error);
+                }
+
+                console.log(data);
+
+
+                if(response==='200'){
+                    toast.success(response.data.message, {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        
+                        
+                        });
+                }
+
+                // props.onChange(data);
+                // navigate("/dashboard/user/customer/strategy");
+
+                // this.setState({ postId: data.id })
+            })
+            .catch(error => {
+                // this.setState({ errorMessage: error.toString() });
+                console.error('There was an error!', error);
+
+                toast.error(error.response.data.message, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    
+                    
+                    });
+            });
     }
     return (
         <>
@@ -300,7 +361,7 @@ export function Indicators(params) {
                                     <small>Number of Days from Date Written to First Fill</small>
                                     <input type="text" className="form-control" name="no_of_days_to_first_fill" {...register("no_of_days_to_first_fill")} id="" placeholder="" required="" />
 
-                                    {errors.Bypass_Member_Eligibility?.type === 'required' && <p role="alert" className="notvalid">Number of Days from Date Written to First Fill is   required</p>}
+                                    {errors.no_of_days_to_first_fill?.type === 'required' && <p role="alert" className="notvalid">Number of Days from Date Written to First Fill is   required</p>}
 
                                 </div>
                             </div>
@@ -693,6 +754,13 @@ export function Coverage(params) {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [client, setClient] = useOutletContext();
 
+    const[tier1value,tier1setValue]=useState(null);
+    const[tier2value,tier2setValue]=useState(null);
+
+
+
+
+
 
 
     const {
@@ -716,7 +784,25 @@ export function Coverage(params) {
     }
 
 
+    const tiersMove=()=>{
+      var val1= new Date(document.getElementById("tier_1").value);
+      var val2=  new Date(document.getElementById("tier_2").value);
+      var val3=  new Date(document.getElementById("tier_3").value);
 
+
+      tier1setValue(val1);
+      tier2setValue(val2);
+
+        // setTier2(val2);
+        console.log(tier1value);
+
+        console.log(tier2value);
+
+    }
+
+
+
+   
     const onSubmit = data => {
 
 
@@ -869,7 +955,7 @@ export function Coverage(params) {
                                 <h5 className="mb-2">Coverage Strategy</h5>
                             </div>
                             <div className="col-md-1 mb-1">
-                                <a href="" className="btn btn-theme btn-sm p-1" style={{ width: '100%' }}>Add <i className="fa fa-plus"></i></a>
+                                <button onClick={tiersMove} className="btn btn-theme btn-sm p-1" style={{ width: '100%' }}>Add <i className="fa fa-plus"></i></button>
                             </div>
                         </div>
                         <div className="row align-items-center">
@@ -879,9 +965,9 @@ export function Coverage(params) {
                             <div className="col-md-3">
                                 <div className="form-group mb-3">
                                     <small>Tier 1</small>
-                                    <input type="date" className="form-control" name="tier_1" {...register('tier_1', {
+                                    <input type="date" className="form-control" value="2013-01-08"  id="tier_1" onSelect={tiersMove}  name="tier_1" {...register('tier_1', {
                                         required: true,
-                                    })} id="" />
+                                    })}  />
                                     {errors.tier_1?.type === 'required' && <p role="alert" className="notvalid">Cov Eff Date is  required</p>}
 
                                 </div>
@@ -889,9 +975,9 @@ export function Coverage(params) {
                             <div className="col-md-3">
                                 <div className="form-group mb-3">
                                     <small>Tier 2</small>
-                                    <input type="date" className="form-control" name="tier_2"  {...register('tier_2', {
+                                    <input type="date" className="form-control" defaultValue="01-02-2022" name="tier_2"  {...register('tier_2', {
                                         required: true,
-                                    })} id="" />
+                                    })} id="tier_2" />
                                     {errors.tier_2?.type === 'required' && <p role="alert" className="notvalid">Cov Eff Date is  required</p>}
 
                                 </div>
@@ -901,7 +987,7 @@ export function Coverage(params) {
                                     <small>Tier 3</small>
                                     <input type="date" className="form-control" name="tier_3" {...register('tier_3', {
                                         required: true,
-                                    })} id="" />
+                                    })} id="tier_3" />
                                     {errors.tier_3?.type === 'required' && <p role="alert" className="notvalid">Cov Eff Date is  required</p>}
 
                                 </div>
