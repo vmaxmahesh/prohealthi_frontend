@@ -44,7 +44,6 @@ function Customer() {
                 <Link to="strategy" className={'nav-link' + (currentpath == 'strategy' ? ' active' : '')}>Strategy</Link>
                 <Link to="eligibility" className={'nav-link' + (currentpath == 'eligibility' ? ' active' : '')}>Eligibility</Link>
                 <Link to="indicators" className={'nav-link' + (currentpath == 'indicators' ? ' active' : '')}>Indicators</Link>
-                <Link to="exceptions" className={'nav-link' + (currentpath == 'exceptions' ? ' active' : '')}>Exception Lists / Charges</Link>
 
             </div>
             <div className="tab-content" id="nav-tabContent">

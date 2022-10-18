@@ -8,6 +8,13 @@ import Clientgroup, { Charges as CGCharges, Identification as Cgi, Eligibility a
 import Customer, { Eligibility, Exceptions, Identification, Indicators, Strategy } from './pages/dashboard/user/customer/Customer';
 import Client, { Eligibility as Ce, Identification as Ci, Indicators as Cin, Coverage as CS } from './pages/dashboard/user/client/Client';
 import Member, { ChnageLog, ClaimHistory, Coverage, CoverageHistory, Health, MemberForm, Notes, Overrides, PriorAuthorisation, ProviderSearch } from './pages/dashboard/members/Member';
+
+import SearchProvider, { Provider,Effectivedates,PharmistSystem,NetworkParticipation } from './pages/dashboard/user/provider/SearchProvider';
+
+import TraditionalNetworks,{Network,Providers} from './pages/dashboard/user/provider/TraditionalNetworks';
+
+import FlexibleNetworks,{Rules} from './pages/dashboard/user/provider/FlexibleNetworks';
+
 import Membership, { SearchById, SearchByName } from './pages/dashboard/members/Membership';
 import PlanAuthorisation, { Authorisation, PANotes, Pricing } from './pages/dashboard/members/PlanAuthorisation';
 import PlanValidation from './pages/dashboard/members/PlanValidation';
@@ -114,53 +121,65 @@ function App() {
 
           </Route>
 
-          <Route path="code/benefits" element={<Benifits />}>
+
+          <Route path='user/searchprovider' element={<SearchProvider />}>
+          <Route index element={<Navigate to="provider" replace />} />
+
+            <Route path='provider' element={<Provider />} />
+            <Route path='effectivedates' element={<Effectivedates />} />
+            <Route path='pharmistsystem' element={<PharmistSystem />} />
+
+            <Route path='networkparticipation' element={<NetworkParticipation />} />
+
 
           </Route>
 
-          <Route path="code/procedure" element={<Procedure />}>
+
+          <Route path='user/provider/traditionalnetworks' element={<TraditionalNetworks />}>
+          <Route index element={<Navigate to="network" replace />} />
+
+            <Route path='network' element={<Network />} />
+            <Route path='providers' element={<Providers />} />
+
+
 
           </Route>
 
-          <Route path="code/diagnosis" element={<Diagnosis />}>
+
+
+          <Route path='user/provider/flexiblenetworks' element={<FlexibleNetworks  />}>
+          <Route index element={<Navigate to="network" replace />} />
+
+            <Route path='network' element={<Network />} />
+            <Route path='rules' element={<Rules />} />
+
+
 
           </Route>
 
-          <Route path="code/reason" element={<Reason />}>
 
-          </Route>
 
-          <Route path="code/cause-of-loss" element={<CauseOfLoss />}>
-          </Route>
 
-          <Route path="code/service-modifiers" element={<ServiceModifiers />}>
-          </Route>
-
-          <Route path="code/service-type" element={<ServiceType />}>
-          </Route>
-
-          <Route path="code/provider-type" element={<ProviderType />}>
-          </Route>
-
-          <></>
 
         </Route>
-      </Routes>
-      <ToastContainer
-        position="bottom-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
-      {/* Same as */}
-      <ToastContainer />
-      {/* <Loading/> */}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </Routes>
     </>
 
   );

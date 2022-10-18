@@ -59,10 +59,16 @@ export default function Dashboard() {
                             </div>
                         </div>
                         <div className={'dashboard-nav-dropdown' + (['subpath', 'subpath2'].includes(currentpath) ? ' show' : '')}>
-                            <a href="#!" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
-                                <i className="fa-solid fa-hand-holding-heart"></i> Provider Data </a>
+                            <Link to="/dashboard/user/searchprovider" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
+                                <i className="fa-solid fa-hand-holding-heart"></i> Provider Data </Link>
                             <div className='dashboard-nav-dropdown-menu'>
-                                <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>All</a>
+                            <Link to="/dashboard/user/searchprovider" className={'dashboard-nav-dropdown-item' + (currentpath == 'provider' ? ' active' : '')}>Provider</Link>
+
+                                <Link to="/dashboard/user/provider/traditionalnetworks"  className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Traditional Networks</Link>
+                                <Link to="/dashboard/user/provider/flexiblenetworks"  className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>FlexibleNetworks</Link>
+                                <Link to="/dashboard/user/provider/superprovider"  className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Super Provider</Link>
+
+
                                 <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Recent</a>
                                 <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}> Projections</a>
                             </div>
@@ -161,7 +167,7 @@ export default function Dashboard() {
                                 <li className="dropdown"><a href="" className="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                     <div className="d-flex align-items-center">
                                         <div><small>Welcome User</small>
-                                            <p><b>Mr. Vamshi Krish</b></p>
+                                            <p><b>Adam</b></p>
                                         </div>
                                         <div className="profile">
                                             <img src="images/profile-pic.png" className="img-fluid" alt="" />
