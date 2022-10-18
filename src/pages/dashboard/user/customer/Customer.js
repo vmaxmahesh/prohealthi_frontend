@@ -44,6 +44,7 @@ function Customer() {
                 <Link to="strategy" className={'nav-link' + (currentpath == 'strategy' ? ' active' : '')}>Strategy</Link>
                 <Link to="eligibility" className={'nav-link' + (currentpath == 'eligibility' ? ' active' : '')}>Eligibility</Link>
                 <Link to="indicators" className={'nav-link' + (currentpath == 'indicators' ? ' active' : '')}>Indicators</Link>
+                <Link to="exceptions" className={'nav-link' + (currentpath == 'exceptions' ? ' active' : '')}>Exceptions List/ Charges</Link>
 
             </div>
             <div className="tab-content" id="nav-tabContent">
@@ -336,7 +337,7 @@ export function Identification(props) {
                                             <input type="date" {...register("effectivedate", {
                                                 required: true,
                                             })} className="form-control" onChange={StartDateChange} name="effectivedate" id="" placeholder="Address 1" />
-Effective Date
+                                            Effective Date
                                         </div>
                                     </div>
                                     <div className="col-md-6">
@@ -949,101 +950,101 @@ export function Strategy(props) {
 
 
 
-<div class="modal fade" id="supernetwork" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Search Super Provider Networks</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
+                <div class="modal fade" id="supernetwork" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Search Super Provider Networks</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
 
-                <div className='row align-items-center'>
-                    <h6>Criteria</h6>
-                    <br></br>
+                                <div className='row align-items-center'>
+                                    <h6>Criteria</h6>
+                                    <br></br>
 
-                    <div className="col-md-5  align-items-center">
-                        <div className="form-group mb-3">
-                            <small>Network ID</small>
-                            <input type="text"  {...register2("rva_list_id", {
-                                required: true,
-                            })} className="form-control" name="rva_list_id" id="" />
-                            {errors2.rva_list_id?.type === 'required' && <p role="alert" className="notvalid">List Id is required </p>}
+                                    <div className="col-md-5  align-items-center">
+                                        <div className="form-group mb-3">
+                                            <small>Network ID</small>
+                                            <input type="text"  {...register2("rva_list_id", {
+                                                required: true,
+                                            })} className="form-control" name="rva_list_id" id="" />
+                                            {errors2.rva_list_id?.type === 'required' && <p role="alert" className="notvalid">List Id is required </p>}
 
-                        </div>
-                    </div>
-
-
-                    <div className="col-md-5 align-items-center">
+                                        </div>
+                                    </div>
 
 
-                        <div className="form-group mb-3">
-
-                            <button style={successbtnstyle} className='btn btn-success float-right'>Search</button>
-
-                        </div>
-
-                    </div>
+                                    <div className="col-md-5 align-items-center">
 
 
+                                        <div className="form-group mb-3">
 
-                    <div className="col-md-5  align-items-center">
-                        <div className="form-group mb-3">
-                            <small>Network Name</small>
-                            <input type="text"  {...register2("list_name", {
-                            })} className="form-control" name="list_name" id="" />
-                            {/* {errors2.plan_id?.type === 'required' && <p role="alert" className="notvalid">Plan Id is required </p>} */}
+                                            <button style={successbtnstyle} className='btn btn-success float-right'>Search</button>
 
-                        </div>
-                    </div>
+                                        </div>
+
+                                    </div>
 
 
 
+                                    <div className="col-md-5  align-items-center">
+                                        <div className="form-group mb-3">
+                                            <small>Network Name</small>
+                                            <input type="text"  {...register2("list_name", {
+                                            })} className="form-control" name="list_name" id="" />
+                                            {/* {errors2.plan_id?.type === 'required' && <p role="alert" className="notvalid">Plan Id is required </p>} */}
 
-
-                </div>
-
-                <div>
-
-
-                    <br></br>
-                    <div class="row">
-                        <div class="col-md-12 table-responsive">
-                            <table class="table table-bordered  table-responsive">
-                                <thead>
-                                    <tr className='table-danger'>
-                                        <th>Network Id</th>
-                                        <th>Network Name</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {/* { cottagesList } */}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                                        </div>
+                                    </div>
 
 
 
 
 
+                                </div>
 
-                </div>
-
-
-
+                                <div>
 
 
-            </div>
+                                    <br></br>
+                                    <div class="row">
+                                        <div class="col-md-12 table-responsive">
+                                            <table class="table table-bordered  table-responsive">
+                                                <thead>
+                                                    <tr className='table-danger'>
+                                                        <th>Network Id</th>
+                                                        <th>Network Name</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {/* { cottagesList } */}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
 
-            {/* <div class="modal-footer">
+
+
+
+
+
+                                </div>
+
+
+
+
+
+                            </div>
+
+                            {/* <div class="modal-footer">
 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 <button type="button" class="btn btn-info">Add Benefit Code</button>
 </div> */}
-        </div>
-    </div>
-</div>
-</form>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </>
     )
 }
@@ -1542,21 +1543,21 @@ export function Indicators(props) {
                                         required: true,
                                     })} id="" placeholder="" required="" /> */}
 
-<select className="form-select" {...register("tax_status", {
-                                    required: true,
-                                })} name="tax_status">
-                                    <option value="">--select--</option>
-                                    <option value="1">Not Specified </option>
-                                    <option value="2">Taxable</option>
-                                    <option value="3">Tax Exempt</option>
-                                </select>
+                                    <select className="form-select" {...register("tax_status", {
+                                        required: true,
+                                    })} name="tax_status">
+                                        <option value="">--select--</option>
+                                        <option value="1">Not Specified </option>
+                                        <option value="2">Taxable</option>
+                                        <option value="3">Tax Exempt</option>
+                                    </select>
                                     {errors.tax_status?.type === 'required' && <p role="alert" className="notvalid">Tax status field is    required</p>}
 
                                 </div>
                             </div>
 
 
-                             
+
                             <div className="clearfix mb-2"></div>
 
                             <div className="col-md-4 mb-1">
@@ -1631,6 +1632,10 @@ export function Exceptions(props) {
 
     }
 
+    useEffect(() => {
+
+    }, [customer]);
+
 
 
 
@@ -1644,7 +1649,7 @@ export function Exceptions(props) {
 
         // console.log(process.env.REACT_APP_API_BASEURL);
         console.log('mahesh');
-        postTOBackend(customer);
+        postTOBackend();
 
     }
 
@@ -1652,19 +1657,20 @@ export function Exceptions(props) {
 
     console.log(process.env.REACT_APP_API_BASEURL);
 
-    const postTOBackend = customer => {
-        console.log(customer);
-        alert('mahesh');
+    const postTOBackend = () => {
+        // alert('mahesh');
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(customer)
         };
+        console.log(requestOptions);debugger;
+
         fetch(process.env.REACT_APP_API_BASEURL + '/api/customer/add', requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
-                alert(response);
+                // alert(response);
 
                 // check for error response
                 if (!response.ok) {
@@ -1673,10 +1679,10 @@ export function Exceptions(props) {
                     return Promise.reject(error);
                 }
 
-                console.log(data);
+                // console.log(data);
 
 
-                if(response==='200'){
+                if (response === '200') {
                     toast.success(response.data.message, {
                         position: "top-right",
                         autoClose: 5000,
@@ -1685,9 +1691,9 @@ export function Exceptions(props) {
                         pauseOnHover: true,
                         draggable: true,
                         progress: undefined,
-                        
-                        
-                        });
+
+
+                    });
                 }
 
                 // props.onChange(data);
@@ -1707,9 +1713,9 @@ export function Exceptions(props) {
                     pauseOnHover: true,
                     draggable: true,
                     progress: undefined,
-                    
-                    
-                    });
+
+
+                });
             });
     }
     return (
@@ -1717,105 +1723,105 @@ export function Exceptions(props) {
 
 
 
-<form key={1} onSubmit={handleSubmit2(searchSubmit)}>
+            <form key={1} onSubmit={handleSubmit2(searchSubmit)}>
 
 
 
-<div class="modal fade" id="rvalistidModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Search RVA Lists</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
+                <div class="modal fade" id="rvalistidModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Search RVA Lists</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
 
-                <div className='row align-items-center'>
-                    <h6>Criteria</h6>
-                    <br></br>
+                                <div className='row align-items-center'>
+                                    <h6>Criteria</h6>
+                                    <br></br>
 
-                    <div className="col-md-5  align-items-center">
-                        <div className="form-group mb-3">
-                            <small>List ID</small>
-                            <input type="text"  {...register2("rva_list_id", {
-                                required: true,
-                            })} className="form-control" name="rva_list_id" id="" />
-                            {errors2.rva_list_id?.type === 'required' && <p role="alert" className="notvalid">List Id is required </p>}
+                                    <div className="col-md-5  align-items-center">
+                                        <div className="form-group mb-3">
+                                            <small>List ID</small>
+                                            <input type="text"  {...register2("rva_list_id", {
+                                                required: true,
+                                            })} className="form-control" name="rva_list_id" id="" />
+                                            {errors2.rva_list_id?.type === 'required' && <p role="alert" className="notvalid">List Id is required </p>}
 
-                        </div>
-                    </div>
-
-
-                    <div className="col-md-5 align-items-center">
+                                        </div>
+                                    </div>
 
 
-                        <div className="form-group mb-3">
-
-                            <button style={successbtnstyle} className='btn btn-success float-right'>Search</button>
-
-                        </div>
-
-                    </div>
+                                    <div className="col-md-5 align-items-center">
 
 
+                                        <div className="form-group mb-3">
 
-                    <div className="col-md-5  align-items-center">
-                        <div className="form-group mb-3">
-                            <small>List Name</small>
-                            <input type="text"  {...register2("list_name", {
-                            })} className="form-control" name="list_name" id="" />
-                            {/* {errors2.plan_id?.type === 'required' && <p role="alert" className="notvalid">Plan Id is required </p>} */}
+                                            <button style={successbtnstyle} className='btn btn-success float-right'>Search</button>
 
-                        </div>
-                    </div>
+                                        </div>
+
+                                    </div>
 
 
 
+                                    <div className="col-md-5  align-items-center">
+                                        <div className="form-group mb-3">
+                                            <small>List Name</small>
+                                            <input type="text"  {...register2("list_name", {
+                                            })} className="form-control" name="list_name" id="" />
+                                            {/* {errors2.plan_id?.type === 'required' && <p role="alert" className="notvalid">Plan Id is required </p>} */}
 
-
-                </div>
-
-                <div>
-
-
-                    <br></br>
-                    <div class="row">
-                        <div class="col-md-12 table-responsive">
-                            <table class="table table-bordered  table-responsive">
-                                <thead>
-                                    <tr className='table-danger'>
-                                        <th>List Id</th>
-                                        <th>List Name</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {/* { cottagesList } */}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                                        </div>
+                                    </div>
 
 
 
 
 
+                                </div>
 
-                </div>
-
-
-
+                                <div>
 
 
-            </div>
+                                    <br></br>
+                                    <div class="row">
+                                        <div class="col-md-12 table-responsive">
+                                            <table class="table table-bordered  table-responsive">
+                                                <thead>
+                                                    <tr className='table-danger'>
+                                                        <th>List Id</th>
+                                                        <th>List Name</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {/* { cottagesList } */}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
 
-            {/* <div class="modal-footer">
+
+
+
+
+
+                                </div>
+
+
+
+
+
+                            </div>
+
+                            {/* <div class="modal-footer">
 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 <button type="button" class="btn btn-info">Add Benefit Code</button>
 </div> */}
-        </div>
-    </div>
-</div>
-</form>
+                        </div>
+                    </div>
+                </div>
+            </form>
             <form onSubmit={handleSubmit(onSubmit)}>
 
                 <div className="card mt-3 mb-3">

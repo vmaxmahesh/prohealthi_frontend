@@ -237,23 +237,23 @@ function Add(props) {
                         <Modal.Title>Provider Types </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col-md-12 mb-2">
-                                    <div class="form-group">
+                        <div className="modal-body">
+                            <div className="row">
+                                <div className="col-md-12 mb-2">
+                                    <div className="form-group">
                                         <small>Provider Type</small>
-                                        <input type="text" class="form-control" name="" id="" {...register("provider_type_code", { required: true, maxLength: 2 })} />
+                                        <input type="text" className="form-control" name="" id="" {...register("provider_type_code", { required: true, maxLength: 2 })} />
                                         {/* {errors.provider_type_code && <span><p className='notvalid'>This field is required</p></span>} */}
-                                        {/* <input type="text" class="form-control" name="" id="" {...register("service_modifier_code", { required: true, maxLength: 2 })} /> */}
+                                        {/* <input type="text" className="form-control" name="" id="" {...register("service_modifier_code", { required: true, maxLength: 2 })} /> */}
                                         {errors.provider_type_code && errors.provider_type_code.type === "required" && <span className="notvalid">This is required</span>}
                                         {errors.provider_type_code && errors.provider_type_code.type === "maxLength" && <span className="notvalid">Max length exceeded</span>}
 
                                     </div>
                                 </div>
-                                <div class="col-md-12 mb-2">
-                                    <div class="form-group">
+                                <div className="col-md-12 mb-2">
+                                    <div className="form-group">
                                         <small>Discription</small>
-                                        <textarea class="form-control" rows="3" name="" id=""  {...register("provider_type_description", { required: true })} ></textarea>
+                                        <textarea className="form-control" rows="3" name="" id=""  {...register("provider_type_description", { required: true })} ></textarea>
                                         {errors.provider_type_description && <span><p className='notvalid'>This field is required</p></span>}
                                     </div>
                                 </div>
@@ -265,7 +265,7 @@ function Add(props) {
                         <Button variant="secondary" onClick={props.handleClose}>
                             Close
                         </Button>
-                        <button type="submit" class="btn btn-info">Add Provider Types</button>
+                        <button type="submit" className="btn btn-info">Add Provider Types</button>
                     </Modal.Footer>
                 </form>
             </Modal>
