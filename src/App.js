@@ -157,7 +157,33 @@ function App() {
 
           </Route>
 
-
+          <Route path="code/benefits" element={<Benifits />}>
+            
+            </Route>
+  
+            <Route path="code/procedure" element={<Procedure />}>
+             
+            </Route>
+  
+            <Route path="code/diagnosis" element={<Diagnosis />}>
+             
+            </Route>
+  
+            <Route path="code/reason" element={<Reason />}>
+             
+            </Route>
+  
+            <Route path="code/cause-of-loss" element={<CauseOfLoss />}>
+            </Route>
+  
+            <Route path="code/service-modifiers" element={<ServiceModifiers />}>
+            </Route>
+  
+            <Route path="code/service-type" element={<ServiceType />}>
+            </Route>
+  
+            <Route path="code/provider-type" element={<ProviderType />}>
+            </Route>
 
 
 
