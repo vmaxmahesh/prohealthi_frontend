@@ -75,12 +75,12 @@ export default function Dashboard() {
                         </div>
 
                         <div className={'dashboard-nav-dropdown' + (['subpath', 'subpath2'].includes(currentpath) ? ' show' : '')}>
-                            <a href="#!" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
-                                <i className="fa-solid fa-prescription"></i> Prescriber Data </a>
+                            <Link to="/dashboard/presciberdata"  className="dashboard-nav-item dashboard-nav-dropdown-toggle">
+                                <i className="fa-solid fa-prescription"></i> Prescriber Data </Link>
                             <div className='dashboard-nav-dropdown-menu'>
-                                <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>All</a>
-                                <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Recent</a>
-                                <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}> Projections</a>
+                                <Link to="/dashboard/presciberdata" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Presciber</Link>
+
+                              
                             </div>
                         </div>
                         <div className={'dashboard-nav-dropdown' + (['subpath', 'subpath2'].includes(currentpath) ? ' show' : '')}>

@@ -20,6 +20,8 @@ import PlanAuthorisation, { Authorisation, PANotes, Pricing } from './pages/dash
 import PlanValidation from './pages/dashboard/members/PlanValidation';
 import useToken from './hooks/useToken';
 import PrioritizeNetworks from './pages/dashboard/user/provider/PrioritizeNetworks';
+import Prescriber from './pages/dashboard/presciberdata/Prescriber';
+import { ToastContainer } from 'react-toastify';
 
 
 
@@ -161,6 +163,11 @@ function App() {
 
 
           <Route path='user/provider/prioritizenetworks' element={<PrioritizeNetworks  />}>
+         
+          </Route>
+
+
+          <Route path='presciberdata' element={<Prescriber  />}>
           {/* <Route index element={<Navigate to="network" replace />} /> */}
 
             {/* <Route path='superprovider' element={<Network />} /> */}
