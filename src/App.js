@@ -36,6 +36,7 @@ import CopayStepSchedule from './pages/dashboard/third party pricing/CopayStepSc
 import CopaySchedule from './pages/dashboard/third party pricing/CopaySchedule';
 import ProcedureUCRList from './pages/dashboard/third party pricing/ProcedureUCRList';
 import RVAList from './pages/dashboard/third party pricing/RVAList';
+import NDC from './pages/dashboard/exception list/ndc';
 
 
 function setToken(userToken) {
@@ -127,6 +128,34 @@ function App() {
 
           </Route>
 
+          <Route path="code/benefits" element={<Benifits />}>
+            
+            </Route>
+  
+            <Route path="code/procedure" element={<Procedure />}>
+             
+            </Route>
+  
+            <Route path="code/diagnosis" element={<Diagnosis />}>
+             
+            </Route>
+  
+            <Route path="code/reason" element={<Reason />}>
+             
+            </Route>
+  
+            <Route path="code/cause-of-loss" element={<CauseOfLoss />}>
+            </Route>
+  
+            <Route path="code/service-modifiers" element={<ServiceModifiers />}>
+            </Route>
+  
+            <Route path="code/service-type" element={<ServiceType />}>
+            </Route>
+  
+            <Route path="code/provider-type" element={<ProviderType />}>
+            </Route>
+
 
           <Route path='user/searchprovider' element={<SearchProvider />}>
           <Route index element={<Navigate to="provider" replace />} />
@@ -217,27 +246,19 @@ function App() {
 
           {/* third party pricing ends  */}
 
+          {/* exception list route starts  */}
 
+          <Route path="exception-list/ndc" element={<NDC   />}>
+          </Route>
+
+
+         {/* exception list route ends  */}
 
         </Route>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     </Routes>
+     <ToastContainer/>
     </>
 
   );

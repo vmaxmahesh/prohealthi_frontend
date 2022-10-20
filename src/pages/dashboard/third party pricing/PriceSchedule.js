@@ -31,58 +31,26 @@ export default function PriceSchedule() {
                         </div>
                     </div>
                 </div> 
-             <GetPriceSchedules />
-             <SearchPriceSchedule />
+                <SearchPriceSchedule />                            
              <BrandTabs />
         </>
     );
 }
 
-function GetPriceSchedules() {
-    return(
-        <>
-       <div className="card mt-3 mb-3">
-                    <div className="card-body">
-
-                        <div className="row">
-                            <div className="col-md-12">
-                                <h5 className="mb-2">Price Schedules</h5>
-                            </div>
-                            <table className= "table  table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Price Schedule</th>
-                                        <th>Schedule Name</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                     <tr>
-                                        <td>100PC</td>
-                                        <td>100p</td>
-                                        <td><button className="btn btn-sm btn-info" id=""><i className="fa fa-eye"></i> View</button></td>
-                                    </tr>
-                                     <tr>
-                                        <td>50PC</td>
-                                        <td>200p</td>
-                                        <td><button className="btn btn-sm btn-info" id=""><i className="fa fa-eye"></i> View</button></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-     
-                       </div>
-                   </div>
-                   </div>
-                   </>
-    );
-}
-
 function SearchPriceSchedule() {
     const {register,handleSubmit, watch, formState: { errors }} = useForm();
-
+    const [showPriceSchedule, setPriceSchedule] = useState([]);
     const search_data = (data) => {
         console.log(data);
+        const arr = [
+            {schedule_id : '1234', schedule_name : 'test schedule_name 1', copay_schedule : 'copay_schedule 1'},
+            {schedule_id : '1234', schedule_name : 'test schedule_name 1', copay_schedule : 'copay_schedule 1'},
+            {schedule_id : '1234', schedule_name : 'test schedule_name 1', copay_schedule : 'copay_schedule 1'},
+            {schedule_id : '1234', schedule_name : 'test schedule_name 1', copay_schedule : 'copay_schedule 1'},            
+        ];
+        setPriceSchedule(arr);
     }
+    useEffect(() => {},[showPriceSchedule]);
     return(
         <>
         <form onSubmit={handleSubmit(search_data)}>
@@ -93,7 +61,7 @@ function SearchPriceSchedule() {
                                         <small>Price Schedule ID</small>
                                         <input type="text" className="form-control" placeholder="Price Schedule ID" name=""
                                          {...register("schedule_id", { required:true })} autoComplete="off"/>
-                                         {errors.price_schedule_id && <span><p className="notvalid">This field is required</p></span>}
+                                         {errors.schedule_id && <span><p className="notvalid">This field is required</p></span>}
                                     </div>
                                 </div>
                                 <div className="col mb-2">
@@ -113,15 +81,68 @@ function SearchPriceSchedule() {
                                 <div className="col-md-2 mb-2">
                                     <div className="form-group">
                                         <small>&nbsp;</small><br/>
-                                        <button type="submit" className="btn m-0 p-2 btn-theme" style={{width: "100%", fontSize: "12px"}}>Search</button>
+                                        <button type="submit" className="btn m-0 p-2 btn-theme" style={{width: "100%", fontSize: "12px"}} onClick={e => search_data()}>Search</button>
                                     </div>
                                 </div>                              
                             </div>
                         </div>
                         </form>
+                        <GetPriceSchedules PriceScheduleData={showPriceSchedule}/>
         </>
     )
 }
+
+function GetPriceSchedules(props) {
+    const PriceScheduleArray = [];
+    for(let i=0; i<props.PriceScheduleData.length; i++)
+    {
+        PriceScheduleArray.push(<PriceScheduleRow psRowData={props.PriceScheduleData[i]} />);
+    }
+    return(
+        <>
+       <div className="card mt-3 mb-3">
+                    <div className="card-body">
+
+                        <div className="row">
+                            <div className="col-md-12">
+                                <h5 className="mb-2">Price Schedules</h5>
+                            </div>
+                            <table className= "table  table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Price Schedule</th>
+                                        <th>Schedule Name</th>
+                                        <th>Copay Schedule</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                  {PriceScheduleArray}
+                                </tbody>
+                            </table>
+     
+                       </div>
+                   </div>
+                   </div>
+                   </>
+    );
+}
+
+function PriceScheduleRow(props)
+{
+    return(
+        <>
+        <tr>
+            <td>{props.psRowData.schedule_id}</td>
+            <td>{props.psRowData.schedule_name}</td>
+            <td>{props.psRowData.copay_schedule}</td>
+            <td><button className="btn btn-sm btn-info" id=""><i className="fa fa-eye"></i> View</button></td>
+        </tr>
+        </>
+    )
+}
+
+
 
 function BrandTabs() {    
     return(

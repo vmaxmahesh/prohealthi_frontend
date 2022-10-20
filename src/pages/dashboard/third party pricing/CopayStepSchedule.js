@@ -3,7 +3,7 @@ import React from 'react';
 export default function CopayStepSchedule() {
     return(
         <>
-            <div class='dashboard-content clearfix'>
+            <div className='dashboard-content clearfix'>
 
 <div className="row">
     <div className="col-md-6 mb-3">
@@ -36,7 +36,7 @@ export default function CopayStepSchedule() {
                 <div className="col-md-4 mb-3">
                     <div className="form-group">
                         <small>Copay List</small>
-                        <input type="text" className="form-control" placeholder="Surgical" name="" id="" required="" autocomplete="off" />
+                        <input type="text" className="form-control" placeholder="Surgical" name="" id="" required="" autoComplete="off" />
                        
                     </div>
                 </div>
@@ -56,7 +56,7 @@ export default function CopayStepSchedule() {
                         <div className="col-md-6">
                             <div className="form-check">
                                   <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
-                                  <label className="form-check-label" for="flexRadioDefault1">
+                                  <label className="form-check-label" htmlFor="flexRadioDefault1">
                                     Days Supply
                                   </label>
                                 </div>
@@ -64,7 +64,7 @@ export default function CopayStepSchedule() {
                         <div className="col-md-6 ">
                            <div className="form-check">
                               <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
-                              <label className="form-check-label" for="flexRadioDefault1">
+                              <label className="form-check-label" htmlFor="flexRadioDefault1">
                                 Max Cost
                               </label>
                             </div>
@@ -84,19 +84,19 @@ export default function CopayStepSchedule() {
              <div className="row mb-2 ">
                 <div className="col-md-3 mb-3">
                     <div className="form-group">
-                        <input type="text" className="form-control" placeholder="30000" name="" id="" required="" autocomplete="off" />
+                        <input type="text" className="form-control" placeholder="30000" name="" id="" required="" autoComplete="off" />
                        
                     </div>
                 </div>
                 <div className="col-md-3 mb-3">
                     <div className="form-group">
-                        <input type="text" className="form-control" placeholder="0" name="" id="" required="" autocomplete="off" />
+                        <input type="text" className="form-control" placeholder="0" name="" id="" required="" autoComplete="off" />
                        
                     </div>
                 </div>
                 <div className="col-md-3 mb-3">
                     <div className="form-group">
-                        <input type="text" className="form-control" placeholder="83" name="" id="" required="" autocomplete="off" />
+                        <input type="text" className="form-control" placeholder="83" name="" id="" required="" autoComplete="off" />
                        
                     </div>
                 </div>
@@ -133,7 +133,7 @@ function GetStepScheduleTable() {
                 <div className="col-md-12">
                     <h5 className="mb-2">Step Schedules table</h5>
                 </div>
-                <table class= "table  table-bordered">
+                <table className= "table  table-bordered">
                     <thead>
                         <tr>
                             <th>Maximum Cost</th>

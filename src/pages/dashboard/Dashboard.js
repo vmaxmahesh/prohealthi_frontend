@@ -20,10 +20,17 @@ export default function Dashboard() {
                             <a href="#!" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
                                 <i className="fas fa-clipboard-list"></i> Exception Lists</a>
                             <div className='dashboard-nav-dropdown-menu'>
-                                <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>All</a>
-                                <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Recent</a>
-                                <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Images</a>
-                                <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Video</a>
+                                <a href="/dashboard/exception-list/ndc" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>NDC</a>
+                                <a href="/dashboard/exception-list/gpi" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>GPI</a>
+                                <a href="/dashboard/exception-list/therapy-class" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Therapy Class</a>
+                                <a href="/dashboard/exception-list/drug-classification" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Drug Classification</a>
+                                <a href="/dashboard/exception-list/procedure" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Procedure</a>
+                                <a href="/dashboard/exception-list/reason" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Reason</a>
+                                <a href="/dashboard/exception-list/benefit-list" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Benefit List</a>
+                                <a href="/dashboard/exception-list/benefit-derivation" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Benefit Derivation</a>
+                                <a href="/dashboard/exception-list/provider-type-validation" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Provider Type Validation</a>
+                                <a href="/dashboard/exception-list/procedure-code-list" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Procedure Code List</a>
+                                <a href="/dashboard/exception-list/super-benefit-list" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Super Benefit List</a>
                             </div>
                         </div>
                         <div className={'dashboard-nav-dropdown' + (['subpath', 'subpath2'].includes(currentpath) ? ' show' : '')}>
@@ -44,13 +51,13 @@ export default function Dashboard() {
                             <a href="#!" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
                                 <i className="fa-solid fa-calendar-days"></i> Third Party Pricing </a>
                             <div className='dashboard-nav-dropdown-menu'>
+                                <a href="/dashboard/third-party-pricing/price-schedule" className="dashboard-nav-dropdown-item">Price Schedule</a>
                                 <a href="/dashboard/third-party-pricing/copay-schedule" className="dashboard-nav-dropdown-item">Copay Schedule</a>
                                 <a href="/dashboard/third-party-pricing/copay-step-schedule" className="dashboard-nav-dropdown-item">Copay Step Schedule</a>
                                 <a href="/dashboard/third-party-pricing/MAC-list" className="dashboard-nav-dropdown-item">MAC List</a>
                                 <a href="/dashboard/third-party-pricing/tax-schedule" className="dashboard-nav-dropdown-item">Tax Schedule</a>
                                 <a href="/dashboard/third-party-pricing/procedure-UCR-list" className="dashboard-nav-dropdown-item">Procedure UCR List</a>
-                                <a href="/dashboard/third-party-pricing/RAV-list" className="dashboard-nav-dropdown-item">RVA List</a>
-                                <a href="/dashboard/third-party-pricing/price-schedule" className="dashboard-nav-dropdown-item">Price Schedule</a>
+                                <a href="/dashboard/third-party-pricing/RAV-list" className="dashboard-nav-dropdown-item">RVA List</a>                                
                             </div>
                         </div>
                         <div className={'dashboard-nav-dropdown' + (['subpath', 'subpath2'].includes(currentpath) ? ' show' : '')}>
