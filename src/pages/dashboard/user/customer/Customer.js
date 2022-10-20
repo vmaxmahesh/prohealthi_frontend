@@ -3,14 +3,90 @@ import { useForm } from 'react-hook-form';
 import { Link, Outlet, Route, Routes, useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import Footer from '../../../../shared/Footer';
 import { ToastContainer, toast } from 'react-toastify';
+import { Button, Col, Row } from 'react-bootstrap';
+import { objToQueryString } from '../../../../hooks/healper';
 
 
 function Customer() {
     const location = useLocation();
+    const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
+
     const currentpath = location.pathname.split('/').pop();
 
     const [customer, setCustomer] = useState([]);
 
+    const [customerlist, setCustomerlist] = useState([]);
+
+    const searchCustomer = (fdata) => {
+        var arr = [];
+
+        const requestOptions = {
+            method: 'GET',
+            // mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            // body: encodeURIComponent(data)
+        };
+        console.log(watch(fdata));
+
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/customer/get?${objToQueryString(fdata)}`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                console.log(response);
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    return Promise.reject(error);
+                } else {
+                    setCustomerlist(data.data);
+                }
+
+
+                if (response === '200') {
+                }
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+    }
+
+    const getCustomer = (customerid) => {
+        console.log(customerid);
+        const requestOptions = {
+            method: 'GET',
+            // mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            // body: encodeURIComponent(data)
+        };
+        // console.log(watch(fdata));
+
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/customer/get/${customerid}`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                console.log(response);
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    return Promise.reject(error);
+                } else {
+                    setCustomer(data.data);
+                }
+
+
+                if (response === '200') {
+                }
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+    }
+
+    useEffect(() => { reset(customer) }, [customer]);
 
     return (
         <>
@@ -35,6 +111,46 @@ function Customer() {
                 </div>
             </div>
 
+            <Row>
+                <Col>
+                    <form onSubmit={handleSubmit(searchCustomer)}>
+                        <div className="card mt-3 mb-3">
+                            <div className="card-body">
+                                <div className="row mb-2">
+                                    <div className="col-md-4 mb-3">
+                                        <div className="form-group">
+                                            <small>ID</small>
+                                            <input type="text" className="form-control" placeholder='Enter Customer Id to search' {...register("customerid")} />
+                                            {/* {errors.customerid && <span><p className='notvalid'>This field is required</p></span>} */}
+                                        </div>
+                                    </div>
+                                    <div className="col-md-4 mb-3">
+                                        <div className="form-group">
+                                            <small>Customer Name</small>
+                                            <input type="text" className="form-control" placeholder='Enter Customer Name to search' {...register("customername")} />
+                                        </div>
+                                    </div>
+                                    <div className="col-md-2 mb-2">
+                                        <div className="form-group">
+                                            <small>&nbsp;</small><br />
+                                            <button type="submit" className="btn m-0 p-2 btn-theme" style={{ width: "100%", fontSize: "12px" }} >Search</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </Col>
+            </Row>
+
+            <Row>
+                <Col>
+                    {customerlist.length > 0 ?
+                        <CustomerTable customers={customerlist} getCustomer={getCustomer} />
+                        : ''}
+                </Col>
+            </Row>
+
             <div className="col-md-12 mb-3">
                 <h4 style={{ fontWeight: '600' }}>Add New Customer</h4>
             </div>
@@ -49,8 +165,6 @@ function Customer() {
             </div>
             <div className="tab-content" id="nav-tabContent">
                 <Outlet context={[customer, setCustomer]} />
-
-
 
                 <div className="tab-pane fade show active" id="Identification" role="tabpanel" aria-labelledby="nav-home-tab">
 
@@ -68,13 +182,66 @@ function Customer() {
     );
 }
 
+function CustomerTable(props) {
+
+    const getCustomer = (customerid) => {
+        // console.log(customerid);
+        props.getCustomer(customerid);
+    }
+
+    const CustomerList = [];
+    for (let i = 0; i < props.customers.length; i++) {
+        CustomerList.push(<Cutomer customer={props.customers[i]} getCustomer={getCustomer} />);
+    }
+    return (
+        <>
+            <div className="card mt-3 mb-3">
+                <div className="card-body">
+                    <div className="row">
+                        <div className="col-md-12">
+                            <h5 className="mb-2">Customers</h5>
+                        </div>
+                        <table className="table  table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Effective Date</th>
+                                    <th>GPI</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                {CustomerList}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </>
+    )
+
+}
+
+function Cutomer(props) {
+    return (
+        <>
+            <tr>
+                <td>{props.customer.customer_id}</td>
+                <td>{props.customer.customer_name}</td>
+                <td><Button variant="primary" onClick={() => props.getCustomer(props.customer.customer_id)}>View</Button></td>
+            </tr>
+        </>
+    )
+}
+
 export function Identification(props) {
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
     const [customer, setCustomer] = useOutletContext();
     const [startDate, setStartDate] = useState(new Date());
     const [afterDate, setAfterDate] = useState(new Date());
 
+    console.log(customer);
 
 
     const navigate = useNavigate();
@@ -92,32 +259,14 @@ export function Identification(props) {
         today = yyyy + '-' + mm + '-' + dd;
         setAfterDate(today);
 
-
     }
 
-
-
-
-
-
     const onSubmit = data => {
-
-
-        // console.log(Identificationdata);
-
         const id = customer;
         id['identification'] = data;
         setCustomer(id);
         console.log(customer);
-
-
-
-
     }
-
-
-
-
     console.log(process.env.REACT_APP_API_BASEURL)
 
     const postTOBackend = data => {
@@ -152,10 +301,11 @@ export function Identification(props) {
             });
     }
 
+    useEffect(() => { reset(customer) }, [customer]);
+
 
     return (
         <>
-
 
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="card mt-3 mb-3">
@@ -166,14 +316,15 @@ export function Identification(props) {
 
                                 <div className="form-group mb-2">
                                     <small>Customer ID</small>
-                                    <input type="text" {...register("cutomerid", {
+                                    <input type="text" {...register("customer_id", {
                                         required: true,
                                         maxLength: 20,
                                         pattern: /^(0|[1-9][0-9]*)$/,
                                     })}
-                                        className="form-control" name="cutomerid" id="" placeholder="Customer ID" />
-                                    {errors.cutomerid?.type === 'required' && <p role="alert" className="notvalid">Customer Id required</p>}
-                                    {errors.cutomerid?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
+                                        className="form-control" name="customer_id" id="" placeholder="Customer ID"
+                                    />
+                                    {errors.customer_id?.type === 'required' && <p role="alert" className="notvalid">Customer Id required</p>}
+                                    {errors.customer_id?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
 
 
                                 </div>
@@ -184,37 +335,37 @@ export function Identification(props) {
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Name</small>
-                                            <input type="text" {...register("name", {
+                                            <input type="text" {...register("customer_name", {
                                                 required: true,
                                                 maxLength: 20,
                                                 pattern: /^[A-Za-z]+$/i
-                                            })} name="name" className="form-control" placeholder="Name" />
-                                            {errors.name?.type === 'required' && <p role="alert" className="notvalid">Name is  required</p>}
+                                            })} name="customer_name" className="form-control" placeholder="Name" />
+                                            {errors.customer_name?.type === 'required' && <p role="alert" className="notvalid">Name is  required</p>}
 
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Address 1</small>
-                                            <input type="text" {...register("address1", {
+                                            <input type="text" {...register("address_1", {
                                                 required: true,
                                                 maxLength: 20,
                                                 pattern: /^[A-Za-z]+$/i
 
-                                            })} name="address1" className="form-control" placeholder="Address 1" />
-                                            {errors.address1?.type === 'required' && <p role="alert" className="notvalid">Address is  required</p>}
+                                            })} name="address_1" className="form-control" placeholder="Address 1" />
+                                            {errors.address_1?.type === 'required' && <p role="alert" className="notvalid">Address is  required</p>}
 
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Address 2</small>
-                                            <input type="text" {...register("address2", {
+                                            <input type="text" {...register("address_2", {
                                                 required: true,
                                                 maxLength: 20,
                                                 pattern: /^[A-Za-z]+$/i
-                                            })} className="form-control" name="address2" id="" placeholder="Address 2" />
-                                            {errors.address2?.type === 'required' && <p role="alert" className="notvalid">Address is  required</p>}
+                                            })} className="form-control" name="address_2" id="" placeholder="Address 2" />
+                                            {errors.address_2?.type === 'required' && <p role="alert" className="notvalid">Address is  required</p>}
 
                                         </div>
                                     </div>
@@ -255,10 +406,10 @@ export function Identification(props) {
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>ZIP Code</small>
-                                            <input type="text" {...register("zip", {
+                                            <input type="text" {...register("zip_code", {
                                                 required: true,
-                                            })} className="form-control" name="zip" id="" placeholder="ZIP Code" />
-                                            {errors.zip?.type === 'required' && <p role="alert" className="notvalid">Zip code  is  required</p>}
+                                            })} className="form-control" name="zip_code" id="" placeholder="ZIP Code" />
+                                            {errors.zip_code?.type === 'required' && <p role="alert" className="notvalid">Zip code  is  required</p>}
 
                                         </div>
                                     </div>
@@ -286,11 +437,11 @@ export function Identification(props) {
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>EDI Address</small>
-                                            <input type="text" {...register("ediaddress", {
+                                            <input type="text" {...register("edi_address", {
                                                 required: true,
-                                            })} className="form-control" name="ediaddress" id="" placeholder="EDI Address" />
+                                            })} className="form-control" name="edi_address" id="" placeholder="EDI Address" />
 
-                                            {errors.ediaddress?.type === 'required' && <p role="alert" className="notvalid">EDI Address  is  required</p>}
+                                            {errors.edi_address?.type === 'required' && <p role="alert" className="notvalid">EDI Address  is  required</p>}
 
 
                                         </div>
@@ -305,7 +456,7 @@ export function Identification(props) {
 
                                         </div>
                                     </div>
-                                    <div className="col-md-6">
+                                    {/* <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Test</small>
                                             <input type="text" {...register("test", {
@@ -315,14 +466,14 @@ export function Identification(props) {
                                             {errors.test?.type === 'required' && <p role="alert" className="notvalid">Test  is  required</p>}
 
                                         </div>
-                                    </div>
+                                    </div> */}
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Type</small>
-                                            <input type="text" {...register("type", {
+                                            <input type="text" {...register("customer_type", {
                                                 required: true,
                                             })} className="form-control" name="type" id="" placeholder="Type" />
-                                            {errors.test?.type === 'required' && <p role="alert" className="notvalid">Type  is  required</p>}
+                                            {errors.customer_type?.type === 'required' && <p role="alert" className="notvalid">Type  is  required</p>}
 
                                         </div>
                                     </div>
@@ -334,28 +485,28 @@ export function Identification(props) {
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Effective Date</small>
-                                            <input type="date" {...register("effectivedate", {
+                                            <input type="date" {...register("effective_date", {
                                                 required: true,
-                                            })} className="form-control" onChange={StartDateChange} name="effectivedate" id="" placeholder="Address 1" />
+                                            })} className="form-control" onChange={StartDateChange} name="effective_date" id="" placeholder="Address 1" />
                                             Effective Date
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Termination Date</small>
-                                            <input type="date" {...register("terminationdate", {
+                                            <input type="date" {...register("termination_date", {
                                                 required: true,
-                                            })} className="form-control" name="terminationdate" id="" min={afterDate} placeholder="Address 2" />
-                                            {errors.terminationdate?.type === 'required' && <p role="alert" className="notvalid">Termination Date  is  required</p>}
+                                            })} className="form-control" name="termination_date" id="" min={afterDate} placeholder="Address 2" />
+                                            {errors.termination_date?.type === 'required' && <p role="alert" className="notvalid">Termination Date  is  required</p>}
 
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Policy Ann. Month</small>
-                                            <select {...register("policyannmonth", {
+                                            <select {...register("policy_anniv_month", {
                                                 required: true,
-                                            })} name="policyannmonth" className="form-select">
+                                            })} name="policy_anniv_month" className="form-select">
 
                                                 <option value="">--Select--</option>
                                                 <option value="1">January</option>
@@ -371,20 +522,20 @@ export function Identification(props) {
                                                 <option value="11">November</option>
                                                 <option value="12">December</option>
                                             </select>
-                                            {errors.policyannmonth?.type === 'required' && <p role="alert" className="notvalid">Policy Ann. Month  is  required</p>}
+                                            {errors.policy_anniv_month?.type === 'required' && <p role="alert" className="notvalid">Policy Ann. Month  is  required</p>}
 
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Policy Ann. Day</small>
-                                            <input type="text" {...register("policyanday", {
+                                            <input type="text" {...register("policy_anniv_day", {
                                                 required: true,
                                                 pattern: /^(0|[1-9][0-9]*)$/,
 
-                                            })} name="policyanday" className="form-control" id="" placeholder="Enter" />
-                                            {errors.policyanday?.type === 'required' && <p role="alert" className="notvalid">Policy Ann. Month  is  required</p>}
-                                            {errors.policyanday?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
+                                            })} name="policy_anniv_day" className="form-control" id="" placeholder="Enter" />
+                                            {errors.policy_anniv_day?.type === 'required' && <p role="alert" className="notvalid">Policy Ann. Month  is  required</p>}
+                                            {errors.policy_anniv_day?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
 
 
                                         </div>
@@ -395,22 +546,22 @@ export function Identification(props) {
                                     <div className="col-md-12">
                                         <div className="form-group mb-2">
                                             <small>Census Date</small>
-                                            <input type="date" {...register("censusdate", {
+                                            <input type="date" {...register("census_date", {
                                                 required: true,
-                                            })} className="form-control" name="censusdate" id="" placeholder="Census Date" />
-                                            {errors.censusdate?.type === 'required' && <p role="alert" className="notvalid">Census Date  is  required</p>}
+                                            })} className="form-control" name="census_date" id="" placeholder="Census Date" />
+                                            {errors.census_date?.type === 'required' && <p role="alert" className="notvalid">Census Date  is  required</p>}
 
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Number of Active Contracts</small>
-                                            <input type="text" {...register("noofactivecontracts", {
+                                            <input type="text" {...register("num_of_active_contracts", {
                                                 required: true,
                                                 pattern: /^(0|[1-9][0-9]*)$/,
-                                            })} className="form-control" name="noofactivecontracts" id="" placeholder="Active Contracts" />
-                                            {errors.noofactivecontracts?.type === 'required' && <p role="alert" className="notvalid">Number of Active Contracts field is required</p>}
-                                            {errors.noofactivecontracts?.type === 'pattern' && <p role="alert" className="notvalid">Field should be number</p>}
+                                            })} className="form-control" name="num_of_active_contracts" id="" placeholder="Active Contracts" />
+                                            {errors.num_of_active_contracts?.type === 'required' && <p role="alert" className="notvalid">Number of Active Contracts field is required</p>}
+                                            {errors.num_of_active_contracts?.type === 'pattern' && <p role="alert" className="notvalid">Field should be number</p>}
 
 
                                         </div>
@@ -418,53 +569,53 @@ export function Identification(props) {
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Number of Active Memebers</small>
-                                            <input type="text" {...register("noofactivemembers", {
+                                            <input type="text" {...register("num_of_active_members", {
                                                 required: true,
                                                 pattern: /^(0|[1-9][0-9]*)$/,
-                                            })} className="form-control" name="noofactivemembers" id="" placeholder="Active Memebers" />
-                                            {errors.noofactivemembers?.type === 'required' && <p role="alert" className="notvalid">Number of Active Memebers field is required</p>}
-                                            {errors.noofactivemembers?.type === 'pattern' && <p role="alert" className="notvalid">Field should be number</p>}
+                                            })} className="form-control" name="num_of_active_members" id="" placeholder="Active Memebers" />
+                                            {errors.num_of_active_members?.type === 'required' && <p role="alert" className="notvalid">Number of Active Memebers field is required</p>}
+                                            {errors.num_of_active_members?.type === 'pattern' && <p role="alert" className="notvalid">Field should be number</p>}
 
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Number of Termed Contracts</small>
-                                            <input type="text" {...register("nooftermedcontracts", {
+                                            <input type="text" {...register("num_of_termed_contracts", {
 
                                                 required: true,
                                                 pattern: /^(0|[1-9][0-9]*)$/,
 
-                                            })} className="form-control" name="nooftermedcontracts" id="" placeholder="Termed Contracts" />
-                                            {errors.nooftermedcontracts?.type === 'required' && <p role="alert" className="notvalid">Number of Termed Contracts field is required</p>}
-                                            {errors.nooftermedcontracts?.type === 'pattern' && <p role="alert" className="notvalid">Field should be number</p>}
+                                            })} className="form-control" name="num_of_termed_contracts" id="" placeholder="Termed Contracts" />
+                                            {errors.num_of_termed_contracts?.type === 'required' && <p role="alert" className="notvalid">Number of Termed Contracts field is required</p>}
+                                            {errors.num_of_termed_contracts?.type === 'pattern' && <p role="alert" className="notvalid">Field should be number</p>}
 
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Number of Termed Memebers</small>
-                                            <input type="text" {...register("nooftermedmembers", {
+                                            <input type="text" {...register("num_of_termed_members", {
                                                 required: true,
                                                 pattern: /^(0|[1-9][0-9]*)$/,
-                                            })} className="form-control" name="nooftermedmembers" id="" placeholder="Termed Memebers" />
-                                            {errors.nooftermedmembers?.type === 'required' && <p role="alert" className="notvalid">Number of Termed Memebers field is required</p>}
-                                            {errors.nooftermedmembers?.type === 'pattern' && <p role="alert" className="notvalid">Field should be number</p>}
+                                            })} className="form-control" name="num_of_termed_members" id="" placeholder="Termed Memebers" />
+                                            {errors.num_of_termed_members?.type === 'required' && <p role="alert" className="notvalid">Number of Termed Memebers field is required</p>}
+                                            {errors.num_of_termed_members?.type === 'pattern' && <p role="alert" className="notvalid">Field should be number</p>}
 
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Number of Pending Contracts</small>
-                                            <input type="text" {...register("noofpendingcontracts", {
+                                            <input type="text" {...register("num_of_pending_contracts", {
 
                                                 required: true,
                                                 pattern: /^(0|[1-9][0-9]*)$/,
 
-                                            })} className="form-control" name="noofpendingcontracts" id="" placeholder="Pending Contracts" />
+                                            })} className="form-control" name="num_of_pending_contracts" id="" placeholder="Pending Contracts" />
 
-                                            {errors.noofpendingcontracts?.type === 'required' && <p role="alert" className="notvalid">Number of Active Contracts field is required</p>}
-                                            {errors.noofpendingcontracts?.type === 'pattern' && <p role="alert" className="notvalid">Field should be number</p>}
+                                            {errors.num_of_pending_contracts?.type === 'required' && <p role="alert" className="notvalid">Number of Active Contracts field is required</p>}
+                                            {errors.num_of_pending_contracts?.type === 'pattern' && <p role="alert" className="notvalid">Field should be number</p>}
 
 
                                         </div>
@@ -472,12 +623,12 @@ export function Identification(props) {
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Number of Pending Memebers</small>
-                                            <input type="text" {...register("noofpendinngmembers", {
+                                            <input type="text" {...register("num_of_pending_members", {
                                                 required: true,
                                                 pattern: /^(0|[1-9][0-9]*)$/,
-                                            })} className="form-control" name="noofpendinngmembers" id="" placeholder="Pending Members" />
-                                            {errors.noofpendinngmembers?.type === 'required' && <p role="alert" className="notvalid">Number of Active Contracts field is required</p>}
-                                            {errors.noofpendinngmembers?.type === 'pattern' && <p role="alert" className="notvalid">Field should be number</p>}
+                                            })} className="form-control" name="num_of_pending_members" id="" placeholder="Pending Members" />
+                                            {errors.num_of_pending_members?.type === 'required' && <p role="alert" className="notvalid">Number of Active Contracts field is required</p>}
+                                            {errors.num_of_pending_members?.type === 'pattern' && <p role="alert" className="notvalid">Field should be number</p>}
 
 
                                         </div>
@@ -1594,14 +1745,13 @@ export function Indicators(props) {
 }
 
 export function Exceptions(props) {
+    console.log(useOutletContext());
 
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [customer, setCustomer] = useOutletContext();
 
 
     const navigate = useNavigate();
-
-
 
     const {
         register: register2,
@@ -1645,9 +1795,8 @@ export function Exceptions(props) {
         var Exceptionsid = customer;
         Exceptionsid['Exceptions'] = data;
         setCustomer(Exceptionsid);
-        // console.log(customer);
 
-        // console.log(process.env.REACT_APP_API_BASEURL);
+
         console.log('mahesh');
         postTOBackend();
 
@@ -1664,7 +1813,7 @@ export function Exceptions(props) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(customer)
         };
-        console.log(requestOptions);debugger;
+        console.log(requestOptions); debugger;
 
         fetch(process.env.REACT_APP_API_BASEURL + '/api/customer/add', requestOptions)
             .then(async response => {
@@ -1724,7 +1873,7 @@ export function Exceptions(props) {
 
 
             <form key={1} onSubmit={handleSubmit2(searchSubmit)}>
-
+                {/* <button type='button' onClick={submit2}>Submit2</button> */}
 
 
                 <div class="modal fade" id="rvalistidModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -1775,10 +1924,6 @@ export function Exceptions(props) {
                                         </div>
                                     </div>
 
-
-
-
-
                                 </div>
 
                                 <div>
@@ -1801,23 +1946,13 @@ export function Exceptions(props) {
                                         </div>
                                     </div>
 
-
-
-
-
-
                                 </div>
-
-
-
-
-
                             </div>
 
                             {/* <div class="modal-footer">
-<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-<button type="button" class="btn btn-info">Add Benefit Code</button>
-</div> */}
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-info">Add Benefit Code</button>
+            </div> */}
                         </div>
                     </div>
                 </div>
