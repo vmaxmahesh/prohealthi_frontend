@@ -22,11 +22,8 @@ function Customer() {
 
         const requestOptions = {
             method: 'GET',
-            // mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
-            // body: encodeURIComponent(data)
         };
-        console.log(watch(fdata));
 
         fetch(process.env.REACT_APP_API_BASEURL + `/api/customer/get?${objToQueryString(fdata)}`, requestOptions)
             .then(async response => {
@@ -152,7 +149,7 @@ function Customer() {
             </Row>
 
             <div className="col-md-12 mb-3">
-                <h4 style={{ fontWeight: '600' }}>Add New Customer</h4>
+                <h4 style={{ fontWeight: '600' }}> Customer Details -</h4>
             </div>
 
             <div className="nav nav-tabs" id="nav-tab" role="tablist">
@@ -671,15 +668,6 @@ export function Strategy(props) {
         float: 'right'
     };
 
-
-
-
-
-
-
-
-
-
     const onSubmit = data => {
         var statid = customer;
         statid['strategy'] = data;
@@ -739,14 +727,14 @@ export function Strategy(props) {
 
 
 
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Plan Search</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title" id="exampleModalLabel">Plan Search</h5>
+                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <div class="modal-body">
+                            <div className="modal-body">
 
                                 <div className='row align-items-center'>
 
@@ -791,7 +779,7 @@ export function Strategy(props) {
                                         <div className="col-md-5  align-items-center">
                                             <div className="form-group mb-4">
                                                 <small>Effective From :</small>
-                                                <input class="align-items-right" type="date"  {...register2("effective_from", {
+                                                <input className="align-items-right" type="date"  {...register2("effective_from", {
                                                 })} className="form-control" name="effective_from" id="" />
                                                 {errors2.effective_from?.type === 'required' && <p role="alert" className="notvalid">Effective From date  is Required</p>}
 
@@ -802,7 +790,7 @@ export function Strategy(props) {
                                         <div className="col-md-5  align-items-center">
                                             <div className="form-group mb-4">
                                                 <small>Effective To :</small>
-                                                <input class="align-items-right" type="date"  {...register2("effective_to", {
+                                                <input className="align-items-right" type="date"  {...register2("effective_to", {
                                                 })} className="form-control" name="effective_to" id="" />
                                                 {errors2.effective_to?.type === 'required' && <p role="alert" className="notvalid">Effective To date required</p>}
 
@@ -816,9 +804,9 @@ export function Strategy(props) {
 
                                     </div>
                                     <br></br>
-                                    <div class="row">
-                                        <div class="col-md-12 table-responsive">
-                                            <table class="table table-bordered  table-responsive">
+                                    <div className="row">
+                                        <div className="col-md-12 table-responsive">
+                                            <table className="table table-bordered  table-responsive">
                                                 <thead>
                                                     <tr className='table-danger'>
                                                         <th>Plan Id</th>
@@ -848,9 +836,9 @@ export function Strategy(props) {
 
                             </div>
 
-                            {/* <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-info">Add Benefit Code</button>
+                            {/* <div className="modal-footer">
+                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" className="btn btn-info">Add Benefit Code</button>
                             </div> */}
                         </div>
                     </div>
@@ -860,10 +848,6 @@ export function Strategy(props) {
 
 
             <form key={2} onSubmit={handleSubmit(onSubmit)}>
-
-
-
-
 
                 <div className="card mt-3 mb-3">
                     <div className="card-body">
@@ -883,30 +867,30 @@ export function Strategy(props) {
                             <div className="col-md-3">
                                 <div className="form-group mb-3">
                                     <small>Tier 1</small>
-                                    <input type="date"  {...register("tier1", {
+                                    <input type="date"  {...register("coverage_eff_date_1", {
                                         required: true,
-                                    })} className="form-control" name="tier1" id="" />
-                                    {errors.tier1?.type === 'required' && <p role="alert" className="notvalid">Tier 1 date  required</p>}
+                                    })} className="form-control" name="coverage_eff_date_1" id="" />
+                                    {errors.coverage_eff_date_1?.type === 'required' && <p role="alert" className="notvalid">Tier 1 date  required</p>}
 
                                 </div>
                             </div>
                             <div className="col-md-3">
                                 <div className="form-group mb-3">
                                     <small>Tier 2</small>
-                                    <input type="date" {...register("tier2", {
+                                    <input type="date" {...register("coverage_eff_date_2", {
                                         required: true,
-                                    })} className="form-control" name="tier2" id="" />
-                                    {errors.tier2?.type === 'required' && <p role="alert" className="notvalid">Tier 2 date  required</p>}
+                                    })} className="form-control" name="coverage_eff_date_2" id="" />
+                                    {errors.coverage_eff_date_2?.type === 'required' && <p role="alert" className="notvalid">Tier 2 date  required</p>}
 
                                 </div>
                             </div>
                             <div className="col-md-3">
                                 <div className="form-group mb-3">
                                     <small>Tier 3</small>
-                                    <input type="date" {...register("tier3", {
+                                    <input type="date" {...register("coverage_eff_date_3", {
                                         required: true,
-                                    })} className="form-control" name="tier3" id="" />
-                                    {errors.tier3?.type === 'required' && <p role="alert" className="notvalid">Tier 3 date  required</p>}
+                                    })} className="form-control" name="coverage_eff_date_3" id="" />
+                                    {errors.coverage_eff_date_3?.type === 'required' && <p role="alert" className="notvalid">Tier 3 date  required</p>}
 
 
                                 </div>
@@ -924,7 +908,7 @@ export function Strategy(props) {
                                     })} className="form-control" name="plan_id_1" id="" />
                                     <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal"><span className="fa fa-search form-icon"></span></a>
 
-                                    {/* <a class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    {/* <a className="btn  btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                 Add Benifit Code <i className="fa fa-search form-icon"></i></a> */}
 
 
@@ -969,28 +953,28 @@ export function Strategy(props) {
                             </div>
                             <div className="col-md-3">
                                 <div className="form-group mb-3">
-                                    <input type="text" {...register("miscellaneous_1", {
+                                    <input type="text" {...register("misc_data_1", {
                                         required: true,
-                                    })} className="form-control" name="miscellaneous_1" id="" />
-                                    {errors.miscellaneous_1?.type === 'required' && <p role="alert" className="notvalid">miscellaneous data is  required</p>}
+                                    })} className="form-control" name="misc_data_1" id="" />
+                                    {errors.misc_data_1?.type === 'required' && <p role="alert" className="notvalid">miscellaneous data is  required</p>}
 
                                 </div>
                             </div>
                             <div className="col-md-3">
                                 <div className="form-group mb-3">
-                                    <input type="text" {...register("miscellaneous_2", {
+                                    <input type="text" {...register("misc_data_2", {
                                         required: true,
-                                    })} className="form-control" name="miscellaneous_2" id="" />
-                                    {errors.miscellaneous_2?.type === 'required' && <p role="alert" className="notvalid">miscellaneous data is  required</p>}
+                                    })} className="form-control" name="misc_data_2" id="" />
+                                    {errors.misc_data_2?.type === 'required' && <p role="alert" className="notvalid">miscellaneous data is  required</p>}
 
                                 </div>
                             </div>
                             <div className="col-md-3">
                                 <div className="form-group mb-3">
-                                    <input type="text" {...register("miscellaneous_3", {
+                                    <input type="text" {...register("misc_data_3", {
                                         required: true,
-                                    })} className="form-control" name="miscellaneous_3" id="" />
-                                    {errors.miscellaneous_3?.type === 'required' && <p role="alert" className="notvalid">miscellaneous data is  required</p>}
+                                    })} className="form-control" name="misc_data_3" id="" />
+                                    {errors.misc_data_3?.type === 'required' && <p role="alert" className="notvalid">miscellaneous data is  required</p>}
 
                                 </div>
                             </div>
@@ -1003,9 +987,9 @@ export function Strategy(props) {
                             <div className="col-md-6">
                                 <div className="form-group mb-3">
                                     <small>Provider Options</small>
-                                    <select className="form-select" {...register("provider_vefification_option", {
+                                    <select className="form-select" {...register("PHARMACY_EXCEPTIONS_FLAG", {
                                         required: true
-                                    })} name="provider_vefification_option">
+                                    })} name="PHARMACY_EXCEPTIONS_FLAG">
                                         <option value="">--select--</option>
                                         <option value="1">No Provider Check</option>
                                         <option value="2">Validate Provider Format</option>
@@ -1019,12 +1003,12 @@ export function Strategy(props) {
                             <div className="col-md-6">
                                 <div className="form-group mb-3">
                                     <small>Super Provider Networks</small>
-                                    <input type="text" className="form-control" {...register("super_provider_network", {
+                                    <input type="text" className="form-control" {...register("SUPER_RX_NETWORK_ID", {
                                         required: true,
-                                    })} name="super_provider_network" id="" />
+                                    })} name="SUPER_RX_NETWORK_ID" id="" />
                                     <a href="" data-bs-toggle="modal" data-bs-target="#supernetwork"><span className="fa fa-search form-icon"></span></a>
 
-                                    {errors.super_provider_network?.type === 'required' && <p role="alert" className="notvalid">Super Provider Networks field is   required</p>}
+                                    {errors.SUPER_RX_NETWORK_ID?.type === 'required' && <p role="alert" className="notvalid">Super Provider Networks field is   required</p>}
 
                                 </div>
                             </div>
@@ -1037,9 +1021,9 @@ export function Strategy(props) {
                             <div className="col-md-4">
                                 <div className="form-group mb-3">
                                     <small>Prescriber Options</small>
-                                    <select className="form-select" {...register("Prescriber_Verification_Options_1", {
+                                    <select className="form-select" {...register("PRESCRIBER_EXCEPTIONS_FLAG", {
                                         required: true,
-                                    })} name="Prescriber_Verification_Options_1" >
+                                    })} name="PRESCRIBER_EXCEPTIONS_FLAG" >
                                         <option value="">--select--</option>
                                         <option value="1">None</option>
                                         <option value="2">Validate DEA Code</option>
@@ -1047,23 +1031,23 @@ export function Strategy(props) {
                                         <option value="4">Must Exist in Prescriber Master</option>
 
                                     </select>
-                                    {errors.Prescriber_Verification_Options_1?.type === 'required' && <p role="alert" className="notvalid">Prescriber Options is   required</p>}
+                                    {errors.PRESCRIBER_EXCEPTIONS_FLAG?.type === 'required' && <p role="alert" className="notvalid">Prescriber Options is   required</p>}
 
                                 </div>
                             </div>
                             <div className="col-md-4">
                                 <div className="form-group mb-3">
                                     <small>Prescriber Options 2</small>
-                                    <select className="form-select" {...register("Prescriber_Verification_Options_2", {
+                                    <select className="form-select" {...register("PRESCRIBER_EXCEPTIONS_FLAG_2", {
                                         required: true,
-                                    })} name="Prescriber_Verification_Options_2">
+                                    })} name="PRESCRIBER_EXCEPTIONS_FLAG_2">
                                         <option value="">--select--</option>
                                         <option value="1">None</option>
                                         <option value="2">Validate DEA Code</option>
                                         <option value="3">primary Prescriber Validation</option>
                                         <option value="4">Must Exist in Prescriber Master</option>
                                     </select>
-                                    {errors.Prescriber_Verification_Options_2?.type === 'required' && <p role="alert" className="notvalid">Prescriber Options is   required</p>}
+                                    {errors.PRESCRIBER_EXCEPTIONS_FLAG_2?.type === 'required' && <p role="alert" className="notvalid">Prescriber Options is   required</p>}
 
                                 </div>
                             </div>
@@ -1072,6 +1056,7 @@ export function Strategy(props) {
                                     <small>Prescriber Grouping ID</small>
 
 
+{/* // not included in DB */}
                                     <select className="form-select" {...register("Prescriber_Grouping_id", {
                                         required: true,
                                     })} name="Prescriber_Grouping_id">
@@ -1101,14 +1086,14 @@ export function Strategy(props) {
 
 
 
-                <div class="modal fade" id="supernetwork" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Search Super Provider Networks</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div className="modal fade" id="supernetwork" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title" id="exampleModalLabel">Search Super Provider Networks</h5>
+                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <div class="modal-body">
+                            <div className="modal-body">
 
                                 <div className='row align-items-center'>
                                     <h6>Criteria</h6>
@@ -1159,9 +1144,9 @@ export function Strategy(props) {
 
 
                                     <br></br>
-                                    <div class="row">
-                                        <div class="col-md-12 table-responsive">
-                                            <table class="table table-bordered  table-responsive">
+                                    <div className="row">
+                                        <div className="col-md-12 table-responsive">
+                                            <table className="table table-bordered  table-responsive">
                                                 <thead>
                                                     <tr className='table-danger'>
                                                         <th>Network Id</th>
@@ -1188,9 +1173,9 @@ export function Strategy(props) {
 
                             </div>
 
-                            {/* <div class="modal-footer">
-<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-<button type="button" class="btn btn-info">Add Benefit Code</button>
+                            {/* <div className="modal-footer">
+<button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+<button type="button" className="btn btn-info">Add Benefit Code</button>
 </div> */}
                         </div>
                     </div>
@@ -1253,14 +1238,14 @@ export function Eligibility(props) {
 
 
 
-                <div class="modal fade" id="eligibilityidModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Search Eligibility Validation Lists</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div className="modal fade" id="eligibilityidModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title" id="exampleModalLabel">Search Eligibility Validation Lists</h5>
+                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <div class="modal-body">
+                            <div className="modal-body">
 
                                 <div className='row align-items-center'>
                                     <h6>Criteria</h6>
@@ -1312,9 +1297,9 @@ export function Eligibility(props) {
 
 
                                     <br></br>
-                                    <div class="row">
-                                        <div class="col-md-12 table-responsive">
-                                            <table class="table table-bordered  table-responsive">
+                                    <div className="row">
+                                        <div className="col-md-12 table-responsive">
+                                            <table className="table table-bordered  table-responsive">
                                                 <thead>
                                                     <tr className='table-danger'>
                                                         <th>List Id</th>
@@ -1341,9 +1326,9 @@ export function Eligibility(props) {
 
                             </div>
 
-                            {/* <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-info">Add Benefit Code</button>
+                            {/* <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" className="btn btn-info">Add Benefit Code</button>
             </div> */}
                         </div>
                     </div>
@@ -1876,14 +1861,14 @@ export function Exceptions(props) {
                 {/* <button type='button' onClick={submit2}>Submit2</button> */}
 
 
-                <div class="modal fade" id="rvalistidModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Search RVA Lists</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div className="modal fade" id="rvalistidModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title" id="exampleModalLabel">Search RVA Lists</h5>
+                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <div class="modal-body">
+                            <div className="modal-body">
 
                                 <div className='row align-items-center'>
                                     <h6>Criteria</h6>
@@ -1930,9 +1915,9 @@ export function Exceptions(props) {
 
 
                                     <br></br>
-                                    <div class="row">
-                                        <div class="col-md-12 table-responsive">
-                                            <table class="table table-bordered  table-responsive">
+                                    <div className="row">
+                                        <div className="col-md-12 table-responsive">
+                                            <table className="table table-bordered  table-responsive">
                                                 <thead>
                                                     <tr className='table-danger'>
                                                         <th>List Id</th>
@@ -1949,9 +1934,9 @@ export function Exceptions(props) {
                                 </div>
                             </div>
 
-                            {/* <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-info">Add Benefit Code</button>
+                            {/* <div className="modal-footer">
+            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" className="btn btn-info">Add Benefit Code</button>
             </div> */}
                         </div>
                     </div>
