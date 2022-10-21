@@ -3,11 +3,15 @@ import { useForm } from 'react-hook-form';
 import { Link, Outlet, Route, Routes, useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import Footer from '../../../../shared/Footer';
 import { ToastContainer, toast } from 'react-toastify';
+import { objToQueryString } from '../../../../hooks/healper';
 
 
 export default function Client() {
     const location = useLocation();
     const currentpath = location.pathname.split('/').pop();
+
+    const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
+
 
     const [count, setCount] = useState(null);
     const [displaynav, setDisplayNav] = useState();
@@ -17,6 +21,9 @@ export default function Client() {
 
 
     const [client, setClient] = useState([]);
+
+
+    const [clientlist, setClientList] = useState([]);
 
 
     const displayNavbuttons = () => {
@@ -34,12 +41,38 @@ export default function Client() {
 
     }
 
-    const getSearch = () => {
+    const searchClient = (fdata) => {
 
-        setCount(1);
+        var arr = [];
+
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        };
+
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/customer/get?${objToQueryString(fdata)}`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                // console.log(response);
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    return Promise.reject(error);
+                    setClientList([]);
+                } else {
+                    setClientList(data.data);
+                }
 
 
-    };
+                
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+    }
 
     return (
         <>
@@ -71,36 +104,36 @@ export default function Client() {
 
             <div className="card mt-3 mb-3">
                 <div className="card-body">
-                    <form method="" action="">
+                <form onSubmit={handleSubmit(searchClient)}>
                         <div className="row mb-4">
                             <div className="col">
                                 <div className="form-group">
                                     <small>Customer ID</small>
-                                    <input type="text" className="form-control" placeholder="Customer ID" name="" id="" required />
+                                    <input type="text" className="form-control"  {...register('customerid')} placeholder="Customer ID" name="customerid" id=""  />
                                 </div>
                             </div>
                             <div className="col">
                                 <div className="form-group">
                                     <small>Customer Name</small>
-                                    <input type="text" className="form-control" placeholder="Customer Name" name="" id="" required />
+                                    <input type="text" className="form-control" {...register('customer_name')} placeholder="Customer Name" name="customer_name" id=""  />
                                 </div>
                             </div>
                             <div className="col">
                                 <div className="form-group">
                                     <small>Client ID</small>
-                                    <input type="text" className="form-control" placeholder="Client ID" name="" id="" required />
+                                    <input type="text" className="form-control" placeholder="Client ID" {...register('clientid')} name="clientid" id=""  />
                                 </div>
                             </div>
                             <div className="col">
                                 <div className="form-group">
                                     <small>Client Name</small>
-                                    <input type="text" className="form-control" placeholder="Client Name" name="" id="" required />
+                                    <input type="text" className="form-control" placeholder="Client Name" name="client_name" id=""  />
                                 </div>
                             </div>
                             <div className="col-md-2">
                                 <div className="form-group">
                                     <small>&nbsp;</small><br />
-                                    <button type="submit" onClick={getSearch} className="btn m-0 p-2 btn-theme" style={{ width: '100%', fontSize: '12px' }}>Search</button>
+                                    <button type="submit"  className="btn m-0 p-2 btn-theme" style={{ width: '100%', fontSize: '12px' }}>Search</button>
 
 
                                     {/* <button  type="submit"  >show table</button> */}

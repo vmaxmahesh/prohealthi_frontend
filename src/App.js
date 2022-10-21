@@ -46,7 +46,7 @@ function getToken() {
 function App() {
   const { token, setToken } = useToken();
 
-
+console.log('app.js');
 
   // if (!token) {
   //   return <Navigate to="login" replace />

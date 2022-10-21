@@ -34,7 +34,7 @@ export default function Benifits() {
     //     }
     // }, [added, reset]);
 
-    const onSubmit = (data) => {
+    const onSubmit = (fdata) => {
         // var arr = [
         //     { code: '1112', description: 'benifit description 1' },
         //     { code: '2341', description: 'benifit description 2' },
@@ -51,7 +51,7 @@ export default function Benifits() {
         // console.log(watch(data)); 
 
         if (process.env.REACT_APP_API_BASEURL != 'NOT') {
-            fetch(process.env.REACT_APP_API_BASEURL + `/api/codes/benefits?${objToQueryString(data)}`, requestOptions)
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/codes/benefits?${objToQueryString(fdata)}`, requestOptions)
                 .then(async response => {
                     const isJson = response.headers.get('content-type')?.includes('application/json');
                     const data = isJson && await response.json();
@@ -63,7 +63,7 @@ export default function Benifits() {
                         const error = (data && data.message) || response.status;
                         return Promise.reject(error);
                     }
-                    console.log(process.env.REACT_APP_API_BASEURL);
+                    // console.log(process.env.REACT_APP_API_BASEURL);
                     // if (process.env.REACT_APP_API_BASEURL == 'NOT') {
                     //     response.message = 'Successfully added';
                     // }
@@ -107,16 +107,7 @@ export default function Benifits() {
 
            
         } else {
-            // toast.success('Added successfully.', {
-            //     position: "top-right",
-            //     autoClose: 5000,
-            //     hideProgressBar: false,
-            //     closeOnClick: true,
-            //     pauseOnHover: true,
-            //     draggable: true,
-            //     progress: undefined,
-
-            // });
+            
         }
     }
 

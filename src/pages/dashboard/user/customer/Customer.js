@@ -36,13 +36,13 @@ function Customer() {
                     // get error message from body or default to response status
                     const error = (data && data.message) || response.status;
                     return Promise.reject(error);
+                    setCustomerlist([]);
                 } else {
                     setCustomerlist(data.data);
                 }
 
 
-                if (response === '200') {
-                }
+                
             })
             .catch(error => {
                 console.error('There was an error!', error);
@@ -50,7 +50,7 @@ function Customer() {
     }
 
     const getCustomer = (customerid) => {
-        console.log(customerid);
+        // console.log(customerid);
         const requestOptions = {
             method: 'GET',
             // mode: 'no-cors',
@@ -83,7 +83,9 @@ function Customer() {
             });
     }
 
-    useEffect(() => { reset(customer) }, [customer]);
+    useEffect(() => {
+         reset(customer) 
+    }, [customer]);
 
     return (
         <>
@@ -780,7 +782,7 @@ export function Strategy(props) {
                                             <div className="form-group mb-4">
                                                 <small>Effective From :</small>
                                                 <input className="align-items-right" type="date"  {...register2("effective_from", {
-                                                })} className="form-control" name="effective_from" id="" />
+                                                })} />
                                                 {errors2.effective_from?.type === 'required' && <p role="alert" className="notvalid">Effective From date  is Required</p>}
 
                                             </div>
