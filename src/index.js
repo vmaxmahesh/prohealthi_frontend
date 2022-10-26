@@ -4,15 +4,17 @@ import './index.css';
 import App, { UnAuthRoutes } from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
+// import Page from 'react-page-loading-v2'
 
 // debugger; 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-     <BrowserRouter>
-     <UnAuthRoutes />
-      <App />
-  </BrowserRouter>
+      <BrowserRouter>
+        <UnAuthRoutes />
+
+        <App />
+      </BrowserRouter>
   </React.StrictMode>
 );
 

@@ -9,11 +9,11 @@ import Customer, { Eligibility, Exceptions, Identification, Indicators, Strategy
 import Client, { Eligibility as Ce, Identification as Ci, Indicators as Cin, Coverage as CS } from './pages/dashboard/user/client/Client';
 import Member, { ChnageLog, ClaimHistory, Coverage, CoverageHistory, Health, MemberForm, Notes, Overrides, PriorAuthorisation, ProviderSearch } from './pages/dashboard/members/Member';
 
-import SearchProvider, { Provider,Effectivedates,PharmistSystem,NetworkParticipation } from './pages/dashboard/user/provider/SearchProvider';
+import SearchProvider, { Provider, Effectivedates, PharmistSystem, NetworkParticipation } from './pages/dashboard/user/provider/SearchProvider';
 
-import TraditionalNetworks,{Network,Providers} from './pages/dashboard/user/provider/TraditionalNetworks';
+import TraditionalNetworks, { Network, Providers } from './pages/dashboard/user/provider/TraditionalNetworks';
 
-import FlexibleNetworks,{Rules} from './pages/dashboard/user/provider/FlexibleNetworks';
+import FlexibleNetworks, { Rules } from './pages/dashboard/user/provider/FlexibleNetworks';
 
 import Membership, { SearchById, SearchByName } from './pages/dashboard/members/Membership';
 import PlanAuthorisation, { Authorisation, PANotes, Pricing } from './pages/dashboard/members/PlanAuthorisation';
@@ -36,8 +36,12 @@ import CopayStepSchedule from './pages/dashboard/third party pricing/CopayStepSc
 import CopaySchedule from './pages/dashboard/third party pricing/CopaySchedule';
 import ProcedureUCRList from './pages/dashboard/third party pricing/ProcedureUCRList';
 import RVAList from './pages/dashboard/third party pricing/RVAList';
-import NDC from './pages/dashboard/exception list/ndc';
-
+import NDC, { ProcessRule, RXLimitationPricing, ValidationsOverride } from './pages/dashboard/exceptionlist/ndc';
+import GPI from './pages/dashboard/exceptionlist/gpi';
+import TherapyClass from './pages/dashboard/exceptionlist/TherapyClass';
+import DrugClassification from './pages/dashboard/exceptionlist/DrugClassification';
+import ExceptionProcedure from './pages/dashboard/exceptionlist/ExceptionProcedure';
+import ExceptionReason from './pages/dashboard/exceptionlist/ExceptionReason';
 
 function setToken(userToken) {
   sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -129,83 +133,19 @@ function App() {
           </Route>
 
           <Route path="code/benefits" element={<Benifits />}>
-            
-            </Route>
-  
-            <Route path="code/procedure" element={<Procedure />}>
-             
-            </Route>
-  
-            <Route path="code/diagnosis" element={<Diagnosis />}>
-             
-            </Route>
-  
-            <Route path="code/reason" element={<Reason />}>
-             
-            </Route>
-  
-            <Route path="code/cause-of-loss" element={<CauseOfLoss />}>
-            </Route>
-  
-            <Route path="code/service-modifiers" element={<ServiceModifiers />}>
-            </Route>
-  
-            <Route path="code/service-type" element={<ServiceType />}>
-            </Route>
-  
-            <Route path="code/provider-type" element={<ProviderType />}>
-            </Route>
 
-
-          <Route path='user/searchprovider' element={<SearchProvider />}>
-          <Route index element={<Navigate to="provider" replace />} />
-
-            <Route path='provider' element={<Provider />} />
-            <Route path='effectivedates' element={<Effectivedates />} />
-            <Route path='pharmistsystem' element={<PharmistSystem />} />
-
-            <Route path='networkparticipation' element={<NetworkParticipation />} />
-
-
-          </Route>
-
-
-          <Route path='user/provider/traditionalnetworks' element={<TraditionalNetworks />}>
-          <Route index element={<Navigate to="network" replace />} />
-
-            <Route path='network' element={<Network />} />
-            <Route path='providers' element={<Providers />} />
-
-
-
-          </Route>
-
-
-
-          <Route path='user/provider/flexiblenetworks' element={<FlexibleNetworks  />}>
-          <Route index element={<Navigate to="network" replace />} />
-
-            <Route path='network' element={<Network />} />
-            <Route path='rules' element={<Rules />} />
-
-          </Route>
-
-          {/* codes routes start  */}
-
-          <Route path="code/benefits" element={<Benifits />}>
-            
           </Route>
 
           <Route path="code/procedure" element={<Procedure />}>
-           
+
           </Route>
 
           <Route path="code/diagnosis" element={<Diagnosis />}>
-           
+
           </Route>
 
           <Route path="code/reason" element={<Reason />}>
-           
+
           </Route>
 
           <Route path="code/cause-of-loss" element={<CauseOfLoss />}>
@@ -219,7 +159,71 @@ function App() {
 
           <Route path="code/provider-type" element={<ProviderType />}>
           </Route>
-    
+
+
+          <Route path='user/searchprovider' element={<SearchProvider />}>
+            <Route index element={<Navigate to="provider" replace />} />
+
+            <Route path='provider' element={<Provider />} />
+            <Route path='effectivedates' element={<Effectivedates />} />
+            <Route path='pharmistsystem' element={<PharmistSystem />} />
+
+            <Route path='networkparticipation' element={<NetworkParticipation />} />
+
+
+          </Route>
+
+
+          <Route path='user/provider/traditionalnetworks' element={<TraditionalNetworks />}>
+            <Route index element={<Navigate to="network" replace />} />
+
+            <Route path='network' element={<Network />} />
+            <Route path='providers' element={<Providers />} />
+
+
+
+          </Route>
+
+
+
+          <Route path='user/provider/flexiblenetworks' element={<FlexibleNetworks />}>
+            <Route index element={<Navigate to="network" replace />} />
+
+            <Route path='network' element={<Network />} />
+            <Route path='rules' element={<Rules />} />
+
+          </Route>
+
+          {/* codes routes start  */}
+
+          <Route path="code/benefits" element={<Benifits />}>
+
+          </Route>
+
+          <Route path="code/procedure" element={<Procedure />}>
+
+          </Route>
+
+          <Route path="code/diagnosis" element={<Diagnosis />}>
+
+          </Route>
+
+          <Route path="code/reason" element={<Reason />}>
+
+          </Route>
+
+          <Route path="code/cause-of-loss" element={<CauseOfLoss />}>
+          </Route>
+
+          <Route path="code/service-modifiers" element={<ServiceModifiers />}>
+          </Route>
+
+          <Route path="code/service-type" element={<ServiceType />}>
+          </Route>
+
+          <Route path="code/provider-type" element={<ProviderType />}>
+          </Route>
+
           {/* codes routes ends  */}
 
           {/* third party pricing started  */}
@@ -248,17 +252,85 @@ function App() {
 
           {/* exception list route starts  */}
 
-          <Route path="exception-list/ndc" element={<NDC   />}>
+          <Route path="exception-list/ndc" element={<NDC />}>
+            <Route index element={<Navigate to="process-rule" replace />} />
+            <Route path='process-rule' element={<ProcessRule />} />
+            <Route path='rx-limitation-pricing' element={<RXLimitationPricing />} />
+            <Route path='validation-override' element={<ValidationsOverride />} />
+          </Route>
+
+          <Route path="exception-list/gpi" element={<GPI />}>
+          </Route>
+
+          <Route path="exception-list/therapy-class" element={<TherapyClass />}>
+          </Route>
+
+          <Route path="exception-list/drug-classification" element={<DrugClassification />}>
+          </Route>
+
+          <Route path="exception-list/procedure" element={<ExceptionProcedure />}>
+          </Route>
+
+          <Route path="exception-list/reason" element={<ExceptionReason />}>
           </Route>
 
 
-         {/* exception list route ends  */}
+          {/* exception list route ends  */}
+
+          <Route path="code/benefits" element={<Benifits />}>
+
+          </Route>
+
+          <Route path="code/procedure" element={<Procedure />}>
+
+          </Route>
+
+          <Route path="code/diagnosis" element={<Diagnosis />}>
+
+          </Route>
+
+          <Route path="code/reason" element={<Reason />}>
+
+          </Route>
+
+          <Route path="code/cause-of-loss" element={<CauseOfLoss />}>
+          </Route>
+
+          <Route path="code/service-modifiers" element={<ServiceModifiers />}>
+          </Route>
+
+          <Route path="code/service-type" element={<ServiceType />}>
+          </Route>
+
+          <Route path="code/provider-type" element={<ProviderType />}>
+          </Route>
+
+
+
+          {/* exception list route starts  */}
+
 
         </Route>
 
 
-    </Routes>
-     <ToastContainer/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </Routes>
+
+      <ToastContainer />
     </>
 
   );
@@ -267,13 +339,13 @@ function App() {
 export function Loading(props) {
   return (
     <>
-      <svg 
-        style={{margin: 'auto', background: 'rgb(255, 255, 255)', display: 'block', shapRendering: 'auto', animationPlayState: 'running', animationDelay: '0s'}}
+      <svg
+        style={{ margin: 'auto', background: 'rgb(255, 255, 255)', display: 'block', shapRendering: 'auto', animationPlayState: 'running', animationDelay: '0s' }}
         width="200px" height="200px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
         <path fill="none" stroke="#e90c59" stroke-width="8" stroke-dasharray="42.76482137044271 42.76482137044271"
           d="M24.3 30C11.4 30 5 43.3 5 50s6.4 20 19.3 20c19.3 0 32.1-40 51.4-40 C88.6 30 95 43.3 95 50s-6.4 20-19.3 20C56.4 70 43.6 30 24.3 30z"
           stroke-linecap="round"
-          style={{transform: 'scale(0.8)', transformOrigin: '50px 50px',  animationPlayState: 'running', animationDelay: '0s'}}>
+          style={{ transform: 'scale(0.8)', transformOrigin: '50px 50px', animationPlayState: 'running', animationDelay: '0s' }}>
           <animate attributeName="stroke-dashoffset" repeatCount="indefinite" dur="1s" keyTimes="0;1"
             values="0;256.58892822265625" style="animation-play-state: running; animation-delay: 0s;"></animate>
         </path>
