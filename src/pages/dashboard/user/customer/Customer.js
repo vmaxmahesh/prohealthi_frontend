@@ -263,7 +263,6 @@ export function Identification(props) {
     const [startDate, setStartDate] = useState(new Date());
     const [afterDate, setAfterDate] = useState(new Date());
 
-    console.log(customer);
 
 
     const navigate = useNavigate();

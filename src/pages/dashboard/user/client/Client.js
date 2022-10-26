@@ -1433,7 +1433,7 @@ export function Coverage(params) {
     }
 
     export function Identification(params) {
-        const { register, handleSubmit, formState: { errors } } = useForm();
+        const { register, handleSubmit, reset, formState: { errors } } = useForm();
         const [client, setClient] = useOutletContext();
 
 
@@ -1455,7 +1455,6 @@ export function Coverage(params) {
 
         }
 
-        console.log(identificationcount);
 
 
 

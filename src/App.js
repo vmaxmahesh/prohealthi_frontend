@@ -37,11 +37,12 @@ import CopaySchedule from './pages/dashboard/third party pricing/CopaySchedule';
 import ProcedureUCRList from './pages/dashboard/third party pricing/ProcedureUCRList';
 import RVAList from './pages/dashboard/third party pricing/RVAList';
 import NDC, { ProcessRule, RXLimitationPricing, ValidationsOverride } from './pages/dashboard/exceptionlist/ndc';
-import GPI from './pages/dashboard/exceptionlist/gpi';
-import TherapyClass from './pages/dashboard/exceptionlist/TherapyClass';
+import GPI, { GPIProcessRule, GPIRXLimitationPricing, GPIValidationsOverride } from './pages/dashboard/exceptionlist/gpi';
+import TherapyClass, { TCProcessRule, TCRXLimitationPricing, TCValidationsOverride } from './pages/dashboard/exceptionlist/TherapyClass';
 import DrugClassification from './pages/dashboard/exceptionlist/DrugClassification';
 import ExceptionProcedure from './pages/dashboard/exceptionlist/ExceptionProcedure';
 import ExceptionReason from './pages/dashboard/exceptionlist/ExceptionReason';
+import BenefitList from './pages/dashboard/exceptionlist/BenefitList';
 
 function setToken(userToken) {
   sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -57,7 +58,7 @@ function getToken() {
 function App() {
   const { token, setToken } = useToken();
 
-console.log('app.js');
+  console.log('app.js');
 
   // if (!token) {
   //   return <Navigate to="login" replace />
@@ -260,9 +261,19 @@ console.log('app.js');
           </Route>
 
           <Route path="exception-list/gpi" element={<GPI />}>
+            <Route index element={<Navigate to="process-rule" replace />} />
+            <Route path='process-rule' element={<GPIProcessRule />} />
+            <Route path='rx-limitation-pricing' element={<GPIRXLimitationPricing />} />
+            <Route path='validation-override' element={<GPIValidationsOverride />} />
           </Route>
 
+
+
           <Route path="exception-list/therapy-class" element={<TherapyClass />}>
+            <Route index element={<Navigate to="process-rule" replace />} />
+            <Route path='process-rule' element={<TCProcessRule />} />
+            <Route path='rx-limitation-pricing' element={<TCRXLimitationPricing />} />
+            <Route path='validation-override' element={<TCValidationsOverride />} />
           </Route>
 
           <Route path="exception-list/drug-classification" element={<DrugClassification />}>
@@ -272,6 +283,9 @@ console.log('app.js');
           </Route>
 
           <Route path="exception-list/reason" element={<ExceptionReason />}>
+          </Route>
+
+          <Route path="exception-list/benefit-list" element={<BenefitList />}>
           </Route>
 
 
