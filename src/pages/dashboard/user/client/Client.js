@@ -1,13 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, Outlet, Route, Routes, useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import Footer from '../../../../shared/Footer';
 import { ToastContainer, toast } from 'react-toastify';
 import { objToQueryString } from '../../../../hooks/healper';
+import { Button, Col, Row } from 'react-bootstrap';
+
 
 
 export default function Client() {
     const location = useLocation();
+    const scollToRef = useRef();
+
     const currentpath = location.pathname.split('/').pop();
 
     const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
@@ -50,7 +54,7 @@ export default function Client() {
             headers: { 'Content-Type': 'application/json' },
         };
 
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/customer/get?${objToQueryString(fdata)}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/client/get?search=${fdata.target.value}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
@@ -73,6 +77,48 @@ export default function Client() {
                 console.error('There was an error!', error);
             });
     }
+
+    // getClient
+    const getClient = (clientid) => {
+        // console.log(customerid);
+        const requestOptions = {
+            method: 'GET',
+            // mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            // body: encodeURIComponent(data)
+        };
+        // console.log(watch(fdata));
+
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/client/get/${clientid}`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                console.log(response);
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    return Promise.reject(error);
+                } else {
+                    setClient(data.data);
+                    scollToRef.current.scrollIntoView()
+                }
+
+
+                if (response === '200') {
+                }
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+    }
+
+    
+    useEffect(() => {
+        reset(client) 
+   }, [client]);
+
 
     return (
         <>
@@ -104,15 +150,19 @@ export default function Client() {
 
             <div className="card mt-3 mb-3">
                 <div className="card-body">
-                <form onSubmit={handleSubmit(searchClient)}>
+
+                    <Row>
+
+                        <Col>
+                        <form >
                         <div className="row mb-4">
                             <div className="col">
                                 <div className="form-group">
-                                    <small>Customer ID</small>
-                                    <input type="text" className="form-control"  {...register('customerid')} placeholder="Customer ID" name="customerid" id=""  />
+                                    <small>Customer ID/Name or Client ID/Name</small>
+                                    <input type="text" onKeyUp={(e) => (searchClient(e))} className="form-control"  {...register('customerid')} placeholder="Start typing Customer ID, Name, Client name or ID" name="customerid" id=""  />
                                 </div>
                             </div>
-                            <div className="col">
+                            {/* <div className="col">
                                 <div className="form-group">
                                     <small>Customer Name</small>
                                     <input type="text" className="form-control" {...register('customer_name')} placeholder="Customer Name" name="customer_name" id=""  />
@@ -139,67 +189,37 @@ export default function Client() {
                                     {/* <button  type="submit"  >show table</button> */}
 
 
-
+{/* 
                                 </div>
-                            </div>
+                            </div> */} 
                         </div>
                     </form>
+                        </Col>
+
+                   
+
+                    </Row>
+
+                    <Row>
+                <Col>
+                    {/* {clientlist.length > 0 ? */}
+                        <CustomerTable customers={clientlist} getCustomer={getClient} />
+                        {/* : ''} */}
+                </Col>
+            </Row>
 
 
-                    {count && <div className="row">
-                        <div className="col-md-12">
-                            <table className="table table-striped table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Customer ID</th>
-                                        <th>Customer Name</th>
-                                        <th>Client ID</th>
-                                        <th>Client Name</th>
-                                        <th>Eff. Date</th>
-                                        <th>Term Date</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Jamrech</td>
-                                        <td>Jamica Mechaidise</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>06-10-2022</td>
-                                        <td>06-12-2040</td>
-                                        <td><button onClick={displayNavbuttons} className="btn btn-sm btn-danger Show"><i className="fa fa-eye"></i> View</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Jamrech</td>
-                                        <td>Jamica Mechaidise</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>06-10-2022</td>
-                                        <td>06-12-2040</td>
-                                        <td><a href="" className="Show"><i className="fa fa-eye"></i></a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Jamrech</td>
-                                        <td>Jamica Mechaidise</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>06-10-2022</td>
-                                        <td>06-12-2040</td>
-                                        <td><a href="" className="btn btn-sm btn-warning Show"><i className="fa fa-eye"></i> View</a></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>}
+              
 
+
+                 
 
 
                 </div>
             </div>
 
 
-            {displaynav && <div >
+             <div >
 
 
                 <div className="nav nav-tabs" id="nav-tab" role="tablist">
@@ -210,16 +230,92 @@ export default function Client() {
                 </div>
 
 
-                <div className="tab-content" id="nav-tabContent">
+                <div className="tab-content" id="nav-tabContent"  ref={scollToRef}>
                     <Outlet context={[client, setClient]} />
                 </div>
-            </div>}
+            </div>
 
             <Footer />
 
         </>
     );
 
+}
+
+function Cutomer(props) {
+    return (
+        <>
+            <tr>
+                <td>{props.customer.customerid}</td>
+                <td>{props.customer.customername}</td>
+                <td>{props.customer.client_id}</td>
+                <td>{props.customer.client_name}</td>
+                <td>{props.customer.clienteffectivedate}</td>
+                <td>{props.customer.clientterminationdate}</td>
+                <td><Button variant="primary" onClick={() => props.getCustomer(props.customer.client_id)}>View</Button></td>
+            </tr>
+        </>
+    )
+}
+
+function CustomerTable(props) {
+
+    const getCustomer = (customerid) => {
+        // console.log(customerid);
+        props.getCustomer(customerid);
+    }
+
+    const ClientList = [];
+    if (props.customers.length > 0) {
+        for (let i = 0; i < props.customers.length; i++) {
+            ClientList.push(<Cutomer customer={props.customers[i]} getCustomer={getCustomer} />);
+        }
+    } else {
+        ClientList.push(<NoReacords/>);
+    }
+   
+    return (
+        <>
+            <div className="card mt-3 mb-3">
+                <div className="card-body">
+                    <div className="row">
+                        <div className="col-md-12">
+                            <h5 className="mb-2">Clients</h5>
+                        </div>
+                        <div style={{    height: '400px', overflowY: 'scroll'}}>
+                        <table className="table  table-bordered" style={{position:'relative'}}>
+                            <thead className='stickt-thead'>
+                                <tr>
+                                    <th>Customer ID	</th>
+                                    <th>Customer Name</th>
+                                    <th>Client ID</th>
+                                    <th>Client Name</th>
+                                    <th>Eff. Date	</th>
+                                    <th>Term Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+
+                                {ClientList}
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
+    )
+
+}
+
+function NoReacords(params) {
+    return (
+        <>
+            <tr style={{padding: '10px', color:'red'}}><td colspan="7">No Records Matches..!</td></tr>
+        </>
+    )
 }
 
 export function Indicators(params) {
@@ -1372,7 +1468,7 @@ export function Coverage(params) {
 }
 
 export function Identification(params) {
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, reset, formState: { errors } } = useForm();
     const [client, setClient] = useOutletContext();
 
 
@@ -1389,14 +1485,15 @@ export function Identification(params) {
         const id = client;
         id['identification'] = data;
         setClient(id);
-        console.log(client);
+        // console.log(client);
 
     }
 
-    console.log(identificationcount);
+    // console.log(identificationcount);
 
 
 
+    useEffect(() => { reset(client) }, [client]);
 
 
     return (
@@ -1434,30 +1531,30 @@ export function Identification(params) {
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Name</small>
-                                            <input type="text" className="form-control" name="customer_name" {...register('customer_name', {
+                                            <input type="text" className="form-control" name="client_name" {...register('client_name', {
                                                 required: true,
                                             })} id="" placeholder="Name" />
-                                            {errors.customer_name?.type === 'required' && <p role="alert" className="notvalid"> Customer Name is  required</p>}
+                                            {errors.client_name?.type === 'required' && <p role="alert" className="notvalid"> Customer Name is  required</p>}
 
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Address 1</small>
-                                            <input type="text" className="form-control" {...register('address1', {
+                                            <input type="text" className="form-control" {...register('address_1', {
                                                 required: true,
-                                            })} name="address1" id="" placeholder="Address 1" />
-                                            {errors.address1?.type === 'required' && <p role="alert" className="notvalid"> Address  is  required</p>}
+                                            })} name="address_1" id="" placeholder="Address 1" />
+                                            {errors.address_1?.type === 'required' && <p role="alert" className="notvalid"> Address  is  required</p>}
 
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Address 2</small>
-                                            <input type="text" className="form-control" name="address2" {...register('address2', {
+                                            <input type="text" className="form-control" name="address_2" {...register('address_2', {
                                                 required: true,
                                             })} id="" placeholder="Address 2" />
-                                            {errors.address2?.type === 'required' && <p role="alert" className="notvalid"> Address  is  required</p>}
+                                            {errors.address_2?.type === 'required' && <p role="alert" className="notvalid"> Address  is  required</p>}
 
                                         </div>
                                     </div>
@@ -1547,7 +1644,7 @@ export function Identification(params) {
 
                                         </div>
                                     </div>
-                                    <div className="col-md-6">
+                                    {/* <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Test</small>
                                             <input type="text" className="form-control" name="test" {...register('test', {
@@ -1556,7 +1653,7 @@ export function Identification(params) {
                                             {errors.test?.type === 'required' && <p role="alert" className="notvalid">  Test field  is  required</p>}
 
                                         </div>
-                                    </div>
+                                    </div> */}
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Type</small>

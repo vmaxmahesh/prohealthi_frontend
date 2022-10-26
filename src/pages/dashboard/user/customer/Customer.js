@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, Outlet, Route, Routes, useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import Footer from '../../../../shared/Footer';
@@ -9,6 +9,8 @@ import { objToQueryString } from '../../../../hooks/healper';
 
 function Customer() {
     const location = useLocation();
+    const scollToRef = useRef();
+
     const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
 
     const currentpath = location.pathname.split('/').pop();
@@ -19,13 +21,14 @@ function Customer() {
 
     const searchCustomer = (fdata) => {
         var arr = [];
+        console.log(fdata.target.value);
 
         const requestOptions = {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         };
 
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/customer/get?${objToQueryString(fdata)}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/customer/get?customerid=${fdata.target.value}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
@@ -35,8 +38,9 @@ function Customer() {
                 if (!response.ok) {
                     // get error message from body or default to response status
                     const error = (data && data.message) || response.status;
-                    return Promise.reject(error);
                     setCustomerlist([]);
+                    return Promise.reject(error);
+                   
                 } else {
                     setCustomerlist(data.data);
                 }
@@ -72,6 +76,7 @@ function Customer() {
                     return Promise.reject(error);
                 } else {
                     setCustomer(data.data);
+                    scollToRef.current.scrollIntoView()
                 }
 
 
@@ -112,18 +117,18 @@ function Customer() {
 
             <Row>
                 <Col>
-                    <form onSubmit={handleSubmit(searchCustomer)}>
+                    <form >
                         <div className="card mt-3 mb-3">
                             <div className="card-body">
                                 <div className="row mb-2">
-                                    <div className="col-md-4 mb-3">
+                                    <div className="col-md-12 mb-3">
                                         <div className="form-group">
-                                            <small>ID</small>
-                                            <input type="text" className="form-control" placeholder='Enter Customer Id to search' {...register("customerid")} />
+                                            <small>Search by Customer ID/Name</small>
+                                            <input type="text" onKeyUp={(e) => searchCustomer(e)} className="form-control" placeholder='Start typing Customer ID or Name' {...register("customerid")} />
                                             {/* {errors.customerid && <span><p className='notvalid'>This field is required</p></span>} */}
                                         </div>
                                     </div>
-                                    <div className="col-md-4 mb-3">
+                                    {/* <div className="col-md-4 mb-3">
                                         <div className="form-group">
                                             <small>Customer Name</small>
                                             <input type="text" className="form-control" placeholder='Enter Customer Name to search' {...register("customername")} />
@@ -134,7 +139,7 @@ function Customer() {
                                             <small>&nbsp;</small><br />
                                             <button type="submit" className="btn m-0 p-2 btn-theme" style={{ width: "100%", fontSize: "12px" }} >Search</button>
                                         </div>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>
@@ -144,9 +149,9 @@ function Customer() {
 
             <Row>
                 <Col>
-                    {customerlist.length > 0 ?
+                    {/* {customerlist.length > 0 ? */}
                         <CustomerTable customers={customerlist} getCustomer={getCustomer} />
-                        : ''}
+                        {/* : ''} */}
                 </Col>
             </Row>
 
@@ -154,7 +159,7 @@ function Customer() {
                 <h4 style={{ fontWeight: '600' }}> Customer Details -</h4>
             </div>
 
-            <div className="nav nav-tabs" id="nav-tab" role="tablist">
+            <div className="nav nav-tabs" id="nav-tab" role="tablist" ref={scollToRef}>
                 <Link to="identification" className={'nav-link' + (currentpath == 'identification' ? ' active' : '')}>Identification</Link>
                 <Link to="strategy" className={'nav-link' + (currentpath == 'strategy' ? ' active' : '')}>Strategy</Link>
                 <Link to="eligibility" className={'nav-link' + (currentpath == 'eligibility' ? ' active' : '')}>Eligibility</Link>
@@ -162,7 +167,7 @@ function Customer() {
                 <Link to="exceptions" className={'nav-link' + (currentpath == 'exceptions' ? ' active' : '')}>Exceptions List/ Charges</Link>
 
             </div>
-            <div className="tab-content" id="nav-tabContent">
+            <div className="tab-content" id="nav-tabContent" >
                 <Outlet context={[customer, setCustomer]} />
 
                 <div className="tab-pane fade show active" id="Identification" role="tabpanel" aria-labelledby="nav-home-tab">
@@ -189,8 +194,16 @@ function CustomerTable(props) {
     }
 
     const CustomerList = [];
-    for (let i = 0; i < props.customers.length; i++) {
-        CustomerList.push(<Cutomer customer={props.customers[i]} getCustomer={getCustomer} />);
+    // for (let i = 0; i < props.customers.length; i++) {
+    //     CustomerList.push(<Cutomer customer={props.customers[i]} getCustomer={getCustomer} />);
+    // }
+
+    if (props.customers.length > 0) {
+        for (let i = 0; i < props.customers.length; i++) {
+            CustomerList.push(<Cutomer customer={props.customers[i]} getCustomer={getCustomer} />);
+        }
+    } else {
+        CustomerList.push(<NoReacords/>);
     }
     return (
         <>
@@ -200,8 +213,9 @@ function CustomerTable(props) {
                         <div className="col-md-12">
                             <h5 className="mb-2">Customers</h5>
                         </div>
-                        <table className="table  table-bordered">
-                            <thead>
+                        <div style={{    height: '400px', overflowY: 'scroll'}}>
+                        <table className="table  table-bordered" style={{position:'relative'}}>
+                            <thead className='stickt-thead'>
                                 <tr>
                                     <th>Effective Date</th>
                                     <th>GPI</th>
@@ -213,12 +227,21 @@ function CustomerTable(props) {
                                 {CustomerList}
                             </tbody>
                         </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </>
     )
 
+}
+
+function NoReacords(params) {
+    return (
+        <>
+            <tr style={{padding: '10px', color:'red'}}><td colspan="7">No Records Matches..!</td></tr>
+        </>
+    )
 }
 
 function Cutomer(props) {
