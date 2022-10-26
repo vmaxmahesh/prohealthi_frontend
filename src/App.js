@@ -29,8 +29,19 @@ import ServiceType from './pages/dashboard/code/ServiceType';
 import ProviderType from './pages/dashboard/code/ProviderType';
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-
-
+import PriceSchedule from './pages/dashboard/third party pricing/PriceSchedule';
+import MacList from './pages/dashboard/third party pricing/MacList';
+import TaxSchedule from './pages/dashboard/third party pricing/TaxSchedule';
+import CopayStepSchedule from './pages/dashboard/third party pricing/CopayStepSchedule';
+import CopaySchedule from './pages/dashboard/third party pricing/CopaySchedule';
+import ProcedureUCRList from './pages/dashboard/third party pricing/ProcedureUCRList';
+import RVAList from './pages/dashboard/third party pricing/RVAList';
+import NDC, { ProcessRule, RXLimitationPricing, ValidationsOverride } from './pages/dashboard/exceptionlist/ndc';
+import GPI from './pages/dashboard/exceptionlist/gpi';
+import TherapyClass from './pages/dashboard/exceptionlist/TherapyClass';
+import DrugClassification from './pages/dashboard/exceptionlist/DrugClassification';
+import ExceptionProcedure from './pages/dashboard/exceptionlist/ExceptionProcedure';
+import ExceptionReason from './pages/dashboard/exceptionlist/ExceptionReason';
 
 function setToken(userToken) {
   sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -121,6 +132,34 @@ console.log('app.js');
 
           </Route>
 
+          <Route path="code/benefits" element={<Benifits />}>
+
+          </Route>
+
+          <Route path="code/procedure" element={<Procedure />}>
+
+          </Route>
+
+          <Route path="code/diagnosis" element={<Diagnosis />}>
+
+          </Route>
+
+          <Route path="code/reason" element={<Reason />}>
+
+          </Route>
+
+          <Route path="code/cause-of-loss" element={<CauseOfLoss />}>
+          </Route>
+
+          <Route path="code/service-modifiers" element={<ServiceModifiers />}>
+          </Route>
+
+          <Route path="code/service-type" element={<ServiceType />}>
+          </Route>
+
+          <Route path="code/provider-type" element={<ProviderType />}>
+          </Route>
+
 
           <Route path='user/searchprovider' element={<SearchProvider />}>
             <Route index element={<Navigate to="provider" replace />} />
@@ -153,9 +192,9 @@ console.log('app.js');
             <Route path='network' element={<Network />} />
             <Route path='rules' element={<Rules />} />
 
-
-
           </Route>
+
+          {/* codes routes start  */}
 
           <Route path="code/benefits" element={<Benifits />}>
 
@@ -185,6 +224,90 @@ console.log('app.js');
           <Route path="code/provider-type" element={<ProviderType />}>
           </Route>
 
+          {/* codes routes ends  */}
+
+          {/* third party pricing started  */}
+          <Route path="third-party-pricing/price-schedule" element={<PriceSchedule />}>
+          </Route>
+
+          <Route path="third-party-pricing/copay-schedule" element={<CopaySchedule />}>
+          </Route>
+
+          <Route path="third-party-pricing/copay-step-schedule" element={<CopayStepSchedule />}>
+          </Route>
+
+          <Route path="third-party-pricing/MAC-list" element={<MacList />}>
+          </Route>
+
+          <Route path="third-party-pricing/procedure-UCR-list" element={<ProcedureUCRList />}>
+          </Route>
+
+          <Route path="third-party-pricing/tax-schedule" element={<TaxSchedule />}>
+          </Route>
+
+          <Route path="third-party-pricing/RAV-list" element={<RVAList />}>
+          </Route>
+
+          {/* third party pricing ends  */}
+
+          {/* exception list route starts  */}
+
+          <Route path="exception-list/ndc" element={<NDC />}>
+            <Route index element={<Navigate to="process-rule" replace />} />
+            <Route path='process-rule' element={<ProcessRule />} />
+            <Route path='rx-limitation-pricing' element={<RXLimitationPricing />} />
+            <Route path='validation-override' element={<ValidationsOverride />} />
+          </Route>
+
+          <Route path="exception-list/gpi" element={<GPI />}>
+          </Route>
+
+          <Route path="exception-list/therapy-class" element={<TherapyClass />}>
+          </Route>
+
+          <Route path="exception-list/drug-classification" element={<DrugClassification />}>
+          </Route>
+
+          <Route path="exception-list/procedure" element={<ExceptionProcedure />}>
+          </Route>
+
+          <Route path="exception-list/reason" element={<ExceptionReason />}>
+          </Route>
+
+
+          {/* exception list route ends  */}
+
+          <Route path="code/benefits" element={<Benifits />}>
+
+          </Route>
+
+          <Route path="code/procedure" element={<Procedure />}>
+
+          </Route>
+
+          <Route path="code/diagnosis" element={<Diagnosis />}>
+
+          </Route>
+
+          <Route path="code/reason" element={<Reason />}>
+
+          </Route>
+
+          <Route path="code/cause-of-loss" element={<CauseOfLoss />}>
+          </Route>
+
+          <Route path="code/service-modifiers" element={<ServiceModifiers />}>
+          </Route>
+
+          <Route path="code/service-type" element={<ServiceType />}>
+          </Route>
+
+          <Route path="code/provider-type" element={<ProviderType />}>
+          </Route>
+
+
+
+          {/* exception list route starts  */}
 
 
         </Route>

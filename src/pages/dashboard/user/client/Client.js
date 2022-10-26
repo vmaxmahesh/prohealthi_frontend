@@ -960,167 +960,138 @@ export function Coverage(params) {
 
 
 
-    const tiersMove = () => {
-        var val1 = new Date(document.getElementById("tier_1").value);
-        var val2 = new Date(document.getElementById("tier_2").value);
-        var val3 = new Date(document.getElementById("tier_3").value);
-
-
-
-        const tier1_formated_date = val1.toLocaleDateString("en-US");
-        const tier1_date = customdateFormat(tier1_formated_date, 'yyyy-MM-dd')
-        tier1setValue(tier1_date);
-
-        const tier2_formated_date = val2.toLocaleDateString("en-US");
-        const tier2_date = customdateFormat(tier2_formated_date, 'yyyy-MM-dd')
-        tier2setValue(tier2_date);
-
-        var today = new Date(0);
-
-        tiersetValue(today);
-
-
-
-    }
-
-    const handlechangetier1 = (e) => {
-        tiersetValue(e.target.value);
-    }
-
-
-    const handlechangetier2 = (e) => {
-        tier1setValue(e.target.value);
-    }
-
-
-    const handlechangetier3 = (e) => {
-        tier2setValue(e.target.value);
-    }
+       
 
 
 
 
-    const onSubmit = data => {
+        const onSubmit = data => {
 
 
 
-        const id = client;
-        id['strategy'] = data;
-        setClient(id);
-        console.log(client);
+            const id = client;
+            id['strategy'] = data;
+            setClient(id);
+            console.log(client);
 
 
 
 
-    }
+        }
 
 
 
-    return (
-        <>
+        return (
+            <>
 
 
-            <form key={1} onSubmit={handleSubmit2(searchSubmit)}>
-
-
-
-                <div class="modal fade" id="planidmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Plan Search</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-
-                                <div className='row align-items-center'>
-
-                                    <div className="col-md-5  align-items-center">
-                                        <div className="form-group mb-3">
-                                            <small>Plan ID</small>
-                                            <input type="text"  {...register2("plan_id", {
-                                                required: true,
-                                            })} className="form-control" name="plan_id" id="" />
-
-                                        </div>
-                                        {errors2.plan_id?.type === 'required' && <p role="alert" className="notvalid">Plan Id is required </p>}
-
-                                    </div>
+                <form key={1} onSubmit={handleSubmit2(searchSubmit)}>
 
 
 
-                                    <div className="col-md-5 align-items-center">
-
-
-                                        <div className="form-group mb-3">
-
-                                            <button style={successbtnstyle} className='btn btn-success float-right'>Search</button>
-
-                                        </div>
-
-                                    </div>
-
+                    <div class="modal fade" id="planidmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Plan Search</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
+                                <div class="modal-body">
 
-                                <div>
-                                    <div className="col-md-5  align-items-center">
-                                        <div className="form-group mb-3">
-                                            <small><b>Date Range</b></small>
-
-
-                                        </div>
-                                    </div>
-
-
-                                    <div className='row'>
+                                    <div className='row align-items-center'>
 
                                         <div className="col-md-5  align-items-center">
-                                            <div className="form-group mb-4">
-                                                <small>Effective From :</small>
-                                                <input class="align-items-right" type="date"  {...register2("effective_from", {
-                                                })} className="form-control" name="effective_from" id="" />
-                                                {errors2.effective_from?.type === 'required' && <p role="alert" className="notvalid">Effective From date  is Required</p>}
+                                            <div className="form-group mb-3">
+                                                <small>Plan ID</small>
+                                                <input type="text"  {...register2("plan_id", {
+                                                    required: true,
+                                                })} className="form-control" name="plan_id" id="" />
+
+                                            </div>
+                                            {errors2.plan_id?.type === 'required' && <p role="alert" className="notvalid">Plan Id is required </p>}
+
+                                        </div>
+
+
+
+                                        <div className="col-md-5 align-items-center">
+
+
+                                            <div className="form-group mb-3">
+
+                                                <button style={successbtnstyle} className='btn btn-success float-right'>Search</button>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div>
+                                        <div className="col-md-5  align-items-center">
+                                            <div className="form-group mb-3">
+                                                <small><b>Date Range</b></small>
+
 
                                             </div>
                                         </div>
 
 
-                                        <div className="col-md-5  align-items-center">
-                                            <div className="form-group mb-4">
-                                                <small>Effective To :</small>
-                                                <input class="align-items-right" type="date"  {...register2("effective_to", {
-                                                })} className="form-control" name="effective_to" id="" />
-                                                {errors2.effective_to?.type === 'required' && <p role="alert" className="notvalid">Effective To date required</p>}
+                                        <div className='row'>
 
+                                            <div className="col-md-5  align-items-center">
+                                                <div className="form-group mb-4">
+                                                    <small>Effective From :</small>
+                                                    <input class="align-items-right" type="date"  {...register2("effective_from", {
+                                                    })} className="form-control" name="effective_from" id="" />
+                                                    {errors2.effective_from?.type === 'required' && <p role="alert" className="notvalid">Effective From date  is Required</p>}
+
+                                                </div>
+                                            </div>
+
+
+                                            <div className="col-md-5  align-items-center">
+                                                <div className="form-group mb-4">
+                                                    <small>Effective To :</small>
+                                                    <input class="align-items-right" type="date"  {...register2("effective_to", {
+                                                    })} className="form-control" name="effective_to" id="" />
+                                                    {errors2.effective_to?.type === 'required' && <p role="alert" className="notvalid">Effective To date required</p>}
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div className='row'>
+
+                                            <h6 className='text-align-center'>Date Range will Displays all plans that have  effective date during that time period</h6>
+
+                                        </div>
+                                        <br></br>
+                                        <div class="row">
+                                            <div class="col-md-12 table-responsive">
+                                                <table class="table table-bordered  table-responsive">
+                                                    <thead>
+                                                        <tr className='table-danger'>
+                                                            <th>Plan Id</th>
+                                                            <th>Effective Date</th>
+                                                            <th>Termination Date</th>
+
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {/* { cottagesList } */}
+                                                    </tbody>
+                                                </table>
                                             </div>
                                         </div>
 
+
+
+
+
+
                                     </div>
-                                    <div className='row'>
-
-                                        <h6 className='text-align-center'>Date Range will Displays all plans that have  effective date during that time period</h6>
-
-                                    </div>
-                                    <br></br>
-                                    <div class="row">
-                                        <div class="col-md-12 table-responsive">
-                                            <table class="table table-bordered  table-responsive">
-                                                <thead>
-                                                    <tr className='table-danger'>
-                                                        <th>Plan Id</th>
-                                                        <th>Effective Date</th>
-                                                        <th>Termination Date</th>
-
-
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {/* { cottagesList } */}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-
 
 
 
@@ -1128,382 +1099,376 @@ export function Coverage(params) {
 
                                 </div>
 
-
-
-
-
-                            </div>
-
-                            {/* <div class="modal-footer">
+                                {/* <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-info">Add Benefit Code</button>
             </div> */}
+                            </div>
                         </div>
                     </div>
-                </div>
-            </form>
+                </form>
 
-            <form onSubmit={handleSubmit(onSubmit)}>
+                <form onSubmit={handleSubmit(onSubmit)}>
 
-                <div className="card mt-3 mb-3">
-                    <div className="card-body">
-                        <div className='row'>
-                            <div className="col-md-11 mb-1">
-                                <h5 className="mb-2">Coverage Strategy</h5>
-                            </div>
-                            <div className="col-md-1 mb-1">
-                                <button onClick={tiersMove} className="btn btn-theme btn-sm p-1" style={{ width: '100%' }}>Add <i className="fa fa-plus"></i></button>
-                            </div>
-                        </div>
-                        <div className="row align-items-center">
-                            <div className="col-md-3 align-items-center">
-                                <p className="mt-2">Cov Eff Date:</p>
-                            </div>
-                            <div className="col-md-3">
-                                <div className="form-group mb-3">
-                                    <small>Tier 1</small>
-                                    {/* <input type="date" className="form-control" value="2013-01-08"  id="tier_1" onSelect={tiersMove}  name="tier_1" {...register('tier_1', { */}
-                                    <input type="date" className="form-control" onInput={handlechangetier1} value={tiervalue} id="tier_1" name="tier_1" {...register('tier_1', {
-                                        required: true,
-                                    })} />
-                                    {errors.tier_1?.type === 'required' && <p role="alert" className="notvalid">Cov Eff Date is  required</p>}
-
+                    <div className="card mt-3 mb-3">
+                        <div className="card-body">
+                            <div className='row'>
+                                <div className="col-md-11 mb-1">
+                                    <h5 className="mb-2">Coverage Strategy</h5>
+                                </div>
+                                <div className="col-md-1 mb-1">
+                                    <button onClick={tiersMove} className="btn btn-theme btn-sm p-1" style={{ width: '100%' }}>Add <i className="fa fa-plus"></i></button>
                                 </div>
                             </div>
-                            <div className="col-md-3">
-                                <div className="form-group mb-3">
-                                    <small>Tier 2</small>
-                                    {/* // <input type="date" className="form-control" defaultValue="01-02-2022" name="tier_2"  {...register('tier_2', { */}
-                                    <input type="date" className="form-control" onInput={handlechangetier2} value={tier1value} name="tier_2"  {...register('tier_2', {
-                                        required: true,
-                                    })} id="tier_2" />
-                                    {errors.tier_2?.type === 'required' && <p role="alert" className="notvalid">Cov Eff Date is  required</p>}
-
+                            <div className="row align-items-center">
+                                <div className="col-md-3 align-items-center">
+                                    <p className="mt-2">Cov Eff Date:</p>
                                 </div>
-                            </div>
-                            <div className="col-md-3">
-                                <div className="form-group mb-3">
-                                    <small>Tier 3</small>
-                                    <input type="date" className="form-control" onInput={handlechangetier3} value={tier2value} name="tier_3" {...register('tier_3', {
-                                        required: true,
-                                    })} id="tier_3" />
-                                    {errors.tier_3?.type === 'required' && <p role="alert" className="notvalid">Cov Eff Date is  required</p>}
-
-                                </div>
-                            </div>
-
-                            <div className="col-md-3 align-items-center">
-                                <p>Plan ID</p>
-                            </div>
-                            <div className="col-md-3">
-                                <div className="form-group mb-3">
-                                    <input type="text" className="form-control" name="plan_id_1" {...register('plan_id_1', {
-                                        required: true,
-                                    })} id="" />
-                                    <a href="" data-bs-toggle="modal" data-bs-target="#planidmodal"><span className="fa fa-search form-icon"></span></a>
-
-                                </div>
-                                {errors.plan_id_1?.type === 'required' && <p role="alert" className="notvalid">Plan Id  is  required</p>}
-
-                            </div>
-                            <div className="col-md-3">
-                                <div className="form-group mb-3">
+                                <div className="col-md-3">
                                     <div className="form-group mb-3">
-                                        <input type="text" className="form-control" name="plan_id_2"  {...register('plan_id_2', {
+                                        <small>Tier 1</small>
+                                        {/* <input type="date" className="form-control" value="2013-01-08"  id="tier_1" onSelect={tiersMove}  name="tier_1" {...register('tier_1', { */}
+                                        <input type="date" className="form-control" onInput={handlechangetier1} value={tiervalue} id="tier_1" name="tier_1" {...register('tier_1', {
+                                            required: true,
+                                        })} />
+                                        {errors.tier_1?.type === 'required' && <p role="alert" className="notvalid">Cov Eff Date is  required</p>}
+
+                                    </div>
+                                </div>
+                                <div className="col-md-3">
+                                    <div className="form-group mb-3">
+                                        <small>Tier 2</small>
+                                        {/* // <input type="date" className="form-control" defaultValue="01-02-2022" name="tier_2"  {...register('tier_2', { */}
+                                        <input type="date" className="form-control" onInput={handlechangetier2} value={tier1value} name="tier_2"  {...register('tier_2', {
+                                            required: true,
+                                        })} id="tier_2" />
+                                        {errors.tier_2?.type === 'required' && <p role="alert" className="notvalid">Cov Eff Date is  required</p>}
+
+                                    </div>
+                                </div>
+                                <div className="col-md-3">
+                                    <div className="form-group mb-3">
+                                        <small>Tier 3</small>
+                                        <input type="date" className="form-control" onInput={handlechangetier3} value={tier2value} name="tier_3" {...register('tier_3', {
+                                            required: true,
+                                        })} id="tier_3" />
+                                        {errors.tier_3?.type === 'required' && <p role="alert" className="notvalid">Cov Eff Date is  required</p>}
+
+                                    </div>
+                                </div>
+
+                                <div className="col-md-3 align-items-center">
+                                    <p>Plan ID</p>
+                                </div>
+                                <div className="col-md-3">
+                                    <div className="form-group mb-3">
+                                        <input type="text" className="form-control" name="plan_id_1" {...register('plan_id_1', {
                                             required: true,
                                         })} id="" />
                                         <a href="" data-bs-toggle="modal" data-bs-target="#planidmodal"><span className="fa fa-search form-icon"></span></a>
 
                                     </div>
-                                    {errors.plan_id_2?.type === 'required' && <p role="alert" className="notvalid">Plan Id  is  required</p>}
+                                    {errors.plan_id_1?.type === 'required' && <p role="alert" className="notvalid">Plan Id  is  required</p>}
 
                                 </div>
-                            </div>
-                            <div className="col-md-3">
-                                <div className="form-group mb-3">
+                                <div className="col-md-3">
                                     <div className="form-group mb-3">
-                                        <input type="text" className="form-control" name="plan_id_3"  {...register('plan_id_3', {
-                                            required: true,
-                                        })} id="" />
-                                        <a href="" data-bs-toggle="modal" data-bs-target="#planidmodal"><span className="fa fa-search form-icon"></span></a>
-
-                                    </div>
-                                    {errors.plan_id_3?.type === 'required' && <p role="alert" className="notvalid">Plan Id  is  required</p>}
-
-                                </div>
-                            </div>
-
-                            <div className="col-md-3 align-items-center">
-                                <p>Miscellaneous Data</p>
-                            </div>
-                            <div className="col-md-3">
-                                <div className="form-group mb-3">
-                                    <input type="text" className="form-control" {...register('miscellaneous_data_1')} name="miscellaneous_data_1"  {...register('miscellaneous_data_1', {
-                                        required: true,
-                                    })} id="" />
-                                    {errors.miscellaneous_data_1?.type === 'required' && <p role="alert" className="notvalid">Miscellaneous Data  is  required</p>}
-
-                                </div>
-                            </div>
-                            <div className="col-md-3">
-                                <div className="form-group mb-3">
-                                    <input type="text" className="form-control" {...register('miscellaneous_data_2', {
-                                        required: true,
-                                    })} name="miscellaneous_data_2"  {...register('miscellaneous_data_2')} id="" />
-                                    {errors.miscellaneous_data_2?.type === 'required' && <p role="alert" className="notvalid">Miscellaneous Data  is  required</p>}
-
-                                </div>
-                            </div>
-                            <div className="col-md-3">
-                                <div className="form-group mb-3">
-                                    <input type="text" className="form-control" {...register('miscellaneous_data_3', {
-                                        required: true,
-                                    })} name="miscellaneous_data_3"  {...register('miscellaneous_data_3')} id="" />
-                                    {errors.miscellaneous_data_3?.type === 'required' && <p role="alert" className="notvalid">Miscellaneous Data  is  required</p>}
-
-                                </div>
-                            </div>
-
-                            <div className="clearfix mb-3"></div>
-
-                            <div className="col-md-12">
-                                <h5 className="mb-2">Provider Verification Options :</h5>
-                            </div>
-                            <div className="col-md-6">
-                                <div className="form-group mb-3">
-                                    <small>Provider Options</small>
-                                    <select className="form-select" {...register("provider_vefification_option", {
-                                        required: true
-                                    })} name="provider_vefification_option">
-                                        <option value="">--select--</option>
-                                        <option value="1">No Provider Check</option>
-                                        <option value="2">Validate Provider Format</option>
-                                        <option value="3">Provider must exist within Provider Master</option>
-                                        <option value="4">Must exist in Provider Network</option>
-                                        <option value="5">Validate Provider In/Out of Network</option>
-                                    </select>
-                                    {errors.provider_vefification_option?.type === 'required' && <p role="alert" className="notvalid">Provider Options  is  required</p>}
-
-                                </div>
-                            </div>
-                            <div className="col-md-6">
-                                <div className="form-group mb-3">
-                                    <small>Super Provider Networks</small>
-                                    <input type="text" className="form-control" {...register('super_provider_networks', {
-                                        required: true,
-                                    })} name="super_provider_networks" id="" />
-                                    <a href="" data-bs-toggle="modal" data-bs-target="#superprovidermodal"><span className="fa fa-search form-icon"></span></a>
-
-
-                                </div>
-                                {errors.super_provider_networks?.type === 'required' && <p role="alert" className="notvalid">Super Provider Networks  is  required</p>}
-
-                            </div>
-
-                            <div className="clearfix mb-2"></div>
-
-                            <div className="col-md-12">
-                                <h5 className="mb-2">Prescriber Verification Options</h5>
-                            </div>
-                            <div className="col-md-4">
-                                <div className="form-group mb-3">
-                                    <small>Prescriber Options</small>
-                                    <select className="form-select" {...register("Prescriber_Verification_Options_1", {
-                                        required: true,
-                                    })} name="Prescriber_Verification_Options_1" >
-                                        <option value="">--select--</option>
-                                        <option value="1">None</option>
-                                        <option value="2">Validate DEA Code</option>
-                                        <option value="3">primary Prescriber Validation</option>
-                                        <option value="4">Must Exist in Prescriber Master</option>
-
-                                    </select>
-                                    {errors.Prescriber_Verification_Options_1?.type === 'required' && <p role="alert" className="notvalid">Prescriber Options  is  required</p>}
-
-                                </div>
-                            </div>
-                            <div className="col-md-4">
-                                <div className="form-group mb-3">
-                                    <small>Prescriber Options 2</small>
-                                    <select className="form-select" {...register("Prescriber_Verification_Options_2", {
-                                        required: true,
-                                    })} name="Prescriber_Verification_Options_2">
-                                        <option value="">--select--</option>
-                                        <option value="1">None</option>
-                                        <option value="2">Validate DEA Code</option>
-                                        <option value="3">primary Prescriber Validation</option>
-                                        <option value="4">Must Exist in Prescriber Master</option>
-                                    </select>
-                                    {errors.Prescriber_Verification_Options_2?.type === 'required' && <p role="alert" className="notvalid">Prescriber Options  is  required</p>}
-
-                                </div>
-                            </div>
-                            <div className="col-md-4">
-                                <div className="form-group mb-3">
-                                    <small>Prescriber Grouping ID</small>
-                                    <select className="form-select" {...register("Prescriber_Grouping_id", {
-                                        required: true,
-                                    })} name="Prescriber_Grouping_id">
-                                        <option value="">--select--</option>
-                                        <option value="1">None</option>
-                                        <option value="2">Validate DEA Code</option>
-                                        <option value="3">primary Prescriber Validation</option>
-                                        <option value="4">Must Exist in Prescriber Master</option>
-                                    </select>
-                                    {errors.Prescriber_Grouping_id?.type === 'required' && <p role="alert" className="notvalid">Prescriber Group Id  is  required</p>}
-
-                                </div>
-                            </div>
-
-
-                        </div>
-                    </div>
-                </div>
-                <div className="col-md-1 float-end">
-                    <button type="submit" className="btn btn-theme pt-2 pb-2" style={{ width: '100%' }}>Next</button>
-                </div>
-            </form>
-
-            <form key={3} onSubmit={handleSubmit2(searchSubmit)}>
-
-
-
-                <div class="modal fade" id="superprovidermodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Search Super Provider Networks</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-
-                                <div className='row align-items-center'>
-                                    <h6>Criteria</h6>
-                                    <br></br>
-
-                                    <div className="col-md-5  align-items-center">
                                         <div className="form-group mb-3">
-                                            <small>Network ID</small>
-                                            <input type="text"  {...register2("rva_list_id", {
+                                            <input type="text" className="form-control" name="plan_id_2"  {...register('plan_id_2', {
                                                 required: true,
-                                            })} className="form-control" name="rva_list_id" id="" />
-                                            {errors2.rva_list_id?.type === 'required' && <p role="alert" className="notvalid">List Id is required </p>}
+                                            })} id="" />
+                                            <a href="" data-bs-toggle="modal" data-bs-target="#planidmodal"><span className="fa fa-search form-icon"></span></a>
 
                                         </div>
+                                        {errors.plan_id_2?.type === 'required' && <p role="alert" className="notvalid">Plan Id  is  required</p>}
+
                                     </div>
-
-
-                                    <div className="col-md-5 align-items-center">
-
-
+                                </div>
+                                <div className="col-md-3">
+                                    <div className="form-group mb-3">
                                         <div className="form-group mb-3">
-
-                                            <button style={successbtnstyle} className='btn btn-success float-right'>Search</button>
-
-                                        </div>
-
-                                    </div>
-
-
-
-                                    <div className="col-md-5  align-items-center">
-                                        <div className="form-group mb-3">
-                                            <small>Network Name</small>
-                                            <input type="text"  {...register2("list_name", {
-                                            })} className="form-control" name="list_name" id="" />
-                                            {/* {errors2.plan_id?.type === 'required' && <p role="alert" className="notvalid">Plan Id is required </p>} */}
+                                            <input type="text" className="form-control" name="plan_id_3"  {...register('plan_id_3', {
+                                                required: true,
+                                            })} id="" />
+                                            <a href="" data-bs-toggle="modal" data-bs-target="#planidmodal"><span className="fa fa-search form-icon"></span></a>
 
                                         </div>
+                                        {errors.plan_id_3?.type === 'required' && <p role="alert" className="notvalid">Plan Id  is  required</p>}
+
                                     </div>
+                                </div>
+
+                                <div className="col-md-3 align-items-center">
+                                    <p>Miscellaneous Data</p>
+                                </div>
+                                <div className="col-md-3">
+                                    <div className="form-group mb-3">
+                                        <input type="text" className="form-control" {...register('miscellaneous_data_1')} name="miscellaneous_data_1"  {...register('miscellaneous_data_1', {
+                                            required: true,
+                                        })} id="" />
+                                        {errors.miscellaneous_data_1?.type === 'required' && <p role="alert" className="notvalid">Miscellaneous Data  is  required</p>}
+
+                                    </div>
+                                </div>
+                                <div className="col-md-3">
+                                    <div className="form-group mb-3">
+                                        <input type="text" className="form-control" {...register('miscellaneous_data_2', {
+                                            required: true,
+                                        })} name="miscellaneous_data_2"  {...register('miscellaneous_data_2')} id="" />
+                                        {errors.miscellaneous_data_2?.type === 'required' && <p role="alert" className="notvalid">Miscellaneous Data  is  required</p>}
+
+                                    </div>
+                                </div>
+                                <div className="col-md-3">
+                                    <div className="form-group mb-3">
+                                        <input type="text" className="form-control" {...register('miscellaneous_data_3', {
+                                            required: true,
+                                        })} name="miscellaneous_data_3"  {...register('miscellaneous_data_3')} id="" />
+                                        {errors.miscellaneous_data_3?.type === 'required' && <p role="alert" className="notvalid">Miscellaneous Data  is  required</p>}
+
+                                    </div>
+                                </div>
+
+                                <div className="clearfix mb-3"></div>
+
+                                <div className="col-md-12">
+                                    <h5 className="mb-2">Provider Verification Options :</h5>
+                                </div>
+                                <div className="col-md-6">
+                                    <div className="form-group mb-3">
+                                        <small>Provider Options</small>
+                                        <select className="form-select" {...register("provider_vefification_option", {
+                                            required: true
+                                        })} name="provider_vefification_option">
+                                            <option value="">--select--</option>
+                                            <option value="1">No Provider Check</option>
+                                            <option value="2">Validate Provider Format</option>
+                                            <option value="3">Provider must exist within Provider Master</option>
+                                            <option value="4">Must exist in Provider Network</option>
+                                            <option value="5">Validate Provider In/Out of Network</option>
+                                        </select>
+                                        {errors.provider_vefification_option?.type === 'required' && <p role="alert" className="notvalid">Provider Options  is  required</p>}
+
+                                    </div>
+                                </div>
+                                <div className="col-md-6">
+                                    <div className="form-group mb-3">
+                                        <small>Super Provider Networks</small>
+                                        <input type="text" className="form-control" {...register('super_provider_networks', {
+                                            required: true,
+                                        })} name="super_provider_networks" id="" />
+                                        <a href="" data-bs-toggle="modal" data-bs-target="#superprovidermodal"><span className="fa fa-search form-icon"></span></a>
 
 
-
-
+                                    </div>
+                                    {errors.super_provider_networks?.type === 'required' && <p role="alert" className="notvalid">Super Provider Networks  is  required</p>}
 
                                 </div>
 
-                                <div>
+                                <div className="clearfix mb-2"></div>
 
-
-                                    <br></br>
-                                    <div class="row">
-                                        <div class="col-md-12 table-responsive">
-                                            <table class="table table-bordered  table-responsive">
-                                                <thead>
-                                                    <tr className='table-danger'>
-                                                        <th>Network Id</th>
-                                                        <th>Network Name</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {/* { cottagesList } */}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-
-
-
-
-
-
+                                <div className="col-md-12">
+                                    <h5 className="mb-2">Prescriber Verification Options</h5>
                                 </div>
+                                <div className="col-md-4">
+                                    <div className="form-group mb-3">
+                                        <small>Prescriber Options</small>
+                                        <select className="form-select" {...register("Prescriber_Verification_Options_1", {
+                                            required: true,
+                                        })} name="Prescriber_Verification_Options_1" >
+                                            <option value="">--select--</option>
+                                            <option value="1">None</option>
+                                            <option value="2">Validate DEA Code</option>
+                                            <option value="3">primary Prescriber Validation</option>
+                                            <option value="4">Must Exist in Prescriber Master</option>
 
+                                        </select>
+                                        {errors.Prescriber_Verification_Options_1?.type === 'required' && <p role="alert" className="notvalid">Prescriber Options  is  required</p>}
 
+                                    </div>
+                                </div>
+                                <div className="col-md-4">
+                                    <div className="form-group mb-3">
+                                        <small>Prescriber Options 2</small>
+                                        <select className="form-select" {...register("Prescriber_Verification_Options_2", {
+                                            required: true,
+                                        })} name="Prescriber_Verification_Options_2">
+                                            <option value="">--select--</option>
+                                            <option value="1">None</option>
+                                            <option value="2">Validate DEA Code</option>
+                                            <option value="3">primary Prescriber Validation</option>
+                                            <option value="4">Must Exist in Prescriber Master</option>
+                                        </select>
+                                        {errors.Prescriber_Verification_Options_2?.type === 'required' && <p role="alert" className="notvalid">Prescriber Options  is  required</p>}
 
+                                    </div>
+                                </div>
+                                <div className="col-md-4">
+                                    <div className="form-group mb-3">
+                                        <small>Prescriber Grouping ID</small>
+                                        <select className="form-select" {...register("Prescriber_Grouping_id", {
+                                            required: true,
+                                        })} name="Prescriber_Grouping_id">
+                                            <option value="">--select--</option>
+                                            <option value="1">None</option>
+                                            <option value="2">Validate DEA Code</option>
+                                            <option value="3">primary Prescriber Validation</option>
+                                            <option value="4">Must Exist in Prescriber Master</option>
+                                        </select>
+                                        {errors.Prescriber_Grouping_id?.type === 'required' && <p role="alert" className="notvalid">Prescriber Group Id  is  required</p>}
+
+                                    </div>
+                                </div>
 
 
                             </div>
-
-                            {/* <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-info">Add Benefit Code</button>
-                        </div> */}
                         </div>
                     </div>
-                </div>
-            </form>
-        </>
-    );
-}
+                    <div className="col-md-1 float-end">
+                        <button type="submit" className="btn btn-theme pt-2 pb-2" style={{ width: '100%' }}>Next</button>
+                    </div>
+                </form>
 
-export function Identification(params) {
-    const { register, handleSubmit, reset, formState: { errors } } = useForm();
-    const [client, setClient] = useOutletContext();
-
-
-    const [identificationcount, setidentificationCount] = useOutletContext();
+                <form key={3} onSubmit={handleSubmit2(searchSubmit)}>
 
 
 
+                    <div class="modal fade" id="superprovidermodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Search Super Provider Networks</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+
+                                    <div className='row align-items-center'>
+                                        <h6>Criteria</h6>
+                                        <br></br>
+
+                                        <div className="col-md-5  align-items-center">
+                                            <div className="form-group mb-3">
+                                                <small>Network ID</small>
+                                                <input type="text"  {...register2("rva_list_id", {
+                                                    required: true,
+                                                })} className="form-control" name="rva_list_id" id="" />
+                                                {errors2.rva_list_id?.type === 'required' && <p role="alert" className="notvalid">List Id is required </p>}
+
+                                            </div>
+                                        </div>
 
 
-    const onSubmit = data => {
+                                        <div className="col-md-5 align-items-center">
+
+
+                                            <div className="form-group mb-3">
+
+                                                <button style={successbtnstyle} className='btn btn-success float-right'>Search</button>
+
+                                            </div>
+
+                                        </div>
 
 
 
-        const id = client;
-        id['identification'] = data;
-        setClient(id);
-        // console.log(client);
+                                        <div className="col-md-5  align-items-center">
+                                            <div className="form-group mb-3">
+                                                <small>Network Name</small>
+                                                <input type="text"  {...register2("list_name", {
+                                                })} className="form-control" name="list_name" id="" />
+                                                {/* {errors2.plan_id?.type === 'required' && <p role="alert" className="notvalid">Plan Id is required </p>} */}
 
+                                            </div>
+                                        </div>
+
+
+
+
+
+                                    </div>
+
+                                    <div>
+
+
+                                        <br></br>
+                                        <div class="row">
+                                            <div class="col-md-12 table-responsive">
+                                                <table class="table table-bordered  table-responsive">
+                                                    <thead>
+                                                        <tr className='table-danger'>
+                                                            <th>Network Id</th>
+                                                            <th>Network Name</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {/* { cottagesList } */}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+
+
+
+
+
+                                    </div>
+
+
+
+
+
+                                </div>
+
+                                {/* <div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+<button type="button" class="btn btn-info">Add Benefit Code</button>
+</div> */}
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </>
+        )
     }
 
-    // console.log(identificationcount);
+    export function Identification(params) {
+        const { register, handleSubmit, formState: { errors } } = useForm();
+        const [client, setClient] = useOutletContext();
+
+
+        const [identificationcount, setidentificationCount] = useOutletContext();
 
 
 
     useEffect(() => { reset(client) }, [client]);
 
 
-    return (
-        <>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="card mt-3 mb-3">
-                    <div className="card-body">
-                        <div className='row'>
-                            <div className="col-md-7">
-                                <h5 className="mb-2">Customer ID</h5>
+        const onSubmit = data => {
+
+
+
+            const id = client;
+            id['identification'] = data;
+            setClient(id);
+            console.log(client);
+
+        }
+
+        console.log(identificationcount);
+
+
+
+
+
+        return (
+            <>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <div className="card mt-3 mb-3">
+                        <div className="card-body">
+                            <div className='row'>
+                                <div className="col-md-7">
+                                    <h5 className="mb-2">Customer ID</h5>
 
                                 <div className="row">
                                     <div className="col-md-12">
@@ -1805,11 +1770,11 @@ export function Identification(params) {
                             </div>
                         </div>
                     </div>
-                </div>
-                <div className="col-md-1 float-end">
-                    <button type="submit" className="btn btn-theme pt-2 pb-2" style={{ width: '100%' }}>Next</button>
-                </div>
-            </form>
-        </>
-    );
-}
+                    </div>
+                    <div className="col-md-1 float-end">
+                        <button type="submit" className="btn btn-theme pt-2 pb-2" style={{ width: '100%' }}>Next</button>
+                    </div>
+                </form>
+            </>
+        )
+    }

@@ -4,7 +4,6 @@ import Modal from 'react-bootstrap/Modal';
 import {useState, useEffect} from 'react';
 import { useForm } from "react-hook-form";
 import { objToQueryString } from '../../../hooks/healper';  
-import { toast } from 'react-toastify';
 
 export default function CauseOfLoss(){
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
@@ -12,11 +11,11 @@ export default function CauseOfLoss(){
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const[causeOfLossData, setCauseOfLossData] = useState([]);
-    const fillCauseOfLoassData = (fdata) => {
+    const fillCauseOfLoassData = (data) => {
         var arr = [
-            // {code : '1110', description : 'desc'},
-            // {code : '1101', description : 'desc 2'},
-            // {code : '2012', description : 'desc 3'},
+            {code : '1110', description : 'desc'},
+            {code : '1101', description : 'desc 2'},
+            {code : '2012', description : 'desc 3'},
         ];
         const requestOptions = {
             method: 'GET',
@@ -24,9 +23,9 @@ export default function CauseOfLoss(){
             headers: { 'Content-Type': 'application/json' },
             // body: encodeURIComponent(data)
         };
-        console.log(watch(fdata)); 
+        console.log(watch(data)); 
 
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/codes/couse-of-loss?${objToQueryString(fdata)}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/codes/couse-of-loss?${objToQueryString(data)}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
@@ -37,8 +36,6 @@ export default function CauseOfLoss(){
                     // get error message from body or default to response status
                     const error = (data && data.message) || response.status;
                     return Promise.reject(error);
-                } else {
-                    setCauseOfLossData(data.data);
                 }
 
 
@@ -48,7 +45,7 @@ export default function CauseOfLoss(){
             .catch(error => {
                 console.error('There was an error!', error);
             });
-        
+        setCauseOfLossData(arr);
     }
 
     useEffect(() => {},[causeOfLossData]);
@@ -103,9 +100,9 @@ export default function CauseOfLoss(){
                             </div>
 
                             <div className="col-md-6 ms-auto text-end mb-3 mt-3">
-                                {/* <a href="" className="btn btn-secondary">Cancel</a>&nbsp;&nbsp;
+                                <a href="" className="btn btn-secondary">Cancel</a>&nbsp;&nbsp;
                                 <a href="" className="btn btn-danger">Select</a>&nbsp;&nbsp;
-                                <a href="" className="btn btn-warning ">Clear</a>&nbsp;&nbsp; */}
+                                <a href="" className="btn btn-warning ">Clear</a>&nbsp;&nbsp;
                                 <button type="submit" className="btn btn-info">Search</button>
                             </div>
                         </div>
@@ -164,7 +161,7 @@ function CauseOfLossRow(props)
     return(
         <>
         <tr>
-            <td>{props.rowdata.cause_of_loss_code}</td>
+            <td>{props.rowdata.code}</td>
             <td>{props.rowdata.description}</td>
         </tr>
         </>
@@ -173,16 +170,7 @@ function CauseOfLossRow(props)
 
 function Add(props)
 {
-    const{ register, handleSubmit, watch, reset, formState : { errors } } = useForm();  const [added, setAdded] = useState(false);
-
-    useEffect(() => {
-
-        if(added) {
-            console.log('added');
-            reset();
-        }
-    }, [added, reset]);
-
+    const{ register, handleSubmit, watch, formState : { errors } } = useForm();
     const causeOfLossData = (data) => {
         console.log(data);
         const requestOptions = {
@@ -203,20 +191,6 @@ function Add(props)
                     // get error message from body or default to response status
                     const error = (data && data.message) || response.status;
                     return Promise.reject(error);
-                } else {
-                    setAdded(true);
-                    toast.success(data.message, {
-                        position: "bottom-center",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-
-                    });
-
-                    return true;
                 }
 
 
