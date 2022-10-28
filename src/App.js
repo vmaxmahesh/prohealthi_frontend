@@ -14,7 +14,7 @@ import SearchProvider, { Provider, Effectivedates, PharmistSystem, NetworkPartic
 import TraditionalNetworks, { Network, Providers } from './pages/dashboard/provider/TraditionalNetworks';
 
 import FlexibleNetworks, { Rules } from './pages/dashboard/provider/FlexibleNetworks';
-
+import PrioritizeNetwork from './pages/dashboard/provider/PrioritizeNetwork';
 import Membership, { SearchById, SearchByName } from './pages/dashboard/members/Membership';
 import PlanAuthorisation, { Authorisation, PANotes, Pricing } from './pages/dashboard/members/PlanAuthorisation';
 import PlanValidation from './pages/dashboard/members/PlanValidation';
@@ -44,6 +44,9 @@ import ExceptionProcedure from './pages/dashboard/exceptionlist/ExceptionProcedu
 import ExceptionReason from './pages/dashboard/exceptionlist/ExceptionReason';
 import BenefitList from './pages/dashboard/exceptionlist/BenefitList';
 import SuperProvider from './pages/dashboard/provider/SuperProvider';
+import Prescriber from './pages/dashboard/prescriber/Prescriber'
+
+
 
 function setToken(userToken) {
   sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -200,6 +203,17 @@ function App() {
             <Route path='rules' element={<Rules />} />
 
           </Route>
+
+          <Route path='provider/prioritizenetworks' element={<PrioritizeNetwork />}>
+           
+          </Route>
+
+
+          <Route path='prescriber/' element={<Prescriber />}>
+           
+           </Route>
+
+          
 
           {/* codes routes start  */}
 

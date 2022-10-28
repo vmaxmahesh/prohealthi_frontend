@@ -820,3 +820,10 @@ th{
 .notvalid {
     color: red;
 }
+
+.modal-90w{
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+   
+}

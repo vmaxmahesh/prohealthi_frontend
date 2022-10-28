@@ -89,8 +89,7 @@ function TraditionalNetworks(props) {
         <>
 
 
-            <button onClick={e =>
-                fillProviderData()} className="btn btn-info">Search</button>
+           
             <div className="dashboard-content clearfix">
 
                 <div className="row">
