@@ -161,6 +161,8 @@ function App() {
           <Route path="code/provider-type" element={<ProviderType />}>
           </Route>
 
+          
+
 
           <Route path='user/searchprovider' element={<SearchProvider />}>
             <Route index element={<Navigate to="provider" replace />} />

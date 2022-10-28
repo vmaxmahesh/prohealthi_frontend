@@ -208,12 +208,12 @@ function ShowNDCList(props) {
 
     const ndcListArray = [];
     for (let i = 0; i < props.ndcListData.length; i++) {
-        ndcListArray.push(<NdcRow ndcRow={props.ndcListData[i]} getNDCItem={getNDCItem} />);
+        ndcListArray.push(<NdcRow ndcRow={props.ndcListData[i]} getNDCItem={getNDCItem} selected={props.selctedNdc} />);
     }
 
     const ndcClassArray = [];
     for (let j = 0; j < props.ndcClassData.length; j++) {
-        ndcClassArray.push(<NdcClassRow ndcClassRow={props.ndcClassData[j]} getNDCItemDetails={getNDCItemDetails} />);
+        ndcClassArray.push(<NdcClassRow ndcClassRow={props.ndcClassData[j]} getNDCItemDetails={getNDCItemDetails} selected={props.selctedNdc} />);
     }
 
     const [ncdListData, setNcdListData] = useState();
@@ -239,7 +239,6 @@ function ShowNDCList(props) {
                                                 <tr>
                                                     <th>GPI EXCEPTION ID</th>
                                                     <th>GPI EXCEPTION NAME</th>
-                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -263,7 +262,6 @@ function ShowNDCList(props) {
                                                     <th>eff. Date</th>
                                                     <th>New drug status</th>
                                                     <th>Process rule</th>
-                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -284,10 +282,12 @@ function ShowNDCList(props) {
 function NdcRow(props) {
     return (
         <>
-            <tr>
+            <tr onClick={() =>props.getNDCItem(props.ndcRow.gpi_exception_list)}
+                className={(props.selected && props.ndcRow.gpi_exception_list == props.selected.gpi_exception_list ? ' tblactiverow ' : '')}
+                >
                 <td>{props.ndcRow.gpi_exception_list}</td>
                 <td>{props.ndcRow.exception_name}</td>
-                <td><button className="btn btn-sm btn-info" id="" onClick={() => props.getNDCItem(props.ndcRow.gpi_exception_list)}><i className="fa fa-eye"></i> View</button></td>
+                {/* <td><button className="btn btn-sm btn-info" id="" onClick={() => props.getNDCItem(props.ndcRow.gpi_exception_list)}><i className="fa fa-eye"></i> View</button></td> */}
             </tr>
         </>
     )
@@ -296,13 +296,15 @@ function NdcRow(props) {
 function NdcClassRow(props) {
     return (
         <>
-            <tr>
+            <tr onClick={() => props.getNDCItemDetails(props.ndcClassRow.generic_product_id)}
+                className={(props.selected && props.ndcClassRow.generic_product_id == props.selected.generic_product_id ? ' tblactiverow ' : '')}
+            >
                 <td>{props.ndcClassRow.gpi_exception_list}</td>
                 <td>{props.ndcClassRow.generic_product_id}</td>
                 <td>{props.ndcClassRow.effective_date}</td>
                 <td>{props.ndcClassRow.new_drug_status}</td>
                 <td>{props.ndcClassRow.process_rule}</td>
-                <td><button className="btn btn-sm btn-info" id="" onClick={() => props.getNDCItemDetails(props.ndcClassRow.generic_product_id)}><i className="fa fa-eye"></i> View</button></td>
+                {/* <td><button className="btn btn-sm btn-info" id="" ><i className="fa fa-eye"></i> View</button></td> */}
             </tr>
         </>
     )

@@ -13,6 +13,11 @@ export default function NDC() {
     const [selctedNdc, setSelctedNdc] = useState('');
 
     const getNDCItems = (ndcid) => {
+        // ndc_exception_list
+        var test = {};
+        test.ndc_exception_list = ndcid;
+        setSelctedNdc(test);
+
         // //  console.log(customerid);
         const requestOptions = {
             method: 'GET',
@@ -72,6 +77,7 @@ export default function NDC() {
                     return Promise.reject(error);
                 } else {
                     setSelctedNdc(data.data);
+                    console.log(selctedNdc);
                     scollToRef.current.scrollIntoView()
                     return;
                 }
@@ -208,12 +214,12 @@ function ShowNDCList(props) {
 
     const ndcListArray = [];
     for (let i = 0; i < props.ndcListData.length; i++) {
-        ndcListArray.push(<NdcRow ndcRow={props.ndcListData[i]} getNDCItem={getNDCItem} />);
+        ndcListArray.push(<NdcRow ndcRow={props.ndcListData[i]} getNDCItem={getNDCItem} selected={props.selctedNdc} />);
     }
 
     const ndcClassArray = [];
     for (let j = 0; j < props.ndcClassData.length; j++) {
-        ndcClassArray.push(<NdcClassRow ndcClassRow={props.ndcClassData[j]} getNDCItemDetails={getNDCItemDetails} />);
+        ndcClassArray.push(<NdcClassRow ndcClassRow={props.ndcClassData[j]} getNDCItemDetails={getNDCItemDetails} selected={props.selctedNdc} />);
     }
 
     const [ncdListData, setNcdListData] = useState();
@@ -239,7 +245,6 @@ function ShowNDCList(props) {
                                                 <tr>
                                                     <th>NDC EXCEPTION ID</th>
                                                     <th>NDC EXCEPTION NAME</th>
-                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -263,7 +268,6 @@ function ShowNDCList(props) {
                                                     <th>eff. Date</th>
                                                     <th>New drug status</th>
                                                     <th>Process rule</th>
-                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -282,27 +286,46 @@ function ShowNDCList(props) {
 }
 
 function NdcRow(props) {
+
+    useEffect(() => {
+
+    }, [props.selected]);
+
+
+
     return (
         <>
-            <tr>
-                <td>{props.ndcRow.ndc_exception_list}</td>
+            <tr className={(props.selected && props.ndcRow.ndc_exception_list == props.selected.ndc_exception_list ? ' tblactiverow ' : '')}
+
+                onClick={() => props.getNDCItem(props.ndcRow.ndc_exception_list)}
+            >
+                <td >{props.ndcRow.ndc_exception_list}</td>
                 <td>{props.ndcRow.exception_name}</td>
-                <td><button className="btn btn-sm btn-info" id="" onClick={() => props.getNDCItem(props.ndcRow.ndc_exception_list)}><i className="fa fa-eye"></i> View</button></td>
+                {/* <td><button className="btn btn-sm btn-info" id="" ><i className="fa fa-eye"></i> View</button></td> */}
             </tr>
         </>
     )
 }
 
 function NdcClassRow(props) {
+
+    useEffect(() => {
+
+    }, [props.selected]);
+
     return (
         <>
-            <tr>
+            <tr
+                className={(props.selected && props.ndcClassRow.ndc == props.selected.ndc ? ' tblactiverow ' : '')}
+                onClick={() => props.getNDCItemDetails(props.ndcClassRow.ndc)}
+
+            >
                 <td>{props.ndcClassRow.ndc_exception_list}</td>
                 <td>{props.ndcClassRow.ndc}</td>
                 <td>{props.ndcClassRow.effective_date}</td>
                 <td>{props.ndcClassRow.new_drug_status}</td>
                 <td>{props.ndcClassRow.process_rule}</td>
-                <td><button className="btn btn-sm btn-info" id="" onClick={() => props.getNDCItemDetails(props.ndcClassRow.ndc)}><i className="fa fa-eye"></i> View</button></td>
+                {/* <td><button className="btn btn-sm btn-info" id="" ><i className="fa fa-eye"></i> View</button></td> */}
             </tr>
         </>
     )
@@ -317,7 +340,7 @@ function AddNcdList(props) {
     const currentpath = location.pathname.split('/').pop();
 
     useEffect(() => { setSelctedNdc(props.selectedNdc) }, [props.selectedNdc, selctedNdc]);
-    // //  console.log(selctedNdc);
+    //  console.log(selctedNdc);
 
     return (
         <>
@@ -370,7 +393,7 @@ export function ProcessRule(props) {
                                 <div className="col-md-6">
                                     <div className="form-group mb-2">
                                         <small>NDC</small>
-                                        <input type="text" className="form-control" name="" id="" placeholder="NDC" />
+                                        <input type="text" className="form-control" name="" {...register("ndc", {})} id="" placeholder="NDC" />
                                         <a href=""><span className="fa fa-search form-icon"></span></a>
                                     </div>
                                 </div>

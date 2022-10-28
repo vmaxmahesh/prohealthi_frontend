@@ -170,7 +170,7 @@ function ServiceModifierRow(props)
 
 function Add(props)
 {
-    const{ register, handleSubmit, watch, formState : { errors } } = useForm();
+    const{ register, handleSubmit, watch, reset, formState : { errors } } = useForm();
     const sericeModifiersData = (data) => {
         console.log(data);
         const requestOptions = {
@@ -191,6 +191,18 @@ function Add(props)
                     // get error message from body or default to response status
                     const error = (data && data.message) || response.status;
                     return Promise.reject(error);
+                } else {
+                    reset();
+                    toast.success('Added Successfully...!', {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+        
+                    });
                 }
 
 

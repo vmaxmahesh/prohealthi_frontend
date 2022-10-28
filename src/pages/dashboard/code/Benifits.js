@@ -1,44 +1,32 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useState, useEffect } from 'react';
 import { useForm } from "react-hook-form";
 import { objToQueryString } from '../../../hooks/healper';
-import { useOutletContext } from 'react-router-dom';
+import { Form, useOutletContext } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { Card, Row } from 'react-bootstrap';
 
 
 export default function Benifits() {
+    const scollToRef = useRef();
 
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
+    const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
 
-    const [benifitsData, setBenifitData] = useState([]);
+    const [benifitsData, setBenifitData] = useState({});
+    const [benifitsList, setBenifitList] = useState([]);
 
-    const addCode = (benefit_data) => {
-        alert(benefit_data);
-        console.log(benefit_data);
-    }
+
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    // useEffect(() => {
 
-    //     if(added) {
-    //         console.log('added');
-    //         reset();
-    //     }
-    // }, [added, reset]);
+    const onSearching = (fdata) => {
 
-    const onSubmit = (fdata) => {
-        // var arr = [
-        //     { code: '1112', description: 'benifit description 1' },
-        //     { code: '2341', description: 'benifit description 2' },
-        // ];
-        //         const encodedValue = encodeURIComponent(someVariable);
-        // fetch(`https://example.com/foo?bar=${encodedValue}`);
 
         const requestOptions = {
             method: 'GET',
@@ -49,7 +37,7 @@ export default function Benifits() {
         // console.log(watch(data)); 
 
         if (process.env.REACT_APP_API_BASEURL != 'NOT') {
-            fetch(process.env.REACT_APP_API_BASEURL + `/api/codes/benefits?${objToQueryString(fdata)}`, requestOptions)
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/codes/benefits?search=${fdata.target.value}`, requestOptions)
                 .then(async response => {
                     const isJson = response.headers.get('content-type')?.includes('application/json');
                     const data = isJson && await response.json();
@@ -60,15 +48,9 @@ export default function Benifits() {
                         // get error message from body or default to response status
                         const error = (data && data.message) || response.status;
                         return Promise.reject(error);
-                    }
-                    // console.log(process.env.REACT_APP_API_BASEURL);
-                    // if (process.env.REACT_APP_API_BASEURL == 'NOT') {
-                    //     response.message = 'Successfully added';
-                    // }
-
-
-
-                    if (response === '200') {
+                    } else {
+                        setBenifitList(data.data);
+                        console.log(benifitsList);
                         toast.success(response.message, {
                             position: "top-right",
                             autoClose: 5000,
@@ -81,13 +63,8 @@ export default function Benifits() {
                         });
                     }
 
-                    // props.onChange(data);
-                    // navigate("/dashboard/user/customer/strategy");
-
-                    // this.setState({ postId: data.id })
                 })
                 .catch(error => {
-                    // this.setState({ errorMessage: error.toString() });
                     console.error('There was an error!', error);
 
                     // toast.error(error.response.data.message, {
@@ -103,14 +80,71 @@ export default function Benifits() {
                     //     });
                 });
 
-            setBenifitData(arr);
         } else {
-            
+
         }
+    }
+
+    const getCode = (id) => {
+        setBenifitData(id);
+        console.log(benifitsData);
+        scollToRef.current.scrollIntoView()
+        // const requestOptions = {
+        //     method: 'GET',
+        //     headers: { 'Content-Type': 'application/json' },
+        // };
+
+
+        // if (process.env.REACT_APP_API_BASEURL != 'NOT') {
+        //     fetch(process.env.REACT_APP_API_BASEURL + `/api/codes/benefits/${fdata.target.value}`, requestOptions)
+        //         .then(async response => {
+        //             const isJson = response.headers.get('content-type')?.includes('application/json');
+        //             const data = isJson && await response.json();
+        //             console.log(response);
+
+        //             // check for error response
+        //             if (!response.ok) {
+        //                 // get error message from body or default to response status
+        //                 const error = (data && data.message) || response.status;
+        //                 return Promise.reject(error);
+        //             } else {
+        //                 setBenifitList(data.data);
+        //                 console.log(benifitsList);
+        //                 toast.success(response.message, {
+        //                     position: "top-right",
+        //                     autoClose: 5000,
+        //                     hideProgressBar: false,
+        //                     closeOnClick: true,
+        //                     pauseOnHover: true,
+        //                     draggable: true,
+        //                     progress: undefined,
+
+        //                 });
+        //             }
+
+        //         })
+        //         .catch(error => {
+        //             console.error('There was an error!', error);
+
+        //             // toast.error(error.response.data.message, {
+        //             //     position: "top-right",
+        //             //     autoClose: 5000,
+        //             //     hideProgressBar: false,
+        //             //     closeOnClick: true,
+        //             //     pauseOnHover: true,
+        //             //     draggable: true,
+        //             //     progress: undefined,
+
+
+        //             //     });
+        //         });
+
+        // } else {}
     }
 
 
     useEffect(() => { }, [benifitsData]);
+
     return (
         <>
             <div className='dashboard-content clearfix'>
@@ -140,56 +174,43 @@ export default function Benifits() {
                 </div>
                 <div className="card mt-3 mb-3">
                     <div className="card-body">
-                        <form onSubmit={handleSubmit(onSubmit)}>
+                        <form >
                             <div className="row">
                                 <div className="col-md-12 mb-2">
                                     <h5>Criteria</h5>
                                 </div>
-                                <div className="col-md-6 mb-2">
+                                <div className="col-md-12 mb-2">
                                     <div className="form-group">
-                                        <small>Code</small>
-                                        <input type="text" name="code" placeholder="Code" {...register("code", { required: true })} className="form-control" />
+                                        <small>Search by Code/Discription</small>
+                                        <input type="text" name="code" onKeyUp={(e) => onSearching(e)} placeholder="Code" {...register("code", { required: true })} className="form-control" />
                                         {errors.code && <span><p role="alert" className="notvalid">This field is required</p></span>}
                                     </div>
                                 </div>
-                                <div className="col-md-6 mb-2">
-                                    <div className="form-group">
-                                        <small>Discription</small>
-                                        <input type="text" name="description" placeholder="Description" {...register("description", { required: true })} id="" className="form-control" />
-                                        {errors.description && <span><p role="alert" className="notvalid">This field is required</p></span>}
-                                    </div>
-                                </div>
 
-                                <div className="col-md-6 ms-auto text-end mb-3 mt-3">
-                                    <a href="" className="btn btn-secondary">Cancel</a>&nbsp;&nbsp;
-                                    <a href="" className="btn btn-danger">Select</a>&nbsp;&nbsp;
-                                    <a href="" className="btn btn-warning ">Clear</a>&nbsp;&nbsp;
-                                    {/* <button href="provider-search.html" className="btn btn-info" onClick={e => fillBenifitsData()}>Search</button> */}
-                                    <button type="submit" href="provider-search.html" className="btn btn-info" >Search</button>
-                                </div>
                             </div>
                         </form>
                     </div>
 
-                    <AddBenifit show={show} handleClose={handleClose} />
                 </div>
-                {benifitsData.length > 0 ?
-                    <List benifitsData={benifitsData} />
-                    : ''}
+                <List benifitsList={benifitsList} getCode={getCode} />
+
+                <div ref={scollToRef}>
+                    <AddBenifit show={show} handleClose={handleClose} selected={benifitsData} />
+
+                </div>
+
             </div>
         </>
     )
 }
 
 function List(props) {
-    // style={{width: '100px', height: '100px', backgroundColor: 'red'}}
+
     const benifitList = [];
-    for (let i = 0; i < props.benifitsData.length; i++) {
-        benifitList.push(<BenifitRow benifitRowData={props.benifitsData[i]} />);
+    for (let i = 0; i < props.benifitsList.length; i++) {
+        benifitList.push(<BenifitRow benifitRowData={props.benifitsList[i]} getCode={props.getCode} />);
     }
-    // const[show, setShow] = useState(false);
-    // const handleClose = () => setShow(false);
-    // const handleShow = () => setShow(true);
+
 
 
     return (
@@ -198,25 +219,23 @@ function List(props) {
                 <div className="card-body">
                     <div className="row">
                         <div className="col-md-12">
-                            <table className="table table-striped table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Code</th>
-                                        <th>Discription</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {benifitList}
-                                </tbody>
-                            </table>
+                            <div style={{ height: '400px', overflowY: 'scroll' }}>
+                                <table className="table  table-bordered" style={{ position: 'relative' }}>
+                                    <thead className='stickt-thead'>
+                                        <tr>
+                                            <th>Code</th>
+                                            <th>Discription</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {benifitList}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                    {/* <div className="col-md-3 ms-auto text-end">
-                                <button className="btn  btn-info" onClick={e => handleShow()}>
-                                    Add Benifit Code <i className="fa fa-plus-circle"></i></button>
-                    </div> */}
+
                 </div>
-                {/* <AddBenifit show={show} handleClose={handleClose} /> */}
             </div>
 
         </>
@@ -226,8 +245,8 @@ function List(props) {
 function BenifitRow(props) {
     return (
         <>
-            <tr>
-                <td>{props.benifitRowData.code}</td>
+            <tr onClick={() => props.getCode(props.benifitRowData)}>
+                <td>{props.benifitRowData.benefit_code}</td>
                 <td>{props.benifitRowData.description}</td>
             </tr>
         </>
@@ -237,7 +256,8 @@ function BenifitRow(props) {
 function AddBenifit(props) {
     const [code, setCode] = useState();
     const [description, setDescription] = useState();
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
+    const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
+
 
     const addCode = (data) => {
         console.log(data);
@@ -250,7 +270,7 @@ function AddBenifit(props) {
         };
         // console.log(watch(data)); 
         if (process.env.REACT_APP_API_BASEURL == 'NOT') {
-                    toast.success('Added Successfully...!', {
+            toast.success('Added Successfully...!', {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -272,6 +292,18 @@ function AddBenifit(props) {
                         // get error message from body or default to response status
                         const error = (data && data.message) || response.status;
                         return Promise.reject(error);
+                    } else {
+                        reset();
+                        toast.success('Added Successfully...!', {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+
+                        });
                     }
 
 
@@ -282,54 +314,44 @@ function AddBenifit(props) {
                 .catch(error => {
                     console.error('There was an error!', error);
                 });
-    }
+        }
 
     }
     const onSubmit = (e) => {
         e.preventDefault();
     }
 
+    useEffect(() => { reset(props.selected) }, [props.selected]);
+
     return (
         <>
-            {/* <form> */}
-
-            <Modal show={props.show} onHide={props.handleClose}>
-                <form onSubmit={handleSubmit(addCode)}>
-                    <Modal.Header closeButton>
-                        <Modal.Title> Benefit Codes </Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <div className="modal-body">
-                            <div className="row">
-                                <div className="col-md-12 mb-2">
-                                    <div className="form-group">
-                                        <small>Benefit Code</small>
-                                        <input type="text" className="form-control" name="benefit_code" id=""  {...register("benefit_code", { required: true })} />
-                                        {errors.benefit_code && <span><p className='notvalid'>This field is required</p></span>}
-                                    </div>
+            <Card>
+                <Card.Header>Benefit Codes</Card.Header>
+                <Card.Body>
+                    {/* <Form> */}
+                    <form onSubmit={handleSubmit(addCode)}>
+                        <div className="row">
+                            <div className="col-md-12 mb-2">
+                                <div className="form-group">
+                                    <small>Code</small>
+                                    <input type="text" className="form-control" name="benefit_code" id=""  {...register("benefit_code", { required: true })} />
+                                    {errors.benefit_code && <span><p className='notvalid'>This field is required</p></span>}
                                 </div>
-                                <div className="col-md-12 mb-2">
-                                    <div className="form-group">
-                                        <small>Discription</small>
-                                        <textarea className="form-control" rows="3" name="benefit_description" id="" {...register("benefit_description", { required: true })}></textarea>
-                                        {errors.benefit_description && <span><p className='notvalid'>This field is required</p></span>}
-                                    </div>
+                            </div>
+                            <div className="col-md-12 mb-2">
+                                <div className="form-group">
+                                    <small>Discription</small>
+                                    <textarea className="form-control" rows="3" name="benefit_description" id="" {...register("description", { required: true })}></textarea>
+                                    {errors.description && <span><p className='notvalid'>This field is required</p></span>}
                                 </div>
                             </div>
                         </div>
-                    </Modal.Body>
-                    <Modal.Footer>
+                        <Button type='submit' variant="primary">Save</Button>
+                    </form>
+                    {/* </Form> */}
+                </Card.Body>
+            </Card>
 
-                        <Button variant="secondary" onClick={props.handleClose}>
-                            Close
-                        </Button>
-                        <button type="submit" className="btn btn-info">Add Procedure Codes</button>
-
-                    </Modal.Footer>
-                </form>
-            </Modal>
-
-            {/* </form> */}
         </>
     )
 }

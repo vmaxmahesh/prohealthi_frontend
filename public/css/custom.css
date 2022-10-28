@@ -28,6 +28,11 @@ td {
     padding: 0;
 }
 
+tr {
+    margin: 5px;
+    padding: 5px;
+}
+
 a,
 a:hover {
     text-decoration: none;
@@ -761,9 +766,10 @@ marquee p{
 }
 
 th{
-    background: #daf9fe !important;
+    background-color: #187d91 !important;
     padding: .8rem .5rem !important;
-    vertical-align: top
+    vertical-align: top;
+    color: white;
 }
 .table>:not(:first-child){
     border-top: none
