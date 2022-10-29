@@ -86,7 +86,7 @@ export default function Dashboard() {
 
                                 <Link to="/dashboard/provider/traditionalnetworks"  className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Traditional Networks</Link>
                                 <Link to="/dashboard/provider/flexiblenetworks"  className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>FlexibleNetworks</Link>
-                                <Link to="/dashboard/provider/superprovider"  className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Super Provider</Link>
+                                <Link to="/dashboard/provider/superprovider"  className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Super Provider Network</Link>
 
                                 <Link  to="/dashboard/provider/prioritizenetworks" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Prioritize Networks</Link>
                             </div>

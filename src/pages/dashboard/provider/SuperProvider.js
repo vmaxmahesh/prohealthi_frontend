@@ -22,7 +22,7 @@ export default function SuperProvider() {
         };
         // //  console.log(watch(fdata));
 
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/exception/ndc/get/${ndcid}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/network/get/${ndcid}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
@@ -59,7 +59,7 @@ export default function SuperProvider() {
         };
         // //  console.log(watch(fdata));
 
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/exception/ndc/details/${ndcid}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/network/details/${ndcid}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
@@ -93,11 +93,11 @@ export default function SuperProvider() {
             headers: { 'Content-Type': 'application/json' },
         };
 
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/exception/ndc/search?search=${fdata.target.value}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/supernetwork/search?search=${fdata.target.value}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
-                //  console.log(response);
+                 console.log('mahesh');
 
                 // check for error response
                 if (!response.ok) {
@@ -285,9 +285,9 @@ function NdcRow(props) {
     return (
         <>
             <tr>
-                <td>{props.ndcRow.ndc_exception_list}</td>
-                <td>{props.ndcRow.exception_name}</td>
-                <td><button className="btn btn-sm btn-info" id="" onClick={() => props.getNDCItem(props.ndcRow.ndc_exception_list)}><i className="fa fa-eye"></i> View</button></td>
+                <td>{props.ndcRow.super_rx_network_id}</td>
+                <td>{props.ndcRow.super_rx_network_id_name}</td>
+                <td><button className="btn btn-sm btn-info" id="" onClick={() => props.getNDCItem(props.ndcRow.super_rx_network_id)}><i className="fa fa-eye"></i> View mahesh</button></td>
             </tr>
         </>
     )
@@ -297,12 +297,12 @@ function NdcClassRow(props) {
     return (
         <>
             <tr>
-                <td>{props.ndcClassRow.ndc_exception_list}</td>
-                <td>{props.ndcClassRow.ndc}</td>
+                <td>{props.ndcClassRow.super_rx_network_priority}</td>
+                <td>{props.ndcClassRow.super_rx_network_id}</td>
                 <td>{props.ndcClassRow.effective_date}</td>
-                <td>{props.ndcClassRow.new_drug_status}</td>
-                <td>{props.ndcClassRow.process_rule}</td>
-                <td><button className="btn btn-sm btn-info" id="" onClick={() => props.getNDCItemDetails(props.ndcClassRow.ndc)}><i className="fa fa-eye"></i> View</button></td>
+                <td>{props.ndcClassRow.rx_network_type}</td>
+                <td>{props.ndcClassRow.price_schedule_ovrd}</td>
+                <td><button className="btn btn-sm btn-info" id="" onClick={() => props.getNDCItemDetails(props.ndcClassRow.super_rx_network_id)}><i className="fa fa-eye"></i> View</button></td>
             </tr>
         </>
     )
@@ -332,13 +332,13 @@ function AddNcdList(props) {
                                     <div class="col-md-6 mb-3">
                                         <div class="form-group">
                                             <small>Super Network ID</small>
-                                            <input type="text" class="form-control" name="" id="" placeholder="" required=""/>
+                                            <input type="text" class="form-control" name="" value={selctedNdc.super_rx_network_id} id="" placeholder="" required=""/>
                                         </div>
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <div class="form-group">
                                             <small>Super Network Name</small>
-                                            <input type="text" class="form-control" name="" id="" placeholder="" required=""/>
+                                            <input type="text" class="form-control" name="" value={selctedNdc.super_rx_network_id_name} id="" placeholder="" required=""/>
                                         </div>
                                     </div>
                                     
@@ -348,14 +348,14 @@ function AddNcdList(props) {
                                         <div class="col-md-6 mb-3">
                                             <div class="form-group">
                                                 <small>Provider Network ID</small>
-                                                <input type="text" class="form-control" name="" id="" placeholder="" required=""/>
+                                                <input type="text" class="form-control" name="" value={selctedNdc.rx_network_id} id="" placeholder="" required=""/>
                                                 <a href=""><span class="fa fa-search form-icon"></span></a>
                                             </div>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <div class="form-group">
                                                 <small>Super Network Priority</small>
-                                                <input type="text" class="form-control" name="" id="" placeholder="" required=""/>
+                                                <input type="text" class="form-control" name="" value={selctedNdc.super_rx_network_priority} id="" placeholder="" required=""/>
                                                 <a href=""><span class="fa fa-search form-icon"></span></a>
                                             </div>
                                         </div>
@@ -363,13 +363,13 @@ function AddNcdList(props) {
                                         <div class="col-md-6 mb-3">
                                             <div class="form-group">
                                                 <small>Effective Date</small>
-                                                <input type="date" class="form-control" name="" id="" placeholder="" required=""/>
+                                                <input type="date" class="form-control" name="" value={selctedNdc.effective_date} id="" placeholder="" required=""/>
                                             </div>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <div class="form-group">
                                                 <small>Termination Date</small>
-                                                <input type="date" class="form-control" name="" id="" placeholder="" required=""/>
+                                                <input type="date" class="form-control" name="" id="" value={selctedNdc.termination_date} placeholder="" required=""/>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
@@ -378,7 +378,7 @@ function AddNcdList(props) {
                                         <div class="col-md-12 mb-3">
                                             <div class="form-group">
                                                 <small>Price Schedule Override</small>
-                                                <input type="text" class="form-control" name="" id="" placeholder="" required=""/>
+                                                <input type="text" class="form-control" name="" id="" value={selctedNdc.pricing_ovrd_list_id} placeholder="" required=""/>
                                                 <a href=""><span class="fa fa-search form-icon"></span></a>
                                             </div>
                                         </div>
@@ -390,13 +390,13 @@ function AddNcdList(props) {
                                         <div class="col-md-6 mb-3">
                                             <div class="form-group">
                                                 <small>Paid/Accepted</small>
-                                                <input type="text" class="form-control" name="" id="" placeholder="" required=""/>
+                                                <input type="text" class="form-control" name=""  value={selctedNdc.comm_charge_paid} id="" placeholder="" required=""/>
                                             </div>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <div class="form-group">
                                                 <small>Reject/Reversal</small>
-                                                <input type="text" class="form-control" name="" id="" placeholder="" required=""/>
+                                                <input type="text" class="form-control" name="" value={selctedNdc.comm_charge_reject} id="" placeholder="" required=""/>
                                             </div>
                                         </div>
                                         
@@ -413,10 +413,10 @@ function AddNcdList(props) {
                                                 <small>Rx Quantity</small>
                                                 <div class="row">
                                                     <div class="col-md-6">
-                                                        <input type="text" class="form-control" name="" id="" placeholder="Minimum" required=""/>
+                                                        <input type="text" class="form-control" name="" value={selctedNdc.min_rx_qty} id="" placeholder="Minimum" required=""/>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <input type="text" class="form-control" name="" id="" placeholder="Maximum" required=""/>
+                                                        <input type="text" class="form-control" name="" id="" value={selctedNdc.max_rx_qty}  placeholder="Maximum" required=""/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -425,11 +425,11 @@ function AddNcdList(props) {
                                             <div class="form-group">
                                                 <small>Days Supply</small>
                                                 <div class="row">
-                                                    <div class="col-md-6">
-                                                        <input type="text" class="form-control" name="" id="" placeholder="Minimum" required=""/>
+                                                    <div class="col-md-6"> 
+                                                        <input type="text" class="form-control" name="" value={selctedNdc.days_supply_opt} id="" placeholder="Minimum" required=""/>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <input type="text" class="form-control" name="" id="" placeholder="Maximum" required=""/>
+                                                        <input type="text" class="form-control" name="" id="" value={selctedNdc.days_supply_opt} placeholder="Maximum" required=""/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -456,13 +456,13 @@ function AddNcdList(props) {
                                         <div class="col-md-12 mb-3">
                                             <div class="form-group">
                                                 <small>Starter Dose Bypass Days</small>
-                                                <input type="text" class="form-control" name="" id="" placeholder="Maximum" required=""/>
+                                                <input type="text" class="form-control" name="" value={selctedNdc.starter_dose_bypass_days} id="" placeholder="Maximum" required=""/>
                                             </div>
                                         </div>
                                         <div class="col-md-12 mb-3">
                                             <div class="form-group">
-                                                <small>St. Dose Maint. Bypass Days</small>
-                                                <input type="text" class="form-control" name="" id="" placeholder="Maximum" required=""/>
+                                                <small>St. Dose Maint. Bypass Days</small>  
+                                                <input type="text" class="form-control" name="" id="" value={selctedNdc.starter_dose_maint_bypass_days} placeholder="Maximum" required=""/>
                                             </div>
                                         </div>
 
