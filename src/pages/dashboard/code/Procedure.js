@@ -102,7 +102,7 @@
 //                             </div>
 //                             <div className="col-md-6 mb-2">
 //                                 <div className="form-group">
-//                                     <small>Discription</small>
+//                                     <small>Description</small>
 //                                     <input type="text" className="form-control" {...register("description", { required: true })} />
 //                                     {errors.description && <span><p role="alert" className="notvalid">This field is required</p></span>}
 //                                 </div>
@@ -146,7 +146,7 @@
 //                                 <thead>
 //                                     <tr>
 //                                         <th>Code</th>
-//                                         <th>Discription</th>
+//                                         <th>Description</th>
 //                                     </tr>
 //                                 </thead>
 //                                 <tbody>
@@ -239,7 +239,7 @@
 //                         </div>
 //                         <div className="col-md-12 mb-2">
 //                             <div className="form-group">
-//                                 <small>Discription</small>
+//                                 <small>Description</small>
 //                                 <textarea className="form-control" rows="3" name="" id="" {...register("procedure_description",{required:true})}></textarea>
 //                                 {errors.procedure_description && <span><p className="notvalid">This field is required</p></span>}
 //                             </div>
@@ -420,7 +420,7 @@ export default function Procedure() {
                                 <li><i className="fas fa-angle-right"></i></li>
                                 <li><a href="">Codes</a></li>
                                 <li><i className="fas fa-angle-right"></i></li>
-                                <li><a href="">Benefit Codes</a></li>
+                                <li><a href="">Procedure Codes</a></li>
                             </ul>
                         </div>
                     </div>
@@ -430,7 +430,7 @@ export default function Procedure() {
                                 <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li>
                                 <div className="col-md-3 ms-auto text-end">
                                     <button className="btn  btn-info" onClick={e => handleShow()}>
-                                        Add Benifit Code <i className="fa fa-plus-circle"></i></button>
+                                        Add Procedure Code <i className="fa fa-plus-circle"></i></button>
                                 </div>
                             </ul>
                         </div>
@@ -445,7 +445,7 @@ export default function Procedure() {
                                 </div>
                                 <div className="col-md-12 mb-2">
                                     <div className="form-group">
-                                        <small>Search by Code/Discription</small>
+                                        <small>Search by Code/Description</small>
                                         <input type="text" name="code" onKeyUp={(e) => onSearching(e)} placeholder="Code" {...register("code", { required: true })} className="form-control" />
                                         {errors.code && <span><p role="alert" className="notvalid">This field is required</p></span>}
                                     </div>
@@ -488,7 +488,7 @@ function List(props) {
                                     <thead className='stickt-thead'>
                                         <tr>
                                             <th>Code</th>
-                                            <th>Discription</th>
+                                            <th>Description</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -590,21 +590,21 @@ function AddBenifit(props) {
     return (
         <>
             <Card>
-                <Card.Header>Benefit Codes</Card.Header>
+                <Card.Header>Procedure Codes</Card.Header>
                 <Card.Body>
                     {/* <Form> */}
                     <form onSubmit={handleSubmit(addCode)}>
                         <div className="row">
                             <div className="col-md-12 mb-2">
                                 <div className="form-group">
-                                    <small>Benefit Code</small>
+                                    <small>Procedure Code</small>
                                     <input type="text" className="form-control" name="benefit_code" id=""  {...register("proc_code_list_id", { required: true })} />
                                     {errors.benefit_code && <span><p className='notvalid'>This field is required</p></span>}
                                 </div>
                             </div>
                             <div className="col-md-12 mb-2">
                                 <div className="form-group">
-                                    <small>Discription</small>
+                                    <small>Description</small>
                                     <textarea className="form-control" rows="3" name="benefit_description" id="" {...register("description", { required: true })}></textarea>
                                     {errors.description && <span><p className='notvalid'>This field is required</p></span>}
                                 </div>

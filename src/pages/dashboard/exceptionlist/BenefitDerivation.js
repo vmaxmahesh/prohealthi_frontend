@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
-export default function ExceptionReason()
+import React from 'react';
+export default function BenefitDerivation()
 {
     return(
         <>
-                <div className="row">
+        <div className="row">
                 <div className="col-md-6 mb-3">
                     <div className="breadcrum">
                         <ul>
@@ -11,7 +11,7 @@ export default function ExceptionReason()
                             <li><i className="fas fa-angle-right"></i></li>
                             <li><a href="">Exception List</a></li>
                             <li><i className="fas fa-angle-right"></i></li>
-                            <li><a href="">Reason Codes</a></li>
+                            <li><a href="">Benefit Derivation</a></li>
                         </ul>
                     </div>
                 </div>
@@ -22,8 +22,7 @@ export default function ExceptionReason()
                         </ul>
                     </div>
                 </div>
-            </div>
-            comment : backend is not clear
+            </div>        
         </>
-    )
+    );
 }

@@ -413,7 +413,7 @@ export default function Reason() {
                                 <li><i className="fas fa-angle-right"></i></li>
                                 <li><a href="">Codes</a></li>
                                 <li><i className="fas fa-angle-right"></i></li>
-                                <li><a href="">Benefit Codes</a></li>
+                                <li><a href="">Reason Codes</a></li>
                             </ul>
                         </div>
                     </div>
@@ -423,7 +423,7 @@ export default function Reason() {
                                 <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li>
                                 <div className="col-md-3 ms-auto text-end">
                                     <button className="btn  btn-info" onClick={e => handleShow()}>
-                                        Add Benifit Code <i className="fa fa-plus-circle"></i></button>
+                                        Add Reason Code <i className="fa fa-plus-circle"></i></button>
                                 </div>
                             </ul>
                         </div>
@@ -438,7 +438,7 @@ export default function Reason() {
                                 </div>
                                 <div className="col-md-12 mb-2">
                                     <div className="form-group">
-                                        <small>Search by Code/Discription</small>
+                                        <small>Search by Code/Description</small>
                                         <input type="text" name="code" onKeyUp={(e) => onSearching(e)} placeholder="Code" {...register("code", { required: true })} className="form-control" />
                                         {errors.code && <span><p role="alert" className="notvalid">This field is required</p></span>}
                                     </div>
@@ -481,7 +481,7 @@ function List(props) {
                                     <thead className='stickt-thead'>
                                         <tr>
                                             <th>Code</th>
-                                            <th>Discription</th>
+                                            <th>Description</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -583,21 +583,21 @@ function AddBenifit(props) {
     return (
         <>
             <Card>
-                <Card.Header>Benefit Codes</Card.Header>
+                <Card.Header>Reason Codes</Card.Header>
                 <Card.Body>
                     {/* <Form> */}
                     <form onSubmit={handleSubmit(addCode)}>
                         <div className="row">
                             <div className="col-md-12 mb-2">
                                 <div className="form-group">
-                                    <small>Code</small>
+                                    <small>Reason Code</small>
                                     <input type="text" className="form-control" name="benefit_code" id=""  {...register("reason_code", { required: true })} />
                                     {errors.benefit_code && <span><p className='notvalid'>This field is required</p></span>}
                                 </div>
                             </div>
                             <div className="col-md-12 mb-2">
                                 <div className="form-group">
-                                    <small>Discription</small>
+                                    <small>Description</small>
                                     <textarea className="form-control" rows="3" name="benefit_description" id="" {...register("reason_description", { required: true })}></textarea>
                                     {errors.description && <span><p className='notvalid'>This field is required</p></span>}
                                 </div>
