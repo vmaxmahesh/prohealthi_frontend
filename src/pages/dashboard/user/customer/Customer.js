@@ -5,6 +5,7 @@ import Footer from '../../../../shared/Footer';
 import { ToastContainer, toast } from 'react-toastify';
 import { Button, Col, Row } from 'react-bootstrap';
 import { objToQueryString } from '../../../../hooks/healper';
+import Select from 'react-select';
 
 
 function Customer() {
@@ -40,13 +41,13 @@ function Customer() {
                     const error = (data && data.message) || response.status;
                     setCustomerlist([]);
                     return Promise.reject(error);
-                   
+
                 } else {
                     setCustomerlist(data.data);
                 }
 
 
-                
+
             })
             .catch(error => {
                 console.error('There was an error!', error);
@@ -89,7 +90,7 @@ function Customer() {
     }
 
     useEffect(() => {
-         reset(customer) 
+        reset(customer)
     }, [customer]);
 
     return (
@@ -150,13 +151,13 @@ function Customer() {
             <Row>
                 <Col>
                     {/* {customerlist.length > 0 ? */}
-                        <CustomerTable customers={customerlist} getCustomer={getCustomer} />
-                        {/* : ''} */}
+                    <CustomerTable customers={customerlist} getCustomer={getCustomer} />
+                    {/* : ''} */}
                 </Col>
             </Row>
 
             <div className="col-md-12 mb-3">
-                <h4 style={{ fontWeight: '600' }}> Customer Details -</h4>
+                <h4 style={{ fontWeight: '600' }}> Customer Details</h4>
             </div>
 
             <div className="nav nav-tabs" id="nav-tab" role="tablist" ref={scollToRef}>
@@ -203,7 +204,7 @@ function CustomerTable(props) {
             CustomerList.push(<Cutomer customer={props.customers[i]} getCustomer={getCustomer} />);
         }
     } else {
-        CustomerList.push(<NoReacords/>);
+        CustomerList.push(<NoReacords />);
     }
     return (
         <>
@@ -213,20 +214,20 @@ function CustomerTable(props) {
                         <div className="col-md-12">
                             <h5 className="mb-2">Customers</h5>
                         </div>
-                        <div style={{    height: '400px', overflowY: 'scroll'}}>
-                        <table className="table  table-bordered" style={{position:'relative'}}>
-                            <thead className='stickt-thead'>
-                                <tr>
-                                    <th>Effective Date</th>
-                                    <th>GPI</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                        <div style={{ height: '400px', overflowY: 'scroll' }}>
+                            <table className="table  table-bordered" style={{ position: 'relative' }}>
+                                <thead className='stickt-thead'>
+                                    <tr>
+                                        <th>Effective Date</th>
+                                        <th>GPI</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
 
-                                {CustomerList}
-                            </tbody>
-                        </table>
+                                    {CustomerList}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -239,7 +240,7 @@ function CustomerTable(props) {
 function NoReacords(params) {
     return (
         <>
-            <tr style={{padding: '10px', color:'red'}}><td colspan="7">No Records Matches..!</td></tr>
+            <tr style={{ padding: '10px', color: 'red' }}><td colspan="7">No Records Matches..!</td></tr>
         </>
     )
 }
@@ -262,6 +263,24 @@ export function Identification(props) {
     const [customer, setCustomer] = useOutletContext();
     const [startDate, setStartDate] = useState(new Date());
     const [afterDate, setAfterDate] = useState(new Date());
+
+    const Countries = [
+        { label: "Albania", value: 355 },
+        { label: "Argentina", value: 54 },
+        { label: "Austria", value: 43 },
+        { label: "Cocos Islands", value: 61 },
+        { label: "Kuwait", value: 965 },
+        { label: "Sweden", value: 46 },
+        { label: "Venezuela", value: 58 }
+    ];
+
+    const onCountryChange = (e) => {
+
+        getCountries();
+    }
+
+
+
 
 
 
@@ -312,7 +331,7 @@ export function Identification(props) {
 
                 setCustomer(data);
                 // props.onChange(data);
-                navigate("/dashboard/user/customer/strategy");
+                // navigate("/dashboard/user/customer/strategy");
 
                 // this.setState({ postId: data.id })
             })
@@ -322,7 +341,88 @@ export function Identification(props) {
             });
     }
 
-    useEffect(() => { reset(customer) }, [customer]);
+    const getStates = data => {
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        };
+        fetch(process.env.REACT_APP_API_BASEURL + '/api/states/Coun', requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    return Promise.reject(error);
+                }
+
+                console.log(data.data);
+                setStates(data.data);
+
+                // props.onChange(data);
+
+                // this.setState({ postId: data.id })
+            })
+            .catch(error => {
+                // this.setState({ errorMessage: error.toString() });
+                console.error('There was an error!', error);
+            });
+    }
+
+    const getCountries = data => {
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        };
+        fetch(process.env.REACT_APP_API_BASEURL + '/api/countries', requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    return Promise.reject(error);
+                }
+
+                console.log(data.data);
+                setCountries(data.data);
+
+                // props.onChange(data);
+
+                // this.setState({ postId: data.id })
+            })
+            .catch(error => {
+                // this.setState({ errorMessage: error.toString() });
+                console.error('There was an error!', error);
+            });
+    }
+
+    useEffect(() => { reset(customer) }, [customer],);
+    // const states = [
+    //     { value: '', text: '--Choose an option--' },
+    //     { value: 'apple', text: 'Apple 🍏' },
+    //     { value: 'banana', text: 'Banana 🍌' },
+    //     { value: 'kiwi', text: 'Kiwi 🥝' },
+    // ];
+
+
+    const [states, setStates] = useState([]);
+
+    const [countries, setCountries] = useState([]);
+
+
+
+    const onStateChange=(e)=>{
+        getStates();
+    }
+
+   
 
 
     return (
@@ -396,11 +496,13 @@ export function Identification(props) {
                                             <select {...register("city", {
                                                 required: true,
 
-                                            })} name="city" className="form-select">
-                                                <option value="">Select City</option>
-                                                <option value="1">option 1</option>
-                                                <option value="2">option 2</option>
-                                                <option value="3">option 3</option>
+                                            })}  onClick={onStateChange} name="city" className="form-select">
+
+                                                {states.map(option => (
+                                                    <option key={option.state_code} value={option.state_code}>
+                                                        {option.state_code}
+                                                    </option>
+                                                ))}
                                             </select>
 
                                             {errors.city?.type === 'required' && <p role="alert" className="notvalid">City is  required</p>}
@@ -411,15 +513,18 @@ export function Identification(props) {
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Country</small>
-                                            <select {...register("country", {
+                                            <select {...register("city", {
                                                 required: true,
 
-                                            })} name="country" className="form-select">
-                                                <option value="">Select Country</option>
-                                                <option value="1">option 1</option>
-                                                <option value="2">option 2</option>
-                                                <option value="3">option 3</option>
+                                            })}  onClick={onCountryChange} name="city" className="form-select">
+
+                                                {countries.map(option => (
+                                                    <option key={option.country_code} value={option.state_code}>
+                                                        {option.description}
+                                                    </option>
+                                                ))}
                                             </select>
+
                                             {errors.country?.type === 'required' && <p role="alert" className="notvalid">Country is  required</p>}
 
                                         </div>
@@ -1080,7 +1185,7 @@ export function Strategy(props) {
                                     <small>Prescriber Grouping ID</small>
 
 
-{/* // not included in DB */}
+                                    {/* // not included in DB */}
                                     <select className="form-select" {...register("Prescriber_Grouping_id", {
                                         required: true,
                                     })} name="Prescriber_Grouping_id">
