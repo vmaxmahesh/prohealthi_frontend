@@ -138,7 +138,7 @@ export default function Client() {
                 <div className="col-md-6 mb-3">
                     <div className="breadcrum ">
                         <ul>
-                            <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li>
+                             <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li> 
                         </ul>
                     </div>
                 </div>
@@ -915,47 +915,47 @@ export function Coverage(params) {
     }
 
 
-    // const tiersMove = () => {
-    //     var val1 = new Date(document.getElementById("tier_1").value);
-    //     var val2 = new Date(document.getElementById("tier_2").value);
-    //     var val3 = new Date(document.getElementById("tier_3").value);
+    const tiersMove = () => {
+        var val1 = new Date(document.getElementById("tier_1").value);
+        var val2 = new Date(document.getElementById("tier_2").value);
+        var val3 = new Date(document.getElementById("tier_3").value);
 
 
-    //     tier1setValue(val1);
-    //     tier2setValue(val2);
+        tier1setValue(val1);
+        tier2setValue(val2);
 
-    //     // setTier2(val2);
-    //     console.log(tier1value);
+        // setTier2(val2);
+        console.log(tier1value);
 
-    //     console.log(tier2value);
+        console.log(tier2value);
 
-    //     const customdateFormat = (inputDate, format) => {
+        const customdateFormat = (inputDate, format) => {
 
-    //         const date = new Date(inputDate);
+            const date = new Date(inputDate);
 
-    //         //extract the parts of the date
-    //         const day = date.getDate();
-    //         const month = date.getMonth() + 1;
-    //         const year = date.getFullYear();
+            //extract the parts of the date
+            const day = date.getDate();
+            const month = date.getMonth() + 1;
+            const year = date.getFullYear();
 
-    //         //replace the month
-    //         format = format.replace("MM", month.toString().padStart(2, "0"));
+            //replace the month
+            format = format.replace("MM", month.toString().padStart(2, "0"));
 
-    //         //replace the year
-    //         if (format.indexOf("yyyy") > -1) {
-    //             format = format.replace("yyyy", year.toString());
-    //         } else if (format.indexOf("yy") > -1) {
-    //             format = format.replace("yy", year.toString().substr(2, 2));
-    //         }
+            //replace the year
+            if (format.indexOf("yyyy") > -1) {
+                format = format.replace("yyyy", year.toString());
+            } else if (format.indexOf("yy") > -1) {
+                format = format.replace("yy", year.toString().substr(2, 2));
+            }
 
-    //         //replace the day
-    //         format = format.replace("dd", day.toString().padStart(2, "0"));
+            //replace the day
+            format = format.replace("dd", day.toString().padStart(2, "0"));
 
-    //         return format;
+            return format;
 
 
-    //     }
-    // }
+        }
+    }
 
 
 
@@ -1128,7 +1128,9 @@ export function Coverage(params) {
                                     <div className="form-group mb-3">
                                         <small>Tier 1</small>
                                         {/* <input type="date" className="form-control" value="2013-01-08"  id="tier_1" onSelect={tiersMove}  name="tier_1" {...register('tier_1', { */}
-                                        <input type="date" className="form-control" onInput={handlechangetier1} value={tiervalue} id="tier_1" name="tier_1" {...register('tier_1', {
+                                        <input type="date" className="form-control" 
+                                        // onInput={handlechangetier1}
+                                         value={tiervalue} id="tier_1" name="tier_1" {...register('tier_1', {
                                             required: true,
                                         })} />
                                         {errors.tier_1?.type === 'required' && <p role="alert" className="notvalid">Cov Eff Date is  required</p>}
@@ -1139,7 +1141,9 @@ export function Coverage(params) {
                                     <div className="form-group mb-3">
                                         <small>Tier 2</small>
                                         {/* // <input type="date" className="form-control" defaultValue="01-02-2022" name="tier_2"  {...register('tier_2', { */}
-                                        <input type="date" className="form-control" onInput={handlechangetier2} value={tier1value} name="tier_2"  {...register('tier_2', {
+                                        <input type="date" className="form-control"
+                                        //  onInput={handlechangetier2} 
+                                         value={tier1value} name="tier_2"  {...register('tier_2', {
                                             required: true,
                                         })} id="tier_2" />
                                         {errors.tier_2?.type === 'required' && <p role="alert" className="notvalid">Cov Eff Date is  required</p>}
@@ -1149,7 +1153,9 @@ export function Coverage(params) {
                                 <div className="col-md-3">
                                     <div className="form-group mb-3">
                                         <small>Tier 3</small>
-                                        <input type="date" className="form-control" onInput={handlechangetier3} value={tier2value} name="tier_3" {...register('tier_3', {
+                                        <input type="date" className="form-control"
+                                        //  onInput={handlechangetier3} 
+                                         value={tier2value} name="tier_3" {...register('tier_3', {
                                             required: true,
                                         })} id="tier_3" />
                                         {errors.tier_3?.type === 'required' && <p role="alert" className="notvalid">Cov Eff Date is  required</p>}

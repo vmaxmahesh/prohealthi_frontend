@@ -70,7 +70,7 @@
 //                     <div className="col-md-6 mb-3">
 //                         <div className="breadcrum ">
 //                             <ul>
-//                                 <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li>
+//                                  <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li> 
 //                                 <div className="col-md-3 ms-auto text-end">                         
 //                                     <button className="btn  btn-info" onClick={e => handleShow()}>
 //                                         Add Provider Types <i className="fa fa-plus-circle"></i></button>
@@ -425,7 +425,7 @@ export default function ProviderType() {
                     <div className="col-md-6 mb-3">
                         <div className="breadcrum ">
                             <ul>
-                                <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li>
+                                 <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li> 
                                 <div className="col-md-3 ms-auto text-end">
                                     <button className="btn  btn-info" onClick={e => handleShow()}>
                                         Add Provider Type <i className="fa fa-plus-circle"></i></button>

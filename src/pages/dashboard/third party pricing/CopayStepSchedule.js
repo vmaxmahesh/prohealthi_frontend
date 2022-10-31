@@ -20,7 +20,7 @@ export default function CopayStepSchedule() {
     <div className="col-md-6 mb-3">
         <div className="breadcrum ">
             <ul>
-                <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li>
+                 <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li> 
             </ul>
         </div>
     </div>
