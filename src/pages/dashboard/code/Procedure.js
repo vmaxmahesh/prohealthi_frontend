@@ -135,7 +135,7 @@
 //     {
 //         procedureList.push(<ProcedureRow procdureListData={props.procedureData[i]} />);
 //     }
-    
+
 //     return(
 //         <>
 //             <div className="card mt-3 mb-3 data">
@@ -156,7 +156,7 @@
 //                         </div>
 //                     </div>                    
 //                 </div>
-                
+
 //             </div>
 //         </>
 //     )
@@ -207,7 +207,7 @@
 //                         pauseOnHover: true,
 //                         draggable: true,
 //                         progress: undefined,
-        
+
 //                     });
 //                 }
 
@@ -248,7 +248,7 @@
 //                 </div>
 //                 </Modal.Body>
 //                 <Modal.Footer>
-                    
+
 //                 <Button variant="secondary" onClick={props.handleClose}>
 //                         Close
 //                     </Button>
@@ -271,7 +271,7 @@ import { objToQueryString } from '../../../hooks/healper';
 import { Form, useOutletContext } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-import { Card, Row } from 'react-bootstrap';
+import { Card, Col, Row } from 'react-bootstrap';
 
 
 export default function Procedure() {
@@ -352,7 +352,7 @@ export default function Procedure() {
     const getCode = (id) => {
         setBenifitData(id);
         console.log(benifitsData);
-        scollToRef.current.scrollIntoView()
+        // scollToRef.current.scrollIntoView()
         // const requestOptions = {
         //     method: 'GET',
         //     headers: { 'Content-Type': 'application/json' },
@@ -406,6 +406,10 @@ export default function Procedure() {
         // } else {}
     }
 
+    const updateSelected = (data) => {
+        setBenifitData(data);
+    }
+
 
     useEffect(() => { }, [benifitsData]);
 
@@ -420,7 +424,7 @@ export default function Procedure() {
                                 <li><i className="fas fa-angle-right"></i></li>
                                 <li><a href="">Codes</a></li>
                                 <li><i className="fas fa-angle-right"></i></li>
-                                <li><a href="">Benefit Codes</a></li>
+                                <li><a href="">Procedure Codes</a></li>
                             </ul>
                         </div>
                     </div>
@@ -430,7 +434,7 @@ export default function Procedure() {
                                 <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li>
                                 <div className="col-md-3 ms-auto text-end">
                                     <button className="btn  btn-info" onClick={e => handleShow()}>
-                                        Add Benifit Code <i className="fa fa-plus-circle"></i></button>
+                                        Add Procedure Code <i className="fa fa-plus-circle"></i></button>
                                 </div>
                             </ul>
                         </div>
@@ -456,12 +460,30 @@ export default function Procedure() {
                     </div>
 
                 </div>
-                <List benifitsList={benifitsList} getCode={getCode} />
 
-                <div ref={scollToRef}>
-                    <AddBenifit show={show} handleClose={handleClose} selected={benifitsData} />
+                <Row>
 
-                </div>
+                    <Col md="4" lg="4">
+
+                        <Card>
+                            <List benifitsList={benifitsList} getCode={getCode} selected={benifitsData} />
+                        </Card>
+                    </Col>
+
+
+                    <Col md="8" lg="8">
+                        <Card>
+                            <div ref={scollToRef}>
+                                <AddBenifit show={show} handleClose={handleClose} selected={benifitsData} updateSelected={updateSelected} />
+
+                            </div>
+                        </Card>
+                    </Col>
+
+                </Row>
+
+
+
 
             </div>
         </>
@@ -472,7 +494,7 @@ function List(props) {
 
     const benifitList = [];
     for (let i = 0; i < props.benifitsList.length; i++) {
-        benifitList.push(<BenifitRow benifitRowData={props.benifitsList[i]} getCode={props.getCode} />);
+        benifitList.push(<BenifitRow benifitRowData={props.benifitsList[i]} selected={props.selected} getCode={props.getCode} />);
     }
 
 
@@ -509,8 +531,10 @@ function List(props) {
 function BenifitRow(props) {
     return (
         <>
-            <tr onClick={() => props.getCode(props.benifitRowData)}>
-                <td>{props.benifitRowData.proc_code_list_id}</td>
+            <tr onClick={() => props.getCode(props.benifitRowData)}
+                className={(props.selected && props.benifitRowData.procedure_code == props.selected.procedure_code ? ' tblactiverow ' : '')}
+            >
+                <td>{props.benifitRowData.procedure_code}</td>
                 <td>{props.benifitRowData.description}</td>
             </tr>
         </>
@@ -558,6 +582,7 @@ function AddBenifit(props) {
                         return Promise.reject(error);
                     } else {
                         reset();
+                        props.updateSelected(data.data);
                         toast.success('Added Successfully...!', {
                             position: "top-right",
                             autoClose: 5000,
@@ -590,15 +615,15 @@ function AddBenifit(props) {
     return (
         <>
             <Card>
-                <Card.Header>Benefit Codes</Card.Header>
+                <Card.Header>Procedure Codes</Card.Header>
                 <Card.Body>
                     {/* <Form> */}
                     <form onSubmit={handleSubmit(addCode)}>
                         <div className="row">
                             <div className="col-md-12 mb-2">
                                 <div className="form-group">
-                                    <small>Benefit Code</small>
-                                    <input type="text" className="form-control" name="benefit_code" id=""  {...register("proc_code_list_id", { required: true })} />
+                                    <small>Procedure Code</small>
+                                    <input type="text" className="form-control" name="benefit_code" id="" readOnly  {...register("procedure_code", { required: true })} />
                                     {errors.benefit_code && <span><p className='notvalid'>This field is required</p></span>}
                                 </div>
                             </div>

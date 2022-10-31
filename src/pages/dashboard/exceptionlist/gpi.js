@@ -175,8 +175,8 @@ function SearchNDC(props) {
                     <div className="row mb-2">
                         <div className="col-md-12 mb-3">
                             <div className="form-group">
-                                <small>GPI ID/Name</small>
-                                <input type="text" onKeyUp={(e) => searchException(e)} className="form-control" placeholder='Start typing NDC ID/Name' {...register("ndc_id", { required: true })} />
+                                <small>Search By GPI ID/Name</small>
+                                <input type="text" onKeyUp={(e) => searchException(e)} className="form-control" placeholder='Start typing GPI ID/Name...' {...register("ndc_id", { required: true })} />
 
                             </div>
                         </div>
@@ -418,7 +418,7 @@ export function GPIProcessRule(props) {
                                 <div className="col-md-12 mb-4">
                                     <div className="form-group">
                                         <input type="checkbox" id="user" className="d-none" />
-                                        <label htmlFor="user">User will Exit will not be Invoked for this Section</label>
+                                        <label htmlFor="user">User Exit will not be Invoked for this Section</label>
                                     </div>
                                 </div>
 

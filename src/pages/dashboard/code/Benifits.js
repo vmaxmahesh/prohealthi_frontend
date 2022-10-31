@@ -7,7 +7,7 @@ import { objToQueryString } from '../../../hooks/healper';
 import { Form, useOutletContext } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-import { Card, Row } from 'react-bootstrap';
+import { Card, Col, Row } from 'react-bootstrap';
 
 
 export default function Benifits() {
@@ -88,7 +88,7 @@ export default function Benifits() {
     const getCode = (id) => {
         setBenifitData(id);
         console.log(benifitsData);
-        scollToRef.current.scrollIntoView()
+        // scollToRef.current.scrollIntoView()
         // const requestOptions = {
         //     method: 'GET',
         //     headers: { 'Content-Type': 'application/json' },
@@ -142,6 +142,10 @@ export default function Benifits() {
         // } else {}
     }
 
+    const updateSelected = (data) => {
+        setBenifitData(data);
+    }
+
 
     useEffect(() => { }, [benifitsData]);
 
@@ -165,8 +169,8 @@ export default function Benifits() {
                             <ul>
                                 <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li>
                                 <div className="col-md-3 ms-auto text-end">
-                                    <button className="btn  btn-info" onClick={e => handleShow()}>
-                                        Add Benifit Code <i className="fa fa-plus-circle"></i></button>
+                                    {/* <button className="btn  btn-info" onClick={e => handleShow()}>
+                                        Add BenefitCode <i className="fa fa-plus-circle"></i></button> */}
                                 </div>
                             </ul>
                         </div>
@@ -192,12 +196,31 @@ export default function Benifits() {
                     </div>
 
                 </div>
-                <List benifitsList={benifitsList} getCode={getCode} />
 
-                <div ref={scollToRef}>
-                    <AddBenifit show={show} handleClose={handleClose} selected={benifitsData} />
 
-                </div>
+                <Row>
+
+                    <Col md="4" lg="4">
+
+                        <Card>
+                            <List benifitsList={benifitsList} getCode={getCode} selected={benifitsData} />
+                        </Card>
+                    </Col>
+
+
+                    <Col md="8" lg="8">
+                        <Card>
+                            <div ref={scollToRef}>
+                                <AddBenifit show={show} handleClose={handleClose} selected={benifitsData} updateSelected={updateSelected} />
+
+                            </div>
+                        </Card>
+                    </Col>
+
+                </Row>
+
+
+
 
             </div>
         </>
@@ -208,7 +231,7 @@ function List(props) {
 
     const benifitList = [];
     for (let i = 0; i < props.benifitsList.length; i++) {
-        benifitList.push(<BenifitRow benifitRowData={props.benifitsList[i]} getCode={props.getCode} />);
+        benifitList.push(<BenifitRow benifitRowData={props.benifitsList[i]} selected={props.selected} getCode={props.getCode} />);
     }
 
 
@@ -245,7 +268,9 @@ function List(props) {
 function BenifitRow(props) {
     return (
         <>
-            <tr onClick={() => props.getCode(props.benifitRowData)}>
+            <tr onClick={() => props.getCode(props.benifitRowData)}
+                className={(props.selected && props.benifitRowData.benefit_code == props.selected.benefit_code ? ' tblactiverow ' : '')}
+            >
                 <td>{props.benifitRowData.benefit_code}</td>
                 <td>{props.benifitRowData.description}</td>
             </tr>
@@ -334,7 +359,7 @@ function AddBenifit(props) {
                             <div className="col-md-12 mb-2">
                                 <div className="form-group">
                                     <small>Code</small>
-                                    <input type="text" className="form-control" name="benefit_code" id=""  {...register("benefit_code", { required: true })} />
+                                    <input type="text" readOnly className="form-control" name="benefit_code" id=""  {...register("benefit_code", { required: true })} />
                                     {errors.benefit_code && <span><p className='notvalid'>This field is required</p></span>}
                                 </div>
                             </div>

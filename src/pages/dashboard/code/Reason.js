@@ -128,7 +128,7 @@
 //     {
 //         reasonCodes.push(<ReasonCodeRow rowData={props.data[i]} />);
 //     }
-    
+
 //     return(
 //         <>
 //         <div className="card mt-3 mb-3 data" >
@@ -147,10 +147,10 @@
 //                                     </tbody>
 //                                 </table>
 //                             </div>
-                            
+
 //                         </div>
 //                     </div>
-                    
+
 //                 </div>
 //                 </>
 //     )
@@ -201,7 +201,7 @@
 //                         pauseOnHover: true,
 //                         draggable: true,
 //                         progress: undefined,
-        
+
 //                     });
 //                 }
 
@@ -242,7 +242,7 @@
 //                 </div>
 //                 </Modal.Body>
 //                 <Modal.Footer>
-                    
+
 //                 <Button variant="secondary" onClick={props.handleClose}>
 //                         Close
 //                     </Button>
@@ -264,7 +264,7 @@ import { objToQueryString } from '../../../hooks/healper';
 import { Form, useOutletContext } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-import { Card, Row } from 'react-bootstrap';
+import { Card, Col, Row } from 'react-bootstrap';
 
 
 export default function Reason() {
@@ -345,7 +345,7 @@ export default function Reason() {
     const getCode = (id) => {
         setBenifitData(id);
         console.log(benifitsData);
-        scollToRef.current.scrollIntoView()
+        // scollToRef.current.scrollIntoView()
         // const requestOptions = {
         //     method: 'GET',
         //     headers: { 'Content-Type': 'application/json' },
@@ -399,6 +399,10 @@ export default function Reason() {
         // } else {}
     }
 
+    const updateSelected = (data) => {
+        setBenifitData(data);
+    }
+
 
     useEffect(() => { }, [benifitsData]);
 
@@ -413,7 +417,7 @@ export default function Reason() {
                                 <li><i className="fas fa-angle-right"></i></li>
                                 <li><a href="">Codes</a></li>
                                 <li><i className="fas fa-angle-right"></i></li>
-                                <li><a href="">Benefit Codes</a></li>
+                                <li><a href="">Reason Codes</a></li>
                             </ul>
                         </div>
                     </div>
@@ -423,7 +427,7 @@ export default function Reason() {
                                 <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li>
                                 <div className="col-md-3 ms-auto text-end">
                                     <button className="btn  btn-info" onClick={e => handleShow()}>
-                                        Add Benifit Code <i className="fa fa-plus-circle"></i></button>
+                                        Add Reason Code <i className="fa fa-plus-circle"></i></button>
                                 </div>
                             </ul>
                         </div>
@@ -449,12 +453,26 @@ export default function Reason() {
                     </div>
 
                 </div>
-                <List benifitsList={benifitsList} getCode={getCode} />
+                <Row>
 
-                <div ref={scollToRef}>
-                    <AddBenifit show={show} handleClose={handleClose} selected={benifitsData} />
+                    <Col md="4" lg="4">
 
-                </div>
+                        <Card>
+                            <List benifitsList={benifitsList} getCode={getCode} selected={benifitsData} />
+                        </Card>
+                    </Col>
+
+
+                    <Col md="8" lg="8">
+                        <Card>
+                            <div ref={scollToRef}>
+                                <AddBenifit show={show} handleClose={handleClose} selected={benifitsData} updateSelected={updateSelected} />
+
+                            </div>
+                        </Card>
+                    </Col>
+
+                </Row>
 
             </div>
         </>
@@ -465,7 +483,7 @@ function List(props) {
 
     const benifitList = [];
     for (let i = 0; i < props.benifitsList.length; i++) {
-        benifitList.push(<BenifitRow benifitRowData={props.benifitsList[i]} getCode={props.getCode} />);
+        benifitList.push(<BenifitRow benifitRowData={props.benifitsList[i]} selected={props.selected} getCode={props.getCode} />);
     }
 
 
@@ -502,7 +520,9 @@ function List(props) {
 function BenifitRow(props) {
     return (
         <>
-            <tr onClick={() => props.getCode(props.benifitRowData)}>
+            <tr onClick={() => props.getCode(props.benifitRowData)}
+                className={(props.selected && props.benifitRowData.reason_code == props.selected.reason_code ? ' tblactiverow ' : '')}
+            >
                 <td>{props.benifitRowData.reason_code}</td>
                 <td>{props.benifitRowData.reason_description}</td>
             </tr>
@@ -583,7 +603,7 @@ function AddBenifit(props) {
     return (
         <>
             <Card>
-                <Card.Header>Benefit Codes</Card.Header>
+                <Card.Header>Reason Codes</Card.Header>
                 <Card.Body>
                     {/* <Form> */}
                     <form onSubmit={handleSubmit(addCode)}>
@@ -591,7 +611,7 @@ function AddBenifit(props) {
                             <div className="col-md-12 mb-2">
                                 <div className="form-group">
                                     <small>Code</small>
-                                    <input type="text" className="form-control" name="benefit_code" id=""  {...register("reason_code", { required: true })} />
+                                    <input type="text" readOnly className="form-control" name="benefit_code" id=""  {...register("reason_code", { required: true })} />
                                     {errors.benefit_code && <span><p className='notvalid'>This field is required</p></span>}
                                 </div>
                             </div>

@@ -178,7 +178,7 @@ export default function Dashboard() {
 
                         <div className="col-md-2 d-flex align-items-center">
                             <a href="#!" className="menu-toggle"><i className="fa-solid fa-bars-staggered"></i></a>
-                            <h3 className="page-title">Client/Group</h3>
+                            <h3 className="page-title"></h3>
                         </div>
                         <div className="col-md-10 ms-auto">
                             <ul className="menu-items align-items-center">

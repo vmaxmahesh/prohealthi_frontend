@@ -416,7 +416,7 @@ export function TCProcessRule(props) {
                                 <div className="col-md-12 mb-4">
                                     <div className="form-group">
                                         <input type="checkbox" id="user" className="d-none" />
-                                        <label htmlFor="user">User will Exit will not be Invoked for this Section</label>
+                                        <label htmlFor="user">User Exit will not be Invoked for this Section</label>
                                     </div>
                                 </div>
 
