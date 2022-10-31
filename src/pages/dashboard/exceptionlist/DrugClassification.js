@@ -64,7 +64,7 @@ function SearchDrugClassification()
                             <div className="col-md-4 mb-3">
                                 <div className="form-group">
                                     <small>ID</small>
-                                <input type="text" className="form-control" placeholder='Enter Drug Classification ID to search' {...register("drug_classification_id",{required:true})}/>
+                                <input type="text" className="form-control" placeholder='Enter drug classification ID to search' {...register("drug_classification_id",{required:true})}/>
                                 {errors.drug_classification_id && <span><p className='notvalid'>This field is required</p></span>}
                                 </div>
                             </div>

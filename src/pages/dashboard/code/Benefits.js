@@ -27,7 +27,6 @@ export default function Benefits() {
 
     const onSearching = (fdata) => {
 
-
         const requestOptions = {
             method: 'GET',
             // mode: 'no-cors',
@@ -87,59 +86,7 @@ export default function Benefits() {
 
     const getCode = (id) => {
         setBenifitData(id);
-        console.log(benifitsData);
-        // scollToRef.current.scrollIntoView()
-        // const requestOptions = {
-        //     method: 'GET',
-        //     headers: { 'Content-Type': 'application/json' },
-        // };
-
-
-        // if (process.env.REACT_APP_API_BASEURL != 'NOT') {
-        //     fetch(process.env.REACT_APP_API_BASEURL + `/api/codes/benefits/${fdata.target.value}`, requestOptions)
-        //         .then(async response => {
-        //             const isJson = response.headers.get('content-type')?.includes('application/json');
-        //             const data = isJson && await response.json();
-        //             console.log(response);
-
-        //             // check for error response
-        //             if (!response.ok) {
-        //                 // get error message from body or default to response status
-        //                 const error = (data && data.message) || response.status;
-        //                 return Promise.reject(error);
-        //             } else {
-        //                 setBenifitList(data.data);
-        //                 console.log(benifitsList);
-        //                 toast.success(response.message, {
-        //                     position: "top-right",
-        //                     autoClose: 5000,
-        //                     hideProgressBar: false,
-        //                     closeOnClick: true,
-        //                     pauseOnHover: true,
-        //                     draggable: true,
-        //                     progress: undefined,
-
-        //                 });
-        //             }
-
-        //         })
-        //         .catch(error => {
-        //             console.error('There was an error!', error);
-
-        //             // toast.error(error.response.data.message, {
-        //             //     position: "top-right",
-        //             //     autoClose: 5000,
-        //             //     hideProgressBar: false,
-        //             //     closeOnClick: true,
-        //             //     pauseOnHover: true,
-        //             //     draggable: true,
-        //             //     progress: undefined,
-
-
-        //             //     });
-        //         });
-
-        // } else {}
+        console.log(benifitsData);        
     }
 
     const updateSelected = (data) => {
@@ -148,6 +95,7 @@ export default function Benefits() {
 
 
     useEffect(() => { }, [benifitsData]);
+
 
     return (
         <>
@@ -185,8 +133,8 @@ export default function Benefits() {
                                 </div>
                                 <div className="col-md-12 mb-2">
                                     <div className="form-group">
-                                        <small>Search By Code/Description</small>
-                                        <input type="text" name="code" onKeyUp={(e) => onSearching(e)} placeholder="Code" {...register("code", { required: true })} className="form-control" />
+                                        <small>Search by code/description</small>
+                                        <input type="text" name="code" onKeyUp={(e) => onSearching(e)} placeholder="Type code/description to search" {...register("code", { required: true })} className="form-control" />
                                         {errors.code && <span><p role="alert" className="notvalid">This field is required</p></span>}
                                     </div>
                                 </div>
@@ -197,21 +145,16 @@ export default function Benefits() {
 
                 </div>
 
-
                 <Row>
-
                     <Col md="4" lg="4">
-
                         <Card>
                             <List benifitsList={benifitsList} getCode={getCode} selected={benifitsData} />
                         </Card>
                     </Col>
-
-
                     <Col md="8" lg="8">
                         <Card>
                             <div ref={scollToRef}>
-                                <AddBenifit show={show} handleClose={handleClose} selected={benifitsData} updateSelected={updateSelected} />
+                                <AddBenefit show={show} handleClose={handleClose} selected={benifitsData} updateSelected={updateSelected} />
 
                             </div>
                         </Card>
@@ -219,13 +162,12 @@ export default function Benefits() {
 
                 </Row>
 
-
-
-
             </div>
+            {/* </div> */}
         </>
     )
 }
+
 
 function List(props) {
 
@@ -358,7 +300,7 @@ function AddBenefit(props) {
                         <div className="row">
                             <div className="col-md-12 mb-2">
                                 <div className="form-group">
-                                    <small>Code</small>
+                                    <small>Benefit Code</small>
                                     <input type="text" readOnly className="form-control" name="benefit_code" id=""  {...register("benefit_code", { required: true })} />
                                     {errors.benefit_code && <span><p className='notvalid'>This field is required</p></span>}
                                 </div>

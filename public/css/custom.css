@@ -729,7 +729,7 @@ marquee p{
 .form-icon{
     position: absolute;
     right: 15px;
-    top: 32px;
+    top: 13px;
     z-index: 9999
 }
 .input-hint{

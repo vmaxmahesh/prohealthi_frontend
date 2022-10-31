@@ -243,8 +243,8 @@ function ShowNDCList(props) {
                                         <table className="table table-striped table-bordered" style={{ position: 'relative' }}>
                                             <thead className='stickt-thead'>
                                                 <tr>
-                                                    <th>NDC EXCEPTION ID</th>
-                                                    <th>NDC EXCEPTION NAME</th>
+                                                    <th>NDC Exception ID</th>
+                                                    <th>NDC Exception Name</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -265,9 +265,9 @@ function ShowNDCList(props) {
                                                 <tr>
                                                     <th>NDC Exception List</th>
                                                     <th>NDC</th>
-                                                    <th>eff. Date</th>
-                                                    <th>New drug status</th>
-                                                    <th>Process rule</th>
+                                                    <th>Effective Date</th>
+                                                    <th>New Drug Status</th>
+                                                    <th>Process Rule</th>
                                                 </tr>
                                             </thead>
                                             <tbody>

@@ -14,10 +14,10 @@
 //     const{register, handleSubmit, watch, formState: {errors}} = useForm();   
 //     const fillServiceTypeData = (data) => {
 //         var arr = [  
-//             { code: '1120', discription: 'service - LOLOHY' },
-//             { code: '1121', discription: 'service - LOLOHY1' },
-//             { code: '1126', discription: 'service - LOLOHY4' },
-//             { code: '1123', discription: 'service - LOLOHY5' },
+//             { code: '1120',  description: 'service - LOLOHY' },
+//             { code: '1121',  description: 'service - LOLOHY1' },
+//             { code: '1126',  description: 'service - LOLOHY4' },
+//             { code: '1123',  description: 'service - LOLOHY5' },
 //         ];
 //         const requestOptions = {
 //             method: 'GET',
@@ -96,7 +96,7 @@
 //                             </div>
 //                             <div className="col-md-6 mb-2">
 //                             <div className="form-group">
-//                                 <small>Discription</small>
+//                                 <small> description</small>
 //                                 <input type="text" name="" id="" className="form-control" {...register("description", {required:true})}/>
 //                                 {errors.description && <span><p className='notvalid'>This field is required</p></span>}
 //                             </div>
@@ -141,7 +141,7 @@
 //                                         <thead>
 //                                             <tr>
 //                                                 <th>Code</th>
-//                                                 <th>Discription</th>
+//                                                 <th> description</th>
 //                                             </tr>
 //                                         </thead>                                        
 //                                         <tbody>
@@ -164,7 +164,7 @@
 //         <>
 //             <tr>
 //                 <td>{props.data.code}</td>
-//                 <td>{props.data.discription}</td>
+//                 <td>{props.data. description}</td>
 //             </tr>
 //         </>
 //     )
@@ -236,7 +236,7 @@
 //                         </div>
 //                         <div class="col-md-12 mb-2">
 //                             <div class="form-group">
-//                                 <small>Discription</small>
+//                                 <small> description</small>
 //                                 <textarea class="form-control" rows="3" name="" id="" {...register("service_type_description", {required:true})}></textarea>
 //                                 {errors.service_type_description && <span><p className='notvalid'>This field is required</p></span>}
 //                             </div>
@@ -428,8 +428,8 @@ export default function Benifits() {
                             <ul>
                                  <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li> 
                                 <div className="col-md-3 ms-auto text-end">
-                                    <button className="btn  btn-info" onClick={e => handleShow()}>
-                                        Add Benifit Code <i className="fa fa-plus-circle"></i></button>
+                                    {/* <button className="btn  btn-info" onClick={e => handleShow()}>
+                                        Add Benifit Code <i className="fa fa-plus-circle"></i></button> */}
                                 </div>
                             </ul>
                         </div>
@@ -444,8 +444,8 @@ export default function Benifits() {
                                 </div>
                                 <div className="col-md-12 mb-2">
                                     <div className="form-group">
-                                        <small>Search by Code/Discription</small>
-                                        <input type="text" name="code" onKeyUp={(e) => onSearching(e)} placeholder="Code" {...register("code", { required: true })} className="form-control" />
+                                        <small>Search by code/ description</small>
+                                        <input type="text" name="code" onKeyUp={(e) => onSearching(e)} placeholder="Type code/ description to search" {...register("code", { required: true })} className="form-control" />
                                         {errors.code && <span><p role="alert" className="notvalid">This field is required</p></span>}
                                     </div>
                                 </div>
@@ -502,7 +502,7 @@ function List(props) {
                                     <thead className='stickt-thead'>
                                         <tr>
                                             <th>Code</th>
-                                            <th>Discription</th>
+                                            <th>Description</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -613,14 +613,14 @@ function AddBenifit(props) {
                         <div className="row">
                             <div className="col-md-12 mb-2">
                                 <div className="form-group">
-                                    <small>Code</small>
+                                    <small>Service type code</small>
                                     <input type="text" readOnly className="form-control" name="benefit_code" id=""  {...register("service_type", { required: true })} />
                                     {errors.benefit_code && <span><p className='notvalid'>This field is required</p></span>}
                                 </div>
                             </div>
                             <div className="col-md-12 mb-2">
                                 <div className="form-group">
-                                    <small>Discription</small>
+                                    <small>Description</small>
                                     <textarea className="form-control" rows="3" name="benefit_description" id="" {...register("description", { required: true })}></textarea>
                                     {errors.description && <span><p className='notvalid'>This field is required</p></span>}
                                 </div>

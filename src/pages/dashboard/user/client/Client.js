@@ -158,8 +158,8 @@ export default function Client() {
                         <div className="row mb-4">
                             <div className="col">
                                 <div className="form-group">
-                                    <small>Customer ID/Name or Client ID/Name</small>
-                                    <input type="text" onKeyUp={(e) => (searchClient(e))} className="form-control"  {...register('customerid')} placeholder="Start typing Customer ID, Name, Client name or ID" name="customerid" id=""  />
+                                    <small>Customer ID/name or client ID/name</small>
+                                    <input type="text" onKeyUp={(e) => (searchClient(e))} className="form-control"  {...register('customerid')} placeholder="Start typing customer ID, name, client name or ID" name="customerid" id=""  />
                                 </div>
                             </div>
                             {/* <div className="col">

@@ -176,7 +176,7 @@ function SearchNDC(props) {
                         <div className="col-md-12 mb-3">
                             <div className="form-group">
                                 <small>Benefit ID/Name</small>
-                                <input type="text" onKeyUp={(e) => searchException(e)} className="form-control" placeholder='Start typing Benefit ID/Name' {...register("ndc_id", { required: true })} />
+                                <input type="text" onKeyUp={(e) => searchException(e)} className="form-control" placeholder='Start typing benefit ID/name' {...register("ndc_id", { required: true })} />
 
                             </div>
                         </div>
@@ -238,7 +238,7 @@ function ShowNDCList(props) {
                                             <thead className='stickt-thead'>
                                                 <tr>
                                                     <th>ID</th>
-                                                    <th>NAME</th>
+                                                    <th>Name</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -258,7 +258,7 @@ function ShowNDCList(props) {
                                         <table className="table table-striped table-bordered" style={{ position: 'relative' }}>
                                             <thead className='stickt-thead'>
                                                 <tr>
-                                                    <th>eff. Date</th>
+                                                    <th>Effective Date</th>
                                                     <th>Benefit Code</th>
                                                     <th>Action</th>
                                                 </tr>
@@ -318,192 +318,192 @@ function AddNcdList(props) {
 
     return (
         <>
-            <div class="card mt-3 mb-3">
-                <div class="card-body">
+            <div className="card mt-3 mb-3">
+                <div className="card-body">
 
-                    <div class="row">
+                    <div className="row">
 
-                        <div class="col-md-8">
+                        <div className="col-md-8">
 
-                            <div class="row mb-2">
-                                <div class="col-md-12 mb-2">
+                            <div className="row mb-2">
+                                <div className="col-md-12 mb-2">
                                     <h5>Benefit List</h5>
                                 </div>
-                                <div class="col-md-6 mb-2">
-                                    <div class="form-group mb-2">
+                                <div className="col-md-6 mb-2">
+                                    <div className="form-group mb-2">
                                         <small>ID</small>
-                                        <input type="text" class="form-control" name="" id="" placeholder="Enter ID" />
+                                        <input type="text" className="form-control" name="" id="" placeholder="Enter ID" />
                                     </div>
                                 </div>
-                                <div class="col-md-6 mb-2">
-                                    <div class="form-group mb-2">
-                                        <small>Discription</small>
-                                        <input type="text" class="form-control" name="" id="" placeholder="Enter ID" />
+                                <div className="col-md-6 mb-2">
+                                    <div className="form-group mb-2">
+                                        <small>Description</small>
+                                        <input type="text" className="form-control" name="" id="" placeholder="Enter description" />
                                     </div>
                                 </div>
 
-                                <div class="col-md-12 mb-2">
+                                <div className="col-md-12 mb-2">
                                     <h5>Benefit Code</h5>
                                 </div>
 
-                                <div class="col-md-4">
-                                    <div class="form-group mb-2">
+                                <div className="col-md-4">
+                                    <div className="form-group mb-2">
                                         <small>Benefit Code</small>
-                                        <input type="text" class="form-control" name="" id="" placeholder="NDC" />
-                                        <a href=""><span class="fa fa-search form-icon"></span></a>
+                                        <input type="text" className="form-control" name="" id="" placeholder="Benefit code" />
+                                        <a href=""><span className="fa fa-search form-icon"></span></a>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group mb-2">
+                                <div className="col-md-4">
+                                    <div className="form-group mb-2">
                                         <small>Effective Date</small>
-                                        <input type="date" class="form-control" name="" id="" />
+                                        <input type="date" className="form-control" name="" id="" />
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group mb-2">
+                                <div className="col-md-4">
+                                    <div className="form-group mb-2">
                                         <small>Termination Date</small>
-                                        <input type="date" class="form-control" name="" id="" />
+                                        <input type="date" className="form-control" name="" id="" />
                                     </div>
                                 </div>
-                                <div class="col-md-12 mt-2">
-                                    <div class="form-group">
-                                        <input type="checkbox" id="one" class="d-none" />
-                                        <label for="one"> User Exit will not be Invoked for this Section</label>
+                                <div className="col-md-12 mt-2">
+                                    <div className="form-group">
+                                        <input type="checkbox" id="one" className="d-none" />
+                                        <label htmlFor="one"> User exit will not be invoked for this section</label>
                                     </div>
                                 </div>
 
-                                <div class="clearfix mb-3"></div>
+                                <div className="clearfix mb-3"></div>
 
-                                <div class="col-md-12 mb-2">
+                                <div className="col-md-12 mb-2">
                                     <h5>Pricing Overrides</h5>
                                 </div>
 
-                                <div class="col-md-4">
-                                    <div class="form-group mb-2">
-                                        <small>Pricing Stratagy</small>
-                                        <input type="text" class="form-control" name="" id="" placeholder="NDC" />
-                                        <a href=""><span class="fa fa-search form-icon"></span></a>
+                                <div className="col-md-4">
+                                    <div className="form-group mb-2">
+                                        <small>Pricing  Strategy</small>
+                                        <input type="text" className="form-control" name="" id="" placeholder="Pricing  Strategy" />
+                                        <a href=""><span className="fa fa-search form-icon"></span></a>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group mb-2">
-                                        <small>Accume Benifit Stratagy</small>
-                                        <input type="text" class="form-control" name="" id="" placeholder="NDC" />
-                                        <a href=""><span class="fa fa-search form-icon"></span></a>
+                                <div className="col-md-4">
+                                    <div className="form-group mb-2">
+                                        <small>Accum. Bene. Strategy</small>
+                                        <input type="text" className="form-control" name="" id="" placeholder="Accume Benefit  Strategy" />
+                                        <a href=""><span className="fa fa-search form-icon"></span></a>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group mb-2">
-                                        <small>Coapy Stratagy</small>
-                                        <input type="text" class="form-control" name="" id="" placeholder="NDC" />
-                                        <a href=""><span class="fa fa-search form-icon"></span></a>
+                                <div className="col-md-4">
+                                    <div className="form-group mb-2">
+                                        <small>Copay Strategy</small>
+                                        <input type="text" className="form-control" name="" id="" placeholder="Copay  Strategy" />
+                                        <a href=""><span className="fa fa-search form-icon"></span></a>
                                     </div>
                                 </div>
 
 
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="row">
-                                <div class="col-md-12 mb-2">
+                        <div className="col-md-4">
+                            <div className="row">
+                                <div className="col-md-12 mb-2">
                                     <h5>Limitations</h5>
                                 </div>
-                                <div class="col-md-12 mb-2">
-                                    <div class="form-group">
+                                <div className="col-md-12 mb-2">
+                                    <div className="form-group">
                                         <small>Amount Due</small>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <input type="text" name="" id="" placeholder="Minimum" class="form-control" />
+                                        <div className="row">
+                                            <div className="col-md-6">
+                                                <input type="text" name="" id="" placeholder="Minimum" className="form-control" />
                                             </div>
-                                            <div class="col-md-6">
-                                                <input type="text" name="" id="" placeholder="Maximum" class="form-control" />
+                                            <div className="col-md-6">
+                                                <input type="text" name="" id="" placeholder="Maximum" className="form-control" />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12 mb-2">
-                                    <div class="form-group">
+                                <div className="col-md-12 mb-2">
+                                    <div className="form-group">
                                         <small>Age</small>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <input type="text" name="" id="" placeholder="Minimum" class="form-control" />
+                                        <div className="row">
+                                            <div className="col-md-6">
+                                                <input type="text" name="" id="" placeholder="Minimum" className="form-control" />
                                             </div>
-                                            <div class="col-md-6">
-                                                <input type="text" name="" id="" placeholder="Maximum" class="form-control" />
+                                            <div className="col-md-6">
+                                                <input type="text" name="" id="" placeholder="Maximum" className="form-control" />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6 mb-2">
+                                <div className="col-md-6 mb-2">
                                     <small>Days Until. Covg Effective</small>
-                                    <input type="text" name="" id="" placeholder="Max" class="form-control" />
+                                    <input type="text" name="" id="" placeholder="Max" className="form-control" />
                                 </div>
-                                <div class="col-md-6 mb-2">
+                                <div className="col-md-6 mb-2">
                                     <small>Days Until. Over Time </small>
-                                    <input type="text" name="" id="" placeholder="Max" class="form-control" />
+                                    <input type="text" name="" id="" placeholder="Max" className="form-control" />
                                 </div>
-                                <div class="col-md-6 mb-2">
+                                <div className="col-md-6 mb-2">
                                     <small>Price per Day</small>
-                                    <input type="text" name="" id="" placeholder="Max" class="form-control" />
+                                    <input type="text" name="" id="" placeholder="Max" className="form-control" />
                                 </div>
-                                <div class="col-md-6 mb-2">
-                                    <small>Price per Diagnosis Code</small>
-                                    <input type="text" name="" id="" placeholder="Max" class="form-control" />
+                                <div className="col-md-6 mb-2">
+                                    <small>Price Per Diagnosis Code</small>
+                                    <input type="text" name="" id="" placeholder="Max" className="form-control" />
                                 </div>
-                                <div class="col-md-6 mb-2">
-                                    <small>Base Benifit</small>
-                                    <input type="text" name="" id="" placeholder="Max" class="form-control" />
+                                <div className="col-md-6 mb-2">
+                                    <small>Base Benefit</small>
+                                    <input type="text" name="" id="" placeholder="Max" className="form-control" />
                                 </div>
-                                <div class="col-md-6 mb-2">
-                                    <small>Base Persentage</small>
-                                    <input type="text" name="" id="" placeholder="Max" class="form-control" />
+                                <div className="col-md-6 mb-2">
+                                    <small>Base Percentage</small>
+                                    <input type="text" name="" id="" placeholder="Max" className="form-control" />
                                 </div>
-                                <div class="col-md-12 mt-2 mb-2">
-                                    <div class="form-group">
-                                        <input type="checkbox" id="SMBPP" class="d-none" />
-                                        <label for="SMBPP"> Use SMBPP</label> &nbsp;&nbsp;&nbsp;
+                                <div className="col-md-12 mt-2 mb-2">
+                                    <div className="form-group">
+                                        <input type="checkbox" id="SMBPP" className="d-none" />
+                                        <label htmlFor="SMBPP"> Use SMBPP</label> &nbsp;&nbsp;&nbsp;
 
-                                        <input type="checkbox" id="Applies" class="d-none" />
-                                        <label for="Applies"> Applies to MM Claim Max</label>
+                                        <input type="checkbox" id="Applies" className="d-none" />
+                                        <label htmlFor="Applies"> Applies To MM Claim Max</label>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-md-8">
-                            <div class="row">
-                                <div class="col-md-12 mb-2">
+                        <div className="col-md-8">
+                            <div className="row">
+                                <div className="col-md-12 mb-2">
                                     <h5>User Message</h5>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
+                                <div className="col-md-6">
+                                    <div className="form-group">
                                         <small>Message</small>
-                                        <textarea class="form-control" rows="3"></textarea>
-                                        <p class="input-hint">Message Returned to the Provider</p>
+                                        <textarea className="form-control" rows="3"></textarea>
+                                        <p className="input-hint">Message returned to the provider</p>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
+                                <div className="col-md-6">
+                                    <div className="form-group mb-3">
                                         <small>Stop Date</small>
-                                        <input type="date" class="form-control" name="" id="" />
+                                        <input type="date" className="form-control" name="" id="" />
                                     </div>
-                                    <div class="form-group">
-                                        <input type="checkbox" id="one" class="d-none" />
-                                        <label for="one"> Message sent only when transaction Rejected</label>
+                                    <div className="form-group">
+                                        <input type="checkbox" id="one" className="d-none" />
+                                        <label htmlFor="one"> Message sent only when transaction rejected</label>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-md-4 mt-3">
-                            <div class="row">
-                                <div class="col-md-12 mb-2">
+                        <div className="col-md-4 mt-3">
+                            <div className="row">
+                                <div className="col-md-12 mb-2">
                                     <h5>Member Restriction</h5>
                                 </div>
-                                <div class="col-md-12 mb-2">
-                                    <div class="form-group">
+                                <div className="col-md-12 mb-2">
+                                    <div className="form-group">
                                         <small>Valid Relationship</small>
-                                        <select class="form-select">
+                                        <select className="form-select">
                                             <option value="">Select</option>
                                             <option value=""></option>
                                             <option value=""></option>
@@ -511,26 +511,26 @@ function AddNcdList(props) {
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-12 mb-3">
-                                    <div class="form-group">
+                                <div className="col-md-12 mb-3">
+                                    <div className="form-group">
                                         <small>Gender Restrictions - (Not Covered)</small>
-                                        <div class="row">
-                                            <div class="col-md-4 mt-2">
-                                                <div class="form-group">
-                                                    <input type="checkbox" id="male" class="d-none" />
-                                                    <label for="male"> Male</label>
+                                        <div className="row">
+                                            <div className="col-md-4 mt-2">
+                                                <div className="form-group">
+                                                    <input type="checkbox" id="male" className="d-none" />
+                                                    <label htmlFor="male"> Male</label>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4 mt-2">
-                                                <div class="form-group">
-                                                    <input type="checkbox" id="female" class="d-none" />
-                                                    <label for="female"> Female</label>
+                                            <div className="col-md-4 mt-2">
+                                                <div className="form-group">
+                                                    <input type="checkbox" id="female" className="d-none" />
+                                                    <label htmlFor="female"> Female</label>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4 mt-2">
-                                                <div class="form-group">
-                                                    <input type="checkbox" id="none" class="d-none" />
-                                                    <label for="none"> None</label>
+                                            <div className="col-md-4 mt-2">
+                                                <div className="form-group">
+                                                    <input type="checkbox" id="none" className="d-none" />
+                                                    <label htmlFor="none"> None</label>
                                                 </div>
                                             </div>
                                         </div>

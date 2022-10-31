@@ -426,8 +426,8 @@ export default function ServiceModifiers() {
                             <ul>
                                  <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li> 
                                 <div className="col-md-3 ms-auto text-end">
-                                    <button className="btn  btn-info" onClick={e => handleShow()}>
-                                        Add Service Modifiers <i className="fa fa-plus-circle"></i></button>
+                                    {/* <button className="btn  btn-info" onClick={e => handleShow()}>
+                                        Add Service Modifiers <i className="fa fa-plus-circle"></i></button> */}
                                 </div>
                             </ul>
                         </div>
@@ -442,8 +442,8 @@ export default function ServiceModifiers() {
                                 </div>
                                 <div className="col-md-12 mb-2">
                                     <div className="form-group">
-                                        <small>Search by Code/Discription</small>
-                                        <input type="text" name="code" onKeyUp={(e) => onSearching(e)} placeholder="Code" {...register("code", { required: true })} className="form-control" />
+                                        <small>Search by code/discription</small>
+                                        <input type="text" name="code" onKeyUp={(e) => onSearching(e)} placeholder="Type code/description to search" {...register("code", { required: true })} className="form-control" />
                                         {errors.code && <span><p role="alert" className="notvalid">This field is required</p></span>}
                                     </div>
                                 </div>
@@ -618,7 +618,7 @@ function AddBenifit(props) {
                         <div className="row">
                             <div className="col-md-12 mb-2">
                                 <div className="form-group">
-                                    <small>Code</small>
+                                    <small>Service Modifier Code</small>
                                     <input type="text" readOnly autocomplete="off" className="form-control" name="benefit_code" id=""  {...register("service_modifier", { required: true })} />
                                     {errors.benefit_code && <span><p className='notvalid'>This field is required</p></span>}
                                 </div>
@@ -636,7 +636,6 @@ function AddBenifit(props) {
                     {/* </Form> */}
                 </Card.Body>
             </Card>
-
         </>
     )
 }

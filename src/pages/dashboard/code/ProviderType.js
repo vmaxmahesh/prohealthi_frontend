@@ -427,8 +427,8 @@ export default function ProviderType() {
                             <ul>
                                  <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li> 
                                 <div className="col-md-3 ms-auto text-end">
-                                    <button className="btn  btn-info" onClick={e => handleShow()}>
-                                        Add Provider Type <i className="fa fa-plus-circle"></i></button>
+                                    {/* <button className="btn  btn-info" onClick={e => handleShow()}>
+                                        Add Provider Type <i className="fa fa-plus-circle"></i></button> */}
                                 </div>
                             </ul>
                         </div>
@@ -443,8 +443,8 @@ export default function ProviderType() {
                                 </div>
                                 <div className="col-md-12 mb-2">
                                     <div className="form-group">
-                                        <small>Search by Code/Discription</small>
-                                        <input type="text" name="code" onKeyUp={(e) => onSearching(e)} placeholder="Code" {...register("code", { required: true })} className="form-control" />
+                                        <small>Search by code/description</small>
+                                        <input type="text" name="code" onKeyUp={(e) => onSearching(e)} placeholder="Type code/description to search" {...register("code", { required: true })} className="form-control" />
                                         {errors.code && <span><p role="alert" className="notvalid">This field is required</p></span>}
                                     </div>
                                 </div>
@@ -501,7 +501,7 @@ function List(props) {
                                     <thead className='stickt-thead'>
                                         <tr>
                                             <th>Code</th>
-                                            <th>Discription</th>
+                                            <th>Description</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -613,14 +613,14 @@ function AddBenifit(props) {
                         <div className="row">
                             <div className="col-md-12 mb-2">
                                 <div className="form-group">
-                                    <small>Code</small>
+                                    <small>Provider type code</small>
                                     <input type="text" readOnly className="form-control" name="benefit_code" id=""  {...register("provider_type", { required: true })} />
                                     {errors.benefit_code && <span><p className='notvalid'>This field is required</p></span>}
                                 </div>
                             </div>
                             <div className="col-md-12 mb-2">
                                 <div className="form-group">
-                                    <small>Discription</small>
+                                    <small>Description</small>
                                     <textarea className="form-control" rows="3" name="benefit_description" id="" {...register("description", { required: true })}></textarea>
                                     {errors.description && <span><p className='notvalid'>This field is required</p></span>}
                                 </div>

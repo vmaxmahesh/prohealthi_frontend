@@ -176,7 +176,7 @@ function SearchNDC(props) {
                         <div className="col-md-12 mb-3">
                             <div className="form-group">
                                 <small>Search By GPI ID/Name</small>
-                                <input type="text" onKeyUp={(e) => searchException(e)} className="form-control" placeholder='Start typing GPI ID/Name...' {...register("ndc_id", { required: true })} />
+                                <input type="text" onKeyUp={(e) => searchException(e)} className="form-control" placeholder='Start typing GPI ID/name...' {...register("ndc_id", { required: true })} />
 
                             </div>
                         </div>
@@ -237,8 +237,8 @@ function ShowNDCList(props) {
                                         <table className="table table-striped table-bordered" style={{ position: 'relative' }}>
                                             <thead className='stickt-thead'>
                                                 <tr>
-                                                    <th>GPI EXCEPTION ID</th>
-                                                    <th>GPI EXCEPTION NAME</th>
+                                                    <th>GPI Exception ID</th>
+                                                    <th>GPI Exception Name</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -259,9 +259,9 @@ function ShowNDCList(props) {
                                                 <tr>
                                                     <th>GPI Exception List</th>
                                                     <th>GPI</th>
-                                                    <th>eff. Date</th>
-                                                    <th>New drug status</th>
-                                                    <th>Process rule</th>
+                                                    <th>Effective Date</th>
+                                                    <th>New Drug Status</th>
+                                                    <th>Process Rule</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
