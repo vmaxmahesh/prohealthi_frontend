@@ -266,7 +266,7 @@ import { objToQueryString } from '../../../hooks/healper';
 import { Form, useOutletContext } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-import { Card, Row } from 'react-bootstrap';
+import { Card, Col, Row } from 'react-bootstrap';
 
 
 export default function Diagnosis() {
@@ -347,7 +347,7 @@ export default function Diagnosis() {
     const getCode = (id) => {
         setBenifitData(id);
         console.log(benifitsData);
-        scollToRef.current.scrollIntoView()
+        // scollToRef.current.scrollIntoView()
         // const requestOptions = {
         //     method: 'GET',
         //     headers: { 'Content-Type': 'application/json' },
@@ -401,6 +401,10 @@ export default function Diagnosis() {
         // } else {}
     }
 
+    const updateSelected = (data) => {
+        setBenifitData(data);
+    }
+
 
     useEffect(() => { }, [benifitsData]);
 
@@ -424,8 +428,8 @@ export default function Diagnosis() {
                             <ul>
                                 <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li>
                                 <div className="col-md-3 ms-auto text-end">
-                                    <button className="btn  btn-info" onClick={e => handleShow()}>
-                                        Add Diagnosis Code <i className="fa fa-plus-circle"></i></button>
+                                    {/* <button className="btn  btn-info" onClick={e => handleShow()}>
+                                        Add Diagnosis Code <i className="fa fa-plus-circle"></i></button> */}
                                 </div>
                             </ul>
                         </div>
@@ -440,8 +444,8 @@ export default function Diagnosis() {
                                 </div>
                                 <div className="col-md-12 mb-2">
                                     <div className="form-group">
-                                        <small>Search by Code/Description</small>
-                                        <input type="text" name="code" onKeyUp={(e) => onSearching(e)} placeholder="Code" {...register("code", { required: true })} className="form-control" />
+                                        <small>Search code/description</small>
+                                        <input type="text" name="code" onKeyUp={(e) => onSearching(e)} placeholder="Type code/description to search" {...register("code", { required: true })} className="form-control" />
                                         {errors.code && <span><p role="alert" className="notvalid">This field is required</p></span>}
                                     </div>
                                 </div>
@@ -451,12 +455,28 @@ export default function Diagnosis() {
                     </div>
 
                 </div>
-                <List benifitsList={benifitsList} getCode={getCode} />
 
-                <div ref={scollToRef}>
-                    <AddBenifit show={show} handleClose={handleClose} selected={benifitsData} />
+                <Row>
 
-                </div>
+                    <Col md="4" lg="4">
+
+                        <Card>
+                            <List benifitsList={benifitsList} getCode={getCode} selected={benifitsData} />
+                        </Card>
+                    </Col>
+
+
+                    <Col md="8" lg="8">
+                        <Card>
+                            <div ref={scollToRef}>
+                                <AddBenifit show={show} handleClose={handleClose} selected={benifitsData} updateSelected={updateSelected} />
+
+                            </div>
+                        </Card>
+                    </Col>
+
+                </Row>
+
 
             </div>
         </>
@@ -467,7 +487,7 @@ function List(props) {
 
     const benifitList = [];
     for (let i = 0; i < props.benifitsList.length; i++) {
-        benifitList.push(<BenifitRow benifitRowData={props.benifitsList[i]} getCode={props.getCode} />);
+        benifitList.push(<BenifitRow benifitRowData={props.benifitsList[i]} selected={props.selected} getCode={props.getCode} />);
     }
 
 
@@ -504,7 +524,9 @@ function List(props) {
 function BenifitRow(props) {
     return (
         <>
-            <tr onClick={() => props.getCode(props.benifitRowData)}>
+            <tr onClick={() => props.getCode(props.benifitRowData)}
+                className={(props.selected && props.benifitRowData.diagnosis_id == props.selected.diagnosis_id ? ' tblactiverow ' : '')}
+            >
                 <td>{props.benifitRowData.diagnosis_id}</td>
                 <td>{props.benifitRowData.description}</td>
             </tr>

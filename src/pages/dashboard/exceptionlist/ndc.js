@@ -243,8 +243,8 @@ function ShowNDCList(props) {
                                         <table className="table table-striped table-bordered" style={{ position: 'relative' }}>
                                             <thead className='stickt-thead'>
                                                 <tr>
-                                                    <th>NDC EXCEPTION ID</th>
-                                                    <th>NDC EXCEPTION NAME</th>
+                                                    <th>NDC Exception ID</th>
+                                                    <th>NDC Exception Name</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -265,9 +265,9 @@ function ShowNDCList(props) {
                                                 <tr>
                                                     <th>NDC Exception List</th>
                                                     <th>NDC</th>
-                                                    <th>eff. Date</th>
-                                                    <th>New drug status</th>
-                                                    <th>Process rule</th>
+                                                    <th>Effective Date</th>
+                                                    <th>New Drug Status</th>
+                                                    <th>Process Rule</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -439,7 +439,7 @@ export function ProcessRule(props) {
                                 <div className="col-md-12 mb-4">
                                     <div className="form-group">
                                         <input type="checkbox" id="user" className="d-none" />
-                                        <label htmlFor="user">User will Exit will not be Invoked for this Section</label>
+                                        <label htmlFor="user">User Exit will not be Invoked for this Section</label>
                                     </div>
                                 </div>
 
@@ -484,7 +484,7 @@ export function ProcessRule(props) {
                         <div className="col-md-6 mt-4 mb-4">
                             <div className="form-group">
                                 <input type="checkbox" id="message" className="d-none" />
-                                <label htmlFor="message">Message sent only when Transation is Rejected</label>
+                                <label htmlFor="message">Message sent only when transaction is Rejected</label>
                             </div>
                         </div>
 
@@ -609,7 +609,7 @@ export function RXLimitationPricing(props) {
                                     <input type="text" name="" id="" placeholder="Max" className="form-control" />
                                 </div>
                                 <div className="col-md-4">
-                                    <small>Star Dose Bypass Days</small>
+                                    <small>Starter Dose Bypass Days</small>
                                     <input type="text" name="" id="" placeholder="Max" className="form-control" />
                                 </div>
                             </div>
@@ -619,7 +619,7 @@ export function RXLimitationPricing(props) {
                                     <input type="text" name="" id="" placeholder="Max" className="form-control" />
                                 </div>
                                 <div className="col-md-4">
-                                    <small>Star Dose Maint. by Days</small>
+                                    <small>Strt. Dose Maint. By. Days</small>
                                     <input type="text" name="" id="" placeholder="Max" className="form-control" />
                                 </div>
 
@@ -802,7 +802,7 @@ export function ValidationsOverride(props) {
                             </div>
                         </div>
                         <div className="col-md-3 mb-2">
-                            <small>Specilty</small>
+                            <small>Speciality</small>
                             <div className="form-group">
                                 <input type="text" className="form-control" name="" id="" required="" />
                                 <a href=""><span className="fa fa-search form-icon"></span></a>
@@ -834,8 +834,8 @@ export function ValidationsOverride(props) {
                             <input type="text" className="form-control" name="" id="" />
                         </div>
                         <div className="col-md-4 mb-2">
-                            <small>Denial Override Code</small>
-                            <input type="text" className="form-control" name="" id="" placeholder="Not Allowed" readOnly />
+                            <small>Denial Override</small>
+                            <input type="text" className="form-control" name="" id="" placeholder="None Allowed" readOnly />
                         </div>
 
                         <div className="clearfix mb-2"></div>
@@ -858,13 +858,13 @@ export function ValidationsOverride(props) {
                         <div className="col-md-6 mb-3">
                             <div className="form-group">
                                 <input type="checkbox" id="three" className="d-none" />
-                                <label htmlFor="three">Exclued Original with Generic Drugs</label>
+                                <label htmlFor="three">Exclude Original with Generic Drugs</label>
                             </div>
                         </div>
                         <div className="col-md-6 mb-3">
                             <div className="form-group">
                                 <input type="checkbox" id="four" className="d-none" />
-                                <label htmlFor="four">Exclued Generic Drugs</label>
+                                <label htmlFor="four">Exclude Generic Drugs</label>
                             </div>
                         </div>
 

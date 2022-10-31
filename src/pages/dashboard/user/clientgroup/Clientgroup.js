@@ -122,10 +122,10 @@ export default function Clientgroup() {
                         <div className="row mb-4">
                             <div className="col mb-2">
                                 <div className="form-group">
-                                    <small>Customer ID/ Client ID/ Group ID/ Group Name</small>
+                                    <small>Customer ID/ client ID/ group ID/ group name</small>
                                     {/* <input type="text" className="form-control" placeholder="Customer ID" name="" id="" /> */}
                                     {/* <a href=""><span className="fa fa-search form-icon"></span></a> */}
-                                    <input type="text" onKeyUp={(e) => searchClientGroup(e)} className="form-control" placeholder='Start typing Customer ID/Client Id or Group Id ' {...register("customerid")} />
+                                    <input type="text" onKeyUp={(e) => searchClientGroup(e)} className="form-control" placeholder='Start typing customer ID/client ID or group ID ' {...register("customerid")} />
                                 </div>
                             </div>
                             {/* <div className="col mb-2">
@@ -575,7 +575,7 @@ export function Indicators(params) {
                                 <select className="form-select" name="accumulated_benifits" {...register('accumulated_benifits', {
                                     required: true,
                                 })}  >
-                                    <option value="">--select--</option>
+                                    <option value="">--Select--</option>
                                     <option value="1">option 1</option>
                                     <option value="2">option 2</option>
                                 </select>
@@ -587,7 +587,7 @@ export function Indicators(params) {
                                 <select className="form-select" name="secondary_coverage" {...register('secondary_coverage', {
                                     required: true,
                                 })}>
-                                    <option value="">--select--</option>
+                                    <option value="">--Select--</option>
                                     <option value="1">option 1</option>
                                     <option value="2">option 2</option>
                                 </select>
@@ -606,7 +606,7 @@ export function Indicators(params) {
                                 <select className="form-select" {...register("max_no_of_transaction_allowed", {
                                     required: true,
                                 })} name='max_no_of_transaction_allowed'>
-                                    <option value="">--select-- </option>
+                                    <option value="">--Select-- </option>
                                     <option value="1">option 1</option>
                                     <option value="2">option 2</option>
                                     <option value="3">option 3</option>
@@ -619,7 +619,7 @@ export function Indicators(params) {
                                 <select className="form-select" {...register("max_no_of_days", {
                                     required: true,
                                 })} name="max_no_of_days">
-                                    <option value="">--select--</option>
+                                    <option value="">--Select--</option>
                                     <option value="1">option 1</option>
                                     <option value="2">option 2</option>
                                     <option value="3">option 3</option>
@@ -637,7 +637,7 @@ export function Indicators(params) {
                                     <input type="checkbox" name="bypass" id="html1" {...register('bypass', {
                                         required: true,
                                     })} className="d-none" />
-                                    <label for="html1">Bypass Member Eligibility DAte Edits Against Customer Effective Dates</label>
+                                    <label for="html1">Bypass Member Eligibility Date Edits Against Customer Effective Dates</label>
                                     {errors.bypass?.type === 'required' && <p role="alert" className="notvalid">Bypass Member Eligibility DAte Edits Against Customer Effective Dates field is  required</p>}
 
                                 </div>
@@ -665,7 +665,7 @@ export function Indicators(params) {
                                     <select className="form-select" name="copy_schedule" {...register('copy_schedule', {
                                         required: true,
                                     })}>
-                                        <option value="">--select--</option>
+                                        <option value="">--Select--</option>
                                         <option value="1">option 1</option>
                                         <option value="2">option 2</option>
                                     </select>
@@ -736,7 +736,7 @@ export function Eligibility(params) {
                                 <select className="form-select" {...register("auto_termination_level", {
                                     required: true,
                                 })} name="auto_termination_level" >
-                                    <option value="">--select--</option>
+                                    <option value="">--Select--</option>
                                     <option value="0">Overlap Allowed Within Database</option>
                                     <option value="1">Automated Termination within client</option>
                                     <option value="2">Automated Termination within Customer</option>
@@ -755,7 +755,7 @@ export function Eligibility(params) {
                                     required: true,
 
                                 })} name="eligibility_type">
-                                    <option value="">--select--</option>
+                                    <option value="">--Select--</option>
                                     <option value="1">Not Specified </option>
                                     <option value="2"> Individual Member Records Exist</option>
                                     <option value="3">Family Member Records Exist</option>
@@ -773,7 +773,7 @@ export function Eligibility(params) {
                                 <select className="form-select" {...register("membership_processing_flag", {
                                     required: true,
                                 })} name="membership_processing_flag">
-                                    <option value="">--select--</option>
+                                    <option value="">--Select--</option>
                                     <option value="1">Membership Processing Will Be Done</option>
                                 </select>
                                 {errors.membership_processing_flag?.type === 'required' && <p role="alert" className="notvalid">Membership Processing Flag field is  required</p>}
@@ -831,7 +831,7 @@ export function Eligibility(params) {
                                 <select className="form-select" {...register("eligibility_change_log_indicator", {
                                     required: true,
                                 })} name="eligibility_change_log_indicator">
-                                    <option value="">--select--</option>
+                                    <option value="">--Select--</option>
                                     <option value="1">Not Specified</option>
                                     <option value="2">Member Record changes will NOT be logged </option>
                                     <option value="3">Member Record changes will be logged</option>
@@ -998,7 +998,7 @@ export function Strategy(params) {
                                     <select className="form-select" {...register("provider_vefification_option", {
                                         required: true
                                     })} name="provider_vefification_option">
-                                        <option value="">--select--</option>
+                                        <option value="">--Select--</option>
                                         <option value="1">No Provider Check</option>
                                         <option value="2">Validate Provider Format</option>
                                         <option value="3">Provider must exist within Provider Master</option>
@@ -1033,7 +1033,7 @@ export function Strategy(params) {
                                     <select className="form-select" {...register("Prescriber_Verification_Options_1", {
                                         required: true,
                                     })} name="Prescriber_Verification_Options_1" >
-                                        <option value="">--select--</option>
+                                        <option value="">--Select--</option>
                                         <option value="1">None</option>
                                         <option value="2">Validate DEA Code</option>
                                         <option value="3">primary Prescriber Validation</option>
@@ -1050,7 +1050,7 @@ export function Strategy(params) {
                                     <select className="form-select" {...register("Prescriber_Verification_Options_2", {
                                         required: true,
                                     })} name="Prescriber_Verification_Options_2">
-                                        <option value="">--select--</option>
+                                        <option value="">--Select--</option>
                                         <option value="1">None</option>
                                         <option value="2">Validate DEA Code</option>
                                         <option value="3">primary Prescriber Validation</option>
@@ -1417,7 +1417,7 @@ export function Identification(params) {
                                     <select className="form-select" name="plan_classification" {...register('plan_classification', {
                                         required: true,
                                     })}>
-                                        <option value="">Choose plan</option>
+                                        <option value="">Choose Plan</option>
                                         <option value="">Select City</option>
                                         <option value="">Select City</option>
                                         <option value="">Select City</option>
