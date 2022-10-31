@@ -102,7 +102,7 @@
 //                             </div>
 //                             <div className="col-md-6 mb-2">
 //                                 <div className="form-group">
-//                                     <small>Discription</small>
+//                                     <small>Description</small>
 //                                     <input type="text" className="form-control" {...register("description", { required: true })} />
 //                                     {errors.description && <span><p role="alert" className="notvalid">This field is required</p></span>}
 //                                 </div>
@@ -146,7 +146,7 @@
 //                                 <thead>
 //                                     <tr>
 //                                         <th>Code</th>
-//                                         <th>Discription</th>
+//                                         <th>Description</th>
 //                                     </tr>
 //                                 </thead>
 //                                 <tbody>
@@ -239,7 +239,7 @@
 //                         </div>
 //                         <div className="col-md-12 mb-2">
 //                             <div className="form-group">
-//                                 <small>Discription</small>
+//                                 <small>Description</small>
 //                                 <textarea className="form-control" rows="3" name="" id="" {...register("procedure_description",{required:true})}></textarea>
 //                                 {errors.procedure_description && <span><p className="notvalid">This field is required</p></span>}
 //                             </div>
@@ -449,7 +449,7 @@ export default function Procedure() {
                                 </div>
                                 <div className="col-md-12 mb-2">
                                     <div className="form-group">
-                                        <small>Search by Code/Discription</small>
+                                        <small>Search by Code/Description</small>
                                         <input type="text" name="code" onKeyUp={(e) => onSearching(e)} placeholder="Code" {...register("code", { required: true })} className="form-control" />
                                         {errors.code && <span><p role="alert" className="notvalid">This field is required</p></span>}
                                     </div>
@@ -510,7 +510,7 @@ function List(props) {
                                     <thead className='stickt-thead'>
                                         <tr>
                                             <th>Code</th>
-                                            <th>Discription</th>
+                                            <th>Description</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -629,7 +629,7 @@ function AddBenifit(props) {
                             </div>
                             <div className="col-md-12 mb-2">
                                 <div className="form-group">
-                                    <small>Discription</small>
+                                    <small>Description</small>
                                     <textarea className="form-control" rows="3" name="benefit_description" id="" {...register("description", { required: true })}></textarea>
                                     {errors.description && <span><p className='notvalid'>This field is required</p></span>}
                                 </div>

@@ -10,7 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Card, Col, Row } from 'react-bootstrap';
 
 
-export default function Benifits() {
+export default function Benefits() {
     const scollToRef = useRef();
 
     const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
@@ -169,8 +169,8 @@ export default function Benifits() {
                             <ul>
                                  <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li> 
                                 <div className="col-md-3 ms-auto text-end">
-                                    {/* <button className="btn  btn-info" onClick={e => handleShow()}>
-                                        Add BenefitCode <i className="fa fa-plus-circle"></i></button> */}
+                                    {/* <button className="btn  btn-info" onClick={e => handleShow()}> */}
+                                        {/* Add Benefit Code <i className="fa fa-plus-circle"></i></button> */}
                                 </div>
                             </ul>
                         </div>
@@ -185,7 +185,7 @@ export default function Benifits() {
                                 </div>
                                 <div className="col-md-12 mb-2">
                                     <div className="form-group">
-                                        <small>Search by Code/Discription</small>
+                                        <small>Search By Code/Description</small>
                                         <input type="text" name="code" onKeyUp={(e) => onSearching(e)} placeholder="Code" {...register("code", { required: true })} className="form-control" />
                                         {errors.code && <span><p role="alert" className="notvalid">This field is required</p></span>}
                                     </div>
@@ -247,7 +247,7 @@ function List(props) {
                                     <thead className='stickt-thead'>
                                         <tr>
                                             <th>Code</th>
-                                            <th>Discription</th>
+                                            <th>Description</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -265,7 +265,7 @@ function List(props) {
     )
 }
 
-function BenifitRow(props) {
+function BenefitRow(props) {
     return (
         <>
             <tr onClick={() => props.getCode(props.benifitRowData)}
@@ -278,7 +278,7 @@ function BenifitRow(props) {
     )
 }
 
-function AddBenifit(props) {
+function AddBenefit(props) {
     const [code, setCode] = useState();
     const [description, setDescription] = useState();
     const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
@@ -365,7 +365,7 @@ function AddBenifit(props) {
                             </div>
                             <div className="col-md-12 mb-2">
                                 <div className="form-group">
-                                    <small>Discription</small>
+                                    <small>Description</small>
                                     <textarea className="form-control" rows="3" name="benefit_description" id="" {...register("description", { required: true })}></textarea>
                                     {errors.description && <span><p className='notvalid'>This field is required</p></span>}
                                 </div>

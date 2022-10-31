@@ -19,7 +19,7 @@ import Membership, { SearchById, SearchByName } from './pages/dashboard/members/
 import PlanAuthorisation, { Authorisation, PANotes, Pricing } from './pages/dashboard/members/PlanAuthorisation';
 import PlanValidation from './pages/dashboard/members/PlanValidation';
 import useToken from './hooks/useToken';
-import Benifits from './pages/dashboard/code/Benifits';
+import Benifits from './pages/dashboard/code/Benefits';
 import Procedure from './pages/dashboard/code/Procedure';
 import Diagnosis from './pages/dashboard/code/Diagnosis';
 import Reason from './pages/dashboard/code/Reason';
@@ -43,6 +43,8 @@ import DrugClassification from './pages/dashboard/exceptionlist/DrugClassificati
 import ExceptionProcedure from './pages/dashboard/exceptionlist/ExceptionProcedure';
 import ExceptionReason from './pages/dashboard/exceptionlist/ExceptionReason';
 import BenefitList from './pages/dashboard/exceptionlist/BenefitList';
+import BenefitDerivation from './pages/dashboard/exceptionlist/BenefitDerivation';
+import Benefits from './pages/dashboard/code/Benefits';
 
 function setToken(userToken) {
   sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -133,7 +135,7 @@ function App() {
 
           </Route>
 
-          <Route path="code/benefits" element={<Benifits />}>
+          <Route path="code/benefits" element={<Benefits />}>
 
           </Route>
 
@@ -288,6 +290,9 @@ function App() {
           </Route>
 
           <Route path="exception-list/benefit-list" element={<BenefitList />}>
+          </Route>
+
+          <Route path="exception-list/benefit-derivation" element={<BenefitDerivation />}>
           </Route>
 
 

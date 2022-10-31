@@ -446,7 +446,7 @@ export default function CauseOfLoss() {
                                 </div>
                                 <div className="col-md-12 mb-2">
                                     <div className="form-group">
-                                        <small>Search by Code/Discription</small>
+                                        <small>Search by Code/Description</small>
                                         <input type="text" name="code" onKeyUp={(e) => onSearching(e)} placeholder="Code" {...register("code", { required: true })} className="form-control" />
                                         {errors.code && <span><p role="alert" className="notvalid">This field is required</p></span>}
                                     </div>
@@ -507,7 +507,7 @@ function List(props) {
                                     <thead className='stickt-thead'>
                                         <tr>
                                             <th>Code</th>
-                                            <th>Discription</th>
+                                            <th>Description</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -618,14 +618,14 @@ function AddBenifit(props) {
                         <div className="row">
                             <div className="col-md-12 mb-2">
                                 <div className="form-group">
-                                    <small>Couse of loss Code</small>
-                                    <input type="text" readOnly className="form-control" name="benefit_code" id=""  {...register("cause_of_loss_code", { required: true })} />
+                                    <small>Couse of loss code</small>
+                                    <input type="text" className="form-control" name="benefit_code" id=""  {...register("cause_of_loss_code", { required: true })} />
                                     {errors.benefit_code && <span><p className='notvalid'>This field is required</p></span>}
                                 </div>
                             </div>
                             <div className="col-md-12 mb-2">
                                 <div className="form-group">
-                                    <small>Discription</small>
+                                    <small>Description</small>
                                     <textarea className="form-control" rows="3" name="benefit_description" id="" {...register("description", { required: true })}></textarea>
                                     {errors.description && <span><p className='notvalid'>This field is required</p></span>}
                                 </div>
