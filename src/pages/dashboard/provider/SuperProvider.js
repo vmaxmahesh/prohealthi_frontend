@@ -287,7 +287,7 @@ function NdcRow(props) {
             <tr>
                 <td>{props.ndcRow.super_rx_network_id}</td>
                 <td>{props.ndcRow.super_rx_network_id_name}</td>
-                <td><button className="btn btn-sm btn-info" id="" onClick={() => props.getNDCItem(props.ndcRow.super_rx_network_id)}><i className="fa fa-eye"></i> View mahesh</button></td>
+                <td><button className="btn btn-sm btn-info" id="" onClick={() => props.getNDCItem(props.ndcRow.super_rx_network_id)}><i className="fa fa-eye"></i> View</button></td>
             </tr>
         </>
     )
