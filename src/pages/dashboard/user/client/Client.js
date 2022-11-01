@@ -80,6 +80,7 @@ export default function Client() {
 
     // getClient
     const getClient = (clientid) => {
+        alert('mahesh');
         // console.log(customerid);
         const requestOptions = {
             method: 'GET',
@@ -266,9 +267,11 @@ function CustomerTable(props) {
     }
 
     const ClientList = [];
+    console.log(props.customers);
     if (props.customers.length > 0) {
         for (let i = 0; i < props.customers.length; i++) {
             ClientList.push(<Cutomer customer={props.customers[i]} getCustomer={getCustomer} />);
+
         }
     } else {
         ClientList.push(<NoReacords/>);
@@ -1656,9 +1659,9 @@ export function Coverage(params) {
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Policy Ann. Month</small>
-                                            <select {...register("policyannmonth", {
+                                            <select {...register("policy_anniv_month", {
                                                 required: true,
-                                            })} name="policyannmonth" className="form-select">
+                                            })} name="policy_anniv_month" className="form-select">
 
                                                 <option value="">--Select--</option>
                                                 <option value="1">January</option>
@@ -1674,20 +1677,20 @@ export function Coverage(params) {
                                                 <option value="11">November</option>
                                                 <option value="12">December</option>
                                             </select>
-                                            {errors.policyannmonth?.type === 'required' && <p role="alert" className="notvalid">Policy Annual Month  is  required</p>}
+                                            {errors.policy_anniv_month?.type === 'required' && <p role="alert" className="notvalid">Policy Annual Month  is  required</p>}
 
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Policy Ann. Day</small>
-                                            <input type="text" className="form-control" name="policy_ann_day" {...register('policy_ann_day', {
+                                            <input type="text" className="form-control" name="policy_anniv_day" {...register('policy_ann_day', {
                                                 required: true,
                                                 pattern: /^(0|[1-9][0-9]*)$/,
 
                                             })} id="" placeholder="Enter" />
-                                            {errors.policy_ann_day?.type === 'required' && <p role="alert" className="notvalid">Policy Annual Day  is  required</p>}
-                                            {errors.policy_ann_day?.type === 'pattern' && <p role="alert" className="notvalid">Enter Number Only..</p>}
+                                            {errors.policy_anniv_day?.type === 'required' && <p role="alert" className="notvalid">Policy Annual Day  is  required</p>}
+                                            {errors.policy_anniv_day?.type === 'pattern' && <p role="alert" className="notvalid">Enter Number Only..</p>}
 
 
                                         </div>

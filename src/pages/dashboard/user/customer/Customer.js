@@ -55,6 +55,7 @@ function Customer() {
     }
 
     const getCustomer = (customerid) => {
+
         // console.log(customerid);
         const requestOptions = {
             method: 'GET',
@@ -68,7 +69,7 @@ function Customer() {
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
-                console.log(response);
+                console.log(data.data);
 
                 // check for error response
                 if (!response.ok) {
@@ -218,8 +219,8 @@ function CustomerTable(props) {
                             <table className="table  table-bordered" style={{ position: 'relative' }}>
                                 <thead className='stickt-thead'>
                                     <tr>
-                                        <th>Effective Date</th>
-                                        <th>GPI</th>
+                                        <th>Customer ID</th>
+                                        <th>Customer Name</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -264,6 +265,8 @@ export function Identification(props) {
     const [startDate, setStartDate] = useState(new Date());
     const [afterDate, setAfterDate] = useState(new Date());
 
+    const [country, setCountry] = useState();
+
     const Countries = [
         { label: "Albania", value: 355 },
         { label: "Argentina", value: 54 },
@@ -274,8 +277,16 @@ export function Identification(props) {
         { label: "Venezuela", value: 58 }
     ];
 
+    const Cstates = [
+        { label: "AD", value: 1 },
+        { label: "KG", value: 2 },
+        
+    ];
+
+
     const onCountryChange = (e) => {
 
+        setCountry(e.target.value);
         getCountries();
     }
 
@@ -347,7 +358,7 @@ export function Identification(props) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         };
-        fetch(process.env.REACT_APP_API_BASEURL + '/api/states/Coun', requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + '/api/states/country', requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
@@ -403,26 +414,25 @@ export function Identification(props) {
             });
     }
 
-    useEffect(() => { reset(customer) }, [customer],);
-    // const states = [
-    //     { value: '', text: '--Choose an option--' },
-    //     { value: 'apple', text: 'Apple 🍏' },
-    //     { value: 'banana', text: 'Banana 🍌' },
-    //     { value: 'kiwi', text: 'Kiwi 🥝' },
-    // ];
+    useEffect(() => { reset(customer) }, [customer]);
+    const countries = [
+        { value: 'Jamica', label: 'Jamaica' },
+        
+    ];
 
 
     const [states, setStates] = useState([]);
 
-    const [countries, setCountries] = useState([]);
+    // const [countries, setCountries] = useState();
+    
+    const [selectedOption, setSelectedOption] = useState(null);
 
 
-
-    const onStateChange=(e)=>{
+    const onStateChange = (e) => {
         getStates();
     }
 
-   
+
 
 
     return (
@@ -490,42 +500,43 @@ export function Identification(props) {
 
                                         </div>
                                     </div>
+
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
-                                            <small>City / State</small>
-                                            <select {...register("city", {
+                                            <small>Country</small>
+                                               
+
+                                            <Select   {...register("country", {
                                                 required: true,
 
-                                            })}  onClick={onStateChange} name="city" className="form-select">
+                                            })} name="city" className="form-select"
+                                            defaultValue={{ label: "Jamica", value: 1 }}
+                                                onChange={setSelectedOption}
+                                                options={countries}
+                                            />
 
-                                                {states.map(option => (
-                                                    <option key={option.state_code} value={option.state_code}>
-                                                        {option.state_code}
-                                                    </option>
-                                                ))}
-                                            </select>
-
-                                            {errors.city?.type === 'required' && <p role="alert" className="notvalid">City is  required</p>}
-
+                                            {errors.country?.type === 'required' && <p role="alert" className="notvalid">Country is  required</p>}
 
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
-                                            <small>Country</small>
-                                            <select {...register("city", {
+                                            <small>City / State</small>
+                                            <Select {...register("city", {
                                                 required: true,
 
-                                            })}  onClick={onCountryChange} name="city" className="form-select">
+                                            })} onClick={onStateChange}  name="city" className="form-select"  defaultValue={{ label: "AD", value: 1 }}          options={Cstates}
+                                            />
 
-                                                {countries.map(option => (
-                                                    <option key={option.country_code} value={option.state_code}>
-                                                        {option.description}
+                                                {/* {states.map(option => (
+                                                    <option key={option.state_code} value={option.state_code}>
+                                                        {option.state_code} --{option.description}
                                                     </option>
-                                                ))}
-                                            </select>
+                                                ))} */}
+                                            {/* </select> */}
 
-                                            {errors.country?.type === 'required' && <p role="alert" className="notvalid">Country is  required</p>}
+                                            {errors.city?.type === 'required' && <p role="alert" className="notvalid">City is  required</p>}
+
 
                                         </div>
                                     </div>
@@ -598,7 +609,7 @@ export function Identification(props) {
                                             <small>Type</small>
                                             <input type="text" {...register("customer_type", {
                                                 required: true,
-                                            })} className="form-control" name="type" id="" placeholder="Type" />
+                                            })} className="form-control" name="customer_type" id="" placeholder="Type" />
                                             {errors.customer_type?.type === 'required' && <p role="alert" className="notvalid">Type  is  required</p>}
 
                                         </div>
@@ -774,9 +785,10 @@ export function Identification(props) {
 
 export function Strategy(props) {
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, reset, formState: { errors } } = useForm();
     const [customer, setCustomer] = useOutletContext();
 
+    useEffect(() => { reset(customer) }, [customer]);
 
 
     const {
@@ -994,7 +1006,7 @@ export function Strategy(props) {
 
                             </div>
                             <div className="col-md-3">
-                                <div className="form-group mb-3">
+                                <div className="form-group">
                                     <small>Tier 1</small>
                                     <input type="date"  {...register("coverage_eff_date_1", {
                                         required: true,
@@ -1004,7 +1016,7 @@ export function Strategy(props) {
                                 </div>
                             </div>
                             <div className="col-md-3">
-                                <div className="form-group mb-3">
+                                <div className="form-group ">
                                     <small>Tier 2</small>
                                     <input type="date" {...register("coverage_eff_date_2", {
                                         required: true,
@@ -1014,7 +1026,7 @@ export function Strategy(props) {
                                 </div>
                             </div>
                             <div className="col-md-3">
-                                <div className="form-group mb-3">
+                                <div className="form-group ">
                                     <small>Tier 3</small>
                                     <input type="date" {...register("coverage_eff_date_3", {
                                         required: true,
@@ -1031,6 +1043,8 @@ export function Strategy(props) {
                             </div>
                             <div className="col-md-3">
                                 <div className="form-group mb-3">
+                                    <small>&nbsp;</small>
+
                                     <input type="text" {...register("plan_id_1", {
                                         required: true,
                                         pattern: /^(0|[1-9][0-9]*)$/,
@@ -1041,8 +1055,8 @@ export function Strategy(props) {
                                 Add Benifit Code <i className="fa fa-search form-icon"></i></a> */}
 
 
-                                    {errors.plan_id_1?.type === 'required' && <p role="alert" className="notvalid">Plan id is  required</p>}
-                                    {errors.plan_id_1?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
+                                    {/* {errors.plan_id_1?.type === 'required' && <p role="alert" className="notvalid">Plan id is  required</p>}
+                                    {errors.plan_id_1?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>} */}
 
                                 </div>
 
@@ -1051,6 +1065,7 @@ export function Strategy(props) {
                             <div className="col-md-3">
                                 <div className="form-group mb-3">
                                     <div className="form-group mb-3">
+                                        <small>&nbsp;</small>
                                         <input type="text" {...register("plan_id_2", {
                                             required: true,
                                             pattern: /^(0|[1-9][0-9]*)$/,
@@ -1066,6 +1081,8 @@ export function Strategy(props) {
                             <div className="col-md-3">
                                 <div className="form-group mb-3">
                                     <div className="form-group mb-3">
+                                        <small>&nbsp;</small>
+
                                         <input type="text" {...register("plan_id_3", {
                                             required: true,
                                             pattern: /^(0|[1-9][0-9]*)$/,
@@ -1115,10 +1132,11 @@ export function Strategy(props) {
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group mb-3">
-                                    <small>Provider Options</small>
-                                    <select className="form-select" {...register("PHARMACY_EXCEPTIONS_FLAG", {
+                                    <small>Provider Options</small> 
+                                    {/* Column not there in customer table */}
+                                    <select className="form-select" {...register("pharmacy_exceptions_flag", {
                                         required: true
-                                    })} name="PHARMACY_EXCEPTIONS_FLAG">
+                                    })} name="pharmacy_exceptions_flag">
                                         <option value="">--select--</option>
                                         <option value="1">No Provider Check</option>
                                         <option value="2">Validate Provider Format</option>
@@ -1126,18 +1144,18 @@ export function Strategy(props) {
                                         <option value="4">Must exist in Provider Network</option>
                                         <option value="5">Validate Provider In/Out of Network</option>
                                     </select>
-                                    {errors.provider_vefification_option?.type === 'required' && <p role="alert" className="notvalid">Provider Options is  required</p>}
+                                    {errors.pharmacy_exceptions_flag?.type === 'required' && <p role="alert" className="notvalid">Provider Options is  required</p>}
                                 </div>
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group mb-3">
                                     <small>Super Provider Networks</small>
-                                    <input type="text" className="form-control" {...register("SUPER_RX_NETWORK_ID", {
+                                    <input type="text" className="form-control" {...register("super_rx_network_id", {
                                         required: true,
-                                    })} name="SUPER_RX_NETWORK_ID" id="" />
+                                    })} name="super_rx_network_id" id="" />
                                     <a href="" data-bs-toggle="modal" data-bs-target="#supernetwork"><span className="fa fa-search form-icon"></span></a>
 
-                                    {errors.SUPER_RX_NETWORK_ID?.type === 'required' && <p role="alert" className="notvalid">Super Provider Networks field is   required</p>}
+                                    {errors.super_rx_network_id?.type === 'required' && <p role="alert" className="notvalid">Super Provider Networks field is   required</p>}
 
                                 </div>
                             </div>
@@ -1150,9 +1168,9 @@ export function Strategy(props) {
                             <div className="col-md-4">
                                 <div className="form-group mb-3">
                                     <small>Prescriber Options</small>
-                                    <select className="form-select" {...register("PRESCRIBER_EXCEPTIONS_FLAG", {
+                                    <select className="form-select" {...register("prescriber_exceptions_flag", {
                                         required: true,
-                                    })} name="PRESCRIBER_EXCEPTIONS_FLAG" >
+                                    })} name="prescriber_exceptions_flag" >
                                         <option value="">--select--</option>
                                         <option value="1">None</option>
                                         <option value="2">Validate DEA Code</option>
@@ -1160,23 +1178,23 @@ export function Strategy(props) {
                                         <option value="4">Must Exist in Prescriber Master</option>
 
                                     </select>
-                                    {errors.PRESCRIBER_EXCEPTIONS_FLAG?.type === 'required' && <p role="alert" className="notvalid">Prescriber Options is   required</p>}
+                                    {errors.prescriber_exceptions_flag?.type === 'required' && <p role="alert" className="notvalid">Prescriber Options is   required</p>}
 
                                 </div>
                             </div>
                             <div className="col-md-4">
                                 <div className="form-group mb-3">
                                     <small>Prescriber Options 2</small>
-                                    <select className="form-select" {...register("PRESCRIBER_EXCEPTIONS_FLAG_2", {
+                                    <select className="form-select" {...register("prescriber_exceptions_flag", {
                                         required: true,
-                                    })} name="PRESCRIBER_EXCEPTIONS_FLAG_2">
+                                    })} name="prescriber_exceptions_flag">
                                         <option value="">--select--</option>
                                         <option value="1">None</option>
                                         <option value="2">Validate DEA Code</option>
                                         <option value="3">primary Prescriber Validation</option>
                                         <option value="4">Must Exist in Prescriber Master</option>
                                     </select>
-                                    {errors.PRESCRIBER_EXCEPTIONS_FLAG_2?.type === 'required' && <p role="alert" className="notvalid">Prescriber Options is   required</p>}
+                                    {errors.prescriber_exceptions_flag?.type === 'required' && <p role="alert" className="notvalid">Prescriber Options is   required</p>}
 
                                 </div>
                             </div>
@@ -1316,7 +1334,7 @@ export function Strategy(props) {
 
 export function Eligibility(props) {
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit,reset, formState: { errors } } = useForm();
     const [customer, setCustomer] = useOutletContext();
 
 
@@ -1354,6 +1372,7 @@ export function Eligibility(props) {
 
     }
 
+    useEffect(() => { reset(customer) }, [customer]);
 
 
 
@@ -1475,9 +1494,9 @@ export function Eligibility(props) {
                                 <small>Auto Termination Level</small>
 
 
-                                <select className="form-select" {...register("auto_termination_level", {
+                                <select className="form-select" {...register("auto_term_level", {
                                     // required: true,
-                                })} name="auto_termination_level" >
+                                })} name="auto_term_level" >
                                     <option value="">--select--</option>
                                     <option value="0">Overlap Allowed Within Database</option>
                                     <option value="1">Automated Termination within client</option>
@@ -1486,14 +1505,14 @@ export function Eligibility(props) {
                                     <option value="4">No Automated Termination-Reject-within database</option>
 
                                 </select>
-                                {errors.auto_termination_level?.type === 'required' && <p role="alert" className="notvalid">Auto Termination Level field is  required</p>}
+                                {errors.auto_term_level?.type === 'required' && <p role="alert" className="notvalid">Auto Termination Level field is  required</p>}
                                 <p className="input-hint">Overlap Allowed Within Database</p>
                             </div>
                             <div className="col-md-4 mb-2">
                                 <small>Auto Family Member Terminate</small>
-                                <select className="form-select"  {...register("auto_family_member_terminate", {
+                                <select className="form-select"  {...register("auto_fam_member_term", {
                                     required: true,
-                                })} name="auto_family_member_terminate">
+                                })} name="auto_fam_member_term">
                                     <option value="">--select--</option>
 
                                     <option value="0">No Automated Termination</option>
@@ -1506,16 +1525,16 @@ export function Eligibility(props) {
                             </div>
                             <div className="col-md-4 mb-2">
                                 <small>Eligibility Type</small>
-                                <select className="form-select" {...register("eligibility_type", {
+                                <select className="form-select" {...register("elig_type", {
                                     required: true,
 
-                                })} name="eligibility_type">
+                                })} name="elig_type">
                                     <option value="">--select--</option>
                                     <option value="1">Not Specified </option>
                                     <option value="2"> Individual Member Records Exist</option>
                                     <option value="3">Family Member Records Exist</option>
                                 </select>
-                                {errors.eligibility_type?.type === 'required' && <p role="alert" className="notvalid">Eligibility Type field is  required</p>}
+                                {errors.elig_type?.type === 'required' && <p role="alert" className="notvalid">Eligibility Type field is  required</p>}
 
                             </div>
 
@@ -1538,10 +1557,10 @@ export function Eligibility(props) {
                             </div>
                             <div className="col-md-4 mb-2">
                                 <small>Overlap Coverage Tie Breaker</small>
-                                <select className="form-select" {...register("Overlap Coverage Tie Breaker", {
+                                <select className="form-select" {...register("overlap_coverage_tie_breaker", {
                                     required: true,
 
-                                })} name="Overlap Coverage Tie Breaker">
+                                })} name="overlap_coverage_tie_breaker">
                                     <option value="">--select--</option>
                                     <option value="1">use group submitted by provider .if Nomatch -use last added</option>
                                     <option value="2">use member record last added</option>
@@ -1558,9 +1577,9 @@ export function Eligibility(props) {
                             </div>
                             <div className="col-md-4 mb-2">
                                 <small>Eligibility Options</small>
-                                <select className="form-select" {...register("eligibility_options", {
+                                <select className="form-select" {...register("elig_date_edit_ovr_flag", {
                                     required: true,
-                                })} name="eligibility_options">
+                                })} name="elig_date_edit_ovr_flag">
                                     <option value="">--Select--</option>
                                     <option value="0">Not Specified</option>
                                     <option value="1">No Eligibility Check</option>
@@ -1581,11 +1600,11 @@ export function Eligibility(props) {
                             <div className="col-md-4 mb-2">
                                 <small>Eligibility Validation List ID</small>
                                 <div className="form-group mb-3">
-                                    <input type="text" className="form-control"  {...register("eligibility_validation_list", {
+                                    <input type="text" className="form-control"  {...register("elig_validation_id", {
                                         required: true,
                                         pattern: /^(0|[1-9][0-9]*)$/,
 
-                                    })} name="eligibility_validation_list" id="" required="" />
+                                    })} name="elig_validation_id" id="" required="" />
 
                                     <a href="" data-bs-toggle="modal" data-bs-target="#eligibilityidModal"><span className="fa fa-search form-icon"></span></a>
 
@@ -1596,9 +1615,10 @@ export function Eligibility(props) {
                             </div>
                             <div className="col-md-4 mb-2">
                                 <small>Authorization Transfer</small>
-                                <select className="form-select"  {...register("authorization_transfer", {
+
+                                <select className="form-select"  {...register("auth_xfer_ind", {
                                     required: true,
-                                })} name="authorization_transfer">
+                                })} name="auth_xfer_ind">
                                     <option value="">--select--</option>
                                     <option value="0">Not Specified</option>
                                     <option value="1">Customer</option>
@@ -1616,6 +1636,7 @@ export function Eligibility(props) {
                                 <h5 className="mb-2">Eligibility Change Logging</h5>
                             </div>
                             <div className="col-md-4 mb-2">
+                                {/* column not found in db */}
                                 <small>Eligibility Change Log Indicator</small>
                                 <select className="form-select" {...register("eligibility_change_log_indicator", {
                                     required: true,
