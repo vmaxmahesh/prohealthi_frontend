@@ -93,7 +93,6 @@ export default function NDC() {
 
 
     const searchException = (fdata) => {
-
         const requestOptions = {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
@@ -124,8 +123,6 @@ export default function NDC() {
                 console.error('There was an error!', error);
             });
     }
-
-
 
     useEffect(() => { }, [ndcData, ndcClass, selctedNdc]);
 
@@ -167,13 +164,10 @@ export default function NDC() {
 function SearchNDC(props) {
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
-
     const searchException = (fdata) => {
 
         props.searchException(fdata);
     }
-
-
     return (
         <>
             <div className="card mt-3 mb-3">
