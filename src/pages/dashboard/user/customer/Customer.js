@@ -6,6 +6,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import { Button, Col, Row } from 'react-bootstrap';
 import { objToQueryString } from '../../../../hooks/healper';
 import Select from 'react-select';
+import SelectSearch from 'react-select-search';
+
 
 
 function Customer() {
@@ -788,13 +790,25 @@ export function Strategy(props) {
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
     const [customer, setCustomer] = useOutletContext();
 
+
     useEffect(() => { reset(customer) }, [customer]);
+
+
+    const [planidslist, setPlanidsList] = useState([]);
 
 
     const {
         register: register2,
         formState: { errors: errors2 },
         handleSubmit: handleSubmit2,
+    } = useForm({
+        mode: "onBlur",
+    });
+
+    const {
+        register: register3,
+        formState: { errors: errors3 },
+        handleSubmit: handleSubmit3,
     } = useForm({
         mode: "onBlur",
     });
@@ -819,11 +833,99 @@ export function Strategy(props) {
 
     const searchSubmit = data => {
 
-
-        alert('mahesh');
+        alert(data);
+        searchnetworkid();
 
     }
 
+    const searchplanid = (fdata) => {
+        var arr = [];
+        alert(fdata.target.value);
+
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        };
+
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/plan/get/${fdata.target.value}`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                // console.log(response);
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    setPlanidsList([]);
+                    console.log(planidslist);
+                    return Promise.reject(error);
+
+                } else {
+                    console.log(data);
+                    setPlanidsList(data.data);
+                    console.log(planidslist);
+
+
+                }
+
+
+
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+    }
+
+    const options = [
+        { value: 'UWI_STAFF', label: 'UWI_STAFF' },
+        { value: 'strawberry', label: 'Strawberry' },
+        { value: 'vanilla', label: 'Vanilla' }
+      ]
+    const searchnetworkid = (fdata) => {
+        var arr = [];
+        alert(fdata);
+
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        };
+
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/superprovidernetwork/get/${fdata}`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                // console.log(response);
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    setPlanidsList([]);
+                    console.log(planidslist);
+                    return Promise.reject(error);
+
+                } else {
+                    console.log(data);
+                    setPlanidsList(data.data);
+                    console.log(planidslist);
+
+
+                }
+
+
+
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+    }
+
+
+    const mahesh=(e)=>{
+        console.log(e.value);
+        searchnetworkid(e.value)
+    }
 
 
     const postTOBackendStrategy = data => {
@@ -864,7 +966,7 @@ export function Strategy(props) {
 
 
 
-            <form key={1} onSubmit={handleSubmit2(searchSubmit)}>
+            <form key={10} >
 
 
 
@@ -882,7 +984,7 @@ export function Strategy(props) {
                                     <div className="col-md-5  align-items-center">
                                         <div className="form-group mb-3">
                                             <small>Plan ID</small>
-                                            <input type="text"  {...register2("plan_id", {
+                                            <input type="text" onKeyUp={(e) => searchplanid(e)}  {...register2("plan_id", {
                                                 required: true,
                                             })} className="form-control" name="plan_id" id="" />
                                             {errors2.plan_id?.type === 'required' && <p role="alert" className="notvalid">Plan Id is required </p>}
@@ -897,7 +999,7 @@ export function Strategy(props) {
 
                                         <div className="form-group mb-3">
 
-                                            <button style={successbtnstyle} className='btn btn-success float-right'>Search</button>
+                                            <button  type="submit" style={successbtnstyle} className='btn btn-success float-right'>Search</button>
 
                                         </div>
 
@@ -1150,10 +1252,11 @@ export function Strategy(props) {
                             <div className="col-md-6">
                                 <div className="form-group mb-3">
                                     <small>Super Provider Networks</small>
-                                    <input type="text" className="form-control" {...register("super_rx_network_id", {
+                                    {/* <input type="text" className="form-control" {...register("super_rx_network_id", {
                                         required: true,
-                                    })} name="super_rx_network_id" id="" />
-                                    <a href="" data-bs-toggle="modal" data-bs-target="#supernetwork"><span className="fa fa-search form-icon"></span></a>
+                                    })} name="super_rx_network_id" id="" /> */}
+                                    {/* <a href="" data-bs-toggle="modal" data-bs-target="#supernetwork"><span className="fa fa-search form-icon"></span></a> */}
+                                    <Select options={options}   onChange={(e) => mahesh(e)} />
 
                                     {errors.super_rx_network_id?.type === 'required' && <p role="alert" className="notvalid">Super Provider Networks field is   required</p>}
 
@@ -1229,7 +1332,7 @@ export function Strategy(props) {
             </form>
 
 
-            <form key={3} onSubmit={handleSubmit2(searchSubmit)}>
+            <form key={4} onSubmit={handleSubmit3(searchSubmit)}>
 
 
 
@@ -1243,43 +1346,48 @@ export function Strategy(props) {
                             <div className="modal-body">
 
                                 <div className='row align-items-center'>
-                                    <h6>Criteria</h6>
+                                    <h6>Network ID/NetworkName</h6>
                                     <br></br>
+<div>
+<SelectSearch options={options} search="true" value="sv" name="language" placeholder="Choose your language" />
 
-                                    <div className="col-md-5  align-items-center">
+</div>
+
+
+                                    {/* <div className="col-md-5  align-items-center">
                                         <div className="form-group mb-3">
-                                            <small>Network ID</small>
+                                            <small>Network ID/NetworkName</small>
                                             <input type="text"  {...register2("rva_list_id", {
                                                 required: true,
                                             })} className="form-control" name="rva_list_id" id="" />
-                                            {errors2.rva_list_id?.type === 'required' && <p role="alert" className="notvalid">List Id is required </p>}
+                                            {errors2.rva_list_id?.type === 'required' && <p role="alert" className="notvalid">Network Id/Name is required </p>}
 
                                         </div>
-                                    </div>
+                                    </div> */}
 
 
                                     <div className="col-md-5 align-items-center">
 
 
-                                        <div className="form-group mb-3">
+                                        {/* <div className="form-group mb-3">
 
-                                            <button style={successbtnstyle} className='btn btn-success float-right'>Search</button>
+                                            <button    style={successbtnstyle} className='btn btn-success float-right'>Search</button>
 
-                                        </div>
+                                        </div> */}
 
                                     </div>
 
 
 
-                                    <div className="col-md-5  align-items-center">
+                                    {/* <div className="col-md-5  align-items-center">
                                         <div className="form-group mb-3">
                                             <small>Network Name</small>
                                             <input type="text"  {...register2("list_name", {
                                             })} className="form-control" name="list_name" id="" />
-                                            {/* {errors2.plan_id?.type === 'required' && <p role="alert" className="notvalid">Plan Id is required </p>} */}
+                                            {errors2.plan_id?.type === 'required' && <p role="alert" className="notvalid">Plan Id is required </p>}
 
                                         </div>
-                                    </div>
+                                    </div> */}
 
 
 
@@ -1320,10 +1428,7 @@ export function Strategy(props) {
 
                             </div>
 
-                            {/* <div className="modal-footer">
-<button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-<button type="button" className="btn btn-info">Add Benefit Code</button>
-</div> */}
+                          
                         </div>
                     </div>
                 </div>
@@ -1625,7 +1730,7 @@ export function Eligibility(props) {
                                     <option value="2">Customer/Client</option>
                                     <option value="3">Customer/Client/Group</option>
                                 </select>
-                                {errors.authorization_transfer?.type === 'required' && <p role="alert" className="notvalid">Authorization Transfer is  required</p>}
+                                {errors.auth_xfer_ind?.type === 'required' && <p role="alert" className="notvalid">Authorization Transfer is  required</p>}
 
                             </div>
 
@@ -1663,7 +1768,7 @@ export function Eligibility(props) {
 export function Indicators(props) {
 
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit,reset, formState: { errors } } = useForm();
     const [customer, setCustomer] = useOutletContext();
 
     const navigate = useNavigate();
@@ -1675,6 +1780,9 @@ export function Indicators(props) {
         setCustomer(Indicatorsid);
         console.log(customer);
     }
+
+    useEffect(() => { reset(customer) }, [customer]);
+
 
 
     return (
@@ -1723,22 +1831,22 @@ export function Indicators(props) {
                             </div>
                             <div className="col-md-6 mb-2">
                                 <small>Maximum Number Of Transactions Allowed For An Interim..</small>
-                                <select className="form-select" {...register("max_no_of_transaction_allowed", {
+                                <select className="form-select" {...register("max_num_trans_interim_elig", {
                                     required: true,
-                                })} name='max_no_of_transaction_allowed'>
+                                })} name='max_num_trans_interim_elig'>
                                     <option value="">--select-- </option>
                                     <option value="1">option 1</option>
                                     <option value="2">option 2</option>
                                     <option value="3">option 3</option>
                                 </select>
-                                {errors.max_no_of_transaction_allowed?.type === 'required' && <p role="alert" className="notvalid">Maximum Number Of Transactions Allowed For An Interim field  is  required</p>}
+                                {errors.max_num_trans_interim_elig?.type === 'required' && <p role="alert" className="notvalid">Maximum Number Of Transactions Allowed For An Interim field  is  required</p>}
 
                             </div>
                             <div className="col-md-6 mb-2">
                                 <small>Maximum Number Of Days That An Interim Member Will Be..</small>
-                                <select className="form-select" {...register("max_no_of_days", {
+                                <select className="form-select" {...register("max_days_interim_elig", {
                                     required: true,
-                                })} name="max_no_of_days">
+                                })} name="max_days_interim_elig">
                                     <option value="">--select--</option>
                                     <option value="1">option 1</option>
                                     <option value="2">option 2</option>
@@ -1755,6 +1863,7 @@ export function Indicators(props) {
                             </div>
                             <div className="col-md-12 mb-1">
                                 <div className="form-group">
+                                    {/* DB COLUMN NOT FOUND */}
                                     <input type="checkbox" name="Bypass_Member_Eligibility" {...register("Bypass_Member_Eligibility", {
                                         required: true,
                                     })} id="html" className="d-none" />
@@ -1772,38 +1881,38 @@ export function Indicators(props) {
                             <div className="col-md-4">
                                 <div className="form-group mb-2">
                                     <small>Number of Days from Date Written to First Fill</small>
-                                    <input type="text" className="form-control" name="no_of_days_to_first_fill" {...register("no_of_days_to_first_fill")} id="" placeholder="" required="" />
+                                    <input type="text" className="form-control" name="date_written_to_first_fill" {...register("date_written_to_first_fill")} id="" placeholder="" required="" />
 
-                                    {errors.Bypass_Member_Eligibility?.type === 'required' && <p role="alert" className="notvalid">Number of Days from Date Written to First Fill is   required</p>}
+                                    {errors.date_written_to_first_fill?.type === 'required' && <p role="alert" className="notvalid">Number of Days from Date Written to First Fill is   required</p>}
 
                                 </div>
                             </div>
                             <div className="col-md-4">
                                 <div className="form-group mb-2">
                                     <small>Number of Days from Date Filled to Date Submitted</small>
-                                    <input type="text" className="form-control" {...register("no_of_days_to_first_fill_submit", {
+                                    <input type="text" className="form-control" {...register("date_filled_to_sub_online", {
                                         required: true,
-                                    })} name="no_of_days_to_first_fill_submit" id="" placeholder="" required="" />
-                                    {errors.no_of_days_to_first_fill_submit?.type === 'required' && <p role="alert" className="notvalid">Number of Days from Date Filled to Date Submitted field  is   required</p>}
+                                    })} name="date_filled_to_sub_online" id="" placeholder="" required="" />
+                                    {errors.date_filled_to_sub_online?.type === 'required' && <p role="alert" className="notvalid">Number of Days from Date Filled to Date Submitted field  is   required</p>}
 
                                 </div>
                             </div>
                             <div className="col-md-4">
                                 <div className="form-group mb-2">
                                     <small>Number of Days from Date Filled to Submitted (Manual)</small>
-                                    <input type="text" className="form-control"  {...register("no_of_days_to_first_fill_submit_manual", {
+                                    <input type="text" className="form-control"  {...register("date_filled_to_sub_dmr", {
                                         required: true,
-                                    })} name="no_of_days_to_first_fill_submit_manual" id="" placeholder="" required="" />
-                                    {errors.no_of_days_to_first_fill_submit_manual?.type === 'required' && <p role="alert" className="notvalid">Number of Days from Date Filled to Submitted (Manual) field  is   required</p>}
+                                    })} name="date_filled_to_sub_dmr" id="" placeholder="" required="" />
+                                    {errors.date_filled_to_sub_dmr?.type === 'required' && <p role="alert" className="notvalid">Number of Days from Date Filled to Submitted (Manual) field  is   required</p>}
 
                                 </div>
                             </div>
                             <div className="col-md-4">
                                 <div className="form-group mb-2">
                                     <small>Number of Days from DateFilled to Future Fill Date</small>
-                                    <input type="text" className="form-control"  {...register("no_of_days_from_date_filled_to_future", {
+                                    <input type="text" className="form-control"  {...register("date_sub_to_filled_future", {
                                         required: true,
-                                    })} name="no_of_days_from_date_filled_to_future" id="" placeholder="" required="" />
+                                    })} name="date_sub_to_filled_future" id="" placeholder="" required="" />
                                     {errors.no_of_days_from_date_filled_to_future?.type === 'required' && <p role="alert" className="notvalid">Number of Days from DateFilled to Future Fill Date field  is   required</p>}
 
                                 </div>
@@ -1811,7 +1920,7 @@ export function Indicators(props) {
                             <div className="col-md-4">
                                 <div className="form-group mb-2">
                                     <small>Number of Days for Reversal</small>
-                                    <input type="text" className="form-control" name="no_of_days_reversal" {...register("no_of_days_reversal", {
+                                    <input type="text" className="form-control" name="days_for_reversals" {...register("days_for_reversals", {
                                         required: true,
                                     })} id="" placeholder="" required="" />
                                     {errors.no_of_days_reversal?.type === 'required' && <p role="alert" className="notvalid">Number of Days for Reversal field  is   required</p>}
@@ -1848,20 +1957,20 @@ export function Indicators(props) {
 
                             <div className="col-md-4 mb-1">
                                 <div className="form-group">
-                                    <input type="checkbox" id="Tax" {...register("tax_exempty_entity", {
+                                    <input type="checkbox" id="Tax" {...register("non_profit_tax_exempt_flag", {
                                         required: true,
-                                    })} name="tax_exempty_entity" className="d-none" />
+                                    })} name="non_profit_tax_exempt_flag" className="d-none" />
                                     <label for="Tax">Tax Exempty Entity</label>
-                                    {errors.tax_exempty_entity?.type === 'required' && <p role="alert" className="notvalid">Tax Exempty Entity field  is   required</p>}
+                                    {errors.non_profit_tax_exempt_flag?.type === 'required' && <p role="alert" className="notvalid">Tax Exempty Entity field  is   required</p>}
 
                                 </div>
                             </div>
 
                             <div className="col-md-4 mb-1">
                                 <div className="form-group">
-                                    <input type="checkbox" id="u&c" {...register("mandatory_u_c", {
+                                    <input type="checkbox" id="u&c" {...register("reqd_u_and_c_flag", {
                                         required: true,
-                                    })} name="mandatory_u_c" className="d-none" />
+                                    })} name="reqd_u_and_c_flag" className="d-none" />
                                     <label for="u&c">Mandatory U and C</label>
 
                                 </div>
@@ -2102,9 +2211,9 @@ export function Exceptions(props) {
                             </div>
                             <div className="col-md-6 mb-1">
                                 <div className="form-group">
-                                    <input type="checkbox" id="Plan" className="d-none" {...register("bypass_plan_ndc_gpi", {
+                                    <input type="checkbox" id="Plan" className="d-none" {...register("excl_plan_ndc_gpi_excep_flag", {
                                         required: true,
-                                    })} name="bypass_plan_ndc_gpi" />
+                                    })} name="excl_plan_ndc_gpi_excep_flag" />
                                     <label for="Plan">Bypass Plan NDC/GPI Exception List Processing</label>
                                     {errors.bypass_plan_ndc_gpi?.type === 'required' && <p role="alert" className="notvalid">Bypass Plan NDC/GPI Exception List Processing field   is   required</p>}
 
@@ -2112,11 +2221,11 @@ export function Exceptions(props) {
                             </div>
                             <div className="col-md-6 mb-1">
                                 <div className="form-group">
-                                    <input type="checkbox" id="System" className="d-none" {...register('bypass_plan_ndc_gpi_exception_list_process', {
+                                    <input type="checkbox" id="System" className="d-none" {...register('excl_sys_ndc_gpi_excep_flag', {
                                         required: true,
-                                    })} name="bypass_plan_ndc_gpi_exception_list_process" />
+                                    })} name="excl_sys_ndc_gpi_excep_flag" />
                                     <label for="System">Bypass System NDC/GPI Exception List Processing</label>
-                                    {errors.bypass_plan_ndc_gpi_exception_list_process?.type === 'required' && <p role="alert" className="notvalid">Bypass System NDC/GPI Exception List Processing  field   is   required</p>}
+                                    {errors.excl_sys_ndc_gpi_excep_flag?.type === 'required' && <p role="alert" className="notvalid">Bypass System NDC/GPI Exception List Processing  field   is   required</p>}
 
                                 </div>
                             </div>
@@ -2174,7 +2283,7 @@ export function Exceptions(props) {
                             <div className="col-md-3">
                                 <div className="form-group mb-2">
                                     <small>Admin %</small>
-                                    <input type="text" className="form-control" name="admin_percentage" {...register('admin_percentage', {
+                                    <input type="text" className="form-control" name="admin_percent" {...register('admin_percent', {
                                         required: true,
                                         pattern: /^(0|[1-9][0-9]*)$/,
 
@@ -2199,25 +2308,25 @@ export function Exceptions(props) {
                             <div className="col-md-3">
                                 <div className="form-group mb-2">
                                     <small>UCF Claim Fee</small>
-                                    <input type="text" className="form-control" name="ucf_claim_fee"   {...register("ucf_claim_fee", {
+                                    <input type="text" className="form-control" name="ucf_fee"   {...register("ucf_fee", {
                                         required: true,
                                         pattern: /^(0|[1-9][0-9]*)$/,
                                     })} id="" placeholder="" required="" />
-                                    {errors.ucf_claim_fee?.type === 'required' && <p role="alert" className="notvalid">UCF Claim Fee  field   is   required</p>}
-                                    {errors.ucf_claim_fee?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
+                                    {errors.ucf_fee?.type === 'required' && <p role="alert" className="notvalid">UCF Claim Fee  field   is   required</p>}
+                                    {errors.ucf_fee?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
                                 </div>
                             </div>
                             <div className="col-md-3">
                                 <div className="form-group mb-2">
                                     <small>Elig Update Fee</small>
-                                    <input type="text" className="form-control" name="elig_update_fee"   {...register('elig_update_fee', {
+                                    <input type="text" className="form-control" name="elig_upd_fee"   {...register('elig_upd_fee', {
                                         required: true,
                                         pattern: /^(0|[1-9][0-9]*)$/,
 
 
                                     })} id="" placeholder="" required="" />
-                                    {errors.elig_update_fee?.type === 'required' && <p role="alert" className="notvalid">Elig Update Fee  is   required</p>}
-                                    {errors.elig_update_fee?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
+                                    {errors.elig_upd_fee?.type === 'required' && <p role="alert" className="notvalid">Elig Update Fee  is   required</p>}
+                                    {errors.elig_upd_fee?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
 
                                 </div>
                             </div>
@@ -2237,13 +2346,13 @@ export function Exceptions(props) {
                             <div className="col-md-3">
                                 <div className="form-group mb-2">
                                     <small>Mail Srv Ltr Prd Fee</small>
-                                    <input type="text" className="form-control"  {...register('mail_srv_ltr', {
+                                    <input type="text" className="form-control"  {...register('mail_ord_letter_fee', {
                                         required: true,
                                         pattern: /^(0|[1-9][0-9]*)$/,
 
-                                    })} name="mail_srv_ltr" id="" placeholder="" required="" />
-                                    {errors.mail_srv_ltr?.type === 'required' && <p role="alert" className="notvalid">Mail Srv Ltr Prd Fee  is   required</p>}
-                                    {errors.mail_srv_ltr?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
+                                    })} name="mail_ord_letter_fee" id="" placeholder="" required="" />
+                                    {errors.mail_ord_letter_fee?.type === 'required' && <p role="alert" className="notvalid">Mail Srv Ltr Prd Fee  is   required</p>}
+                                    {errors.mail_ord_letter_fee?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
 
                                 </div>
                             </div>
