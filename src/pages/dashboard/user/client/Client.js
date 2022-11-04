@@ -961,6 +961,45 @@ export function Coverage(params) {
     // }
 
 
+    
+    const tiersMove = () => {
+        var val1 = new Date(document.getElementById("tier_1").value);
+        var val2 = new Date(document.getElementById("tier_2").value);
+        var val3 = new Date(document.getElementById("tier_3").value);
+
+
+
+        const tier1_formated_date = val1.toLocaleDateString("en-US");
+        const tier1_date = customdateFormat(tier1_formated_date, 'yyyy-MM-dd')
+        tier1setValue(tier1_date);
+
+        const tier2_formated_date = val2.toLocaleDateString("en-US");
+        const tier2_date = customdateFormat(tier2_formated_date, 'yyyy-MM-dd')
+        tier2setValue(tier2_date);
+
+        var today = new Date(0);
+
+        tiersetValue(today);
+
+
+
+    }
+
+    const handlechangetier1 = (e) => {
+        tiersetValue(e.target.value);
+    }
+
+
+    const handlechangetier2 = (e) => {
+        tier1setValue(e.target.value);
+    }
+
+
+    const handlechangetier3 = (e) => {
+        tier2setValue(e.target.value);
+    }
+
+
 
 
        

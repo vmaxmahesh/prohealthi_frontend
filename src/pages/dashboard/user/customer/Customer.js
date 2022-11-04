@@ -787,12 +787,20 @@ export function Identification(props) {
 
 export function Strategy(props) {
 
+
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
     const [customer, setCustomer] = useOutletContext();
+    const[superoptions,setSuperOptions]=useState(false)
 
 
     useEffect(() => { reset(customer) }, [customer]);
 
+useEffect(()=>{
+     if( !superoptions){
+        getAllSuperProviderNetworkIds();
+
+    }
+}, [superoptions])
 
     const [planidslist, setPlanidsList] = useState([]);
 
@@ -813,6 +821,44 @@ export function Strategy(props) {
         mode: "onBlur",
     });
 
+    
+    const tiersMove = () => {
+        var val1 = new Date(document.getElementById("tier_1").value);
+        var val2 = new Date(document.getElementById("tier_2").value);
+        var val3 = new Date(document.getElementById("tier_3").value);
+
+
+
+        const tier1_formated_date = val1.toLocaleDateString("en-US");
+        const tier1_date = customdateFormat(tier1_formated_date, 'yyyy-MM-dd')
+        tier1setValue(tier1_date);
+
+        const tier2_formated_date = val2.toLocaleDateString("en-US");
+        const tier2_date = customdateFormat(tier2_formated_date, 'yyyy-MM-dd')
+        tier2setValue(tier2_date);
+
+        var today = new Date(0);
+
+        tiersetValue(today);
+
+
+
+    }
+
+    const handlechangetier1 = (e) => {
+        tiersetValue(e.target.value);
+    }
+
+
+    const handlechangetier2 = (e) => {
+        tier1setValue(e.target.value);
+    }
+
+
+    const handlechangetier3 = (e) => {
+        tier2setValue(e.target.value);
+    }
+
 
 
 
@@ -829,7 +875,6 @@ export function Strategy(props) {
         setCustomer(statid);
         console.log(customer);
     }
-
 
     const searchSubmit = data => {
 
@@ -884,7 +929,6 @@ export function Strategy(props) {
       ]
     const searchnetworkid = (fdata) => {
         var arr = [];
-        alert(fdata);
 
         const requestOptions = {
             method: 'GET',
@@ -921,10 +965,54 @@ export function Strategy(props) {
             });
     }
 
+    const getAllSuperProviderNetworkIds = (fdata) => {
+        var arr = [];
+
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        };
+
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/superprovidernetworkids`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                console.log(response);
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    setPlanidsList([]);
+                    // console.log(planidslist);
+                    return Promise.reject(error);
+
+                } else {
+                    console.log(data.data);
+                    setSuperOptions(data.data);
+                    // console.log(superoptions);
+
+
+                }
+
+
+
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+    }
+
+const[value,setValue]=useState(null);
+
+
+const [selectedOption, setSelectedOption] = useState(null);
 
     const mahesh=(e)=>{
-        console.log(e.value);
-        searchnetworkid(e.value)
+        console.log(e);
+        alert(e.value)
+        setValue(e.value);
+        // searchnetworkid(e.value)
     }
 
 
@@ -1111,7 +1199,7 @@ export function Strategy(props) {
                                 <div className="form-group">
                                     <small>Tier 1</small>
                                     <input type="date"  {...register("coverage_eff_date_1", {
-                                        required: true,
+                                        // required: true,
                                     })} className="form-control" name="coverage_eff_date_1" id="" />
                                     {errors.coverage_eff_date_1?.type === 'required' && <p role="alert" className="notvalid">Tier 1 date  required</p>}
 
@@ -1121,7 +1209,7 @@ export function Strategy(props) {
                                 <div className="form-group ">
                                     <small>Tier 2</small>
                                     <input type="date" {...register("coverage_eff_date_2", {
-                                        required: true,
+                                        // required: true,
                                     })} className="form-control" name="coverage_eff_date_2" id="" />
                                     {errors.coverage_eff_date_2?.type === 'required' && <p role="alert" className="notvalid">Tier 2 date  required</p>}
 
@@ -1131,7 +1219,7 @@ export function Strategy(props) {
                                 <div className="form-group ">
                                     <small>Tier 3</small>
                                     <input type="date" {...register("coverage_eff_date_3", {
-                                        required: true,
+                                        // required: true,
                                     })} className="form-control" name="coverage_eff_date_3" id="" />
                                     {errors.coverage_eff_date_3?.type === 'required' && <p role="alert" className="notvalid">Tier 3 date  required</p>}
 
@@ -1148,7 +1236,7 @@ export function Strategy(props) {
                                     <small>&nbsp;</small>
 
                                     <input type="text" {...register("plan_id_1", {
-                                        required: true,
+                                        // required: true,
                                         pattern: /^(0|[1-9][0-9]*)$/,
                                     })} className="form-control" name="plan_id_1" id="" />
                                     <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal"><span className="fa fa-search form-icon"></span></a>
@@ -1169,7 +1257,7 @@ export function Strategy(props) {
                                     <div className="form-group mb-3">
                                         <small>&nbsp;</small>
                                         <input type="text" {...register("plan_id_2", {
-                                            required: true,
+                                            // required: true,
                                             pattern: /^(0|[1-9][0-9]*)$/,
 
 
@@ -1186,7 +1274,7 @@ export function Strategy(props) {
                                         <small>&nbsp;</small>
 
                                         <input type="text" {...register("plan_id_3", {
-                                            required: true,
+                                            // required: true,
                                             pattern: /^(0|[1-9][0-9]*)$/,
                                         })} className="form-control" name="plan_id_3" id="" />
                                         <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal"><span className="fa fa-search form-icon"></span></a>
@@ -1202,7 +1290,7 @@ export function Strategy(props) {
                             <div className="col-md-3">
                                 <div className="form-group mb-3">
                                     <input type="text" {...register("misc_data_1", {
-                                        required: true,
+                                        // required: true,
                                     })} className="form-control" name="misc_data_1" id="" />
                                     {errors.misc_data_1?.type === 'required' && <p role="alert" className="notvalid">miscellaneous data is  required</p>}
 
@@ -1211,7 +1299,7 @@ export function Strategy(props) {
                             <div className="col-md-3">
                                 <div className="form-group mb-3">
                                     <input type="text" {...register("misc_data_2", {
-                                        required: true,
+                                        // required: true,
                                     })} className="form-control" name="misc_data_2" id="" />
                                     {errors.misc_data_2?.type === 'required' && <p role="alert" className="notvalid">miscellaneous data is  required</p>}
 
@@ -1220,7 +1308,7 @@ export function Strategy(props) {
                             <div className="col-md-3">
                                 <div className="form-group mb-3">
                                     <input type="text" {...register("misc_data_3", {
-                                        required: true,
+                                        // required: true,
                                     })} className="form-control" name="misc_data_3" id="" />
                                     {errors.misc_data_3?.type === 'required' && <p role="alert" className="notvalid">miscellaneous data is  required</p>}
 
@@ -1237,7 +1325,7 @@ export function Strategy(props) {
                                     <small>Provider Options</small> 
                                     {/* Column not there in customer table */}
                                     <select className="form-select" {...register("pharmacy_exceptions_flag", {
-                                        required: true
+                                        // required: true
                                     })} name="pharmacy_exceptions_flag">
                                         <option value="">--select--</option>
                                         <option value="1">No Provider Check</option>
@@ -1256,7 +1344,20 @@ export function Strategy(props) {
                                         required: true,
                                     })} name="super_rx_network_id" id="" /> */}
                                     {/* <a href="" data-bs-toggle="modal" data-bs-target="#supernetwork"><span className="fa fa-search form-icon"></span></a> */}
-                                    <Select options={options}   onChange={(e) => mahesh(e)} />
+                                    <Select    
+ options={superoptions}   name="super_rx_network_id" value={value}  {...register('super_rx_network_id')}  onChange={(e) => mahesh(e)}  />
+                               
+
+
+                               
+
+                               
+
+                                
+
+
+                                   
+
 
                                     {errors.super_rx_network_id?.type === 'required' && <p role="alert" className="notvalid">Super Provider Networks field is   required</p>}
 
@@ -1272,7 +1373,7 @@ export function Strategy(props) {
                                 <div className="form-group mb-3">
                                     <small>Prescriber Options</small>
                                     <select className="form-select" {...register("prescriber_exceptions_flag", {
-                                        required: true,
+                                        // required: true,
                                     })} name="prescriber_exceptions_flag" >
                                         <option value="">--select--</option>
                                         <option value="1">None</option>
@@ -1289,7 +1390,7 @@ export function Strategy(props) {
                                 <div className="form-group mb-3">
                                     <small>Prescriber Options 2</small>
                                     <select className="form-select" {...register("prescriber_exceptions_flag", {
-                                        required: true,
+                                        // required: true,
                                     })} name="prescriber_exceptions_flag">
                                         <option value="">--select--</option>
                                         <option value="1">None</option>
@@ -1308,7 +1409,7 @@ export function Strategy(props) {
 
                                     {/* // not included in DB */}
                                     <select className="form-select" {...register("Prescriber_Grouping_id", {
-                                        required: true,
+                                        // required: true,
                                     })} name="Prescriber_Grouping_id">
                                         <option value="">--select--</option>
                                         <option value="1">None</option>
@@ -1463,7 +1564,7 @@ export function Eligibility(props) {
     const searchSubmit = data => {
 
 
-        alert('mahesh');
+        // alert('mahesh');
 
     }
 
