@@ -119,19 +119,21 @@ export default function Dashboard() {
                                 <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Recent</a>
                                 <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}> Projections</a>
                             </div>
-                        </div>
+                        </div> */}
 
                         <div className={'dashboard-nav-dropdown' + (['subpath', 'subpath2'].includes(currentpath) ? ' show' : '')}>
                             <a href="#!" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
                                 <i className="fa-solid fa-handshake"></i> Accumulated Benefits </a>
                             <div className='dashboard-nav-dropdown-menu'>
-                                <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>All</a>
-                                <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Recent</a>
-                                <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}> Projections</a>
+                                <a href="/dashboard/accumulated-benefits/all" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Accumulated benefits</a>
+                                <a href="/dashboard/accumulated-benefits/gpi-exclusion" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>GPI exclusion lists</a>
+                                <a href="/dashboard/accumulated-benefits/ndc-exclusion" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}> NDC exclusion lists</a>
+                                <a href="/dashboard/accumulated-benefits/major-medical-maximums" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Major medical maximums</a>
+                                
                             </div>
                         </div>
 
-                        <div className={'dashboard-nav-dropdown' + (['subpath', 'subpath2'].includes(currentpath) ? ' show' : '')}>
+                        {/* <div className={'dashboard-nav-dropdown' + (['subpath', 'subpath2'].includes(currentpath) ? ' show' : '')}>
                             <a href="#!" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
                                 <i className="fa-solid fa-compass-drafting"></i> Plan Design </a>
                             <div className='dashboard-nav-dropdown-menu'>

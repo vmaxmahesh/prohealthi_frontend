@@ -48,6 +48,10 @@ import Benefits from './pages/dashboard/code/Benefits';
 import DiagnosisValidation from './pages/dashboard/validation_lists/DiagnosisValidation';
 import SpecialityValidation from './pages/dashboard/validation_lists/SpecialityValidation';
 import EligibilityValidation from './pages/dashboard/validation_lists/EligibilityValidation';
+import ProviderValidation from './pages/dashboard/validation_lists/ProviderValidation';
+import PrescriberValidation from './pages/dashboard/validation_lists/PrescriberValidation';
+import DiagnosisPrioritization from './pages/dashboard/validation_lists/DiagnosisPrioritization';
+import AccumulatedBenefits from './pages/dashboard/accumulated_benefits/AccumulatedBenefits';
 
 function setToken(userToken) {
   sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -330,7 +334,23 @@ function App() {
           <Route path="validation-lists/eligibility" element={<EligibilityValidation />}>
           </Route>
 
+          <Route path="validation-lists/provider" element={<ProviderValidation />}>
+          </Route>
+
+          <Route path="validation-lists/prescriber" element={<PrescriberValidation />}>
+          </Route>
+
+          <Route path="validation-lists/diagnosis-prioritization" element={<DiagnosisPrioritization />}>
+          </Route>
+
           {/* validation list route ends  */}
+
+          {/* Accumulated Benefit Route Starts  */}
+
+          <Route path="accumulated-benefits/all" element={<AccumulatedBenefits />}>
+          </Route>
+
+          {/* Accumulated Benefit Route Ends  */}
 
 
         </Route>
