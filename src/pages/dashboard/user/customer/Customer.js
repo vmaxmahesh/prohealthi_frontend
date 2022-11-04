@@ -891,7 +891,7 @@ export function Strategy(props) {
 
                             </div>
                             <div className="col-md-3">
-                                <div className="form-group mb-3">
+                                <div className="form-group">
                                     <small>Tier 1</small>
                                     <input type="date"  {...register("coverage_eff_date_1", {
                                         required: true,
@@ -901,7 +901,7 @@ export function Strategy(props) {
                                 </div>
                             </div>
                             <div className="col-md-3">
-                                <div className="form-group mb-3">
+                                <div className="form-group">
                                     <small>Tier 2</small>
                                     <input type="date" {...register("coverage_eff_date_2", {
                                         required: true,
@@ -911,7 +911,7 @@ export function Strategy(props) {
                                 </div>
                             </div>
                             <div className="col-md-3">
-                                <div className="form-group mb-3">
+                                <div className="form-group">
                                     <small>Tier 3</small>
                                     <input type="date" {...register("coverage_eff_date_3", {
                                         required: true,
@@ -928,6 +928,7 @@ export function Strategy(props) {
                             </div>
                             <div className="col-md-3">
                                 <div className="form-group mb-3">
+                                <small>&nbsp;</small>
                                     <input type="text" {...register("plan_id_1", {
                                         required: true,
                                         pattern: /^(0|[1-9][0-9]*)$/,
@@ -948,6 +949,7 @@ export function Strategy(props) {
                             <div className="col-md-3">
                                 <div className="form-group mb-3">
                                     <div className="form-group mb-3">
+                                        <small>&nbsp;</small>
                                         <input type="text" {...register("plan_id_2", {
                                             required: true,
                                             pattern: /^(0|[1-9][0-9]*)$/,
@@ -963,6 +965,7 @@ export function Strategy(props) {
                             <div className="col-md-3">
                                 <div className="form-group mb-3">
                                     <div className="form-group mb-3">
+                                    <small>&nbsp;</small>
                                         <input type="text" {...register("plan_id_3", {
                                             required: true,
                                             pattern: /^(0|[1-9][0-9]*)$/,
