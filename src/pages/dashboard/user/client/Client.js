@@ -1691,7 +1691,7 @@ export function Coverage(params) {
                                                 required: true,
                                                 pattern: /^(0|[1-9][0-9]*)$/,
 
-                                            })} id="" placeholder="Enter" />
+                                            })} id="" placeholder="Enter Policy Ann. Day" />
                                             {errors.policy_ann_day?.type === 'required' && <p role="alert" className="notvalid">Policy Annual Day  is  required</p>}
                                             {errors.policy_ann_day?.type === 'pattern' && <p role="alert" className="notvalid">Enter Number Only..</p>}
 

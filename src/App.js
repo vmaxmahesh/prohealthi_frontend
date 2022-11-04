@@ -45,6 +45,7 @@ import ExceptionReason from './pages/dashboard/exceptionlist/ExceptionReason';
 import BenefitList from './pages/dashboard/exceptionlist/BenefitList';
 import BenefitDerivation from './pages/dashboard/exceptionlist/BenefitDerivation';
 import Benefits from './pages/dashboard/code/Benefits';
+import Dashboardpage from './pages/dashboard/dashboardpage';
 
 function setToken(userToken) {
   sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -69,13 +70,14 @@ function App() {
   return (
 
     <>
-
-
-      <Routes>
+      <Routes>  
         <Route exact path="/">
           {/* <Home /> */}
         </Route>
         <Route path="/dashboard" element={<Dashboard />}>
+          {/* <Route index element={<Navigate to="d" replace />} />
+
+          <Route path='d' element={<Dashboardpage />} /> */}
           <Route path='user/client' element={<Client />} >
             <Route index element={<Navigate to="identification" replace />} />
             <Route path='identification' element={<Ci />} />
@@ -163,7 +165,7 @@ function App() {
           <Route path="code/provider-type" element={<ProviderType />}>
           </Route>
 
-          
+
 
 
           <Route path='user/searchprovider' element={<SearchProvider />}>

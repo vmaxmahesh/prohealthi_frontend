@@ -21,6 +21,9 @@ code {
   top: 0;
   z-index: 10;
 }
+.active{
+  background-color: #65c1d3;
+}
 
 .tblactiverow {
   background-color: #0dcaf0;

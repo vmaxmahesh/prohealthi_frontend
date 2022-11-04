@@ -125,7 +125,9 @@ export default function NDC() {
             });
     }
 
-
+    const AddForm = () => {
+        scollToRef.current.scrollIntoView()
+    }
 
     useEffect(() => { }, [ndcData, ndcClass, selctedNdc]);
 
@@ -143,10 +145,18 @@ export default function NDC() {
                         </ul>
                     </div>
                 </div>
-                <div className="col-md-6 mb-3">
+                <div className="col-md-2 mb-3 ">
+                </div>
+                {/* <div className="col-md-2 mb-3"></div> */}
+                <div className="col-md-2 mb-3 ">
+
+                </div>
+                <div className="col-md-2 mb-3 right text-end">
                     <div className="breadcrum ">
                         <ul>
-                             <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li> 
+                            {/* <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li> */}
+                            <button className="btn btn-sm btn-warning" id="show" onClick={e => AddForm()}><i className="fa plus-circle"></i> Add NDC List</button>
+
                         </ul>
                     </div>
                 </div>
@@ -200,6 +210,7 @@ function SearchNDC(props) {
 }
 
 function ShowNDCList(props) {
+    const scollToRef = useRef();
 
     useEffect(() => { }, [props.selctedNdc]);
     // //  console.log(props.selctedNdc);
@@ -225,17 +236,17 @@ function ShowNDCList(props) {
     const [ncdListData, setNcdListData] = useState();
     const [show, setShow] = useState("none");
     const handleShow = () => setShow("block");
+
+    
     return (
         <>
             <div className="card mt-3 mb-3">
                 <div className="card-body">
                     <div className="row">
-                        <div className="col-md-8 mb-2">
+                        <div className="col-md-12 mb-2">
                             <h5>NDC Exception List</h5>
                         </div>
-                        <div className="col-md-4 mb-3 text-end">
-                            <button className="btn btn-sm btn-warning" id="show" onClick={e => handleShow()}><i className="fa plus-circle"></i> Add NDC List</button>
-                        </div>
+
                         <div className="col-md-4">
                             <div className="card mt-3 mb-3">
                                 <div className="card-body">

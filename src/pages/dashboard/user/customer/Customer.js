@@ -554,7 +554,7 @@ export function Identification(props) {
                                                 required: true,
                                                 pattern: /^(0|[1-9][0-9]*)$/,
 
-                                            })} name="policy_anniv_day" className="form-control" id="" placeholder="Enter" />
+                                            })} name="policy_anniv_day" className="form-control" id="" placeholder="Enter Policy Ann. Day" />
                                             {errors.policy_anniv_day?.type === 'required' && <p role="alert" className="notvalid">Policy Ann. Month  is  required</p>}
                                             {errors.policy_anniv_day?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
 

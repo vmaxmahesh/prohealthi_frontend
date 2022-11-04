@@ -96,7 +96,7 @@ export default function Clientgroup() {
                             <li><i className="fas fa-angle-right"></i></li>
                             <li><a href="">Users Data</a></li>
                             <li><i className="fas fa-angle-right"></i></li>
-                            <li><a href="">Client</a></li>
+                            <li><a href="">Client/Client Group</a></li>
                         </ul>
                     </div>
                 </div>
@@ -110,7 +110,7 @@ export default function Clientgroup() {
             </div>
 
             <div className="col-md-12 mb-3">
-                <h4 style={{ fontWeight: '600' }}>Search Client/Group</h4>
+                <h4 style={{ fontWeight: '600' }}>Client/Client Group</h4>
             </div>
 
             <div className="card mt-3 mb-3">
@@ -148,12 +148,12 @@ export default function Clientgroup() {
                                 </div>
                             </div> */}
 
-                            <div className="col-md-12">
+                            {/* <div className="col-md-12">
                                 <div className="form-group">
                                     <input type="checkbox" id="Return" className="d-none" />
                                     <label htmlFor="Return">Return all groups to my list</label>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </form>
 
@@ -1308,7 +1308,7 @@ export function Identification(params) {
                                             <small>Policy Ann. Day</small>
                                             <input type="text" className="form-control" name="policy_ann_day" {...register('policy_ann_day', {
                                                 required: true,
-                                            })} id="" placeholder="Enter" />
+                                            })} id="" placeholder="Enter Policy Ann. Day" />
                                             {errors.policy_ann_day?.type === 'required' && <p role="alert" className="notvalid">Policy Ann. Day is  required</p>}
 
                                         </div>
