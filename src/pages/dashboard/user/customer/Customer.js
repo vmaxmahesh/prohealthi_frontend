@@ -1121,8 +1121,8 @@ const [selectedOption, setSelectedOption] = useState(null);
                                         <div className="col-md-5  align-items-center">
                                             <div className="form-group mb-4">
                                                 <small>Effective To :</small>
-                                                <input className="align-items-right" type="date"  {...register2("effective_to", {
-                                                })} className="form-control" name="effective_to" id="" />
+                                                <input className="form-control align-items-right" type="date"  {...register2("effective_to", {
+                                                })}  name="effective_to" id="" />
                                                 {errors2.effective_to?.type === 'required' && <p role="alert" className="notvalid">Effective To date required</p>}
 
                                             </div>
