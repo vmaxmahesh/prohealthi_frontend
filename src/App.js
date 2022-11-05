@@ -55,6 +55,8 @@ import AccumulatedBenefits, { ExclusionLimitation, Deductible } from './pages/da
 import GPIExclusion from './pages/dashboard/accumulated_benefits/GPIExclusion';
 import NDCExclusion from './pages/dashboard/accumulated_benefits/NDCExclusion';
 import MajorMedicalMaximums from './MajorMedicalMaximums';
+import DrugDatabase, { Distribution, General, IDCodes, Pricing as DrugInformationPricing } from './pages/dashboard/drug_information/DrugDatabase';
+import NDCCrossReference from './pages/dashboard/drug_information/NDCCrossReference';
 
 function setToken(userToken) {
   sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -363,10 +365,22 @@ function App() {
           </Route>
 
           <Route path="accumulated-benefits/major-medical-maximums" element={<MajorMedicalMaximums />}>
-          </Route>
-          
-
+          </Route>        
           {/* Accumulated Benefit Route Ends  */}
+
+          {/* Drug Information Route starts */}
+          <Route path="drug-information/drug-database" element={<DrugDatabase />}>
+            <Route index element={<Navigate to="general" replace/>} />
+            <Route path='general' element={<General />} />
+            <Route path='id-codes' element={<IDCodes />} />
+            <Route path='distribution' element={<Distribution />} />
+            <Route path='pricing' element={<DrugInformationPricing />} />
+          </Route>
+
+          <Route path='drug-information/ndc-gpi-cross-reference' element={<NDCCrossReference />}>
+          </Route>
+
+          {/* Drug information route ends */}
 
 
         </Route>
