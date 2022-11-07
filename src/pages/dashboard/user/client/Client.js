@@ -448,28 +448,28 @@ export function Indicators(params) {
                             </div>
                             <div className="col-md-6 mb-2">
                                 <small>Maximum Number Of Transactions Allowed For An Interim..</small>
-                                <select className="form-select" {...register("max_no_of_transaction_allowed", {
+                                <select className="form-select" {...register("max_num_trans_interim_elig", {
                                     required: true,
-                                })} name='max_no_of_transaction_allowed'>
+                                })} name='max_num_trans_interim_elig'>
                                     <option value="">--select-- </option>
                                     <option value="1">option 1</option>
                                     <option value="2">option 2</option>
                                     <option value="3">option 3</option>
                                 </select>
-                                {errors.max_no_of_transaction_allowed?.type === 'required' && <p role="alert" className="notvalid">Maximum Number Of Transactions Allowed For An Interim is  required</p>}
+                                {errors.max_num_trans_interim_elig?.type === 'required' && <p role="alert" className="notvalid">Maximum Number Of Transactions Allowed For An Interim is  required</p>}
 
                             </div>
                             <div className="col-md-6 mb-2">
                                 <small>Maximum Number Of Days That An Interim Member Will Be..</small>
-                                <select className="form-select" {...register("max_no_of_days", {
+                                <select className="form-select" {...register("max_days_interim_elig", {
                                     required: true,
-                                })} name="max_no_of_days">
+                                })} name="max_days_interim_elig">
                                     <option value="">--select--</option>
                                     <option value="1">option 1</option>
                                     <option value="2">option 2</option>
                                     <option value="3">option 3</option>
                                 </select>
-                                {errors.max_no_of_transaction_allowed?.type === 'required' && <p role="alert" className="notvalid">Maximum Number Of Days That An Interim Member Will Be is  required</p>}
+                                {errors.max_days_interim_elig?.type === 'required' && <p role="alert" className="notvalid">Maximum Number Of Days That An Interim Member Will Be is  required</p>}
 
                             </div>
 
