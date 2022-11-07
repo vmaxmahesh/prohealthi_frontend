@@ -25,6 +25,8 @@ export default function NDCExclusion()
                 </div>
             </div>
             <SearchNDCExclusion />
+            <NDCExclusionList />
+            <NDCExclusionForm />
         </>
     )
 }
@@ -46,7 +48,7 @@ function SearchNDCExclusion()
                     </div>
                 </div>
             </div> 
-            <NDCExclusionList />
+          
         </>
     )
 }
@@ -104,7 +106,7 @@ function NDCExclusionList()
                     </div>
                 </div>
             </div> 
-            <NDCExclusionForm />
+            
         </>
     )
 }

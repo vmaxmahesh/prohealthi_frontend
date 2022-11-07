@@ -57,6 +57,9 @@ import NDCExclusion from './pages/dashboard/accumulated_benefits/NDCExclusion';
 import MajorMedicalMaximums from './MajorMedicalMaximums';
 import DrugDatabase, { Distribution, General, IDCodes, Pricing as DrugInformationPricing } from './pages/dashboard/drug_information/DrugDatabase';
 import NDCCrossReference from './pages/dashboard/drug_information/NDCCrossReference';
+import PricingStrategies from './pages/dashboard/strategies/PricingStrategies';
+import CopayStrategy from './pages/dashboard/strategies/CopayStrategy';
+import AccumulatedBenefitStrategy from './pages/dashboard/strategies/AccumulatedBenefitStrategy';
 
 function setToken(userToken) {
   sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -379,8 +382,13 @@ function App() {
 
           <Route path='drug-information/ndc-gpi-cross-reference' element={<NDCCrossReference />}>
           </Route>
-
           {/* Drug information route ends */}
+
+          {/* strategies route started */}
+          <Route path="strategies/pricing-startegy" element={<PricingStrategies />} />
+          <Route path="strategies/copay-strategy" element={<CopayStrategy />} />
+          <Route path="strategies/accumulated-benefits-strategy" element={<AccumulatedBenefitStrategy />} />
+          {/* strategies route ends  */}
 
 
         </Route>
