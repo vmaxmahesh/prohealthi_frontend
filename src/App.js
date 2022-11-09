@@ -19,7 +19,7 @@ import Membership, { SearchById, SearchByName } from './pages/dashboard/members/
 import PlanAuthorisation, { Authorisation, PANotes, Pricing } from './pages/dashboard/members/PlanAuthorisation';
 import PlanValidation from './pages/dashboard/members/PlanValidation';
 import useToken from './hooks/useToken';
-import Benifits from './pages/dashboard/code/Benifits';
+import Benifits from './pages/dashboard/code/Benefits';
 import Procedure from './pages/dashboard/code/Procedure';
 import Diagnosis from './pages/dashboard/code/Diagnosis';
 import Reason from './pages/dashboard/code/Reason';
@@ -47,6 +47,15 @@ import SuperProvider from './pages/dashboard/provider/SuperProvider';
 import Prescriber from './pages/dashboard/prescriber/Prescriber'
 
 
+import BenefitDerivation from './pages/dashboard/exceptionlist/BenefitDerivation';
+import Benefits from './pages/dashboard/code/Benefits';
+import DiagnosisValidation from './pages/dashboard/validation_lists/DiagnosisValidation';
+import SpecialityValidation from './pages/dashboard/validation_lists/SpecialityValidation';
+import EligibilityValidation from './pages/dashboard/validation_lists/EligibilityValidation';
+import ProviderValidation from './pages/dashboard/validation_lists/ProviderValidation';
+import PrescriberValidation from './pages/dashboard/validation_lists/PrescriberValidation';
+import DiagnosisPrioritization from './pages/dashboard/validation_lists/DiagnosisPrioritization';
+// import AccumulatedBenefits from './pages/dashboard/accumulated_benefits/AccumulatedBenefits';
 
 function setToken(userToken) {
   sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -71,13 +80,14 @@ function App() {
   return (
 
     <>
-
-
       <Routes>
         <Route exact path="/">
           {/* <Home /> */}
         </Route>
         <Route path="/dashboard" element={<Dashboard />}>
+          {/* <Route index element={<Navigate to="d" replace />} />
+
+          <Route path='d' element={<Dashboardpage />} /> */}
           <Route path='user/client' element={<Client />} >
             <Route index element={<Navigate to="identification" replace />} />
             <Route path='identification' element={<Ci />} />
@@ -137,7 +147,7 @@ function App() {
 
           </Route>
 
-          <Route path="code/benefits" element={<Benifits />}>
+          <Route path="code/benefits" element={<Benefits />}>
 
           </Route>
 
@@ -189,16 +199,12 @@ function App() {
 
             <Route path='network' element={<Network />} />
             <Route path='providers' element={<Providers />} />
-
-
-
           </Route>
 
 
 
           <Route path='provider/flexiblenetworks' element={<FlexibleNetworks />}>
             <Route index element={<Navigate to="network" replace />} />
-
             <Route path='network' element={<Network />} />
             <Route path='rules' element={<Rules />} />
 
@@ -308,6 +314,9 @@ function App() {
           <Route path="exception-list/benefit-list" element={<BenefitList />}>
           </Route>
 
+          <Route path="exception-list/benefit-derivation" element={<BenefitDerivation />}>
+          </Route>
+
 
           {/* exception list route ends  */}
 
@@ -341,7 +350,33 @@ function App() {
 
 
 
-          {/* exception list route starts  */}
+          {/* validation list route starts  */}
+          <Route path="validation-lists/diagnosis" element={<DiagnosisValidation />}>
+          </Route>
+
+          <Route path="validation-lists/speciality" element={<SpecialityValidation />}>
+          </Route>
+
+          <Route path="validation-lists/eligibility" element={<EligibilityValidation />}>
+          </Route>
+
+          <Route path="validation-lists/provider" element={<ProviderValidation />}>
+          </Route>
+
+          <Route path="validation-lists/prescriber" element={<PrescriberValidation />}>
+          </Route>
+
+          <Route path="validation-lists/diagnosis-prioritization" element={<DiagnosisPrioritization />}>
+          </Route>
+
+          {/* validation list route ends  */}
+
+          {/* Accumulated Benefit Route Starts  */}
+
+          {/* <Route path="accumulated-benefits/all" element={<AccumulatedBenefit />}>
+          </Route> */}
+
+          {/* Accumulated Benefit Route Ends  */}
 
 
         </Route>

@@ -113,7 +113,7 @@ function Customer() {
                 <div className="col-md-6 mb-3">
                     <div className="breadcrum ">
                         <ul>
-                            <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li>
+                             <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li> 
                         </ul>
                     </div>
                 </div>
@@ -127,8 +127,8 @@ function Customer() {
                                 <div className="row mb-2">
                                     <div className="col-md-12 mb-3">
                                         <div className="form-group">
-                                            <small>Search by Customer ID/Name</small>
-                                            <input type="text" onKeyUp={(e) => searchCustomer(e)} className="form-control" placeholder='Start typing Customer ID or Name' {...register("customerid")} />
+                                            <small>Search by customer ID/name</small>
+                                            <input type="text" onKeyUp={(e) => searchCustomer(e)} className="form-control" placeholder='Start typing customer ID or name' {...register("customerid")} />
                                             {/* {errors.customerid && <span><p className='notvalid'>This field is required</p></span>} */}
                                         </div>
                                     </div>
@@ -672,7 +672,7 @@ export function Identification(props) {
                                                 required: true,
                                                 pattern: /^(0|[1-9][0-9]*)$/,
 
-                                            })} name="policy_anniv_day" className="form-control" id="" placeholder="Enter" />
+                                            })} name="policy_anniv_day" className="form-control" id="" placeholder="Enter Policy Ann. Day" />
                                             {errors.policy_anniv_day?.type === 'required' && <p role="alert" className="notvalid">Policy Ann. Month  is  required</p>}
                                             {errors.policy_anniv_day?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
 
@@ -1192,7 +1192,9 @@ const [selectedOption, setSelectedOption] = useState(null);
                         </div>
                         <div className="row align-items-center">
                             <div className="col-md-3 align-items-center">
-                                <p className="mt-2">Cov Eff Date:</p>
+                                <p className="mt-2">Coverage
+                                
+                                 Effective Date:</p>
 
                             </div>
                             <div className="col-md-3">
@@ -1411,7 +1413,7 @@ const [selectedOption, setSelectedOption] = useState(null);
                                     <select className="form-select" {...register("Prescriber_Grouping_id", {
                                         // required: true,
                                     })} name="Prescriber_Grouping_id">
-                                        <option value="">--select--</option>
+                                        <option value="">--Select--</option>
                                         <option value="1">None</option>
                                         <option value="2">Validate DEA Code</option>
                                         <option value="3">primary Prescriber Validation</option>
@@ -1754,7 +1756,7 @@ export function Eligibility(props) {
                                 <select className="form-select" {...register("membership_processing_flag", {
                                     required: true,
                                 })} name="membership_processing_flag">
-                                    <option value="">--select--</option>
+                                    <option value="">--Select--</option>
                                     <option value="1">Membership Processing Will Be Done</option>
                                 </select>
                                 {errors.membership_processing_flag?.type === 'required' && <p role="alert" className="notvalid">Membership Processing Flag field is  required</p>}
@@ -1847,7 +1849,7 @@ export function Eligibility(props) {
                                 <select className="form-select" {...register("eligibility_change_log_indicator", {
                                     required: true,
                                 })} name="eligibility_change_log_indicator">
-                                    <option value="">--select--</option>
+                                    <option value="">--Select--</option>
                                     <option value="1">Not Specified</option>
                                     <option value="2">Member Record changes will NOT be logged </option>
                                     <option value="3">Member Record changes will be logged</option>
@@ -1901,7 +1903,7 @@ export function Indicators(props) {
                                 <select className="form-select" {...register("Secondary_Coverage_indicator", {
                                     required: true,
                                 })} name="Secondary_Coverage_indicator">
-                                    <option value="">--select--</option>
+                                    <option value="">--Select--</option>
                                     <option value="1">Not applicable</option>
                                     <option value="2">Reject transactions</option>
                                     <option value="3">pay and report transactions</option>
@@ -1914,7 +1916,7 @@ export function Indicators(props) {
                                 <select className="form-select" {...register("Accumulated_Benefits_Indicator", {
                                     required: true,
                                 })} name="Accumulated_Benefits_Indicator">
-                                    <option value="">--select--</option>
+                                    <option value="">--Select--</option>
                                     <option value="1">Not Specified</option>
                                     <option value="2">Family Accumulation By Patient PIN Number </option>
                                     <option value="3">Family Accumulation By Member ID</option>
@@ -2042,7 +2044,7 @@ export function Indicators(props) {
                                     <select className="form-select" {...register("tax_status", {
                                         required: true,
                                     })} name="tax_status">
-                                        <option value="">--select--</option>
+                                        <option value="">--Select--</option>
                                         <option value="1">Not Specified </option>
                                         <option value="2">Taxable</option>
                                         <option value="3">Tax Exempt</option>

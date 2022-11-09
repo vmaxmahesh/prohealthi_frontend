@@ -13,6 +13,11 @@ export default function NDC() {
     const [selctedNdc, setSelctedNdc] = useState('');
 
     const getNDCItems = (ndcid) => {
+        // ndc_exception_list
+        var test = {};
+        test.ndc_exception_list = ndcid;
+        setSelctedNdc(test);
+
         // //  console.log(customerid);
         const requestOptions = {
             method: 'GET',
@@ -72,6 +77,7 @@ export default function NDC() {
                     return Promise.reject(error);
                 } else {
                     setSelctedNdc(data.data);
+                    console.log(selctedNdc);
                     scollToRef.current.scrollIntoView()
                     return;
                 }
@@ -87,7 +93,6 @@ export default function NDC() {
 
 
     const searchException = (fdata) => {
-
         const requestOptions = {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
@@ -119,7 +124,9 @@ export default function NDC() {
             });
     }
 
-
+    const AddForm = () => {
+        scollToRef.current.scrollIntoView()
+    }
 
     useEffect(() => { }, [ndcData, ndcClass, selctedNdc]);
 
@@ -137,10 +144,18 @@ export default function NDC() {
                         </ul>
                     </div>
                 </div>
-                <div className="col-md-6 mb-3">
+                <div className="col-md-2 mb-3 ">
+                </div>
+                {/* <div className="col-md-2 mb-3"></div> */}
+                <div className="col-md-2 mb-3 ">
+
+                </div>
+                <div className="col-md-2 mb-3 right text-end">
                     <div className="breadcrum ">
                         <ul>
-                            <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li>
+                            {/* <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li> */}
+                            <button className="btn btn-sm btn-warning" id="show" onClick={e => AddForm()}><i className="fa plus-circle"></i> Add NDC List</button>
+
                         </ul>
                     </div>
                 </div>
@@ -161,13 +176,10 @@ export default function NDC() {
 function SearchNDC(props) {
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
-
     const searchException = (fdata) => {
 
         props.searchException(fdata);
     }
-
-
     return (
         <>
             <div className="card mt-3 mb-3">
@@ -194,6 +206,7 @@ function SearchNDC(props) {
 }
 
 function ShowNDCList(props) {
+    const scollToRef = useRef();
 
     useEffect(() => { }, [props.selctedNdc]);
     // //  console.log(props.selctedNdc);
@@ -208,28 +221,28 @@ function ShowNDCList(props) {
 
     const ndcListArray = [];
     for (let i = 0; i < props.ndcListData.length; i++) {
-        ndcListArray.push(<NdcRow ndcRow={props.ndcListData[i]} getNDCItem={getNDCItem} />);
+        ndcListArray.push(<NdcRow ndcRow={props.ndcListData[i]} getNDCItem={getNDCItem} selected={props.selctedNdc} />);
     }
 
     const ndcClassArray = [];
     for (let j = 0; j < props.ndcClassData.length; j++) {
-        ndcClassArray.push(<NdcClassRow ndcClassRow={props.ndcClassData[j]} getNDCItemDetails={getNDCItemDetails} />);
+        ndcClassArray.push(<NdcClassRow ndcClassRow={props.ndcClassData[j]} getNDCItemDetails={getNDCItemDetails} selected={props.selctedNdc} />);
     }
 
     const [ncdListData, setNcdListData] = useState();
     const [show, setShow] = useState("none");
     const handleShow = () => setShow("block");
+
+    
     return (
         <>
             <div className="card mt-3 mb-3">
                 <div className="card-body">
                     <div className="row">
-                        <div className="col-md-8 mb-2">
+                        <div className="col-md-12 mb-2">
                             <h5>NDC Exception List</h5>
                         </div>
-                        <div className="col-md-4 mb-3 text-end">
-                            <button className="btn btn-sm btn-warning" id="show" onClick={e => handleShow()}><i className="fa plus-circle"></i> Add NDC List</button>
-                        </div>
+
                         <div className="col-md-4">
                             <div className="card mt-3 mb-3">
                                 <div className="card-body">
@@ -237,9 +250,8 @@ function ShowNDCList(props) {
                                         <table className="table table-striped table-bordered" style={{ position: 'relative' }}>
                                             <thead className='stickt-thead'>
                                                 <tr>
-                                                    <th>NDC EXCEPTION ID</th>
-                                                    <th>NDC EXCEPTION NAME</th>
-                                                    <th>Action</th>
+                                                    <th>NDC Exception ID</th>
+                                                    <th>NDC Exception Name</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -260,10 +272,9 @@ function ShowNDCList(props) {
                                                 <tr>
                                                     <th>NDC Exception List</th>
                                                     <th>NDC</th>
-                                                    <th>eff. Date</th>
-                                                    <th>New drug status</th>
-                                                    <th>Process rule</th>
-                                                    <th>Action</th>
+                                                    <th>Effective Date</th>
+                                                    <th>New Drug Status</th>
+                                                    <th>Process Rule</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -282,27 +293,46 @@ function ShowNDCList(props) {
 }
 
 function NdcRow(props) {
+
+    useEffect(() => {
+
+    }, [props.selected]);
+
+
+
     return (
         <>
-            <tr>
-                <td>{props.ndcRow.ndc_exception_list}</td>
+            <tr className={(props.selected && props.ndcRow.ndc_exception_list == props.selected.ndc_exception_list ? ' tblactiverow ' : '')}
+
+                onClick={() => props.getNDCItem(props.ndcRow.ndc_exception_list)}
+            >
+                <td >{props.ndcRow.ndc_exception_list}</td>
                 <td>{props.ndcRow.exception_name}</td>
-                <td><button className="btn btn-sm btn-info" id="" onClick={() => props.getNDCItem(props.ndcRow.ndc_exception_list)}><i className="fa fa-eye"></i> View</button></td>
+                {/* <td><button className="btn btn-sm btn-info" id="" ><i className="fa fa-eye"></i> View</button></td> */}
             </tr>
         </>
     )
 }
 
 function NdcClassRow(props) {
+
+    useEffect(() => {
+
+    }, [props.selected]);
+
     return (
         <>
-            <tr>
+            <tr
+                className={(props.selected && props.ndcClassRow.ndc == props.selected.ndc ? ' tblactiverow ' : '')}
+                onClick={() => props.getNDCItemDetails(props.ndcClassRow.ndc)}
+
+            >
                 <td>{props.ndcClassRow.ndc_exception_list}</td>
                 <td>{props.ndcClassRow.ndc}</td>
                 <td>{props.ndcClassRow.effective_date}</td>
                 <td>{props.ndcClassRow.new_drug_status}</td>
                 <td>{props.ndcClassRow.process_rule}</td>
-                <td><button className="btn btn-sm btn-info" id="" onClick={() => props.getNDCItemDetails(props.ndcClassRow.ndc)}><i className="fa fa-eye"></i> View</button></td>
+                {/* <td><button className="btn btn-sm btn-info" id="" ><i className="fa fa-eye"></i> View</button></td> */}
             </tr>
         </>
     )
@@ -317,7 +347,7 @@ function AddNcdList(props) {
     const currentpath = location.pathname.split('/').pop();
 
     useEffect(() => { setSelctedNdc(props.selectedNdc) }, [props.selectedNdc, selctedNdc]);
-    // //  console.log(selctedNdc);
+    //  console.log(selctedNdc);
 
     return (
         <>
@@ -370,7 +400,7 @@ export function ProcessRule(props) {
                                 <div className="col-md-6">
                                     <div className="form-group mb-2">
                                         <small>NDC</small>
-                                        <input type="text" className="form-control" name="" id="" placeholder="NDC" />
+                                        <input type="text" className="form-control" name="" {...register("ndc", {})} id="" placeholder="NDC" />
                                         <a href=""><span className="fa fa-search form-icon"></span></a>
                                     </div>
                                 </div>
@@ -416,7 +446,7 @@ export function ProcessRule(props) {
                                 <div className="col-md-12 mb-4">
                                     <div className="form-group">
                                         <input type="checkbox" id="user" className="d-none" />
-                                        <label htmlFor="user">User will Exit will not be Invoked for this Section</label>
+                                        <label htmlFor="user">User Exit will not be Invoked for this Section</label>
                                     </div>
                                 </div>
 
@@ -461,7 +491,7 @@ export function ProcessRule(props) {
                         <div className="col-md-6 mt-4 mb-4">
                             <div className="form-group">
                                 <input type="checkbox" id="message" className="d-none" />
-                                <label htmlFor="message">Message sent only when Transation is Rejected</label>
+                                <label htmlFor="message">Message sent only when transaction is Rejected</label>
                             </div>
                         </div>
 
@@ -586,7 +616,7 @@ export function RXLimitationPricing(props) {
                                     <input type="text" name="" id="" placeholder="Max" className="form-control" />
                                 </div>
                                 <div className="col-md-4">
-                                    <small>Star Dose Bypass Days</small>
+                                    <small>Starter Dose Bypass Days</small>
                                     <input type="text" name="" id="" placeholder="Max" className="form-control" />
                                 </div>
                             </div>
@@ -596,7 +626,7 @@ export function RXLimitationPricing(props) {
                                     <input type="text" name="" id="" placeholder="Max" className="form-control" />
                                 </div>
                                 <div className="col-md-4">
-                                    <small>Star Dose Maint. by Days</small>
+                                    <small>Strt. Dose Maint. By. Days</small>
                                     <input type="text" name="" id="" placeholder="Max" className="form-control" />
                                 </div>
 
@@ -779,7 +809,7 @@ export function ValidationsOverride(props) {
                             </div>
                         </div>
                         <div className="col-md-3 mb-2">
-                            <small>Specilty</small>
+                            <small>Speciality</small>
                             <div className="form-group">
                                 <input type="text" className="form-control" name="" id="" required="" />
                                 <a href=""><span className="fa fa-search form-icon"></span></a>
@@ -811,8 +841,8 @@ export function ValidationsOverride(props) {
                             <input type="text" className="form-control" name="" id="" />
                         </div>
                         <div className="col-md-4 mb-2">
-                            <small>Denial Override Code</small>
-                            <input type="text" className="form-control" name="" id="" placeholder="Not Allowed" readOnly />
+                            <small>Denial Override</small>
+                            <input type="text" className="form-control" name="" id="" placeholder="None Allowed" readOnly />
                         </div>
 
                         <div className="clearfix mb-2"></div>
@@ -835,13 +865,13 @@ export function ValidationsOverride(props) {
                         <div className="col-md-6 mb-3">
                             <div className="form-group">
                                 <input type="checkbox" id="three" className="d-none" />
-                                <label htmlFor="three">Exclued Original with Generic Drugs</label>
+                                <label htmlFor="three">Exclude Original with Generic Drugs</label>
                             </div>
                         </div>
                         <div className="col-md-6 mb-3">
                             <div className="form-group">
                                 <input type="checkbox" id="four" className="d-none" />
-                                <label htmlFor="four">Exclued Generic Drugs</label>
+                                <label htmlFor="four">Exclude Generic Drugs</label>
                             </div>
                         </div>
 

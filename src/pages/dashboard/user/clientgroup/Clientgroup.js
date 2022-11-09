@@ -97,21 +97,21 @@ export default function Clientgroup() {
                             <li><i className="fas fa-angle-right"></i></li>
                             <li><a href="">Users Data</a></li>
                             <li><i className="fas fa-angle-right"></i></li>
-                            <li><a href="">Client</a></li>
+                            <li><a href="">Client/Client Group</a></li>
                         </ul>
                     </div>
                 </div>
                 <div className="col-md-6 mb-3">
                     <div className="breadcrum ">
                         <ul>
-                            <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li>
+                             <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li> 
                         </ul>
                     </div>
                 </div>
             </div>
 
             <div className="col-md-12 mb-3">
-                <h4 style={{ fontWeight: '600' }}>Search Client/Group</h4>
+                <h4 style={{ fontWeight: '600' }}>Client/Client Group</h4>
             </div>
 
             <div className="card mt-3 mb-3">
@@ -123,10 +123,10 @@ export default function Clientgroup() {
                         <div className="row mb-4">
                             <div className="col mb-2">
                                 <div className="form-group">
-                                    <small>Customer ID/ Client ID/ Group ID/ Group Name</small>
+                                    <small>Customer ID/ client ID/ group ID/ group name</small>
                                     {/* <input type="text" className="form-control" placeholder="Customer ID" name="" id="" /> */}
                                     {/* <a href=""><span className="fa fa-search form-icon"></span></a> */}
-                                    <input type="text" onKeyUp={(e) => searchClientGroup(e)} className="form-control" placeholder='Start typing Customer ID/Client Id or Group Id ' {...register("customerid")} />
+                                    <input type="text" onKeyUp={(e) => searchClientGroup(e)} className="form-control" placeholder='Start typing customer ID/client ID or group ID ' {...register("customerid")} />
                                 </div>
                             </div>
                             {/* <div className="col mb-2">
@@ -149,12 +149,12 @@ export default function Clientgroup() {
                                 </div>
                             </div> */}
 
-                            <div className="col-md-12">
+                            {/* <div className="col-md-12">
                                 <div className="form-group">
                                     <input type="checkbox" id="Return" className="d-none" />
                                     <label htmlFor="Return">Return all groups to my list</label>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </form>
 
@@ -579,7 +579,7 @@ export function Indicators(params) {
                                 <select className="form-select" name="accum_bene_fam_sum_ind" {...register('accum_bene_fam_sum_ind', {
                                     required: true,
                                 })}  >
-                                    <option value="">--select--</option>
+                                    <option value="">--Select--</option>
                                     <option value="1">option 1</option>
                                     <option value="2">option 2</option>
                                 </select>
@@ -591,7 +591,7 @@ export function Indicators(params) {
                                 <select className="form-select" name="secondary_coverage" {...register('secondary_coverage', {
                                     required: true,
                                 })}>
-                                    <option value="">--select--</option>
+                                    <option value="">--Select--</option>
                                     <option value="1">option 1</option>
                                     <option value="2">option 2</option>
                                 </select>
@@ -641,7 +641,7 @@ export function Indicators(params) {
                                     <input type="checkbox" name="bypass" id="html1" {...register('bypass', {
                                         required: true,
                                     })} className="d-none" />
-                                    <label for="html1">Bypass Member Eligibility DAte Edits Against Customer Effective Dates</label>
+                                    <label for="html1">Bypass Member Eligibility Date Edits Against Customer Effective Dates</label>
                                     {errors.bypass?.type === 'required' && <p role="alert" className="notvalid">Bypass Member Eligibility DAte Edits Against Customer Effective Dates field is  required</p>}
 
                                 </div>
@@ -669,7 +669,7 @@ export function Indicators(params) {
                                     <select className="form-select" name="copay_sched_ovr_flag" {...register('copay_sched_ovr_flag', {
                                         required: true,
                                     })}>
-                                        <option value="">--select--</option>
+                                        <option value="">--Select--</option>
                                         <option value="1">option 1</option>
                                         <option value="2">option 2</option>
                                     </select>
@@ -780,7 +780,7 @@ export function Eligibility(params) {
                                 <select className="form-select" {...register("membership_processing_flag", {
                                     required: true,
                                 })} name="membership_processing_flag">
-                                    <option value="">--select--</option>
+                                    <option value="">--Select--</option>
                                     <option value="1">Membership Processing Will Be Done</option>
                                 </select>
                                 {errors.membership_processing_flag?.type === 'required' && <p role="alert" className="notvalid">Membership Processing Flag field is  required</p>}
@@ -838,7 +838,7 @@ export function Eligibility(params) {
                                 <select className="form-select" {...register("eligibility_change_log_indicator", {
                                     required: true,
                                 })} name="eligibility_change_log_indicator">
-                                    <option value="">--select--</option>
+                                    <option value="">--Select--</option>
                                     <option value="1">Not Specified</option>
                                     <option value="2">Member Record changes will NOT be logged </option>
                                     <option value="3">Member Record changes will be logged</option>
