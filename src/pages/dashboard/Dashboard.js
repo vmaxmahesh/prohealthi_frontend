@@ -71,15 +71,14 @@ export default function Dashboard() {
                             </div>
                         </div>
 
-                         {/* <div className={'dashboard-nav-dropdown' + (['subpath', 'subpath2'].includes(currentpath) ? ' show' : '')}>
+                         <div className={'dashboard-nav-dropdown' + (['subpath', 'subpath2'].includes(currentpath) ? ' show' : '')}>
                             <a href="#!" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
                                 <i className="fa-solid fa-prescription-bottle-medical"></i> Drug Information </a>
                             <div className='dashboard-nav-dropdown-menu'>
-                                <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>All</a>
-                                <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Recent</a>
-                                <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}> Projections</a>
+                                <a href="/dashboard/drug-information/drug-database" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Drug Database</a>
+                                <a href="/dashboard/drug-information/ndc-gpi-cross-reference" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>NDC/GPI cross reference</a>
                             </div>
-                            </div> */}
+                            </div>
 
                         <div className={'dashboard-nav-dropdown' + (['subpath', 'subpath2'].includes(currentpath) ? ' show' : '')}>
                             <a href="#!" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
@@ -118,17 +117,17 @@ export default function Dashboard() {
                                 <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Recent</a>
                                 <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}> Projections</a>
                             </div>
-                        </div> 
+                        </div> */}
 
                         <div className={'dashboard-nav-dropdown' + (['subpath', 'subpath2'].includes(currentpath) ? ' show' : '')}>
                             <a href="#!" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
-                                <i className="fa-solid fa-credit-card"></i> Payment Strategies </a>
+                                <i className="fa-solid fa-credit-card"></i>  Strategies </a>
                             <div className='dashboard-nav-dropdown-menu'>
-                                <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>All</a>
-                                <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Recent</a>
-                                <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}> Projections</a>
+                                <Link to='/dashboard/strategies/pricing-startegy' className={'dashboard-nav-dropdown-item' + (currentpath == 'pricing-startegy' ? ' active' : '')}>Pricing Strategy</Link>
+                                <Link to="/dashboard/strategies/copay-strategy" className={'dashboard-nav-dropdown-item' + (currentpath == 'copay-strategy' ? ' active' : '')}>Copay Strategy</Link>
+                                <Link to="/dashboard/strategies/accumulated-benefits-strategy" className={'dashboard-nav-dropdown-item' + (currentpath == 'accumulated-benefits-strategy' ? ' active' : '')}> Accumulated Benefits Strategy</Link>
                             </div>
-                        </div> */}
+                        </div>
 
                         <div className={'dashboard-nav-dropdown' + (['subpath', 'subpath2'].includes(currentpath) ? ' show' : '')}>
                             <a href="#!" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
