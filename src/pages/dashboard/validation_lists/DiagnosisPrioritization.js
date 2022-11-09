@@ -25,7 +25,14 @@ export default function DiagnosisPrioritization() {
                     </div>
                 </div>
             </div>
+           
             <SearchDiagPrioritization />
+
+            <DiagnosisPrioritizationList />
+
+
+            <DiagPrioritizeForm />
+            
         </>
     )
 }
@@ -46,7 +53,7 @@ function SearchDiagPrioritization() {
                     </div>
                 </div>
             </div>
-            <DiagnosisPrioritizationList />
+            {/* <DiagnosisPrioritizationList /> */}
         </>
     )
 }
@@ -85,7 +92,7 @@ function DiagnosisPrioritizationList() {
                     </div>
                 </div>
             </div>
-            <DiagPrioritizeForm />
+
         </>
     )
 }
@@ -129,15 +136,15 @@ function DiagPrioritizeForm() {
                             </div>
                         </div>
                     </div>
-                        <div>click on list and drag new position to assign new priority</div>
+                    <div>click on list and drag new position to assign new priority</div>
                     <Row>
                         <Col>
-                        <DiagPrioritizeDragable />
+                            <DiagPrioritizeDragable />
                         </Col>
                     </Row>
                 </div>
             </div>
-          
+
 
 
         </>
@@ -165,6 +172,12 @@ function DiagPrioritizeDragable() {
                     <li key={index}>{`${index + 1}.  ${item}`}</li>
                 ))}
             </DraggableList>
-        </>     
+        </>
     )
 }
+
+
+
+
+
+

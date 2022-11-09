@@ -26,8 +26,7 @@ export default function Dashboard() {
                                 {/* <a href="/dashboard/exception-list/drug-classification" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Drug Classification</a> */}
                                 {/* <a href="/dashboard/exception-list/procedure" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Procedure</a> */}
                                 {/* <a href="/dashboard/exception-list/reason" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Reason</a> */}
-                                <a href="/dashboard/exception-list/benefit-list" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Benefit List</a>
-                                <a href="/dashboard/exception-list/benefit-derivation" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Benefit Derivation</a>
+                                {/* <a href="/dashboard/exception-list/benefit-list" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Benefit List</a> */}
                                 {/* <a href="/dashboard/exception-list/provider-type-validation" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Provider Type Validation</a>
                                 <a href="/dashboard/exception-list/procedure-code-list" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Procedure Code List</a>
                                 <a href="/dashboard/exception-list/super-benefit-list" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Super Benefit List</a> */}
@@ -37,6 +36,7 @@ export default function Dashboard() {
 
                                 <Link to="/dashboard/exception-list/therapy-class" className={'dashboard-nav-dropdown-item' + (currentpath == 'therapy-class' ? ' active' : '')}>Therapy Class</Link>
                                 <Link to="/dashboard/exception-list/benefit-list" className={'dashboard-nav-dropdown-item' + (currentpath == 'benefit-list' ? ' active' : '')}>Benefit List</Link>
+                                <Link to="/dashboard/exception-list/benefit-derivation" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Benefit Derivation</Link>
 
                             </div>
                         </div>
@@ -56,7 +56,7 @@ export default function Dashboard() {
                             </div>
                         </div>
 
-                        {/* <div className='dashboard-nav-dropdown'>
+                         <div className='dashboard-nav-dropdown'>
                            
                             <Link to="" className='dashboard-nav-item dashboard-nav-dropdown-toggle'>
                                 <i className="fa-solid fa-calendar-days"></i> Third Party Pricing </Link>
@@ -118,7 +118,7 @@ export default function Dashboard() {
                                 <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Recent</a>
                                 <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}> Projections</a>
                             </div>
-                        </div>
+                        </div> 
 
                         <div className={'dashboard-nav-dropdown' + (['subpath', 'subpath2'].includes(currentpath) ? ' show' : '')}>
                             <a href="#!" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
@@ -150,7 +150,7 @@ export default function Dashboard() {
                                 <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Recent</a>
                                 <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}> Projections</a>
                             </div>
-                        </div>
+                    </div> */}
 
                         <div className={'dashboard-nav-dropdown' + (['member', 'membership', 'plan-authorisations', 'plan-validations'].includes(currentpath) ? ' show' : '')}>
                             <a href="#!" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
@@ -163,7 +163,7 @@ export default function Dashboard() {
                             </div>
                         </div>
 
-                        <div className={'dashboard-nav-dropdown' + (['subpath', 'subpath2'].includes(currentpath) ? ' show' : '')}>
+                    {/*    <div className={'dashboard-nav-dropdown' + (['subpath', 'subpath2'].includes(currentpath) ? ' show' : '')}>
                             <a href="#!" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
                                 <i className="fa-solid fa-calendar-days"></i> Price Schedules </a>
                             <div className='dashboard-nav-dropdown-menu'>

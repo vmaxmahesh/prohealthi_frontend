@@ -16,16 +16,11 @@ export default function Client() {
 
     const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
 
-
     const [count, setCount] = useState(null);
     const [displaynav, setDisplayNav] = useState();
     const [identificationcount, setidentificationCount] = useState(null);
 
-
-
-
     const [client, setClient] = useState([]);
-
 
     const [clientlist, setClientList] = useState([]);
 
@@ -33,7 +28,6 @@ export default function Client() {
     const displayNavbuttons = () => {
         setDisplayNav(1);
     }
-
 
 
     const showidentificationform = () => {

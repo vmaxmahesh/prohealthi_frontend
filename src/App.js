@@ -51,7 +51,7 @@ import EligibilityValidation from './pages/dashboard/validation_lists/Eligibilit
 import ProviderValidation from './pages/dashboard/validation_lists/ProviderValidation';
 import PrescriberValidation from './pages/dashboard/validation_lists/PrescriberValidation';
 import DiagnosisPrioritization from './pages/dashboard/validation_lists/DiagnosisPrioritization';
-import AccumulatedBenefits from './pages/dashboard/accumulated_benefits/AccumulatedBenefits';
+// import AccumulatedBenefits from './pages/dashboard/accumulated_benefits/AccumulatedBenefits';
 
 function setToken(userToken) {
   sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -76,7 +76,7 @@ function App() {
   return (
 
     <>
-      <Routes>  
+      <Routes>
         <Route exact path="/">
           {/* <Home /> */}
         </Route>
@@ -348,8 +348,8 @@ function App() {
 
           {/* Accumulated Benefit Route Starts  */}
 
-          <Route path="accumulated-benefits/all" element={<AccumulatedBenefits />}>
-          </Route>
+          {/* <Route path="accumulated-benefits/all" element={<AccumulatedBenefit />}>
+          </Route> */}
 
           {/* Accumulated Benefit Route Ends  */}
 
