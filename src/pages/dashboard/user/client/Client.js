@@ -971,47 +971,47 @@ export function Coverage(params) {
     const [selectedOption, setSelectedOption] = useState(null);
 
 
-    const tiersMove = () => {
-        var val1 = new Date(document.getElementById("tier_1").value);
-        var val2 = new Date(document.getElementById("tier_2").value);
-        var val3 = new Date(document.getElementById("tier_3").value);
+    // const tiersMove = () => {
+    //     var val1 = new Date(document.getElementById("tier_1").value);
+    //     var val2 = new Date(document.getElementById("tier_2").value);
+    //     var val3 = new Date(document.getElementById("tier_3").value);
 
 
-        tier1setValue(val1);
-        tier2setValue(val2);
+    //     tier1setValue(val1);
+    //     tier2setValue(val2);
 
-        // setTier2(val2);
-        console.log(tier1value);
+    //     // setTier2(val2);
+    //     console.log(tier1value);
 
-        console.log(tier2value);
+    //     console.log(tier2value);
 
-        const customdateFormat = (inputDate, format) => {
+    //     const customdateFormat = (inputDate, format) => {
 
-            const date = new Date(inputDate);
+    //         const date = new Date(inputDate);
 
-            //extract the parts of the date
-            const day = date.getDate();
-            const month = date.getMonth() + 1;
-            const year = date.getFullYear();
+    //         //extract the parts of the date
+    //         const day = date.getDate();
+    //         const month = date.getMonth() + 1;
+    //         const year = date.getFullYear();
 
-            //replace the month
-            format = format.replace("MM", month.toString().padStart(2, "0"));
+    //         //replace the month
+    //         format = format.replace("MM", month.toString().padStart(2, "0"));
 
-            //replace the year
-            if (format.indexOf("yyyy") > -1) {
-                format = format.replace("yyyy", year.toString());
-            } else if (format.indexOf("yy") > -1) {
-                format = format.replace("yy", year.toString().substr(2, 2));
-            }
+    //         //replace the year
+    //         if (format.indexOf("yyyy") > -1) {
+    //             format = format.replace("yyyy", year.toString());
+    //         } else if (format.indexOf("yy") > -1) {
+    //             format = format.replace("yy", year.toString().substr(2, 2));
+    //         }
 
-            //replace the day
-            format = format.replace("dd", day.toString().padStart(2, "0"));
+    //         //replace the day
+    //         format = format.replace("dd", day.toString().padStart(2, "0"));
 
-            return format;
+    //         return format;
 
 
-        }
-    }
+    //     }
+    // }
 
 
 
