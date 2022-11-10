@@ -141,17 +141,16 @@ export default function Dashboard() {
                             </div>
                         </div>
 
-                        {/* <div className={'dashboard-nav-dropdown' + (['subpath', 'subpath2'].includes(currentpath) ? ' show' : '')}>
+                        <div className={'dashboard-nav-dropdown' + (['subpath', 'subpath2'].includes(currentpath) ? ' show' : '')}>
                             <a href="#!" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
                                 <i className="fa-solid fa-compass-drafting"></i> Plan Design </a>
                             <div className='dashboard-nav-dropdown-menu'>
-                                <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>All</a>
-                                <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Recent</a>
-                                <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}> Projections</a>
+                                <Link to="/dashboard/plan-design/plan-association" className={'dashboard-nav-dropdown-item' + (currentpath == 'plan-association' ? ' active' : '')}>Plan Association</Link>
+                                <Link to="/dashboard/plan-design/plan-edit" className={'dashboard-nav-dropdown-item' + (currentpath == 'plan-edit' ? ' active' : '')}>Plan Edit</Link>
                             </div>
                     </div> */}
 
-                        <div className={'dashboard-nav-dropdown' + (['member', 'membership', 'plan-authorisations', 'plan-validations'].includes(currentpath) ? ' show' : '')}>
+                         {/* <div className={'dashboard-nav-dropdown' + (['member', 'membership', 'plan-authorisations', 'plan-validations'].includes(currentpath) ? ' show' : '')}>
                             <a href="#!" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
                                 <i className="fa-solid fa-address-card"></i> Membership Data </a>
                             <div className='dashboard-nav-dropdown-menu'>

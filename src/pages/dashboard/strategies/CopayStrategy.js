@@ -27,7 +27,7 @@ export default function CopayStrategy()
             <SearchCopayStrategy />
             <CopayStrategyList />
             <CopayStrategyForm />
-            <CopayStrategyIdentifiers />
+            {/* <CopayStrategyIdentifiers /> */}
         </>
     )
 }
@@ -138,11 +138,11 @@ function CopayStrategyForm()
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        {/* </div>
         </div>
 
         <div className="card mt-3 mb-3">
-            <div className="card-body">
+            <div className="card-body"> */}
             
                 <div className="row mb-2">
                         <div className="col-md-12">
@@ -206,6 +206,21 @@ function CopayStrategyForm()
                     </div>
                         
                 </div>
+                <div className="row mb-2">
+                        <div className="col-md-12">
+                    <h5 className="mb-2">Identifiers</h5>
+                </div>
+                    
+                   
+                <div className="col-md-3 mb-4"> 
+                        <small className="mb-2"></small>
+                        <div className="form-group mt-4">
+                            <input type="checkbox" id="Return2" className="d-none" />
+                            <label htmlFor="Return2">User exit will not be invoked for the strategy </label>
+                        </div>
+                        </div>
+                </div>
+               
                 <div className="col-md-12 ">
                         <div className="float-end">
                     {/* <a href="" className="btn btn-theme pt-2 pb-2" style={{width: "100%"}}>Next</a> */}
