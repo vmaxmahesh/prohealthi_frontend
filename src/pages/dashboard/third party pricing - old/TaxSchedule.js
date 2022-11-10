@@ -3,7 +3,7 @@ export default function TaxSchedule()
 {
     return(
         <>
-        <div className="row">
+          <div className="row">
                     <div className="col-md-6 mb-3">
                         <div className="breadcrum">
                             <ul>
@@ -11,7 +11,7 @@ export default function TaxSchedule()
                                 <li><i className="fas fa-angle-right"></i></li>
                                 <li><a href=""> Third Party Pricing </a></li>
                                 <li><i className="fas fa-angle-right"></i></li>
-                                <li><a href=""> Tax Schedule </a></li>
+                                <li><a href="">Tax Schedules</a></li>
                             </ul>
                         </div>
                     </div>
@@ -22,52 +22,35 @@ export default function TaxSchedule()
                             </ul>
                         </div>
                     </div>
-                </div>                
-                <TaxScheduleList />
-        </>
-    )
-}
-
-function TaxScheduleList()
-{
-    return(
-        <>
-         <div className="card mt-3 mb-3">
-                <div className="card-body">
-                        <div className="col-md-12">
-                            <h5 className="mb-2">Tax Schedule List</h5>
-                        </div>
-                    <div className="row">
-                    <div className="col-md-4">                        
-                        <table className= "table  table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Tax Schedule ID</th>
-                                    <th>Tax Schedule Name</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                               
-                            </tbody>
-                        </table>                        
-                    </div>
-
-                <div className="col-md-8">                
-                        <TaxScheduleForm />
                 </div>
 
-            </div>
-           </div>
-         </div>     
-        </>
-    )
-}
+                <div className="card mt-3 mb-3">
+                    <div className="card-body">
+                        <div className="col-md-12">
+                                <h5 className="mb-2">Tax Schedules</h5>
+                            </div>
+                            <div className="row mb-2">
+                                <div className="col-md-4 mb-3">
+                                    <div className="form-group">
+                                        <small>Tax Schedules ID</small>
+                                       <select className="form-select">
+                                        <option>JaimaicaOTC</option>
+                                    </select>
+                                    </div>
+                                </div>
+                                <div className="col-md-4 mb-3">
+                                    <div className="form-group">
+                                        <small>Tax Schedules Name</small>
+                                    <select className="form-select">
+                                        <option>OC Tax</option>
+                                    </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-function TaxScheduleForm()
-{
-    return(
-        <>
-        <div className="card mt-3 mb-3">
+                    <div className="card mt-3 mb-3">
                        <div className="card-body">
                         
                             <div className="row mb-2">
@@ -80,7 +63,7 @@ function TaxScheduleForm()
                                         <input type="text" className="form-control" placeholder="JaimaicaOTC" name="" id="" required="" autoComplete="off" />
                                     </div>
                                 </div>
-                                <div className="col-md-4 mb-3">
+                                <div className="col-md-10 mb-3">
                                     <div className="form-group">
                                         <small>Tax Schedules Name :</small>
                                     <textarea rows="3" cols="2" className="form-control" placeholder="OC Tax"></textarea>
@@ -113,6 +96,7 @@ function TaxScheduleForm()
                                        
                                     </div>
                                 </div>
+
 
                                 <div className="col-md-3 mb-4">
                                     <div className="form-group">
@@ -161,12 +145,12 @@ function TaxScheduleForm()
                                 </div>
                                 <div className="col-md-12 ">
                                     <div className="float-end">
-                                {/* <a href="" className="btn btn-theme pt-2 pb-2" style={{width: "100%"}}>Next</a> */}
+                                <a href="" className="btn btn-theme pt-2 pb-2" style={{width: "100%"}}>Next</a>
                             </div> 
                             </div>
                             </div>
                        </div>
-                   </div> 
-                   </>
+                   </div>
+        </>
     )
 }

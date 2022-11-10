@@ -138,11 +138,11 @@ function PriceScheduleForm()
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        {/* </div>
         </div>
 
         <div className="card mt-3 mb-3">
-            <div className="card-body">
+            <div className="card-body"> */}
             
                 <div className="row mb-2">
                         <div className="col-md-12">

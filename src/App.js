@@ -29,11 +29,11 @@ import ServiceType from './pages/dashboard/code/ServiceType';
 import ProviderType from './pages/dashboard/code/ProviderType';
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-import PriceSchedule from './pages/dashboard/third party pricing/PriceSchedule';
+import PriceSchedule, { BrandItem, BrandItemGeneric, GetGenericItem } from './pages/dashboard/third party pricing/PriceSchedule';
 import MacList from './pages/dashboard/third party pricing/MacList';
 import TaxSchedule from './pages/dashboard/third party pricing/TaxSchedule';
 import CopayStepSchedule from './pages/dashboard/third party pricing/CopayStepSchedule';
-import CopaySchedule from './pages/dashboard/third party pricing/CopaySchedule';
+import CopaySchedule, { NonGeneric } from './pages/dashboard/third party pricing/CopaySchedule';
 import ProcedureUCRList from './pages/dashboard/third party pricing/ProcedureUCRList';
 import RVAList from './pages/dashboard/third party pricing/RVAList';
 import NDC, { ProcessRule, RXLimitationPricing, ValidationsOverride } from './pages/dashboard/exceptionlist/ndc';
@@ -60,6 +60,8 @@ import NDCCrossReference from './pages/dashboard/drug_information/NDCCrossRefere
 import PricingStrategies from './pages/dashboard/strategies/PricingStrategies';
 import CopayStrategy from './pages/dashboard/strategies/CopayStrategy';
 import AccumulatedBenefitStrategy from './pages/dashboard/strategies/AccumulatedBenefitStrategy';
+import PlanAssociation from './pages/dashboard/plan_design/PlanAssociation';
+import PlanEdit from './pages/dashboard/plan_design/PlanEdit';
 
 function setToken(userToken) {
   sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -237,12 +239,19 @@ function App() {
 
           {/* third party pricing started  */}
           <Route path="third-party-pricing/price-schedule" element={<PriceSchedule />}>
+            <Route index path="brand-item" element={<BrandItem />} />
+            <Route path="brand-item-generic" element={<BrandItemGeneric />} />
+            <Route path="generic-item" element={<GetGenericItem />} />
           </Route>
 
           <Route path="third-party-pricing/copay-schedule" element={<CopaySchedule />}>
+           <Route index path="brand-item" element={<NonGeneric />} />
+           <Route path="brand-item-generic" element={<BrandItemGeneric />} />
+            <Route path="generic-item" element={<GetGenericItem />} />
           </Route>
 
           <Route path="third-party-pricing/copay-step-schedule" element={<CopayStepSchedule />}>
+          
           </Route>
 
           <Route path="third-party-pricing/MAC-list" element={<MacList />}>
@@ -389,6 +398,11 @@ function App() {
           <Route path="strategies/copay-strategy" element={<CopayStrategy />} />
           <Route path="strategies/accumulated-benefits-strategy" element={<AccumulatedBenefitStrategy />} />
           {/* strategies route ends  */}
+
+          {/* plan design route starts  */}
+          <Route path="plan-design/plan-association" element={<PlanAssociation />} />
+          <Route path="plan-design/plan-edit" element={<PlanEdit />} /> 
+          {/* plan design route ends  */}
 
 
         </Route>
