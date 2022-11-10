@@ -148,7 +148,7 @@ export default function Dashboard() {
                                 <Link to="/dashboard/plan-design/plan-association" className={'dashboard-nav-dropdown-item' + (currentpath == 'plan-association' ? ' active' : '')}>Plan Association</Link>
                                 <Link to="/dashboard/plan-design/plan-edit" className={'dashboard-nav-dropdown-item' + (currentpath == 'plan-edit' ? ' active' : '')}>Plan Edit</Link>
                             </div>
-                    </div> */}
+                    </div> 
 
                          {/* <div className={'dashboard-nav-dropdown' + (['member', 'membership', 'plan-authorisations', 'plan-validations'].includes(currentpath) ? ' show' : '')}>
                             <a href="#!" className="dashboard-nav-item dashboard-nav-dropdown-toggle">

@@ -240,19 +240,21 @@ function App() {
 
           {/* third party pricing started  */}
           <Route path="third-party-pricing/price-schedule" element={<PriceSchedule />}>
+            <Route index element={<Navigate to="brand-item" replace />} />
             <Route index path="brand-item" element={<BrandItem />} />
             <Route path="brand-item-generic" element={<BrandItemGeneric />} />
             <Route path="generic-item" element={<GetGenericItem />} />
           </Route>
 
           <Route path="third-party-pricing/copay-schedule" element={<CopaySchedule />}>
-           <Route index path="brand-item" element={<NonGeneric />} />
-           <Route path="brand-item-generic" element={<BrandItemGeneric />} />
+            <Route index element={<Navigate to="brand-item" replace />} />
+            <Route index path="brand-item" element={<NonGeneric />} />
+            <Route path="brand-item-generic" element={<BrandItemGeneric />} />
             <Route path="generic-item" element={<GetGenericItem />} />
           </Route>
 
           <Route path="third-party-pricing/copay-step-schedule" element={<CopayStepSchedule />}>
-          
+
           </Route>
 
           <Route path="third-party-pricing/MAC-list" element={<MacList />}>
@@ -378,12 +380,12 @@ function App() {
           </Route>
 
           <Route path="accumulated-benefits/major-medical-maximums" element={<MajorMedicalMaximums />}>
-          </Route>        
+          </Route>
           {/* Accumulated Benefit Route Ends  */}
 
           {/* Drug Information Route starts */}
           <Route path="drug-information/drug-database" element={<DrugDatabase />}>
-            <Route index element={<Navigate to="general" replace/>} />
+            <Route index element={<Navigate to="general" replace />} />
             <Route path='general' element={<General />} />
             <Route path='id-codes' element={<IDCodes />} />
             <Route path='distribution' element={<Distribution />} />
@@ -402,28 +404,11 @@ function App() {
 
           {/* plan design route starts  */}
           <Route path="plan-design/plan-association" element={<PlanAssociation />} />
-          <Route path="plan-design/plan-edit" element={<PlanEdit />} /> 
+          <Route path="plan-design/plan-edit" element={<PlanEdit />} />
           {/* plan design route ends  */}
 
 
         </Route>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       </Routes>
 
       <ToastContainer />
