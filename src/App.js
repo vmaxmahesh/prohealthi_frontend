@@ -402,7 +402,8 @@ function App() {
           {/* plan design route starts  */}
           <Route path="plan-design/plan-association" element={<PlanAssociation />} />
           <Route path="plan-design/plan-edit" element={<PlanEdit />} > 
-            <Route index path="plan-formulary" element={<PlanFormulary />} />
+          <Route index element={<Navigate to="plan-formulary" replace/>} />
+            <Route  path="plan-formulary" element={<PlanFormulary />} />
             <Route  path="rx-limitations" element={<RxLimitations />} />
             <Route  path="date-limitations" element={<DateLimitations />} />
             <Route path="refill-limitations" element={<RefillLimitations />} />
