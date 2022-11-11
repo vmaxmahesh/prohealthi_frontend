@@ -55,7 +55,15 @@ import EligibilityValidation from './pages/dashboard/validation_lists/Eligibilit
 import ProviderValidation from './pages/dashboard/validation_lists/ProviderValidation';
 import PrescriberValidation from './pages/dashboard/validation_lists/PrescriberValidation';
 import DiagnosisPrioritization from './pages/dashboard/validation_lists/DiagnosisPrioritization';
-// import AccumulatedBenefits from './pages/dashboard/accumulated_benefits/AccumulatedBenefits';
+import AccumulatedBenefits, { ExclusionLimitation, Deductible } from './pages/dashboard/accumulated_benefits/AccumulatedBenefits';
+import GPIExclusion from './pages/dashboard/accumulated_benefits/GPIExclusion';
+import NDCExclusion from './pages/dashboard/accumulated_benefits/NDCExclusion';
+import MajorMedicalMaximums from './MajorMedicalMaximums';
+import DrugDatabase, { Distribution, General, IDCodes, Pricing as DrugInformationPricing } from './pages/dashboard/drug_information/DrugDatabase';
+import NDCCrossReference from './pages/dashboard/drug_information/NDCCrossReference';
+import PricingStrategies from './pages/dashboard/strategies/PricingStrategies';
+import CopayStrategy from './pages/dashboard/strategies/CopayStrategy';
+import AccumulatedBenefitStrategy from './pages/dashboard/strategies/AccumulatedBenefitStrategy';
 
 function setToken(userToken) {
   sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -373,10 +381,40 @@ function App() {
 
           {/* Accumulated Benefit Route Starts  */}
 
-          {/* <Route path="accumulated-benefits/all" element={<AccumulatedBenefit />}>
-          </Route> */}
+          <Route path="accumulated-benefits/all" element={<AccumulatedBenefits />}>
+            <Route index element={<Navigate to="exclusion-limitation" replace />} />
+            <Route path="exclusion-limitation" element={<ExclusionLimitation />} />
+            <Route path="deductible" element={<Deductible />} />
+          </Route>
 
+          <Route path="accumulated-benefits/gpi-exclusion" element={<GPIExclusion />}>
+          </Route>
+
+          <Route path="accumulated-benefits/ndc-exclusion" element={<NDCExclusion />}>
+          </Route>
+
+          <Route path="accumulated-benefits/major-medical-maximums" element={<MajorMedicalMaximums />}>
+          </Route>        
           {/* Accumulated Benefit Route Ends  */}
+
+          {/* Drug Information Route starts */}
+          <Route path="drug-information/drug-database" element={<DrugDatabase />}>
+            <Route index element={<Navigate to="general" replace/>} />
+            <Route path='general' element={<General />} />
+            <Route path='id-codes' element={<IDCodes />} />
+            <Route path='distribution' element={<Distribution />} />
+            <Route path='pricing' element={<DrugInformationPricing />} />
+          </Route>
+
+          <Route path='drug-information/ndc-gpi-cross-reference' element={<NDCCrossReference />}>
+          </Route>
+          {/* Drug information route ends */}
+
+          {/* strategies route started */}
+          <Route path="strategies/pricing-startegy" element={<PricingStrategies />} />
+          <Route path="strategies/copay-strategy" element={<CopayStrategy />} />
+          <Route path="strategies/accumulated-benefits-strategy" element={<AccumulatedBenefitStrategy />} />
+          {/* strategies route ends  */}
 
 
         </Route>
