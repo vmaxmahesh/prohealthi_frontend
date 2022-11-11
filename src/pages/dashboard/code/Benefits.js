@@ -15,8 +15,9 @@ export default function Benefits() {
 
     const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
 
-    const [benifitsData, setBenifitData] = useState({});
+    const [benifitsData, setBenifitData] = useState(false);
     const [benifitsList, setBenifitList] = useState([]);
+    const [adding, setAdding] = useState(false);
 
 
 
@@ -86,15 +87,31 @@ export default function Benefits() {
 
     const getCode = (id) => {
         setBenifitData(id);
-        console.log(benifitsData);        
+        // console.log(benifitsData);
     }
 
     const updateSelected = (data) => {
         setBenifitData(data);
     }
 
+    const AddForm = () => {
+        setBenifitData(false);
+        setAdding(true);
+        reset();
 
-    useEffect(() => { }, [benifitsData]);
+    }
+
+
+    useEffect(() => {
+        if (benifitsData) {
+            setAdding(false);
+
+        } else {
+            setAdding(true);
+            setBenifitData(false);
+        }
+
+    }, [benifitsData, adding]);
 
 
     return (
@@ -115,10 +132,10 @@ export default function Benefits() {
                     <div className="col-md-6 mb-3">
                         <div className="breadcrum ">
                             <ul>
-                                 <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li> 
+                                {/* <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li>  */}
                                 <div className="col-md-3 ms-auto text-end">
-                                    {/* <button className="btn  btn-info" onClick={e => handleShow()}> */}
-                                        {/* Add Benefit Code <i className="fa fa-plus-circle"></i></button> */}
+                                    <button className="btn  btn-info btn-sm" onClick={e => AddForm()}>
+                                        Add Benefit Code <i className="fa fa-plus-circle"></i></button>
                                 </div>
                             </ul>
                         </div>
@@ -154,7 +171,7 @@ export default function Benefits() {
                     <Col md="8" lg="8">
                         <Card>
                             <div ref={scollToRef}>
-                                <AddBenefit show={show} handleClose={handleClose} selected={benifitsData} updateSelected={updateSelected} />
+                                <AddBenefit show={show} adding={adding} handleClose={handleClose} selected={benifitsData} updateSelected={updateSelected} />
 
                             </div>
                         </Card>
@@ -173,7 +190,7 @@ function List(props) {
 
     const benifitList = [];
     for (let i = 0; i < props.benifitsList.length; i++) {
-        benifitList.push(<BenifitRow benifitRowData={props.benifitsList[i]} selected={props.selected} getCode={props.getCode} />);
+        benifitList.push(<BenefitRow benifitRowData={props.benifitsList[i]} selected={props.selected} getCode={props.getCode} />);
     }
 
 
@@ -221,13 +238,12 @@ function BenefitRow(props) {
 }
 
 function AddBenefit(props) {
-    const [code, setCode] = useState();
-    const [description, setDescription] = useState();
+
     const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
 
 
     const addCode = (data) => {
-        console.log(data);
+        // console.log(data);
         const requestOptions = {
             method: 'POST',
             // mode: 'no-cors',
@@ -252,7 +268,7 @@ function AddBenefit(props) {
                 .then(async response => {
                     const isJson = response.headers.get('content-type')?.includes('application/json');
                     const data = isJson && await response.json();
-                    console.log(response);
+                    // console.log(response);
 
                     // check for error response
                     if (!response.ok) {
@@ -260,7 +276,7 @@ function AddBenefit(props) {
                         const error = (data && data.message) || response.status;
                         return Promise.reject(error);
                     } else {
-                        reset();
+                        reset(data.data);
                         toast.success('Added Successfully...!', {
                             position: "top-right",
                             autoClose: 5000,
@@ -288,12 +304,30 @@ function AddBenefit(props) {
         e.preventDefault();
     }
 
-    useEffect(() => { reset(props.selected) }, [props.selected]);
+    useEffect(() => {
+
+
+        if (props.adding) {
+            reset({ benefit_code: '', description: '', new: 1 }, {
+                keepValues: false,
+            })
+        } else {
+            reset(props.selected);
+        }
+
+        if (!props.selected) {
+            reset({ benefit_code: '', description: '', new: 1 }, {
+                keepValues: false,
+            })
+        }
+
+
+    }, [props.selected, props.adding]);
 
     return (
         <>
             <Card>
-                <Card.Header>Benefit Codes</Card.Header>
+                <Card.Header>Benefit Codes {props.adding ? ' - (Adding)' : '- (' + props.selected.benefit_code + ' )'}</Card.Header>
                 <Card.Body>
                     {/* <Form> */}
                     <form onSubmit={handleSubmit(addCode)}>
@@ -301,8 +335,16 @@ function AddBenefit(props) {
                             <div className="col-md-12 mb-2">
                                 <div className="form-group">
                                     <small>Benefit Code</small>
+
+
+                                    {props.adding ?
+                                        <input type="text" className="form-control" name="benefit_code" id=""  {...register("benefit_code", { required: true })} />
+                                    // errors.benefit_code && <span><p className='notvalid'>This field is required</p></span>
+
+                                    :
+
                                     <input type="text" readOnly className="form-control" name="benefit_code" id=""  {...register("benefit_code", { required: true })} />
-                                    {errors.benefit_code && <span><p className='notvalid'>This field is required</p></span>}
+}
                                 </div>
                             </div>
                             <div className="col-md-12 mb-2">
