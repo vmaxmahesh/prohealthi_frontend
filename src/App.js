@@ -61,7 +61,7 @@ import PricingStrategies from './pages/dashboard/strategies/PricingStrategies';
 import CopayStrategy from './pages/dashboard/strategies/CopayStrategy';
 import AccumulatedBenefitStrategy from './pages/dashboard/strategies/AccumulatedBenefitStrategy';
 import PlanAssociation from './pages/dashboard/plan_design/PlanAssociation';
-import PlanEdit from './pages/dashboard/plan_design/PlanEdit';
+import PlanEdit, { DateLimitations, PlanEditNotes, PlanFormulary, RefillLimitations, RxLimitations } from './pages/dashboard/plan_design/PlanEdit';
 
 function setToken(userToken) {
   sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -401,7 +401,13 @@ function App() {
 
           {/* plan design route starts  */}
           <Route path="plan-design/plan-association" element={<PlanAssociation />} />
-          <Route path="plan-design/plan-edit" element={<PlanEdit />} /> 
+          <Route path="plan-design/plan-edit" element={<PlanEdit />} > 
+            <Route index path="plan-formulary" element={<PlanFormulary />} />
+            <Route  path="rx-limitations" element={<RxLimitations />} />
+            <Route  path="date-limitations" element={<DateLimitations />} />
+            <Route path="refill-limitations" element={<RefillLimitations />} />
+            <Route path="notes" element={<PlanEditNotes />} />
+          </Route>
           {/* plan design route ends  */}
 
 

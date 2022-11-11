@@ -56,3 +56,7 @@ code {
 }
 
 .draggablelist {}
+
+.form-btm p,input {
+  margin-bottom:5px;
+}
