@@ -1,7 +1,57 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { render } from 'react-dom';
+import { useForm } from 'react-hook-form';
+import { Link, Outlet, useLocation, useOutletContext } from 'react-router-dom';
+
 
 export default function EligibilityValidation()
 {
+
+
+
+
+    const scollToRef = useRef();
+
+
+    const [ndcData, setNdcData] = useState([]);
+    const [ndcClass, setNdClass] = useState([]);
+
+    const [selctedNdc, setSelctedNdc] = useState('');
+
+
+    const searchException = (fdata) => {
+        
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        };
+
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/diagnosis/search?search=${fdata.target.value}`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                //  console.log(response);
+                // console.log(data.data);
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    setNdcData([]);
+                    return Promise.reject(error);
+
+                } else {
+                    setNdcData(data.data);
+                    return;
+                }
+
+
+
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+    }
     return(
         <>
          <div className="row">
@@ -24,13 +74,22 @@ export default function EligibilityValidation()
                     </div>
                 </div>
             </div> 
-            <SearchEligibility />
+
+            <SearchEligibility searchException={searchException} />
+
         </>
     )
 }
 
-function SearchEligibility()
+function SearchEligibility(props)
 {
+
+
+    const searchException = (fdata) => {
+
+        props.searchException(fdata);
+    }
+
     return(
         <>
         <div className="card mt-3 mb-3">
@@ -39,7 +98,7 @@ function SearchEligibility()
                         <div className="col-md-12 mb-3">
                             <div className="form-group">
                                 <small>Eligibility Validation ID/Name</small>
-                                <input type="text"  className="form-control" placeholder='Start typing eligibility validation ID/name to search'
+                                <input type="text" onKeyUp={(e) => searchException(e)}  className="form-control" placeholder='Start typing eligibility validation ID/name to search'
                                 />
                             </div>
                         </div>                       
