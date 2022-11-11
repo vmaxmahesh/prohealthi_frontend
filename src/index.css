@@ -80,3 +80,6 @@ code {
 ::-webkit-scrollbar-thumb:hover {
   background: #0dcaf0; 
 }
+.form-btm p,input {
+  margin-bottom:5px;
+}
