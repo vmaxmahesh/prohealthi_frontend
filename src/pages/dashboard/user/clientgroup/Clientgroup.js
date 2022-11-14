@@ -5,6 +5,7 @@ import { Link, Outlet, Route, Routes, useLocation, useNavigate, useOutletContext
 import Footer from '../../../../shared/Footer';
 import { ToastContainer, toast } from 'react-toastify';
 import { Button } from 'react-bootstrap';
+import Select from 'react-select';
 
 export default function Clientgroup() {
     const location = useLocation();
@@ -298,7 +299,7 @@ function TableRow(props) {
 
 
 export function Charges(params) {
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register,reset, handleSubmit, formState: { errors } } = useForm();
 
     const [clientgroup, setClientgroup] = useOutletContext();
     const [startDate, setStartDate] = useState(new Date());
@@ -318,6 +319,8 @@ export function Charges(params) {
 
 
     }
+    useEffect(() => { reset(clientgroup) }, [clientgroup]);
+
     return (
         <>
 
@@ -343,10 +346,10 @@ export function Charges(params) {
                             <div className="col-md-4 mb-2">
                                 <div className="form-group mb-2">
                                     <small>Admin %</small>
-                                    <input type="text" className="form-control" {...register('admin_percentage', {
+                                    <input type="text" className="form-control" {...register('admin_percent', {
                                         required: true,
-                                    })} name="admin_percentage" id="" placeholder="" />
-                                    {errors.admin_percentage?.type === 'required' && <p role="alert" className="notvalid">Admin percentage is   required</p>}
+                                    })} name="admin_percent" id="" placeholder="" />
+                                    {errors.admin_percent?.type === 'required' && <p role="alert" className="notvalid">Admin percentage is   required</p>}
 
                                 </div>
                             </div>
@@ -374,7 +377,7 @@ export function Charges(params) {
                             <div className="col-md-4 mb-2">
                                 <div className="form-group mb-2">
                                     <small>Elig Update Fee</small>
-                                    <input type="text" className="form-control" name="elig_update" {...register('elig_update', {
+                                    <input type="text" className="form-control" name="elig_upd_fee" {...register('elig_upd_fee', {
                                         required: true,
                                     })} id="" placeholder="" />
                                     {errors.elig_update?.type === 'required' && <p role="alert" className="notvalid">Elig Update Fee is   required</p>}
@@ -384,10 +387,10 @@ export function Charges(params) {
                             <div className="col-md-4 mb-2">
                                 <div className="form-group mb-2">
                                     <small>Prior Auth Fee</small>
-                                    <input type="text" className="form-control" name="prior_auth" {...register('prior_auth', {
+                                    <input type="text" className="form-control" name="prior_auth_fee" {...register('prior_auth_fee', {
                                         required: true,
                                     })} id="" placeholder="" />
-                                    {errors.elig_update?.type === 'required' && <p role="alert" className="notvalid">Prior Auth  Fee is   required</p>}
+                                    {errors.prior_auth_fee?.type === 'required' && <p role="alert" className="notvalid">Prior Auth  Fee is   required</p>}
 
                                 </div>
                             </div>
@@ -399,21 +402,21 @@ export function Charges(params) {
                             </div>
                             <div className="col-md-6 mb-1">
                                 <div className="form-group">
-                                    <input type="checkbox" id="Plan" className="d-none" {...register('bypass_plan_ndc', {
+                                    <input type="checkbox" id="Plan" className="d-none" {...register('excl_plan_ndc_gpi_excep_flag', {
                                         required: true,
-                                    })} name="bypass_plan_ndc" />
+                                    })} name="excl_plan_ndc_gpi_excep_flag" />
                                     <label for="Plan">Bypass Plan NDC/GPI Exception List Processing</label>
-                                    {errors.bypass_plan_ndc?.type === 'required' && <p role="alert" className="notvalid">Bypass Plan NDC/GPI Exception List Processing is   required</p>}
+                                    {errors.excl_plan_ndc_gpi_excep_flag?.type === 'required' && <p role="alert" className="notvalid">Bypass Plan NDC/GPI Exception List Processing is   required</p>}
 
                                 </div>
                             </div>
                             <div className="col-md-6 mb-1">
                                 <div className="form-group">
-                                    <input type="checkbox" id="System" name="bypass_system_ndc" {...register('bypass_system_ndc', {
+                                    <input type="checkbox" id="System" name="excl_sys_ndc_gpi_excep_flag" {...register('excl_sys_ndc_gpi_excep_flag', {
                                         required: true,
                                     })} className="d-none" />
                                     <label for="System">Bypass System NDC/GPI Exception List Processing</label>
-                                    {errors.bypass_system_ndc?.type === 'required' && <p role="alert" className="notvalid">Bypass System NDC/GPI Exception List Processing is   required</p>}
+                                    {errors.excl_sys_ndc_gpi_excep_flag?.type === 'required' && <p role="alert" className="notvalid">Bypass System NDC/GPI Exception List Processing is   required</p>}
 
                                 </div>
                             </div>
@@ -426,71 +429,71 @@ export function Charges(params) {
                             <div className="col-md-4">
                                 <div className="form-group mb-2">
                                     <small>Number of Days from Date Written to First Fill</small>
-                                    <input type="text" className="form-control" {...register('number_of_days_from_date', {
+                                    <input type="text" className="form-control" {...register('date_written_to_first_fill', {
                                         required: true,
-                                    })} name="number_of_days_from_date" id="" placeholder="" />
-                                    {errors.number_of_days_from_date?.type === 'required' && <p role="alert" className="notvalid">Number of Days from Date Written to First Fill is   required</p>}
+                                    })} name="date_written_to_first_fill" id="" placeholder="" />
+                                    {errors.date_written_to_first_fill?.type === 'required' && <p role="alert" className="notvalid">Number of Days from Date Written to First Fill is   required</p>}
 
                                 </div>
                             </div>
                             <div className="col-md-4">
                                 <div className="form-group mb-2">
                                     <small>Number of Days from Date Filled to Date Submitted</small>
-                                    <input type="text" className="form-control" name="number_of_days_from_date_submitted" {...register('number_of_days_from_date_submitted', {
+                                    <input type="text" className="form-control" name="date_filled_to_sub_online" {...register('date_filled_to_sub_online', {
                                         required: true,
                                     })} id="" placeholder="" />
-                                    {errors.number_of_days_from_date_submitted?.type === 'required' && <p role="alert" className="notvalid">Number of Days from Date Filled to Date Submitted is   required</p>}
+                                    {errors.date_filled_to_sub_online?.type === 'required' && <p role="alert" className="notvalid">Number of Days from Date Filled to Date Submitted is   required</p>}
 
                                 </div>
                             </div>
                             <div className="col-md-4">
                                 <div className="form-group mb-2">
                                     <small>Number of Days from Date Filled to Submitted (Manual)</small>
-                                    <input type="text" className="form-control" name="number_of_days_from_date_submitted_manual" {...register('number_of_days_from_date_submitted_manual', {
+                                    <input type="text" className="form-control" name="date_filled_to_sub_dmr" {...register('date_filled_to_sub_dmr', {
                                         required: true,
                                     })} id="" placeholder="" />
-                                    {errors.number_of_days_from_date_submitted_manual?.type === 'required' && <p role="alert" className="notvalid">Number of Days from Date Filled to Submitted (Manual) is   required</p>}
+                                    {errors.date_filled_to_sub_dmr?.type === 'required' && <p role="alert" className="notvalid">Number of Days from Date Filled to Submitted (Manual) is   required</p>}
 
                                 </div>
                             </div>
                             <div className="col-md-4">
                                 <div className="form-group mb-2">
                                     <small>Number of Days from DateFilled to Future Fill Date</small>
-                                    <input type="text" className="form-control" name="number_of_days_from_date_tofuture_fill" {...register('number_of_days_from_date_tofuture_fill', {
+                                    <input type="text" className="form-control" name="date_sub_to_filled_future" {...register('date_sub_to_filled_future', {
                                         required: true,
                                     })} id="" placeholder="" />
-                                    {errors.number_of_days_from_date_tofuture_fill?.type === 'required' && <p role="alert" className="notvalid">Number of Days from DateFilled to Future Fill Date is   required</p>}
+                                    {errors.date_sub_to_filled_future?.type === 'required' && <p role="alert" className="notvalid">Number of Days from DateFilled to Future Fill Date is   required</p>}
 
                                 </div>
                             </div>
                             <div className="col-md-4">
                                 <div className="form-group mb-2">
                                     <small>Number of Days for Reversal</small>
-                                    <input type="text" className="form-control" name="number_of_days_reversal" {...register('number_of_days_reversal', {
+                                    <input type="text" className="form-control" name="days_for_reversals" {...register('days_for_reversals', {
                                         required: true,
                                     })} id="" placeholder="" />
-                                    {errors.number_of_days_reversal?.type === 'required' && <p role="alert" className="notvalid">Number of Days for Reversal is   required</p>}
+                                    {errors.days_for_reversals?.type === 'required' && <p role="alert" className="notvalid">Number of Days for Reversal is   required</p>}
 
                                 </div>
                             </div>
                             <div className="clearfix mb-2"></div>
                             <div className="col-md-4 mb-1">
                                 <div className="form-group">
-                                    <input type="checkbox" id="Tax" name="tax_exempty" {...register('tax_exempty', {
+                                    <input type="checkbox" id="Tax" name="non_profit_tax_exempt_flag" {...register('non_profit_tax_exempt_flag', {
                                         required: true,
                                     })} className="d-none" />
                                     <label for="Tax">Tax Exempty Entity</label>
-                                    {errors.tax_exempty?.type === 'required' && <p role="alert" className="notvalid">Tax Exempty Entity is   required</p>}
+                                    {errors.non_profit_tax_exempt_flag?.type === 'required' && <p role="alert" className="notvalid">Tax Exempty Entity is   required</p>}
 
                                 </div>
                             </div>
                             <div className="col-md-4 mb-1">
                                 <div className="form-group">
-                                    <input type="checkbox" name='mandatory_u_c' {...register('mandatory_u_c', {
+                                    <input type="checkbox" name='reqd_u_and_c_flag' {...register('reqd_u_and_c_flag', {
                                         required: true,
                                     })} id="u&amp;c" className="d-none" />
                                     <label for="u&amp;c">Mandatory U and C</label>
-                                    {errors.mandatory_u_c?.type === 'required' && <p role="alert" className="notvalid">Mandatory U and C is   required</p>}
+                                    {errors.reqd_u_and_c_flag?.type === 'required' && <p role="alert" className="notvalid">Mandatory U and C is   required</p>}
 
                                 </div>
                             </div>
@@ -537,7 +540,7 @@ export function Charges(params) {
 
 export function Indicators(params) {
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register,reset, handleSubmit, formState: { errors } } = useForm();
 
     const [clientgroup, setClientgroup] = useOutletContext();
     const [startDate, setStartDate] = useState(new Date());
@@ -557,6 +560,7 @@ export function Indicators(params) {
 
 
     }
+    useEffect(() => { reset(clientgroup) }, [clientgroup]);
 
 
     return (
@@ -572,14 +576,14 @@ export function Indicators(params) {
                             </div>
                             <div className="col-md-6 mb-2">
                                 <small>Accumelated Benifits Ind:</small>
-                                <select className="form-select" name="accumulated_benifits" {...register('accumulated_benifits', {
+                                <select className="form-select" name="accum_bene_fam_sum_ind" {...register('accum_bene_fam_sum_ind', {
                                     required: true,
                                 })}  >
                                     <option value="">--Select--</option>
                                     <option value="1">option 1</option>
                                     <option value="2">option 2</option>
                                 </select>
-                                {errors.accumulated_benifits?.type === 'required' && <p role="alert" className="notvalid">Accumelated Benifits Ind field is  required</p>}
+                                {errors.accum_bene_fam_sum_ind?.type === 'required' && <p role="alert" className="notvalid">Accumelated Benifits Ind field is  required</p>}
 
                             </div>
                             <div className="col-md-6 mb-2">
@@ -602,11 +606,11 @@ export function Indicators(params) {
                                 <h5 className="mb-2">Interim Member Maximums</h5>
                             </div>
                             <div className="col-md-6 mb-2">
-                                <small>Maximum Number Of Transactions Allowed For An Interim..</small>
-                                <select className="form-select" {...register("max_no_of_transaction_allowed", {
+                                <small>Maximum Number Of Transactions Allowed For An Interim..</small>MAX_NUM_TRANS_INTERIM_ELIG
+                                <select className="form-select" {...register("max_num_trans_interim_elig", {
                                     required: true,
-                                })} name='max_no_of_transaction_allowed'>
-                                    <option value="">--Select-- </option>
+                                })} name='max_num_trans_interim_elig'>
+                                    <option value="">--select-- </option>
                                     <option value="1">option 1</option>
                                     <option value="2">option 2</option>
                                     <option value="3">option 3</option>
@@ -616,10 +620,10 @@ export function Indicators(params) {
                             </div>
                             <div className="col-md-6 mb-2">
                                 <small>Maximum Number Of Days That An Interim Member Will Be..</small>
-                                <select className="form-select" {...register("max_no_of_days", {
+                                <select className="form-select" {...register("max_days_interim_elig", {
                                     required: true,
-                                })} name="max_no_of_days">
-                                    <option value="">--Select--</option>
+                                })} name="max_days_interim_elig">
+                                    <option value="">--select--</option>
                                     <option value="1">option 1</option>
                                     <option value="2">option 2</option>
                                     <option value="3">option 3</option>
@@ -662,7 +666,7 @@ export function Indicators(params) {
                             <div className="col-md-6">
                                 <div className="form-group mb-2">
                                     <small>Option</small>
-                                    <select className="form-select" name="copy_schedule" {...register('copy_schedule', {
+                                    <select className="form-select" name="copay_sched_ovr_flag" {...register('copay_sched_ovr_flag', {
                                         required: true,
                                     })}>
                                         <option value="">--Select--</option>
@@ -670,17 +674,17 @@ export function Indicators(params) {
                                         <option value="2">option 2</option>
                                     </select>
                                 </div>
-                                {errors.copy_schedule?.type === 'required' && <p role="alert" className="notvalid">Copy Schedule Override field is  required</p>}
+                                {errors.copay_sched_ovr_flag?.type === 'required' && <p role="alert" className="notvalid">Copy Schedule Override field is  required</p>}
 
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group mb-2">
                                     <small>Shedule</small>
-                                    <input type="text" className="form-control" name="Shedule" {...register('Shedule', {
+                                    <input type="text" className="form-control" name="copay_sched_ovr" {...register('copay_sched_ovr', {
                                         required: true,
                                     })} id="" placeholder="" />
 
-                                    {errors.Shedule?.type === 'required' && <p role="alert" className="notvalid">Schedule  field is  required</p>}
+                                    {errors.copay_sched_ovr?.type === 'required' && <p role="alert" className="notvalid">Schedule  field is  required</p>}
 
 
                                 </div>
@@ -699,7 +703,7 @@ export function Indicators(params) {
 
 export function Eligibility(params) {
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register,reset, handleSubmit, formState: { errors } } = useForm();
 
     const [clientgroup, setClientgroup] = useOutletContext();
     const [startDate, setStartDate] = useState(new Date());
@@ -720,6 +724,9 @@ export function Eligibility(params) {
 
     }
 
+    useEffect(() => { reset(clientgroup) }, [clientgroup]);
+
+
 
     return (
         <>
@@ -733,10 +740,10 @@ export function Eligibility(params) {
                             </div>
                             <div className="col-md-6 mb-2">
                                 <small>Auto Termination Level</small>
-                                <select className="form-select" {...register("auto_termination_level", {
+                                <select className="form-select" {...register("auto_term_level", {
                                     required: true,
-                                })} name="auto_termination_level" >
-                                    <option value="">--Select--</option>
+                                })} name="auto_term_level" >
+                                    <option value="">--select--</option>
                                     <option value="0">Overlap Allowed Within Database</option>
                                     <option value="1">Automated Termination within client</option>
                                     <option value="2">Automated Termination within Customer</option>
@@ -744,23 +751,23 @@ export function Eligibility(params) {
                                     <option value="4">No Automated Termination-Reject-within database</option>
 
                                 </select>
-                                {errors.auto_termination_level?.type === 'required' && <p role="alert" className="notvalid">Auto Termination Level field is  required</p>}
+                                {errors.auto_term_level?.type === 'required' && <p role="alert" className="notvalid">Auto Termination Level field is  required</p>}
 
                                 <p className="input-hint">Overlap Allowed Within Database</p>
                             </div>
 
                             <div className="col-md-6 mb-2">
                                 <small>Eligibility Type</small>
-                                <select className="form-select" {...register("eligibility_type", {
+                                <select className="form-select" {...register("elig_type", {
                                     required: true,
 
-                                })} name="eligibility_type">
-                                    <option value="">--Select--</option>
+                                })} name="elig_type">
+                                    <option value="">--select--</option>
                                     <option value="1">Not Specified </option>
                                     <option value="2"> Individual Member Records Exist</option>
                                     <option value="3">Family Member Records Exist</option>
                                 </select>
-                                {errors.eligibility_type?.type === 'required' && <p role="alert" className="notvalid">Eligibility Type field is  required</p>}
+                                {errors.elig_type?.type === 'required' && <p role="alert" className="notvalid">Eligibility Type field is  required</p>}
                             </div>
 
                             <div className="clearfix mb-2"></div>
@@ -786,9 +793,9 @@ export function Eligibility(params) {
                             </div>
                             <div className="col-md-6 mb-2">
                                 <small>Eligibility Options</small>
-                                <select className="form-select" {...register("eligibility_options", {
+                                <select className="form-select" {...register("elig_date_edit_ovr_flag", {
                                     required: true,
-                                })} name="eligibility_options">
+                                })} name="elig_date_edit_ovr_flag">
                                     <option value="">--Select--</option>
                                     <option value="0">Not Specified</option>
                                     <option value="1">No Eligibility Check</option>
@@ -802,23 +809,23 @@ export function Eligibility(params) {
 
 
                                 </select>
-                                {errors.eligibility_options?.type === 'required' && <p role="alert" className="notvalid">Eligibility Options is  required</p>}
+                                {errors.elig_date_edit_ovr_flag?.type === 'required' && <p role="alert" className="notvalid">Eligibility Options is  required</p>}
                                 <p className="input-hint">Check Eligibility By Member:</p>
                             </div>
                             <div className="col-md-6 mb-2">
                                 <small>Eligibility Validation List ID</small>
                                 <div className="form-group mb-3">
-                                    <input type="text" className="form-control"  {...register("eligibility_validation_list", {
+                                    <input type="text" className="form-control"  {...register("elig_validation_id", {
                                         required: true,
                                         pattern: /^(0|[1-9][0-9]*)$/,
 
-                                    })} name="eligibility_validation_list" id="" required="" />
+                                    })} name="elig_validation_id" id="" required="" />
 
                                     <a href="" data-bs-toggle="modal" data-bs-target="#eligibilityidModal"><span className="fa fa-search form-icon"></span></a>
 
                                 </div>
-                                {errors.eligibility_validation_list?.type === 'required' && <p role="alert" className="notvalid">Eligibility Validation List ID is  required</p>}
-                                {errors.eligibility_validation_list?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
+                                {errors.elig_validation_id?.type === 'required' && <p role="alert" className="notvalid">Eligibility Validation List ID is  required</p>}
+                                {errors.elig_validation_id?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
                             </div>
 
                             <div className="clearfix mb-2"></div>
@@ -852,12 +859,14 @@ export function Eligibility(params) {
 
 export function Strategy(params) {
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register,reset, handleSubmit, formState: { errors } } = useForm();
 
     const [clientgroup, setClientgroup] = useOutletContext();
     const [startDate, setStartDate] = useState(new Date());
     const [afterDate, setAfterDate] = useState(new Date());
+    const[superoptions,setSuperOptions]=useState(false)
 
+    useEffect(() => { reset(clientgroup) }, [clientgroup]);
 
     const onSubmit = data => {
 
@@ -872,6 +881,51 @@ export function Strategy(params) {
 
 
     }
+
+    const getAllSuperProviderNetworkIds = (fdata) => {
+        var arr = [];
+
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        };
+
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/superprovidernetworkids`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                console.log(response);
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    setPlanidsList([]);
+                    // console.log(planidslist);
+                    return Promise.reject(error);
+
+                } else {
+                    console.log(data.data);
+                    setSuperOptions(data.data);
+                    // console.log(superoptions);
+
+
+                }
+
+
+
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+    }
+
+    useEffect(() => {
+        if (!superoptions) {
+            getAllSuperProviderNetworkIds();
+
+        }
+    }, [superoptions])
 
 
     return (
@@ -926,12 +980,12 @@ export function Strategy(params) {
                             </div>
                             <div className="col-md-3">
                                 <div className="form-group mb-3">
-                                    <input type="text" className="form-control" {...register('plan_id_1', {
+                                    <input type="text" className="form-control" {...register('plan_id', {
                                         required: true,
-                                    })} name="plan_id_1" id="" />
+                                    })} name="plan_id" id="" />
                                     <a href=""><span className="fa fa-search form-icon"></span></a>
                                 </div>
-                                {errors.plan_id_1?.type === 'required' && <p role="alert" className="notvalid">Plan Id  is  required</p>}
+                                {errors.plan_id?.type === 'required' && <p role="alert" className="notvalid">Plan Id  is  required</p>}
 
                             </div>
                             <div className="col-md-3">
@@ -963,26 +1017,26 @@ export function Strategy(params) {
                             </div>
                             <div className="col-md-3">
                                 <div className="form-group mb-3">
-                                    <input type="text" {...register('miscellaneous_data_1', {
+                                    <input type="text" {...register('misc_data_1', {
                                         required: true,
-                                    })} className="form-control" name="miscellaneous_data_1" id="" />
-                                    {errors.miscellaneous_data_1?.type === 'required' && <p role="alert" className="notvalid">Miscellaneous data  is  required</p>}
+                                    })} className="form-control" name="misc_data_1" id="" />
+                                    {errors.misc_data_1?.type === 'required' && <p role="alert" className="notvalid">Miscellaneous data  is  required</p>}
 
                                 </div>
                             </div>
                             <div className="col-md-3">
                                 <div className="form-group mb-3">
-                                    <input type="text" {...register('miscellaneous_data_2', {
+                                    <input type="text" {...register('misc_data_2', {
                                         required: true,
-                                    })} className="form-control" name="miscellaneous_data_2" id="" />
-                                    {errors.miscellaneous_data_2?.type === 'required' && <p role="alert" className="notvalid">Miscellaneous data  is  required</p>}
+                                    })} className="form-control" name="misc_data_2" id="" />
+                                    {errors.misc_data_2?.type === 'required' && <p role="alert" className="notvalid">Miscellaneous data  is  required</p>}
 
                                 </div>
                             </div>
                             <div className="col-md-3">
                                 <div className="form-group mb-3">
-                                    <input type="text" className="form-control" name="" id="" />
-                                    {errors.miscellaneous_data_2?.type === 'required' && <p role="alert" className="notvalid">Miscellaneous data  is  required</p>}
+                                    <input type="text" className="form-control" {...register('misc_data_3')} name="misc_data_3" id="" />
+                                    {errors.misc_data_3?.type === 'required' && <p role="alert" className="notvalid">Miscellaneous data  is  required</p>}
 
                                 </div>
                             </div>
@@ -995,31 +1049,36 @@ export function Strategy(params) {
                             <div className="col-md-6">
                                 <div className="form-group mb-3">
                                     <small>Provider Options</small>
-                                    <select className="form-select" {...register("provider_vefification_option", {
+                                    <select className="form-select" {...register("pharmacy_exceptions_flag", {
                                         required: true
-                                    })} name="provider_vefification_option">
-                                        <option value="">--Select--</option>
+                                    })} name="pharmacy_exceptions_flag">
+                                        <option value="">--select--</option>
                                         <option value="1">No Provider Check</option>
                                         <option value="2">Validate Provider Format</option>
                                         <option value="3">Provider must exist within Provider Master</option>
                                         <option value="4">Must exist in Provider Network</option>
                                         <option value="5">Validate Provider In/Out of Network</option>
                                     </select>
-                                    {errors.provider_vefification_option?.type === 'required' && <p role="alert" className="notvalid">Provider Options is  required</p>}
+                                    {errors.pharmacy_exceptions_flag?.type === 'required' && <p role="alert" className="notvalid">Provider Options is  required</p>}
                                 </div>
-                                {errors.provider_options?.type === 'required' && <p role="alert" className="notvalid">Provider Verification Options  is  required</p>}
+                                {errors.pharmacy_exceptions_flag?.type === 'required' && <p role="alert" className="notvalid">Provider Verification Options  is  required</p>}
 
                             </div>
                             <div className="col-md-6">
+
                                 <div className="form-group mb-3">
                                     <small>Super Provider Networks</small>
-                                    <input type="text" className="form-control" name="super_provider_network" id="" {...register('super_provider_network', {
+                                    {/* <input type="text" className="form-control" {...register("super_rx_network_id", {
                                         required: true,
-                                    })} />
-                                    <a href=""><span className="fa fa-search form-icon"></span></a>
-                                    {errors.super_provider_network?.type === 'required' && <p role="alert" className="notvalid">Super Provider Networks  is  required</p>}
+                                    })} name="super_rx_network_id" id="" /> */}
+                                    {/* <a href="" data-bs-toggle="modal" data-bs-target="#supernetwork"><span className="fa fa-search form-icon"></span></a> */}
+                                    <Select
+                                        options={superoptions} name="super_rx_network_id"   {...register('super_rx_network_id')} onChange={(e) => mahesh(e)} />
+
+                                    {errors.super_rx_network_id?.type === 'required' && <p role="alert" className="notvalid">Super Provider Networks field is   required</p>}
 
                                 </div>
+
                             </div>
 
                             <div className="clearfix mb-2"></div>
@@ -1030,33 +1089,33 @@ export function Strategy(params) {
                             <div className="col-md-4">
                                 <div className="form-group mb-3">
                                     <small>Prescriber Options</small>
-                                    <select className="form-select" {...register("Prescriber_Verification_Options_1", {
+                                    <select className="form-select" {...register("prescriber_exceptions_flag", {
                                         required: true,
-                                    })} name="Prescriber_Verification_Options_1" >
-                                        <option value="">--Select--</option>
+                                    })} name="prescriber_exceptions_flag" >
+                                        <option value="">--select--</option>
                                         <option value="1">None</option>
                                         <option value="2">Validate DEA Code</option>
                                         <option value="3">primary Prescriber Validation</option>
                                         <option value="4">Must Exist in Prescriber Master</option>
 
                                     </select>
-                                    {errors.Prescriber_Verification_Options_1?.type === 'required' && <p role="alert" className="notvalid">Prescriber Options is   required</p>}
+                                    {errors.prescriber_exceptions_flag?.type === 'required' && <p role="alert" className="notvalid">Prescriber Options is   required</p>}
 
                                 </div>
                             </div>
                             <div className="col-md-4">
                                 <div className="form-group mb-3">
                                     <small>Prescriber Options 2</small>
-                                    <select className="form-select" {...register("Prescriber_Verification_Options_2", {
+                                    <select className="form-select" {...register("prescriber_exceptions_flag_2", {
                                         required: true,
-                                    })} name="Prescriber_Verification_Options_2">
-                                        <option value="">--Select--</option>
+                                    })} name="prescriber_exceptions_flag_2">
+                                        <option value="">--select--</option>
                                         <option value="1">None</option>
                                         <option value="2">Validate DEA Code</option>
                                         <option value="3">primary Prescriber Validation</option>
                                         <option value="4">Must Exist in Prescriber Master</option>
                                     </select>
-                                    {errors.Prescriber_Verification_Options_2?.type === 'required' && <p role="alert" className="notvalid">Prescriber Options is   required</p>}
+                                    {errors.prescriber_exceptions_flag_2?.type === 'required' && <p role="alert" className="notvalid">Prescriber Options is   required</p>}
                                 </div>
                             </div>
                             <div className="col-md-4">
@@ -1089,6 +1148,7 @@ export function Identification(params) {
     const [clientgroup, setClientgroup] = useOutletContext();
     const [startDate, setStartDate] = useState(new Date());
     const [afterDate, setAfterDate] = useState(new Date());
+    const [selectedOption, setSelectedOption] = useState(null);
 
 
     const onSubmit = data => {
@@ -1105,9 +1165,53 @@ export function Identification(params) {
 
     }
 
+    const Cstates = [
+        { label: "AD", value: 1 },
+        { label: "KG", value: 2 },
+
+    ];
+
+    const onStateChange = (e) => {
+        getStates();
+    }
+
+    const getStates = data => {
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        };
+        fetch(process.env.REACT_APP_API_BASEURL + '/api/states/country', requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    return Promise.reject(error);
+                }
+
+                console.log(data.data);
+                setStates(data.data);
+
+                // props.onChange(data);
+
+                // this.setState({ postId: data.id })
+            })
+            .catch(error => {
+                // this.setState({ errorMessage: error.toString() });
+                console.error('There was an error!', error);
+            });
+    }
+
+
     useEffect(() => { reset(clientgroup) }, [clientgroup]);
+    const countries = [
+        { value: 'Jamica', label: 'Jamaica' },
 
-
+    ];
 
     return (
         <>
@@ -1170,36 +1274,52 @@ export function Identification(params) {
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
-                                            <small>City / State</small>
-                                            <select className="form-select" {...register('city', {
+                                            <small>Country</small>
+
+
+                                            <Select   {...register("country", {
                                                 required: true,
-                                            })} name="city">
-                                                <option value="">Select City</option>
-                                                <option value="1">Select City</option>
-                                                <option value="2">Select City</option>
-                                                <option value="3">Select City</option>
-                                            </select>
+
+                                            })} name="city" className="form-select"
+                                                defaultValue={{ label: "Jamica", value: 1 }}
+                                                onChange={setSelectedOption}
+                                                options={countries}
+                                            />
+
+                                            {errors.country?.type === 'required' && <p role="alert" className="notvalid">Country is  required</p>}
+
                                         </div>
-                                        {errors.city?.type === 'required' && <p role="alert" className="notvalid">city is  required</p>}
 
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
-                                            <small>Country</small>
-                                            <input type="text" {...register('country', {
+                                            <small>City / State</small>
+                                            <Select {...register("city", {
                                                 required: true,
-                                            })} className="form-control" name="country" id="" placeholder="Country" />
-                                            {errors.country?.type === 'required' && <p role="alert" className="notvalid">Country is  required</p>}
+
+                                            })} onClick={onStateChange} name="city" className="form-select" defaultValue={{ label: "AD", value: 1 }} options={Cstates}
+                                            />
+
+                                            {/* {states.map(option => (
+                                                    <option key={option.state_code} value={option.state_code}>
+                                                        {option.state_code} --{option.description}
+                                                    </option>
+                                                ))} */}
+                                            {/* </select> */}
+
+                                            {errors.city?.type === 'required' && <p role="alert" className="notvalid">City is  required</p>}
+
 
                                         </div>
+
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>ZIP Code</small>
-                                            <input type="text" {...register('zipcode', {
+                                            <input type="text" {...register('zip_code', {
                                                 required: true,
-                                            })} className="form-control" name="zipcode" id="" placeholder="ZIP Code" />
-                                            {errors.zipcode?.type === 'required' && <p role="alert" className="notvalid">Zip code  is  required</p>}
+                                            })} className="form-control" name="zip_code" id="" placeholder="ZIP Code" />
+                                            {errors.zip_code?.type === 'required' && <p role="alert" className="notvalid">Zip code  is  required</p>}
 
                                         </div>
                                     </div>
@@ -1256,10 +1376,10 @@ export function Identification(params) {
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Type</small>
-                                            <input type="text"  {...register('type', {
+                                            <input type="text"  {...register('elig_type', {
                                                 required: true,
-                                            })} className="form-control" name="type" id="" placeholder="Type" />
-                                            {errors.type?.type === 'required' && <p role="alert" className="notvalid">Type is  required</p>}
+                                            })} className="form-control" name="elig_type" id="" placeholder="Type" />
+                                            {errors.elig_type?.type === 'required' && <p role="alert" className="notvalid">Type is  required</p>}
 
                                         </div>
                                     </div>
@@ -1291,25 +1411,35 @@ export function Identification(params) {
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Policy Ann. Month</small>
-                                            <select className="form-select"  {...register('policy_name_month', {
+                                            <select {...register("policy_anniv_month", {
                                                 required: true,
-                                            })} name="policy_name_month" >
-                                                <option value="">Policy Ann. Month</option>
-                                                <option value="">Select City</option>
-                                                <option value="">Select City</option>
-                                                <option value="">Select City</option>
+                                            })} name="policy_anniv_month" className="form-select">
+
+                                                <option value="">--Select--</option>
+                                                <option value="1">January</option>
+                                                <option value="2">February</option>
+                                                <option value="3">March</option>
+                                                <option value="4">April</option>
+                                                <option value="5">May</option>
+                                                <option value="6">June</option>
+                                                <option value="7">July</option>
+                                                <option value="8">August</option>
+                                                <option value="9">September</option>
+                                                <option value="10">October</option>
+                                                <option value="11">November</option>
+                                                <option value="12">December</option>
                                             </select>
-                                            {errors.policy_name_month?.type === 'required' && <p role="alert" className="notvalid">Policy Ann. Month is  required</p>}
+                                            {errors.policy_anniv_month?.type === 'required' && <p role="alert" className="notvalid">Policy Ann. Month is  required</p>}
 
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Policy Ann. Day</small>
-                                            <input type="text" className="form-control" name="policy_ann_day" {...register('policy_ann_day', {
+                                            <input type="text" className="form-control" name="policy_anniv_day" {...register('policy_anniv_day', {
                                                 required: true,
-                                            })} id="" placeholder="Enter Policy Ann. Day" />
-                                            {errors.policy_ann_day?.type === 'required' && <p role="alert" className="notvalid">Policy Ann. Day is  required</p>}
+                                            })} id="" placeholder="Enter" />
+                                            {errors.policy_anniv_day?.type === 'required' && <p role="alert" className="notvalid">Policy Ann. Day is  required</p>}
 
                                         </div>
                                     </div>
@@ -1319,72 +1449,72 @@ export function Identification(params) {
                                     <div className="col-md-12">
                                         <div className="form-group mb-2">
                                             <small>Census Date</small>
-                                            <input type="text" {...register('census', {
+                                            <input type="date" {...register('census_date', {
                                                 required: true,
                                             })} className="form-control" name="census" id="" placeholder="Census Date" />
 
-                                            {errors.census?.type === 'required' && <p role="alert" className="notvalid">Census Date is  required</p>}
+                                            {errors.census_date?.type === 'required' && <p role="alert" className="notvalid">Census Date is  required</p>}
 
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Active Contracts</small>
-                                            <input type="text" className="form-control"  {...register('active_contracts', {
+                                            <input type="text" className="form-control"  {...register('num_of_active_contracts', {
                                                 required: true,
                                             })} name="active_contracts" id="" placeholder="Active Contracts" />
-                                            {errors.active_contracts?.type === 'required' && <p role="alert" className="notvalid">Active Contracts is  required</p>}
+                                            {errors.num_of_active_contracts?.type === 'required' && <p role="alert" className="notvalid">Active Contracts is  required</p>}
 
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Active Memebers</small>
-                                            <input type="text" className="form-control" name="active_members" {...register('active_members', {
+                                            <input type="text" className="form-control" name="num_of_active_members" {...register('num_of_active_members', {
                                                 required: true,
                                             })} id="" placeholder="Active Memebers" />
-                                            {errors.active_members?.type === 'required' && <p role="alert" className="notvalid">Active Memebers is  required</p>}
+                                            {errors.num_of_active_members?.type === 'required' && <p role="alert" className="notvalid">Active Memebers is  required</p>}
 
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Termed Contracts</small>
-                                            <input type="text" className="form-control" {...register('termed_contracts', {
+                                            <input type="text" className="form-control" {...register('num_of_termed_contracts', {
                                                 required: true,
-                                            })} name="termed_contracts" id="" placeholder="Termed Contracts" />
-                                            {errors.termed_contracts?.type === 'required' && <p role="alert" className="notvalid">Termed  Contracts is  required</p>}
+                                            })} name="num_of_termed_contracts" id="" placeholder="Termed Contracts" />
+                                            {errors.num_of_termed_contracts?.type === 'required' && <p role="alert" className="notvalid">Termed  Contracts is  required</p>}
 
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Termed Memebers</small>
-                                            <input type="text" className="form-control" {...register('termed_members', {
+                                            <input type="text" className="form-control" {...register('num_of_termed_members', {
                                                 required: true,
-                                            })} name="termed_members" id="" placeholder="Termed Memebers" />
+                                            })} name="num_of_termed_members" id="" placeholder="Termed Memebers" />
 
-                                            {errors.termed_members?.type === 'required' && <p role="alert" className="notvalid">Termed  Memebers is  required</p>}
+                                            {errors.num_of_termed_members?.type === 'required' && <p role="alert" className="notvalid">Termed  Memebers is  required</p>}
 
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Pending Contracts</small>
-                                            <input type="text" className="form-control" {...register('pending_contracts', {
+                                            <input type="text" className="form-control" {...register('num_of_pending_contracts', {
                                                 required: true,
-                                            })} name="pending_contracts" id="" placeholder="Pending Contracts" />
-                                            {errors.pending_contracts?.type === 'required' && <p role="alert" className="notvalid">Pending Contracts is  required</p>}
+                                            })} name="num_of_pending_contracts" id="" placeholder="Pending Contracts" />
+                                            {errors.num_of_pending_contracts?.type === 'required' && <p role="alert" className="notvalid">Pending Contracts is  required</p>}
 
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Pending Memebers</small>
-                                            <input type="text" {...register('pending_members', {
+                                            <input type="text" {...register('num_of_pending_members', {
                                                 required: true,
-                                            })} className="form-control" name="pending_members" id="" placeholder="Pending Members" />
-                                            {errors.pending_members?.type === 'required' && <p role="alert" className="notvalid">pending members   is  required</p>}
+                                            })} className="form-control" name="num_of_pending_members" id="" placeholder="Pending Members" />
+                                            {errors.num_of_pending_members?.type === 'required' && <p role="alert" className="notvalid">pending members   is  required</p>}
 
                                         </div>
                                     </div>
@@ -1394,20 +1524,20 @@ export function Identification(params) {
                             <div className="col-md-4">
                                 <div className="form-group mb-2">
                                     <small>Marketing Group</small>
-                                    <input  {...register('marketing_group', {
+                                    <input  {...register('marketing_rep_id', {
                                         required: true,
-                                    })} type="text" className="form-control" name="marketing_group" id="" placeholder="Pending Members" />
-                                    {errors.marketing_group?.type === 'required' && <p role="alert" className="notvalid">Marketing Group is  required</p>}
+                                    })} type="text" className="form-control" name="marketing_rep_id" id="" placeholder="Pending Members" />
+                                    {errors.marketing_rep_id?.type === 'required' && <p role="alert" className="notvalid">Marketing Group is  required</p>}
 
                                 </div>
                             </div>
                             <div className="col-md-4">
                                 <div className="form-group mb-2">
                                     <small>Anniversary Date</small>
-                                    <input type="date" className="form-control" {...register('anniversary_date', {
+                                    <input type="date" className="form-control" {...register('anniv_date', {
                                         required: true,
-                                    })} name="anniversary_date" id="" placeholder="Pending Members" />
-                                    {errors.marketing_group?.type === 'required' && <p role="alert" className="notvalid">Anniversary Date is  required</p>}
+                                    })} name="anniv_date" id="" placeholder="Pending Members" />
+                                    {errors.anniv_date?.type === 'required' && <p role="alert" className="notvalid">Anniversary Date is  required</p>}
 
                                 </div>
                             </div>
@@ -1417,10 +1547,10 @@ export function Identification(params) {
                                     <select className="form-select" name="plan_classification" {...register('plan_classification', {
                                         required: true,
                                     })}>
-                                        <option value="">Choose Plan</option>
-                                        <option value="">Select City</option>
-                                        <option value="">Select City</option>
-                                        <option value="">Select City</option>
+                                        <option value="">Choose plan</option>
+                                        <option value="1">Select City</option>
+                                        <option value="2">Select City</option>
+                                        <option value="3">Select City</option>
                                     </select>
                                     {errors.plan_classification?.type === 'required' && <p role="alert" className="notvalid">plan classification  is  required</p>}
 

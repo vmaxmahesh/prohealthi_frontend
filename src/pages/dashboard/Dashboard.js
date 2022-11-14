@@ -97,15 +97,13 @@ export default function Dashboard() {
                             <Link to="/dashboard/user/searchprovider" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
                                 <i className="fa-solid fa-hand-holding-heart"></i> Provider Data </Link>
                             <div className='dashboard-nav-dropdown-menu'>
-                            <Link to="/dashboard/user/searchprovider" className={'dashboard-nav-dropdown-item' + (currentpath == 'provider' ? ' active' : '')}>Provider</Link>
+                            <Link to="/dashboard/searchprovider" className={'dashboard-nav-dropdown-item' + (currentpath == 'provider' ? ' active' : '')}>Provider</Link>
 
-                                <Link to="/dashboard/user/provider/traditionalnetworks"  className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Traditional Networks</Link>
-                                <Link to="/dashboard/user/provider/flexiblenetworks"  className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>FlexibleNetworks</Link>
-                                <Link to="/dashboard/user/provider/superprovider"  className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Super Provider</Link>
+                                <Link to="/dashboard/provider/traditionalnetworks"  className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Traditional Networks</Link>
+                                <Link to="/dashboard/provider/flexiblenetworks"  className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>FlexibleNetworks</Link>
+                                <Link to="/dashboard/provider/superprovider"  className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Super Provider Network</Link>
 
-
-                                <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Recent</a>
-                                <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}> Projections</a>
+                                <Link  to="/dashboard/provider/prioritizenetworks" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Prioritize Networks</Link>
                             </div>
                         </div>
 
@@ -113,7 +111,7 @@ export default function Dashboard() {
                             <a href="#!" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
                                 <i className="fa-solid fa-prescription"></i> Prescriber Data </a>
                             <div className='dashboard-nav-dropdown-menu'>
-                                <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>All</a>
+                                <Link to="/dashboard/prescriber" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Prescriber</Link>
                                 <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Recent</a>
                                 <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}> Projections</a>
                             </div>

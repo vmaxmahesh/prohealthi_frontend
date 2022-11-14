@@ -9,12 +9,12 @@ import Customer, { Eligibility, Exceptions, Identification, Indicators, Strategy
 import Client, { Eligibility as Ce, Identification as Ci, Indicators as Cin, Coverage as CS } from './pages/dashboard/user/client/Client';
 import Member, { ChnageLog, ClaimHistory, Coverage, CoverageHistory, Health, MemberForm, Notes, Overrides, PriorAuthorisation, ProviderSearch } from './pages/dashboard/members/Member';
 
-import SearchProvider, { Provider, Effectivedates, PharmistSystem, NetworkParticipation } from './pages/dashboard/user/provider/SearchProvider';
+import SearchProvider, { Provider, Effectivedates, PharmistSystem, NetworkParticipation } from './pages/dashboard/provider/SearchProvider';
 
-import TraditionalNetworks, { Network, Providers } from './pages/dashboard/user/provider/TraditionalNetworks';
+import TraditionalNetworks, { Network, Providers } from './pages/dashboard/provider/TraditionalNetworks';
 
-import FlexibleNetworks, { Rules } from './pages/dashboard/user/provider/FlexibleNetworks';
-
+import FlexibleNetworks, { Rules } from './pages/dashboard/provider/FlexibleNetworks';
+import PrioritizeNetwork from './pages/dashboard/provider/PrioritizeNetwork';
 import Membership, { SearchById, SearchByName } from './pages/dashboard/members/Membership';
 import PlanAuthorisation, { Authorisation, PANotes, Pricing } from './pages/dashboard/members/PlanAuthorisation';
 import PlanValidation from './pages/dashboard/members/PlanValidation';
@@ -43,6 +43,10 @@ import DrugClassification from './pages/dashboard/exceptionlist/DrugClassificati
 import ExceptionProcedure from './pages/dashboard/exceptionlist/ExceptionProcedure';
 import ExceptionReason from './pages/dashboard/exceptionlist/ExceptionReason';
 import BenefitList from './pages/dashboard/exceptionlist/BenefitList';
+import SuperProvider from './pages/dashboard/provider/SuperProvider';
+import Prescriber from './pages/dashboard/prescriber/Prescriber'
+
+
 import BenefitDerivation from './pages/dashboard/exceptionlist/BenefitDerivation';
 import Benefits from './pages/dashboard/code/Benefits';
 import DiagnosisValidation from './pages/dashboard/validation_lists/DiagnosisValidation';
@@ -180,7 +184,9 @@ function App() {
 
           <Route path="code/provider-type" element={<ProviderType />}>
           </Route>
-          <Route path='user/searchprovider' element={<SearchProvider />}>
+
+
+          <Route path='searchprovider' element={<SearchProvider />}>
             <Route index element={<Navigate to="provider" replace />} />
 
             <Route path='provider' element={<Provider />} />
@@ -192,19 +198,38 @@ function App() {
 
           </Route>
 
+          <Route path='provider/superprovider' element={<SuperProvider />}>
+           
 
-          <Route path='user/provider/traditionalnetworks' element={<TraditionalNetworks />}>
+          </Route>
+
+
+          <Route path='provider/traditionalnetworks' element={<TraditionalNetworks />}>
             <Route index element={<Navigate to="network" replace />} />
 
             <Route path='network' element={<Network />} />
             <Route path='providers' element={<Providers />} />
           </Route>
-          <Route path='user/provider/flexiblenetworks' element={<FlexibleNetworks />}>
+
+
+
+          <Route path='provider/flexiblenetworks' element={<FlexibleNetworks />}>
             <Route index element={<Navigate to="network" replace />} />
             <Route path='network' element={<Network />} />
             <Route path='rules' element={<Rules />} />
 
           </Route>
+
+          <Route path='provider/prioritizenetworks' element={<PrioritizeNetwork />}>
+           
+          </Route>
+
+
+          <Route path='prescriber/' element={<Prescriber />}>
+           
+           </Route>
+
+          
 
           {/* codes routes start  */}
 

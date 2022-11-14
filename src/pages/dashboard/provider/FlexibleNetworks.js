@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, Outlet, Route, Routes, useLocation, useNavigate, useOutletContext } from 'react-router-dom';
-import Footer from '../../../../shared/Footer';
+import Footer from '../../../shared/Footer';
 import { ToastContainer, toast } from 'react-toastify';
 import { Alert } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
+
 
 
 function FlexibleNetworks(props) {
     const location = useLocation();
     const currentpath = location.pathname.split('/').pop();
+    const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
 
     const [provider, setProvider] = useState([]);
     const [ProviderData, setProviderdata] = useState([]);
+    const [customerlist, setCustomerlist] = useState([]);
+
 
 
     const [tableData, settableData] = useState([]);
@@ -75,6 +80,51 @@ function FlexibleNetworks(props) {
                         </div>
                     </div>
                 </div>
+
+
+
+                <Row>
+                <Col>
+                    <form >
+                        <div className="card mt-3 mb-3">
+                            <div className="card-body">
+                                <div className="row mb-2">
+                                    <div className="col-md-12 mb-3">
+                                        <div className="form-group">
+                                            <small>Search Network ID/Name</small>
+                                            <input type="text" onKeyUp={(e) => searchCustomer(e)} className="form-control" placeholder='Start typing Network ID or Name' {...register("customerid")} />
+                                            {/* {errors.customerid && <span><p className='notvalid'>This field is required</p></span>} */}
+                                        </div>
+                                    </div>
+                                    {/* <div className="col-md-4 mb-3">
+                                        <div className="form-group">
+                                            <small>Customer Name</small>
+                                            <input type="text" className="form-control" placeholder='Enter Customer Name to search' {...register("customername")} />
+                                        </div>
+                                    </div>
+                                    <div className="col-md-2 mb-2">
+                                        <div className="form-group">
+                                            <small>&nbsp;</small><br />
+                                            <button type="submit" className="btn m-0 p-2 btn-theme" style={{ width: "100%", fontSize: "12px" }} >Search</button>
+                                        </div>
+                                    </div> */}
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </Col>
+            </Row>
+
+
+
+            <Row>
+                <Col>
+                    {/* {customerlist.length > 0 ? */}
+                        <CustomerTable customers={customerlist} />
+                        {/* : ''} */}
+                </Col>
+            </Row>
+
 
               
 
@@ -216,6 +266,80 @@ function FlexibleNetworks(props) {
     )
 
 
+}
+
+
+
+
+function CustomerTable(props) {
+
+    // const getCustomer = (customerid) => {
+    //     // console.log(customerid);
+    //     props.getCustomer(customerid);
+    // }
+
+    const CustomerList = [];
+    // for (let i = 0; i < props.customers.length; i++) {
+    //     CustomerList.push(<Cutomer customer={props.customers[i]} getCustomer={getCustomer} />);
+    // }
+
+    if (props.customers.length > 0) {
+        for (let i = 0; i < props.customers.length; i++) {
+            CustomerList.push(<Cutomer customer={props.customers[i]} />);
+        }
+    } else {
+        CustomerList.push(<NoReacords/>);
+    }
+    return (
+        <>
+            <div className="card mt-3 mb-3">
+                <div className="card-body">
+                    <div className="row">
+                        <div className="col-md-12">
+                            <h5 className="mb-2">Flexible Network List</h5>
+                        </div>
+                        <div style={{    height: '400px', overflowY: 'scroll'}}>
+                        <table className="table  table-bordered" style={{position:'relative'}}>
+                            <thead className='stickt-thead'>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>NAME</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                {CustomerList}
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
+    )
+
+}
+
+function NoReacords(params) {
+    return (
+        <>
+            <tr style={{padding: '10px', color:'red'}}><td colspan="7">No Records Matches..!</td></tr>
+        </>
+    )
+}
+
+
+function Cutomer(props) {
+    return (
+        <>
+            <tr>
+                <td>{props.customer.customer_id}</td>
+                <td>{props.customer.customer_name}</td>
+                <td><Button variant="primary" onClick={() => props.getCustomer(props.customer.customer_id)}>View</Button></td>
+            </tr>
+        </>
+    )
 }
 
 
