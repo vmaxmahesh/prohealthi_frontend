@@ -64,127 +64,20 @@ function SearchProvider() {
                     </div>
                 </div>
             </div>
-
-
+            <SearchProviderId />
+            <ProviderList />
             <div className="card mt-3 mb-3">
                 <div className="card-body">
-
-
-                    <form id="search-form">
-
-                        <div className="row">
-                            <div className="col-md-12">
-                                <h5 className="mb-2">Criteria</h5>
-                            </div>
-                            <div className="col-md-3 mb-3">
-                                <div className="form-group">
-                                    <small>ID</small>
-                                    <input type="text" className="form-control" name="" id="" placeholder="" required />
-                                </div>
-                            </div>
-                            <div className="col-md-3 mb-3">
-                                <div className="form-group">
-                                    <small>Name</small>
-                                    <input type="text" className="form-control" name="" id="" placeholder="" required />
-                                    <a href=""><span className="fa fa-search form-icon"></span></a>
-                                </div>
-                            </div>
-                            <div className="col-md-3 mb-3">
-                                <div className="form-group">
-                                    <small>Store Number</small>
-                                    <input type="text" className="form-control" name="" id="" placeholder="" required />
-                                </div>
-                            </div>
-                            <div className="col-md-3 mb-3">
-                                <div className="form-group">
-                                    <small>City</small>
-                                    <select className="form-select">
-                                        <option value="">Select City</option>
-                                        <option value="1">Hyderabad</option>
-                                        <option value="2">Vijayawada</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div className="col-md-3 mb-3">
-                                <div className="form-group">
-                                    <small>State</small>
-                                    <select className="form-select">
-                                        <option value="">Select State</option>
-                                        <option value="1">Andhara pradesh</option>
-                                        <option value="2">Telengana</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div className="col-md-3 mb-3">
-                                <div className="form-group">
-                                    <small>County</small>
-                                    <select className="form-select">
-                                        <option value="">Select County</option>
-                                        <option value="1">india</option>
-                                        <option value="2">asia</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div className="col-md-3 mb-3">
-                                <div className="form-group">
-                                    <small>ZIP</small>
-                                    <input type="text" className="form-control" name="" id="" placeholder="" required />
-                                </div>
-                            </div>
-                            <div className="col-md-3 mb-3">
-                                <div className="form-group">
-                                    <small>Area Code</small>
-                                    <input type="text" className="form-control" name="" id="" placeholder="" required />
-                                </div>
-                            </div>
-
-
-
-
-
-                            <div className="col-md-6 ms-auto text-end mb-3">
-                                {/* <a href="" className="btn btn-secondary">Cancel</a>&nbsp;&nbsp; */}
-                                {/* <a href="" className="btn btn-danger">Select</a>&nbsp;&nbsp; */}
-                                <button onClick={clearForm} className="btn btn-warning ">Clear</button>&nbsp;&nbsp;
-                                <button onClick={e =>
-                                    fillProviderData()} className="btn btn-info">Search</button>
-                            </div>
-                        </div>
-
-                    </form>
-
-
-
 
 
                     {ProviderData.length > 0 ?
                         <Results typedata={ProviderData} />
                         : ''}
-
-
+                       
                     <div className="row">
-                        <div className="col-md-6 mb-3">
-                            <div className="breadcrum">
-                                <ul>
-                                    <li><a href="">Home</a></li>
-                                    <li><i className="fas fa-angle-right"></i></li>
-                                    <li><a href="">Provider Data</a></li>
-                                    <li><i className="fas fa-angle-right"></i></li>
-                                    <li><a href="">Provider</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        {/* <div className="col-md-6 mb-3">
-                    <div className="breadcrum ">
-                        <ul>
-                            <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li>
-                        </ul>
-                    </div>
-                </div> */}
                     </div>
 
-
-
+                    
                     <div className="nav nav-tabs col-md-12" id="nav-tab" role="tablist">
                         <Link to="provider" className={'nav-link' + (currentpath == 'provider' ? ' active' : '')}>Provider</Link>
                         <Link to="effectivedates" className={'nav-link' + (currentpath == 'effectivedates' ? ' active' : '')}>Effective Dates</Link>
@@ -197,36 +90,71 @@ function SearchProvider() {
                         <Outlet context={[provider, setProvider]} />
 
                     </div>
-
-
-
-
-
-
-
-
-
-
+                    </div>
+                    
                 </div>
-            </div>
-
-
-
-
-
-
-
+                
             <Footer />
         </>
     );
 }
 
+function SearchProviderId()
+{
+    return(
+        <>
+          <div className="card mt-3 mb-3">
+                    <div className="card-body">
+                        <div className="row mb-2">
+                            <div className="col-md-12 mb-3">
+                                <div className="form-group">
+                                    <small>Provider </small>
+                                    <input type="text" className="form-control" placeholder='Start typing provider id/ name/ store no. to search'
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </>
+    )
+}
+
+function ProviderList()
+{
+    return(
+        <>
+         <div className="card mt-3 mb-3">
+                <div className="card-body">
+                        <div className="col-md-12">
+                            <h5 className="mb-2">Provider List </h5>
+                        </div>
+                    <div className="row">
+                    <div className="col-md-12">                        
+                        <table className= "table  table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Provider ID</th>
+                                    <th>Name</th>
+                                    <th>Store ID</th>
+                                    <th>Chain</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                               
+                            </tbody>
+                        </table>                        
+                    </div>   
+            </div>
+           </div>
+         </div> 
+        </>
+    )
+}
 
 function ProviderTypeRow(props) {
 
     const currentpath = location.pathname.split('/').pop();
-
-
     return (
         <>
             <tr>
@@ -235,9 +163,6 @@ function ProviderTypeRow(props) {
                 <td>{props.datar.storenumber}</td>
                 <td>{props.datar.chain}</td>
                 <td><Link to="allproviders" className="btn btn-sm btn-info"><i className="fa fa-eye"></i> View</Link></td>
-
-
-
             </tr>
         </>
     )
@@ -335,20 +260,9 @@ export function Provider(props) {
         mailing_store_no: '78989898',
         mail_order: 'true',
         mail_head_office_indicator: true,
-
-
-
     });
-
-
-
-
-
-
     return (
         <>
-
-
             <div className="card mt-3 mb-3">
                 <div className="card-body">
                     <form method="" action="">

@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { Link, Outlet, Route, Routes, useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import Footer from '../../../../shared/Footer';
 import { ToastContainer, toast } from 'react-toastify';
-import { Alert } from 'react-bootstrap';
+import { Alert, Row, Col } from 'react-bootstrap';
 
 
 function FlexibleNetworks(props) {
@@ -63,7 +63,7 @@ function FlexibleNetworks(props) {
                                 <li><i className="fas fa-angle-right"></i></li>
                                 <li><a href="">Provider Data</a></li>
                                 <li><i className="fas fa-angle-right"></i></li>
-                                <li><a href="">flixible Network</a></li>
+                                <li><a href="">Flixible Network</a></li>
                             </ul>
                         </div>
                     </div>
@@ -78,11 +78,10 @@ function FlexibleNetworks(props) {
 
               
 
+<SearchFlexibleNetwork />
 
 
-
-
-                <div className="data" style={{ display: '' }} >
+                 {/* <div className="data" style={{ display: '' }} >
                     <div className="nav nav-tabs" id="nav-tab" role="tablist">
 
                         <Link to="network" className={'nav-link' + (currentpath == 'network' ? ' active' : '')}>NetWork</Link>
@@ -93,10 +92,6 @@ function FlexibleNetworks(props) {
 
 
                         <Outlet context={[Flexiblenetwork, SetFlexibleNetwork]} />
-
-
-                        {/* const [Flexiblenetwork, SetFlexibleNetwork] = useState([]); */}
-
 
 
 
@@ -198,14 +193,31 @@ function FlexibleNetworks(props) {
                                 </div>
                             </div>
                             <div className="col-md-1 float-end">
-                                {/* <a href="" className="btn btn-theme pt-2 pb-2" style="width: 100%">Next</a> */}
                             </div>
                         </div>
                     </div>
 
-                </div>
+                </div>  */}
 
+<Row>
+                    <Col md="3">
+                        <FlexibleNetworkList />
+                    </Col>
 
+                    <Col md="9">
+                        <div className="nav nav-tabs" id="nav-tab" role="tablist">
+
+                            <Link to="network" className={'nav-link' + (currentpath == 'network' ? ' active' : '')}>NetWork</Link>
+                            <Link to="rules" className={'nav-link' + (currentpath == 'rules' ? ' active' : '')}>Rules</Link>
+
+                        </div>
+                        <div className="tab-content" id="nav-tabContent">
+
+                            <Outlet context={[Flexiblenetwork, SetFlexibleNetwork]} />
+                        </div>
+
+                    </Col>
+                </Row>
 
 
             </div>
@@ -214,8 +226,55 @@ function FlexibleNetworks(props) {
             <Footer />
         </>
     )
+}
 
+function SearchFlexibleNetwork() {
+    return (
+        <>
+            <div className="card mt-3 mb-3">
+                <div className="card-body">
+                    <div className="row mb-2">
+                        <div className="col-md-12 mb-3">
+                            <div className="form-group">
+                                <small>Flexible NetWork </small>
+                                <input type="text" className="form-control" placeholder='Start typing flexible network id/ name to search'
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
+    )
+}
 
+function FlexibleNetworkList() {
+    return (
+        <>
+            <div className="card mt-3 mb-3">
+                <div className="card-body">
+                    <div className="col-md-12">
+                        <h5 className="mb-2">Flexible Network List </h5>
+                    </div>
+                    <div className="row">
+                        <div className="col-md-12">
+                            <table className="table  table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th> ID</th>
+                                        <th>Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
+    )
 }
 
 
@@ -693,7 +752,7 @@ export function Rules(props) {
                                         required: true,
                                     })} class="d-none" />
 
-                                    <label for="male">Exclusion</label>
+                                    <label htmlFor="male">Exclusion</label>
                                     {errors.exclusion?.type === 'required' && <p role="alert" className="notvalid"> Exclusion  is  required</p>}
 
                                 </div>

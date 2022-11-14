@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { Link, Outlet, Route, Routes, useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import Footer from '../../../../shared/Footer';
 import { ToastContainer, toast } from 'react-toastify';
-import { Alert } from 'react-bootstrap';
+import { Alert, Col, Row } from 'react-bootstrap';
 
 
 function TraditionalNetworks(props) {
@@ -13,20 +13,9 @@ function TraditionalNetworks(props) {
     const [provider, setProvider] = useState([]);
     const [ProviderData, setProviderdata] = useState([]);
 
-
     const [tableData, settableData] = useState([]);
 
-
     const [traditionalnetwork, SetTraditionalNetwork] = useState([]);
-
-
-
-
-
-
-
-
-
 
     const fillProviderData = (e) => {
         // API  
@@ -44,14 +33,8 @@ function TraditionalNetworks(props) {
         // fillProviderData();
     }, [ProviderData]);
 
-
-
-
-
     return (
         <>
-
-
             <button onClick={e =>
                 fillProviderData()} className="btn btn-info">Search</button>
             <div className="dashboard-content clearfix">
@@ -78,10 +61,11 @@ function TraditionalNetworks(props) {
                 </div>
 
                 <div className="col-md-12 mb-3">
-                    <h4 >Search Client</h4>
+                    {/* <h4 >Search Client</h4> */}
+                    <SearchTraditionalNetwork />
                 </div>
 
-                <div className="card mt-3 mb-3">
+                {/* <div className="card mt-3 mb-3">
                     <div className="card-body" onClick={e =>
                         fillProviderData()}>
 
@@ -91,7 +75,7 @@ function TraditionalNetworks(props) {
                                 {ProviderData.length > 0 ?
                                     <TraditionalNetworkResults typedata={ProviderData} />
                                     : ''}
-                                {/* <table className="table table-striped table-bordered">
+                                <table className="table table-striped table-bordered">
                                     <thead>
                                         <tr>
                                             <th>ID</th>
@@ -106,15 +90,35 @@ function TraditionalNetworks(props) {
                                             <td><button type="submit" onClick={handleshow} className="btn btn-sm btn-info" id="show"><i className="fa fa-eye"></i> View</button></td>
                                         </tr>
                                     </tbody>
-                                </table> */}
+                                </table>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> */}
+
+                <Row>
+                    <Col md="3">
+                        <TraditionalNetworkList />
+                    </Col>
+
+                    <Col md="9">
+                        <div className="nav nav-tabs" id="nav-tab" role="tablist">
+
+                            <Link to="network" className={'nav-link' + (currentpath == 'network' ? ' active' : '')}>NetWork</Link>
+                            <Link to="providers" className={'nav-link' + (currentpath == 'providers' ? ' active' : '')}>Providers</Link>
+
+                        </div>
+                        <div className="tab-content" id="nav-tabContent">
+
+                            <Outlet context={[traditionalnetwork, SetTraditionalNetwork]} />
+                        </div>
+
+                    </Col>
+                </Row>
 
 
 
-                <div className="data" style={{ display: '' }} >
+                {/* <div className="data" style={{ display: '' }} >
                     <div className="nav nav-tabs" id="nav-tab" role="tablist">
 
                         <Link to="network" className={'nav-link' + (currentpath == 'network' ? ' active' : '')}>NetWork</Link>
@@ -123,16 +127,11 @@ function TraditionalNetworks(props) {
                     </div>
                     <div className="tab-content" id="nav-tabContent">
 
-
-                        <Outlet context={[traditionalnetwork, SetTraditionalNetwork]} />
-
+                        <Outlet context={[traditionalnetwork, SetTraditionalNetwork]} /> */}
 
                         {/* const [traditionalnetwork, SetTraditionalNetwork] = useState([]); */}
 
-
-
-
-                        <div className="tab-pane fade" id="Providers" role="tabpanel" aria-labelledby="nav-profile-tab">
+                        {/* <div className="tab-pane fade" id="Providers" role="tabpanel" aria-labelledby="nav-profile-tab">
 
                             <div className="card mt-3 mb-3">
                                 <div className="card-body">
@@ -140,9 +139,8 @@ function TraditionalNetworks(props) {
                                         <div className="col-md-12">
                                             <h5 className="mb-2">Providers within Network</h5>
                                         </div>
+
                                         <div className="col-md-12">
-
-
                                             <table className="table table-striped table-bordered">
                                                 <thead>
                                                     <tr>
@@ -203,7 +201,7 @@ function TraditionalNetworks(props) {
                                             <div className="form-group mb-3 mt-4">
                                                 <small>&nbsp;</small>
                                                 <input type="checkbox" id="male" className="d-none" />
-                                                <label for="male">Parcipation Denied</label>
+                                                <label htmlFor="male">Parcipation Denied</label>
                                             </div>
                                         </div>
                                         <div className="col-md-4">
@@ -225,32 +223,70 @@ function TraditionalNetworks(props) {
                                             <a href="" className="btn btn-warning ">Remove From List</a>&nbsp;&nbsp;
                                             <a href="provider-search.html" className="btn btn-info">Add to List</a>
                                         </div>
-
-
                                     </div>
                                 </div>
                             </div>
                             <div className="col-md-1 float-end">
-                                {/* <a href="" className="btn btn-theme pt-2 pb-2" style="width: 100%">Next</a> */}
+                                <a href="" className="btn btn-theme pt-2 pb-2" style="width: 100%">Next</a> *
+                            </div>
+                        </div> */}
+                    {/* </div>
+                </div>
+            </div> */}
+            <Footer />
+            </div>
+        </>
+    )
+}
+
+function SearchTraditionalNetwork() {
+    return (
+        <>
+            <div className="card mt-3 mb-3">
+                <div className="card-body">
+                    <div className="row mb-2">
+                        <div className="col-md-12 mb-3">
+                            <div className="form-group">
+                                <small>Traditional NetWork </small>
+                                <input type="text" className="form-control" placeholder='Start typing traditional network id/ name to search'
+                                />
                             </div>
                         </div>
                     </div>
-
                 </div>
-
-
-
-
             </div>
-
-
-            <Footer />
         </>
     )
-
-
 }
 
+function TraditionalNetworkList() {
+    return (
+        <>
+            <div className="card mt-3 mb-3">
+                <div className="card-body">
+                    <div className="col-md-12">
+                        <h5 className="mb-2">Traditional Network List </h5>
+                    </div>
+                    <div className="row">
+                        <div className="col-md-12">
+                            <table className="table  table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th> ID</th>
+                                        <th>Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
+    )
+}
 
 function TraditionalNetworkRow(props) {
 
@@ -271,28 +307,16 @@ function TraditionalNetworkRow(props) {
     }
 
     return (
-
-
-
         <>
-
-
-
             <tr>
                 <td>{props.datar.id}</td>
 
                 <td><button type="submit" onClick={handleshow} className="btn btn-sm btn-info" id="show"><i className="fa fa-eye"></i> View</button></td>
 
-
-
-
             </tr>
         </>
     )
 }
-
-
-
 
 function TraditionalNetworkResults(props) {
 
@@ -302,7 +326,6 @@ function TraditionalNetworkResults(props) {
         myData.push(<TraditionalNetworkRow datar={props.typedata[index]}
         />);
     }
-
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -312,10 +335,8 @@ function TraditionalNetworkResults(props) {
         hide: 'false'
     }
 
-
     return (
         <>
-
             <div className="row">
                 <div className="col-md-12 mb-3">
                     <table className="table table-striped table-bordered">
@@ -336,14 +357,9 @@ function TraditionalNetworkResults(props) {
             </div>
         </>
     )
-
-
-
-
 }
 
 export function Network(props) {
-
 
     const { register, handleSubmit, formState: { errors } } = useForm();
 
@@ -351,19 +367,14 @@ export function Network(props) {
 
     const onsubmit = (data) => {
 
-
-
-
         const id = traditionalnetwork;
         id['networkdata'] = data;
         SetTraditionalNetwork(id);
         console.log(data);
 
-
     }
     return (
         <>
-
             <form onSubmit={handleSubmit(onsubmit)}>
                 <div className="tab-pane fade show active" id="Network" role="tabpanel" aria-labelledby="nav-home-tab">
                     <div className="card mt-3 mb-3">
@@ -574,8 +585,6 @@ export function Network(props) {
                     </div>
                 </div>
             </form>
-
-
         </>
     )
 }
@@ -586,12 +595,7 @@ export function Providers(props) {
 
     const { register, handleSubmit, formState: { errors } } = useForm();
 
-
-
-
     const [networkData, setNetworkData] = useState([]);
-
-
 
     useEffect(() => {
     }, [networkData]);
@@ -600,7 +604,6 @@ export function Providers(props) {
 
         setNetworkData([data]);
         console.log(data);
-
 
     }
 
@@ -612,107 +615,88 @@ export function Providers(props) {
 
     return (
         <>
-
-
-
-                <div class="card mt-3 mb-3">
-                    <div class="card-body">
+            <div className="card mt-3 mb-3">
+                <div className="card-body">
                     <form key={1} id="providersform" onSubmit={handleSubmit(onSubmit)}>
 
-                        <div class="row">
-                            <div class="col-md-12">
-                                <h5 class="mb-2">Providers within Network</h5>
+                        <div className="row">
+                            <div className="col-md-12">
+                                <h5 className="mb-2">Providers within Network</h5>
                             </div>
-                           
-
-
-
-
-
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
+                            <div className="col-md-6">
+                                <div className="form-group mb-3">
                                     <small>Provider ID</small>
-                                    <input type="text" class="form-control" name="provider_id" {...register('provider_id', {
+                                    <input type="text" className="form-control" name="provider_id" {...register('provider_id', {
                                         required: true,
                                     })} placeholder="Enter Customer ID" id="" required="" />
 
                                     {errors.provider_id?.type === 'required' && <p role="alert" className="notvalid">Provider ID is  required</p>}
 
-                                    <a href=""><span class="fa fa-search form-icon"></span></a>
+                                    <a href=""><span className="fa fa-search form-icon"></span></a>
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
+                            <div className="col-md-6">
+                                <div className="form-group mb-3">
                                     <small>Price Schedule</small>
-                                    <input type="text" class="form-control" name="price_schedule"  {...register('price_schedule',{
-                                        required:true,
+                                    <input type="text" className="form-control" name="price_schedule"  {...register('price_schedule', {
+                                        required: true,
                                     })} placeholder="Enter Price Schdule" id="" required="" />
-                                    <a href=""><span class="fa fa-search form-icon"></span></a>
+                                    <a href=""><span className="fa fa-search form-icon"></span></a>
                                     {errors.price_schedule?.type === 'required' && <p role="alert" className="notvalid">Price Schedule is  required</p>}
 
                                 </div>
                             </div>
 
-                            <div class="col-md-4">
-                                <div class="form-group mb-3 mt-4">
+                            <div className="col-md-4">
+                                <div className="form-group mb-3 mt-4">
                                     <small>&nbsp;</small>
-                                    <input type="checkbox" id="male" {...register('participation_denied',{
-                                        required:true,
-                                    })} name="participation_denied" class="d-none" />
-                                    <label for="male">Parcipation Denied</label>
+                                    <input type="checkbox" id="male" {...register('participation_denied', {
+                                        required: true,
+                                    })} name="participation_denied" className="d-none" />
+                                    <label htmlFor="male">Parcipation Denied</label>
                                     {errors.participation_denied?.type === 'required' && <p role="alert" className="notvalid">Parcipation Denied is  required</p>}
 
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group mb-3">
+                            <div className="col-md-4">
+                                <div className="form-group mb-3">
                                     <small>Effective Date</small>
-                                    <input type="date" class="form-control" name="effective_date" {...register('effective_date',{
-                                        required:true,
+                                    <input type="date" className="form-control" name="effective_date" {...register('effective_date', {
+                                        required: true,
                                     })} placeholder="Enter Customer ID" id="" required="" />
                                     {errors.effective_date?.type === 'required' && <p role="alert" className="notvalid">Effective Date  is  required</p>}
 
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group mb-3">
+                            <div className="col-md-4">
+                                <div className="form-group mb-3">
                                     <small>Termination Date</small>
-                                    <input type="date" class="form-control" name="termination_date" {...register('termination_date',{
-                                        required:true,
+                                    <input type="date" className="form-control" name="termination_date" {...register('termination_date', {
+                                        required: true,
                                     })} placeholder="Enter Customer ID" id="" required="" />
 
                                     {errors.termination_date?.type === 'required' && <p role="alert" className="notvalid">Termination Date  is  required</p>}
 
                                 </div>
                             </div>
-                            <div class="clearfix mb-2"></div>
+                            <div className="clearfix mb-2"></div>
 
-                            <div class="col-md-6 ms-auto text-end mb-3">
-                                <a  onClick={clearForm} class="btn btn-danger">Clear</a>&nbsp;&nbsp;
-                                {/* <a href="" class="btn btn-warning ">Remove From List</a>&nbsp;&nbsp; */}
-                                <button type="submit" class="btn btn-info">Add to List</button>
+                            <div className="col-md-6 ms-auto text-end mb-3">
+                                <a onClick={clearForm} className="btn btn-danger">Clear</a>&nbsp;&nbsp;
+                                {/* <a href="" className="btn btn-warning ">Remove From List</a>&nbsp;&nbsp; */}
+                                <button type="submit" className="btn btn-info">Add to List</button>
                             </div>
-
-
-
-                           
-
-
                         </div>
-                        </form>
+                    </form>
 
-                         {/* {networkData.length > 0 ? */}
-             <ProvidersResults typedata={networkData} />
-                            {/* // : ''} */}
+                    {/* {networkData.length > 0 ? */}
+                    <ProvidersResults typedata={networkData} />
+                    {/* // : ''} */}
 
-                    </div>
-                    
                 </div>
 
-
-            
-
+            </div>
 
         </>
     )
@@ -722,27 +706,18 @@ export function Providers(props) {
 
 function ProvidersResults(props) {
 
-
-
     var providersData = [];
     for (let index = 0; index < props.typedata.length; index++) {
         providersData.push(<ProvidersRow datar={props.typedata[index]}
         />);
     }
-
-
-
-
     return (
         <>
-
-           
             <div className="card mt-3 mb-3 data" >
                 <div className="card-body">
                     <div className="row">
                         <div className="col-md-12">
-                            <table className="table table-striped table-
-bordered">
+                            <table className="table table-striped table-bordered">
                                 <thead>
                                     <tr>
                                         <th>Provider ID</th>
@@ -786,42 +761,28 @@ function ProvidersRow(props) {
 
     const [display, setDisplay] = useState('');
 
-
     const [show, setShow] = useState(false);
-
 
     const handleshow = (e) => {
         setDisplay('show');
 
         // console.log(display);
 
-
     }
 
     const deleteRow = (e) => {
         alert(e.currentTarget.value);
-
-
     }
 
     return (
-
-
-
         <>
-
-
-
             <tr>
                 <td>{props.datar.provider_id}</td>
                 <td>{props.datar.price_schedule}</td>
                 <td>{props.datar.participation_denied}</td>
                 <td>{props.datar.effective_date}</td>
                 <td>{props.datar.termination_date}</td>
-                <td><button  onClick={deleteRow} value={props.datar.provider_id} class="btn btn-sm btn-warning"><i class="fa fa-trash-alt"></i></button></td>
-
-
-
+                <td><button onClick={deleteRow} value={props.datar.provider_id} className="btn btn-sm btn-warning"><i className="fa fa-trash-alt"></i></button></td>
             </tr>
         </>
     )

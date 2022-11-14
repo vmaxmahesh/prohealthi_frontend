@@ -62,6 +62,8 @@ import CopayStrategy from './pages/dashboard/strategies/CopayStrategy';
 import AccumulatedBenefitStrategy from './pages/dashboard/strategies/AccumulatedBenefitStrategy';
 import PlanAssociation from './pages/dashboard/plan_design/PlanAssociation';
 import PlanEdit, { DateLimitations, PlanEditNotes, PlanFormulary, RefillLimitations, RxLimitations } from './pages/dashboard/plan_design/PlanEdit';
+import SuperProvider from './pages/dashboard/user/provider/SuperProvider';
+import PrioritizeNetwork from './pages/dashboard/user/provider/PrioritizeNetworks';
 
 function setToken(userToken) {
   sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -179,7 +181,7 @@ function App() {
 
           <Route path="code/provider-type" element={<ProviderType />}>
           </Route>
-          <Route path='user/searchprovider' element={<SearchProvider />}>
+          <Route path='provider' element={<SearchProvider />}>
             <Route index element={<Navigate to="provider" replace />} />
 
             <Route path='provider' element={<Provider />} />
@@ -187,23 +189,24 @@ function App() {
             <Route path='pharmistsystem' element={<PharmistSystem />} />
 
             <Route path='networkparticipation' element={<NetworkParticipation />} />
-
-
           </Route>
 
 
-          <Route path='user/provider/traditionalnetworks' element={<TraditionalNetworks />}>
+          <Route path='provider/traditionalnetworks' element={<TraditionalNetworks />}>
             <Route index element={<Navigate to="network" replace />} />
-
             <Route path='network' element={<Network />} />
             <Route path='providers' element={<Providers />} />
           </Route>
-          <Route path='user/provider/flexiblenetworks' element={<FlexibleNetworks />}>
+
+          <Route path='provider/flexiblenetworks' element={<FlexibleNetworks />}>
             <Route index element={<Navigate to="network" replace />} />
             <Route path='network' element={<Network />} />
             <Route path='rules' element={<Rules />} />
-
           </Route>
+
+          <Route path='provider/superprovider' element={<SuperProvider />}></Route>
+
+          <Route path='provider/prioritize-networks' element={<PrioritizeNetwork />}></Route>
 
           {/* codes routes start  */}
 
