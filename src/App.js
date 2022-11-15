@@ -8,11 +8,8 @@ import Clientgroup, { Charges as CGCharges, Identification as Cgi, Eligibility a
 import Customer, { Eligibility, Exceptions, Identification, Indicators, Strategy } from './pages/dashboard/user/customer/Customer';
 import Client, { Eligibility as Ce, Identification as Ci, Indicators as Cin, Coverage as CS } from './pages/dashboard/user/client/Client';
 import Member, { ChnageLog, ClaimHistory, Coverage, CoverageHistory, Health, MemberForm, Notes, Overrides, PriorAuthorisation, ProviderSearch } from './pages/dashboard/members/Member';
-
 import SearchProvider, { Provider, Effectivedates, PharmistSystem, NetworkParticipation } from './pages/dashboard/provider/SearchProvider';
-
 import TraditionalNetworks, { Network, Providers } from './pages/dashboard/provider/TraditionalNetworks';
-
 import FlexibleNetworks, { Rules } from './pages/dashboard/provider/FlexibleNetworks';
 import PrioritizeNetwork from './pages/dashboard/provider/PrioritizeNetwork';
 import Membership, { SearchById, SearchByName } from './pages/dashboard/members/Membership';
@@ -45,8 +42,6 @@ import ExceptionReason from './pages/dashboard/exceptionlist/ExceptionReason';
 import BenefitList from './pages/dashboard/exceptionlist/BenefitList';
 import SuperProvider from './pages/dashboard/provider/SuperProvider';
 import Prescriber from './pages/dashboard/prescriber/Prescriber'
-
-
 import BenefitDerivation from './pages/dashboard/exceptionlist/BenefitDerivation';
 import Benefits from './pages/dashboard/code/Benefits';
 import DiagnosisValidation from './pages/dashboard/validation_lists/DiagnosisValidation';
@@ -73,9 +68,9 @@ function setToken(userToken) {
 }
 
 function getToken() {
-  const tokenString = sessionStorage.getItem('token');
-  const userToken = JSON.parse(tokenString);
-  return userToken?.token
+  // const tokenString = sessionStorage.getItem('token');
+  // const userToken = JSON.parse(tokenString);
+  // return userToken?.token3333333333333x
 }
 
 function App() {
