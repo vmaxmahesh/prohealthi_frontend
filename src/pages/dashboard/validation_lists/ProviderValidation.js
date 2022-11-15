@@ -1,7 +1,144 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { render } from 'react-dom';
+import { useForm } from 'react-hook-form';
+import { Link, Outlet, useLocation, useOutletContext } from 'react-router-dom';
+
 
 export default function ProviderValidation()
 {
+
+
+
+    const scollToRef = useRef();
+
+
+    const [ndcData, setNdcData] = useState([]);
+    const [ndcClass, setNdClass] = useState([]);
+
+    const [selctedNdc, setSelctedNdc] = useState('');
+
+
+
+    const getNDCItems = (ndcid) => {
+        // ndc_exception_list
+
+        var test = {};
+        test.ndc_exception_list = ndcid;
+        setSelctedNdc(test);
+
+        // //  console.log(customerid);
+        const requestOptions = {
+            method: 'GET',
+            // mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            // body: encodeURIComponent(data)
+        };
+        // //  console.log(watch(fdata));
+
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/provider/get/${ndcid}`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                //  console.log(response);
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    setNdClass([]);
+                    return Promise.reject(error);
+                } else {
+                    setNdClass(data.data);
+                    // scollToRef.current.scrollIntoView()
+                }
+
+
+                if (response === '200') {
+                }
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+    }
+
+
+    const getNDCItemDetails = (ndcid) => {
+         console.log(ndcid);
+        const requestOptions = {
+            method: 'GET',
+            // mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            // body: encodeURIComponent(data)
+        };
+        // //  console.log(watch(fdata));
+
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/provider/details/${ndcid}`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                //  console.log(response);
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    return Promise.reject(error);
+                } else {
+                    setSelctedNdc(data.data);
+                    console.log(selctedNdc);
+                    scollToRef.current.scrollIntoView()
+                    return;
+                }
+
+
+                if (response === '200') {
+                }
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+    }
+
+
+
+
+
+
+
+
+    const searchException = (fdata) => {
+
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        };
+
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/provider/search?search=${fdata.target.value}`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                //  console.log(response);
+                console.log(data.data);
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    setNdcData([]);
+                    return Promise.reject(error);
+
+                } else {
+                    setNdcData(data.data);
+                    return;
+                }
+
+
+
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+    }
     return(
         <>
         <div className="row">
@@ -24,13 +161,85 @@ export default function ProviderValidation()
                     </div>
                 </div>
             </div>
-            <SearchProviderValidation />
+
+
+            <SearchProviderValidation searchException={searchException} />
+
+
+            <ProviderList ndcListData={ndcData} ndcClassData={ndcClass} getNDCItem={getNDCItems} getNDCItemDetails={getNDCItemDetails} selctedNdc={selctedNdc} />
+
+
+            <ProviderValidationForm  viewDiagnosisFormdata={selctedNdc} />
+
+
         </>
     )
 }
 
-function SearchProviderValidation()
+
+
+
+
+function NdcRow(props) {
+
+    useEffect(() => {
+    
+    }, [props.selected]);
+
+
+
+    return (
+        <>
+            <tr className={(props.selected && props.ndcRow.prov_type_list_id == props.selected.prov_type_list_id ? ' tblactiverow ' : '')}
+
+                onClick={() => props.getNDCItem(props.ndcRow.prov_type_list_id)}
+            >
+                <td>{props.ndcRow.prov_type_list_id}</td>
+                <td >{props.ndcRow.description}</td>
+
+                {/* <td><button className="btn btn-sm btn-info" id="" ><i className="fa fa-eye"></i> View</button></td> */}
+            </tr>
+        </>
+    )
+}
+
+
+function NdcClassRow(props) {
+
+    useEffect(() => {
+
+    }, [props.selected]);
+
+    return (
+        <>
+            <tr
+                className={(props.selected && props.ndcClassRow.prov_type_list_id == props.selected.prov_type_list_id ? ' tblactiverow ' : '')}
+                onClick={() => props.getNDCItemDetails(props.ndcClassRow.prov_type_list_id)}
+
+            >
+                <td>{props.ndcClassRow.prov_type_list_id}</td>
+                <td>{props.ndcClassRow.diagnosis_list}</td>
+              
+                {/* <td><button className="btn btn-sm btn-info" id="" ><i className="fa fa-eye"></i> View</button></td> */}
+            </tr>
+        </>
+    )
+}
+
+
+
+
+
+
+function SearchProviderValidation(props)
 {
+
+    
+    const searchException = (fdata) => {
+        // alert(fdata);
+
+        props.searchException(fdata);
+    }
     return(
         <>
         <div className="card mt-3 mb-3">
@@ -39,20 +248,52 @@ function SearchProviderValidation()
                         <div className="col-md-12 mb-3">
                             <div className="form-group">
                                 <small>Provider Validation ID/Name</small>
-                                <input type="text"  className="form-control" placeholder='Start typing provider validation ID/name to search'
+                                <input type="text" onKeyUp={(e) => searchException(e)}   className="form-control" placeholder='Start typing provider validation ID/name to search'
                                 />
                             </div>
                         </div>                       
                     </div>
                 </div>
             </div>
-            <ProviderList />
+            {/* <ProviderList /> */}
         </>
     )
 }
 
-function ProviderList()
+function ProviderList(props)
 {
+
+
+    const scollToRef = useRef();
+
+    useEffect(() => { }, [props.selctedNdc]);
+    // //  console.log(props.selctedNdc);
+
+    const getNDCItem = (ndciemid) => {
+        alert(ndciemid);
+        props.getNDCItem(ndciemid);
+    }
+
+    const getNDCItemDetails = (ndciemid) => {
+        props.getNDCItemDetails(ndciemid);
+    }
+
+
+    const ndcListArray = [];
+    for (let i = 0; i < props.ndcListData.length; i++) {
+        ndcListArray.push(<NdcRow ndcRow={props.ndcListData[i]} getNDCItem={getNDCItem} selected={props.selctedNdc} />);
+    }
+
+    const ndcClassArray = [];
+    for (let j = 0; j < props.ndcClassData.length; j++) {
+        ndcClassArray.push(<NdcClassRow ndcClassRow={props.ndcClassData[j]} getNDCItemDetails={getNDCItemDetails} selected={props.selctedNdc} />);
+    }
+
+    const [ncdListData, setNcdListData] = useState();
+    const [show, setShow] = useState("none");
+    const handleShow = () => setShow("block");
+
+
     return(
         <>
          <div className="card mt-3 mb-3">
@@ -76,7 +317,7 @@ function ProviderList()
                                                 </tr>
                                             </thead>
                                             <tbody>
-
+                                            {ndcListArray}
                                             </tbody>
                                         </table>
                                     </div>
@@ -97,6 +338,9 @@ function ProviderList()
                                                 </tr>
                                             </thead>
                                             <tbody>
+
+                                            {ndcClassArray}
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -106,13 +350,19 @@ function ProviderList()
                     </div>
                 </div>
             </div>
-            <ProviderValidationForm />
+            {/* <ProviderValidationForm /> */}
         </>
     )
 }
 
-function ProviderValidationForm()
+function ProviderValidationForm(props)
 {
+
+    const { register,reset, handleSubmit, watch, formState: { errors } } = useForm();
+
+
+    useEffect(() => { reset(props.viewDiagnosisFormdata) }, [props.viewDiagnosisFormdata]);
+
     return(
         <>
         <div className="card mt-3 mb-3">
@@ -125,13 +375,13 @@ function ProviderValidationForm()
                             <div className="col-md-3 mb-3">
                                 <div className="form-group">
                                     <small>ID</small>
-                                    <input type="text" className="form-control" name="" id="" placeholder="" required />
+                                    <input type="text" className="form-control" name="prov_type_list_id" {...register('prov_type_list_id')} id="" placeholder="" required />
                                 </div>
                             </div>
                             <div className="col-md-3 mb-3">
                                 <div className="form-group">
                                     <small>Name</small>
-                                    <input type="text" className="form-control" name="" id="" placeholder="" required />
+                                    <input type="text" className="form-control" name="description"  {...register('description')} id="" placeholder="" required />
                                 </div>
                             </div>
                             <div className="col-md-3 mb-3">
