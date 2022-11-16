@@ -61,6 +61,15 @@ import CopayStrategy from './pages/dashboard/strategies/CopayStrategy';
 import AccumulatedBenefitStrategy from './pages/dashboard/strategies/AccumulatedBenefitStrategy';
 import PlanAssociation from './pages/dashboard/plan_design/PlanAssociation';
 import PlanEdit, { DateLimitations, PlanEditNotes, PlanFormulary, RefillLimitations, RxLimitations } from './pages/dashboard/plan_design/PlanEdit';
+import SuperProvider from './pages/dashboard/user/provider/SuperProvider';
+import PrioritizeNetwork from './pages/dashboard/user/provider/PrioritizeNetworks';
+import Prescriber from './pages/dashboard/prescriber/Prescriber';
+import ProviderTypeValidation from './pages/dashboard/exceptionlist/ProviderTypeValidation';
+import ProcedureCode from './pages/dashboard/exceptionlist/ProcedureCode';
+import SuperBenefitList from './pages/dashboard/exceptionlist/SuperBenefitList';
+import MembersData, { ChangeLogTab, ClaimHistoryTab, CoverageHistoryTab, HealthConditionsTab, MemberTab, NotesTab, OverridesTab, PriorAuthorizationTab, ProviderSearchTab } from './pages/dashboard/membership/MembersData';
+import PriorAuthorization, { Authorization, PriorNotes, PriorPricing } from './pages/dashboard/membership/PriorAuthorization';
+import PlanValidations from './pages/dashboard/membership/PlanValidation';
 
 function setToken(userToken) {
   sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -179,9 +188,7 @@ function App() {
 
           <Route path="code/provider-type" element={<ProviderType />}>
           </Route>
-
-
-          <Route path='searchprovider' element={<SearchProvider />}>
+          <Route path='provider' element={<SearchProvider />}>
             <Route index element={<Navigate to="provider" replace />} />
 
             <Route path='provider' element={<Provider />} />
@@ -189,30 +196,21 @@ function App() {
             <Route path='pharmistsystem' element={<PharmistSystem />} />
 
             <Route path='networkparticipation' element={<NetworkParticipation />} />
-
-
           </Route>
 
           <Route path='provider/superprovider' element={<SuperProvider />}>
            
 
-          </Route>
-
-
           <Route path='provider/traditionalnetworks' element={<TraditionalNetworks />}>
             <Route index element={<Navigate to="network" replace />} />
-
             <Route path='network' element={<Network />} />
             <Route path='providers' element={<Providers />} />
           </Route>
-
-
 
           <Route path='provider/flexiblenetworks' element={<FlexibleNetworks />}>
             <Route index element={<Navigate to="network" replace />} />
             <Route path='network' element={<Network />} />
             <Route path='rules' element={<Rules />} />
-
           </Route>
 
           <Route path='provider/prioritizenetworks' element={<PrioritizeNetwork />}>
@@ -225,6 +223,9 @@ function App() {
            </Route>
 
           
+          <Route path='provider/superprovider' element={<SuperProvider />}></Route>
+
+          <Route path='provider/prioritize-networks' element={<PrioritizeNetwork />}></Route>
 
           {/* codes routes start  */}
 
@@ -331,7 +332,14 @@ function App() {
           <Route path="exception-list/benefit-derivation" element={<BenefitDerivation />}>
           </Route>
 
+          <Route path="exception-list/provider-type-validation" element={<ProviderTypeValidation />}>
+          </Route>
 
+          <Route path="exception-list/procedure-code-list" element={<ProcedureCode />}>
+          </Route>
+
+          <Route path="exception-list/super-benefit-list" element={<SuperBenefitList />}>
+          </Route>
           {/* exception list route ends  */}
 
           <Route path="code/benefits" element={<Benifits />}>
@@ -433,6 +441,35 @@ function App() {
             <Route path="notes" element={<PlanEditNotes />} />
           </Route>
           {/* plan design route ends  */}
+
+          {/* Prescriber route starts  */}
+          <Route path="prescriber-data/prescriber" element={<Prescriber />}></Route>
+          {/* Prescriber route ends  */}
+
+          {/* Membership route starts  */}
+          <Route path="membership/member" element={<MembersData />}>
+            <Route index element={<Navigate to="member" />}></Route>
+            <Route path="member" element={<MemberTab />} />
+            <Route path="overrides" element={<OverridesTab />} />
+            <Route path="coverage-history" element={<CoverageHistoryTab />} />
+            <Route path="health-conditions" element={<HealthConditionsTab />} />
+            <Route path="notes" element={<NotesTab />} />
+            <Route path="claim-history" element={<ClaimHistoryTab />} />
+            <Route path="prior-authorization" element={<PriorAuthorizationTab />} />
+            <Route path="provider-search" element={<ProviderSearchTab />} />
+            <Route path="change-log" element={<ChangeLogTab />} />
+          </Route>
+
+          <Route path='membership/prior-authorization' element={<PriorAuthorization />}>
+            <Route index element={<Navigate to="authorization"/>}></Route>
+            <Route path='authorization' element={<Authorization />} />
+            <Route path='pricing' element={<PriorPricing />} />
+            <Route path='notes' element={<PriorNotes />} />
+          </Route>
+
+          <Route path='membership/plan-validations' element={<PlanValidations />}>
+          </Route>
+          {/* membership route ends  */}
 
 
         </Route>

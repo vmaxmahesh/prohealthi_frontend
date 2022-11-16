@@ -25,6 +25,8 @@ export default function GPIExclusion()
                 </div>
             </div>
             <SearchGPIExclusion />
+            <GPIExclusionList />
+            <GPIExclusionForm />
         </>
     )
 }
@@ -46,7 +48,7 @@ function SearchGPIExclusion()
                     </div>
                 </div>
             </div> 
-            <GPIExclusionList />
+            
         </>
     )
 }
@@ -104,7 +106,7 @@ function GPIExclusionList()
                     </div>
                 </div>
             </div> 
-            <GPIExclusionForm />
+            
         </>
     )
 }

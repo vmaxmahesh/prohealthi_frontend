@@ -5,20 +5,14 @@ import { Link, Outlet, useLocation, useOutletContext } from 'react-router-dom';
 
 export default function NDC() {
     const scollToRef = useRef();
-
-
     const [ndcData, setNdcData] = useState([]);
     const [ndcClass, setNdClass] = useState([]);
-
     const [selctedNdc, setSelctedNdc] = useState('');
-
     const getNDCItems = (ndcid) => {
-        // ndc_exception_list
         var test = {};
         test.ndc_exception_list = ndcid;
         setSelctedNdc(test);
 
-        // //  console.log(customerid);
         const requestOptions = {
             method: 'GET',
             // mode: 'no-cors',
@@ -161,9 +155,7 @@ export default function NDC() {
                 </div>
             </div>
             <SearchNDC searchException={searchException} />
-
             <ShowNDCList ndcListData={ndcData} ndcClassData={ndcClass} getNDCItem={getNDCItems} getNDCItemDetails={getNDCItemDetails} selctedNdc={selctedNdc} />
-
             <div ref={scollToRef}>
                 <AddNcdList selectedNdc={selctedNdc} />
             </div>
