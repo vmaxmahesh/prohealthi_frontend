@@ -26,6 +26,8 @@ export default function AccumulatedBenefits()
                 </div>
             </div>  
             <SearchAccumulatedBenefit />
+            <AccumulatedBenefitList />
+            <AccumulatedBenefitForm />
         </>
     )
 }
@@ -47,7 +49,7 @@ function SearchAccumulatedBenefit()
                     </div>
                 </div>
             </div> 
-            <AccumulatedBenefitList />
+            
         </>
     )
 }
@@ -89,7 +91,7 @@ function AccumulatedBenefitList()
                     </div>
                 </div>
             </div>
-            <AccumulatedBenefitForm />
+            
         </>
     )
 }

@@ -24,7 +24,9 @@ export default function MajorMedicalMaximums()
                     </div>
                 </div>
             </div>
-            <SeacrchMajorMedicalMax />            
+            <SeacrchMajorMedicalMax />   
+            <MajorMedicalMaximumsList /> 
+            <MajorMedicalMaximumForms />        
         </>
     )
 }
@@ -46,7 +48,7 @@ function SeacrchMajorMedicalMax()
                     </div>
                 </div>
             </div>
-            <MajorMedicalMaximumsList />
+            
         </>
     )
 }
@@ -124,7 +126,7 @@ function MajorMedicalMaximumsList()
                     </div>
                 </div>
             </div> 
-            <MajorMedicalMaximumForms />
+            
         </>
     )
 }
