@@ -53,7 +53,7 @@ import DiagnosisPrioritization from './pages/dashboard/validation_lists/Diagnosi
 import AccumulatedBenefits, { ExclusionLimitation, Deductible } from './pages/dashboard/accumulated_benefits/AccumulatedBenefits';
 import GPIExclusion from './pages/dashboard/accumulated_benefits/GPIExclusion';
 import NDCExclusion from './pages/dashboard/accumulated_benefits/NDCExclusion';
-import MajorMedicalMaximums from './MajorMedicalMaximums';
+import MajorMedicalMaximums from './pages/dashboard/accumulated_benefits/MajorMedicalMaximums';
 import DrugDatabase, { Distribution, General, IDCodes, Pricing as DrugInformationPricing } from './pages/dashboard/drug_information/DrugDatabase';
 import NDCCrossReference from './pages/dashboard/drug_information/NDCCrossReference';
 import PricingStrategies from './pages/dashboard/strategies/PricingStrategies';
