@@ -376,11 +376,7 @@ function PriceScheduleForm(props)
                                     </div>
                                 </div>
                             </div>
-                        </div>
-        </div>
 
-        <div className="card mt-3 mb-3">
-            <div className="card-body">
             
                 <div className="row mb-2">
                         <div className="col-md-12">
@@ -472,8 +468,11 @@ function PriceScheduleForm(props)
                     {/* <a href="" className="btn btn-theme pt-2 pb-2" style={{width: "100%"}}>Next</a> */}
                 </div> 
                 </div>
-            </div>
         </div>
+        </div>
+
+    
+
         </>
     )
 }
