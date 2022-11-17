@@ -270,7 +270,7 @@ function ProviderList(props)
     // //  console.log(props.selctedNdc);
 
     const getNDCItem = (ndciemid) => {
-        alert(ndciemid);
+        // alert(ndciemid);
         props.getNDCItem(ndciemid);
     }
 
