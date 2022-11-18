@@ -247,7 +247,7 @@ function ProcListRow(props) {
     return (
         <>
             <tr  onClick={() => props.getListData(props.rowListData)}
-                className={(props.selected && props.rowListData.proc_code_list_id == props.selected.proc_code_list_id ? ' tblactiverow ' : '')}>
+                className={(props.selected && props.rowListData.effective_date == props.selected.effective_date ? ' tblactiverow ' : '')}>
                 <td>{props.rowListData.effective_date}</td>
                 <td>{props.rowListData.procedure_code}</td>
             </tr>
