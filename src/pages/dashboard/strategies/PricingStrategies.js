@@ -4,8 +4,7 @@ import { useForm } from 'react-hook-form';
 import { Link, Outlet, useLocation, useOutletContext } from 'react-router-dom';
 
 
-export default function PricingStrategies()
-{
+export default function PricingStrategies() {
 
     const scollToRef = useRef();
 
@@ -94,7 +93,7 @@ export default function PricingStrategies()
 
 
     const getNDCItemDetails = (ndcid) => {
-         console.log(ndcid);
+        console.log(ndcid);
         const requestOptions = {
             method: 'GET',
             // mode: 'no-cors',
@@ -129,14 +128,14 @@ export default function PricingStrategies()
                 console.error('There was an error!', error);
             });
     }
- 
 
 
 
 
-    return(
+
+    return (
         <>
-         <div className="row">
+            <div className="row">
                 <div className="col-md-6 mb-3">
                     <div className="breadcrum">
                         <ul>
@@ -155,7 +154,7 @@ export default function PricingStrategies()
                         </ul>
                     </div>
                 </div>
-            </div> 
+            </div>
 
 
             <SearchPricingStrategy searchException={searchException} />
@@ -163,35 +162,34 @@ export default function PricingStrategies()
 
             <PricingStrategyList ndcListData={ndcData} ndcClassData={ndcClass} getNDCItem={getNDCItems} getNDCItemDetails={getNDCItemDetails} selctedNdc={selctedNdc} />
 
-            <PriceScheduleForm  viewDiagnosisFormdata={selctedNdc} />
+            <PriceScheduleForm viewDiagnosisFormdata={selctedNdc} />
         </>
     )
 }
 
-function SearchPricingStrategy(props)
-{
+function SearchPricingStrategy(props) {
 
     const searchException = (fdata) => {
         // alert(fdata);
 
         props.searchException(fdata);
     }
-    return(
+    return (
         <>
-        <div className="card mt-3 mb-3">
+            <div className="card mt-3 mb-3">
                 <div className="card-body">
                     <div className="row mb-2">
                         <div className="col-md-12 mb-3">
                             <div className="form-group">
                                 <small>Pricing Strategy</small>
-                                <input type="text" onKeyUp={(e) => searchException(e)}  className="form-control" placeholder='Start typing  pricing strategy ID/name to search'
+                                <input type="text" onKeyUp={(e) => searchException(e)} className="form-control" placeholder='Start typing  pricing strategy ID/name to search'
                                 />
                             </div>
-                        </div>                       
+                        </div>
                     </div>
                 </div>
             </div>
-            </>
+        </>
     )
 }
 
@@ -200,7 +198,7 @@ function SearchPricingStrategy(props)
 function NdcRow(props) {
 
     useEffect(() => {
-    
+
     }, [props.selected]);
 
 
@@ -242,15 +240,14 @@ function NdcClassRow(props) {
                 <td>{props.ndcClassRow.price_schedule}</td>
                 <td>{props.ndcClassRow.mac_list}</td>
 
-              
+
                 {/* <td><button className="btn btn-sm btn-info" id="" ><i className="fa fa-eye"></i> View</button></td> */}
             </tr>
         </>
     )
 }
 
-function PricingStrategyList(props)
-{
+function PricingStrategyList(props) {
 
     const scollToRef = useRef();
 
@@ -280,9 +277,9 @@ function PricingStrategyList(props)
     const [ncdListData, setNcdListData] = useState();
     const [show, setShow] = useState("none");
     const handleShow = () => setShow("block");
-    return(
+    return (
         <>
-         <div className="card mt-3 mb-3">
+            <div className="card mt-3 mb-3">
                 <div className="card-body">
                     <div className="row">
                         <div className="col-md-8 mb-2">
@@ -304,7 +301,7 @@ function PricingStrategyList(props)
                                             </thead>
                                             <tbody>
 
-                                            {ndcListArray}
+                                                {ndcListArray}
 
                                             </tbody>
                                         </table>
@@ -330,7 +327,7 @@ function PricingStrategyList(props)
                                             </thead>
                                             <tbody>
 
-                                            {ndcClassArray}
+                                                {ndcClassArray}
 
 
                                             </tbody>
@@ -341,137 +338,136 @@ function PricingStrategyList(props)
                         </div>
                     </div>
                 </div>
-         </div> 
+            </div>
         </>
     )
 }
 
-function PriceScheduleForm(props)
-{
+function PriceScheduleForm(props) {
 
 
-    const { register,reset, handleSubmit, watch, formState: { errors } } = useForm();
+    const { register, reset, handleSubmit, watch, formState: { errors } } = useForm();
 
 
     useEffect(() => { reset(props.viewDiagnosisFormdata) }, [props.viewDiagnosisFormdata]);
 
-    return(
+    return (
         <>
-        <div className="card mt-3 mb-3">
-                    <div className="card-body">
-                        <div className="col-md-12">
-                                <h5 className="mb-2">Pricing Strategy Identification</h5>
+            <div className="card mt-3 mb-3">
+                <div className="card-body">
+                    <div className="col-md-12">
+                        <h5 className="mb-2">Pricing Strategy Identification</h5>
+                    </div>
+                    <div className="row mb-2">
+                        <div className="col-md-6 mb-3">
+                            <div className="form-group">
+                                <small> Strategy ID: </small>
+                                <input type="text" name="pricing_strategy_id" {...register('pricing_strategy_id')} placeholder="" className="form-control" />
                             </div>
-                            <div className="row mb-2">
-                                <div className="col-md-6 mb-3">
-                                    <div className="form-group">
-                                        <small> Strategy ID: </small>
-                                       <input type="text" name="pricing_strategy_id" {...register('pricing_strategy_id')} placeholder="" className="form-control" />
-                                    </div>
-                                </div>
-                                <div className="col-md-6 mb-3">
-                                    <div className="form-group">
-                                        <small> Strategy Name: </small>
-                                    <input type="text" name="pricing_strategy_name" {...register('pricing_strategy_name')} placeholder="100PC" className="form-control" />
-                                    </div>
-                                </div>
+                        </div>
+                        <div className="col-md-6 mb-3">
+                            <div className="form-group">
+                                <small> Strategy Name: </small>
+                                <input type="text" name="pricing_strategy_name" {...register('pricing_strategy_name')} placeholder="100PC" className="form-control" />
                             </div>
+                        </div>
+                    </div>
 
-            
-                <div className="row mb-2">
+
+                    <div className="row mb-2">
                         <div className="col-md-12">
-                    <h5 className="mb-2">Variations</h5>
-                </div>
-                    
-                    <div className="col-md-3 mb-3">
-                        <div className="form-group">
-                            <small>Provider Type:</small>
+                            <h5 className="mb-2">Variations</h5>
+                        </div>
+
+                        <div className="col-md-3 mb-3">
+                            <div className="form-group">
+                                <small>Provider Type:</small>
                                 <select className="form-select">
                                     <option value="R">Retail</option>
                                     <option value="M">Mail Service </option>
                                     <option value="*">WildCard - No Variation</option>
                                 </select>
+                            </div>
                         </div>
-                    </div>
-                    <div className="col-md-3 mb-3">
-                        <div className="form-group">
-                            <small>Network Partification:</small>
+                        <div className="col-md-3 mb-3">
+                            <div className="form-group">
+                                <small>Network Partification:</small>
                                 <select className="form-select" name="network_part_variation_ind" {...register('network_part_variation_ind')}>
                                     <option value="I">In Network</option>
                                     <option value="O">Out of Network </option>
                                     <option value="*">WildCard - No Variation</option>
                                 </select>
-                                
+
+                            </div>
                         </div>
-                    </div>
-                    <div className="col-md-3 mb-3">
-                        <div className="form-group">
-                            <small>Claim Type:</small>
+                        <div className="col-md-3 mb-3">
+                            <div className="form-group">
+                                <small>Claim Type:</small>
                                 <select className="form-select" name="claim_type_variation_ind" {...register('claim_type_variation_ind')}>
-                                        <option value="P">POS</option>
+                                    <option value="P">POS</option>
                                     <option value="D">DMR </option>
                                     <option value="U">UCF</option>
                                     <option value="*">WildCard - No Variation</option>
                                 </select>
-                                
+
+                            </div>
                         </div>
-                    </div>
-                    <div className="col-md-3 mb-3">
-                        <div className="form-group">
-                            <small>Formulary:</small>
+                        <div className="col-md-3 mb-3">
+                            <div className="form-group">
+                                <small>Formulary:</small>
                                 <select className="form-select" name="formulary_variation_ind" {...register('formulary_variation_ind')}>
                                     <option value="F">Formularly</option>
                                     <option value="N">Non-Formulary </option>
                                     {/* <option>UCF</option> */}
                                     <option value="*">Wild Card - No Variation</option>
                                 </select>
-                                
+
+                            </div>
                         </div>
                     </div>
-                </div>
-                
+
                     <div className="row mb-2 ">
-                    <div className="col-md-3 mb-3">
-                        <div className="form-group ">
+                        <div className="col-md-3 mb-3">
+                            <div className="form-group ">
                                 <small> Schedule ID</small>
-                            <div className="searchmodal">
-                            <input type="text" name="price_schedule" {...register('price_schedule')} className="form-control" placeholder="" />
-                            {/* <button className="btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal"><i className="fa-solid fa-magnifying-glass"></i></button> */}
+                                <div className="searchmodal">
+                                    <input type="text" name="price_schedule" {...register('price_schedule')} className="form-control" placeholder="" />
+                                    {/* <button className="btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal"><i className="fa-solid fa-magnifying-glass"></i></button> */}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="col-md-3 mb-3">
-                        <div className="form-group ">
+                        <div className="col-md-3 mb-3">
+                            <div className="form-group ">
                                 <small> MAC List</small>
-                            <div className="searchmodal">
-                            <input type="text" name="mac_list" {...register('mac_list')} className="form-control" placeholder=""/>
-                            {/* <button className="btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal"><i className="fa-solid fa-magnifying-glass"></i></button> */}
+                                <div className="searchmodal">
+                                    <input type="text" name="mac_list" {...register('mac_list')} className="form-control" placeholder="" />
+                                    {/* <button className="btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal"><i className="fa-solid fa-magnifying-glass"></i></button> */}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="col-md-3 mb-4">
-                        <div className="form-group">
+                        <div className="col-md-3 mb-4">
+                            <div className="form-group">
                                 <small>Effective Date: </small>
-                                <input type="date" className="form-control" placeholder="" name="effective_date"  {...register('effective_date')} id="" required="" autoComplete="off" /> 
+                                <input type="date" className="form-control" placeholder="" name="effective_date"  {...register('effective_date')} id="" required="" autoComplete="off" />
+                            </div>
                         </div>
-                    </div>
-                            <div className="col-md-3 mb-4"> 
+                        <div className="col-md-3 mb-4">
                             <small className="mb-2"></small>
                             <div className="form-group mt-4">
                                 <input type="checkbox" id="Return2" className="d-none" />
                                 <label htmlFor="Return2">User exit will not be invoked for the strategy </label>
                             </div>
+                        </div>
+                    </div>
+                    <div className="col-md-12 ">
+                        <div className="float-end">
+                            {/* <a href="" className="btn btn-theme pt-2 pb-2" style={{width: "100%"}}>Next</a> */}
+                        </div>
                     </div>
                 </div>
-                <div className="col-md-12 ">
-                        <div className="float-end">
-                    {/* <a href="" className="btn btn-theme pt-2 pb-2" style={{width: "100%"}}>Next</a> */}
-                </div> 
-                </div>
-        </div>
-        </div>
+            </div>
 
-    
+
 
         </>
     )
