@@ -179,7 +179,6 @@ function ProviderTypeRow(props) {
 }
 
 function ProviderTypeForm(props) {
-    console.log(props.formData);
     const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
 
     useEffect(() => { reset(props.formData) }, [props.formData]);

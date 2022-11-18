@@ -9,11 +9,11 @@ import Customer, { Eligibility, Exceptions, Identification, Indicators, Strategy
 import Client, { Eligibility as Ce, Identification as Ci, Indicators as Cin, Coverage as CS } from './pages/dashboard/user/client/Client';
 import Member, { ChnageLog, ClaimHistory, Coverage, CoverageHistory, Health, MemberForm, Notes, Overrides, PriorAuthorisation, ProviderSearch } from './pages/dashboard/members/Member';
 
-import SearchProvider, { Provider, Effectivedates, PharmistSystem, NetworkParticipation } from './pages/dashboard/user/provider/SearchProvider';
+import SearchProvider, { Provider, Effectivedates, PharmistSystem, NetworkParticipation } from './pages/dashboard/provider/SearchProvider';
 
-import TraditionalNetworks, { Network, Providers } from './pages/dashboard/user/provider/TraditionalNetworks';
+import TraditionalNetworks, { Network, Providers } from './pages/dashboard/provider/TraditionalNetworks';
 
-import FlexibleNetworks, { Rules } from './pages/dashboard/user/provider/FlexibleNetworks';
+import FlexibleNetworks, { Rules } from './pages/dashboard/provider/FlexibleNetworks';
 
 import Membership, { SearchById, SearchByName } from './pages/dashboard/members/Membership';
 import PlanAuthorisation, { Authorisation, PANotes, Pricing } from './pages/dashboard/members/PlanAuthorisation';
@@ -62,8 +62,8 @@ import CopayStrategy from './pages/dashboard/strategies/CopayStrategy';
 import AccumulatedBenefitStrategy from './pages/dashboard/strategies/AccumulatedBenefitStrategy';
 import PlanAssociation from './pages/dashboard/plan_design/PlanAssociation';
 import PlanEdit, { DateLimitations, PlanEditNotes, PlanFormulary, RefillLimitations, RxLimitations } from './pages/dashboard/plan_design/PlanEdit';
-import SuperProvider from './pages/dashboard/user/provider/SuperProvider';
-import PrioritizeNetwork from './pages/dashboard/user/provider/PrioritizeNetworks';
+import SuperProvider from './pages/dashboard/provider/SuperProvider';
+import PrioritizeNetwork from './pages/dashboard/provider/PrioritizeNetworks';
 import Prescriber from './pages/dashboard/prescriber/Prescriber';
 import ProviderTypeValidation from './pages/dashboard/exceptionlist/ProviderTypeValidation';
 import ProcedureCode from './pages/dashboard/exceptionlist/ProcedureCode';
