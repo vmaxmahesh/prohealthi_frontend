@@ -96,7 +96,6 @@ function App() {
 
     <>
 
-
       <Routes>
         <Route exact path="/">
           {/* <Home /> */}
