@@ -221,7 +221,6 @@ export default function SuperBenefitList() {
 
 
     function SuperBenefitForm(props) {
-        console.log(props.formData);
         const{register, handleSubmit, watch, reset, formState : {error} } = useForm();
         useEffect(() => { reset(props.formData) }, [props.formData]);
         return (
