@@ -71,6 +71,7 @@ import SuperBenefitList from './pages/dashboard/exceptionlist/SuperBenefitList';
 import MembersData, { ChangeLogTab, ClaimHistoryTab, CoverageHistoryTab, HealthConditionsTab, MemberTab, NotesTab, OverridesTab, PriorAuthorizationTab, ProviderSearchTab } from './pages/dashboard/membership/MembersData';
 import PriorAuthorization, { Authorization, PriorNotes, PriorPricing } from './pages/dashboard/membership/PriorAuthorization';
 import PlanValidations from './pages/dashboard/membership/PlanValidation';
+import UserDefinition, { DataAccessTab, GroupForm, UDefinitionTab, UserDF } from './pages/dashboard/administrator/UserDefinition';
 
 function setToken(userToken) {
   sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -455,6 +456,19 @@ function App() {
           <Route path='membership/plan-validations' element={<PlanValidations />}>
           </Route>
           {/* membership route ends  */}
+
+          {/* administrator route starts  */}
+          <Route path='administrator/user-definition' element={<UserDefinition />}>
+            <Route index element={<Navigate to="definition" />} />
+            <Route path='definition' element={<UDefinitionTab />} />
+            
+            <Route path='data-access' element={<DataAccessTab />} />
+            <Route path='group' element={<GroupForm />} />
+            
+          </Route>
+
+         
+          {/* administrator route ends  */}
 
 
         </Route>
