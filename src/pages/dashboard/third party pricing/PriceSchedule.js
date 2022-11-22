@@ -18,7 +18,7 @@ export default function PriceSchedule() {
             method: 'GET',
             headers: { 'content-type': 'application/json' }
         }
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/third-party-pricing/get?search=${fdata.target.value}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/third-party-pricing/price-schedule/get?search=${fdata.target.value}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
@@ -48,7 +48,7 @@ export default function PriceSchedule() {
             method: 'GET',
             headers: { 'content-type': 'application/json' }
         }
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/third-party-pricing/get-price-schedule-data?search=${row.price_schedule}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/third-party-pricing/price-schedule/get-price-schedule-data?search=${row.price_schedule}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();

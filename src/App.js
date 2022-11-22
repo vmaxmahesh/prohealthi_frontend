@@ -33,7 +33,7 @@ import PriceSchedule, { BrandItem, BrandItemGeneric, GetGenericItem } from './pa
 import MacList from './pages/dashboard/third party pricing/MacList';
 import TaxSchedule from './pages/dashboard/third party pricing/TaxSchedule';
 import CopayStepSchedule from './pages/dashboard/third party pricing/CopayStepSchedule';
-import CopaySchedule, { NonGeneric } from './pages/dashboard/third party pricing/CopaySchedule';
+import CopaySchedule, { Generic, GenericItem, NonGeneric } from './pages/dashboard/third party pricing/CopaySchedule';
 import ProcedureUCRList from './pages/dashboard/third party pricing/ProcedureUCRList';
 import RVAList from './pages/dashboard/third party pricing/RVAList';
 import NDC, { ProcessRule, RXLimitationPricing, ValidationsOverride } from './pages/dashboard/exceptionlist/ndc';
@@ -249,15 +249,17 @@ function App() {
 
           {/* third party pricing started  */}
           <Route path="third-party-pricing/price-schedule" element={<PriceSchedule />}>
+            <Route index element={<Navigate to="brand-item" replace />} />
             <Route index path="brand-item" element={<BrandItem />} />
             <Route path="brand-item-generic" element={<BrandItemGeneric />} />
             <Route path="generic-item" element={<GetGenericItem />} />
           </Route>
 
           <Route path="third-party-pricing/copay-schedule" element={<CopaySchedule />}>
-           <Route index path="brand-item" element={<NonGeneric />} />
-           <Route path="brand-item-generic" element={<BrandItemGeneric />} />
-            <Route path="generic-item" element={<GetGenericItem />} />
+           <Route index element={<Navigate to="brand-item" replace />} />
+           <Route path="brand-item" element={<NonGeneric />} />
+           <Route path="brand-item-generic" element={<Generic />} />
+            <Route path="generic-item" element={<GenericItem />} />
           </Route>
 
           <Route path="third-party-pricing/copay-step-schedule" element={<CopayStepSchedule />}>
