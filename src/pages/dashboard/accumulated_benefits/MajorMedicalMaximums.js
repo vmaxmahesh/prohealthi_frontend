@@ -15,6 +15,9 @@ export default function MajorMedicalMaximums()
     const [ndcGroup, setNdcGroup] = useState([]);
 
 
+    const[formData,setformData]=useState([]);
+
+
     const [selctedNdc, setSelctedNdc] = useState('');
 
     const[selectedgroupNdc,setGroupNdc]=useState('');
@@ -113,7 +116,7 @@ export default function MajorMedicalMaximums()
         };
         //  console.log(watch(fdata));
 
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/clientgroup/details/${ndcid}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/clientgroup/get/${ndcid}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
@@ -166,7 +169,7 @@ export default function MajorMedicalMaximums()
                 } else {
                     // setSelctedNdc(data.data);
 
-                    setNdcGroup(data.data);
+                    setformData(data.data);
                     // scollToRef.current.scrollIntoView()
                     // return;
                 }
@@ -209,9 +212,9 @@ export default function MajorMedicalMaximums()
             </div>
             <SeacrchMajorMedicalMax searchException={searchException} />
 
-            <MajorMedicalMaximumsList ndcListData={ndcData} ndcClassData={ndcClass} ndcGroupData={ndcGroup} getNDCItem={getNDCItems} getNDCItemDetails={getNDCItemDetails} selctedNdc={selctedNdc} />
+            <MajorMedicalMaximumsList ndcListData={ndcData} ndcClassData={ndcClass} ndcGroupData={ndcGroup} getNDCItem={getNDCItems}   getOneItemDetails={getOneItemDetails }    getNDCItemDetails={getNDCItemDetails} selctedNdc={selctedNdc} />
 
-            <MajorMedicalMaximumForms  viewDiagnosisFormdata={selctedNdc} />
+            <MajorMedicalMaximumForms  viewDiagnosisFormdata={formData} />
 
         </>
     )
@@ -314,12 +317,12 @@ function NdcGroupRow(props) {
     return (
         <>
             <tr
-                className={(props.selected && props.ndcGroupRow.client_id == props.selected.client_id ? ' tblactiverow ' : '')}
-                onClick={() => props.getOneItemDetails(props.ndcGroupRow.client_id)}
+                className={(props.selected && props.ndcGroupRow.client_group_id == props.selected.client_group_id ? ' tblactiverow ' : '')}
+                onClick={() => props.getOneItemDetails(props.ndcGroupRow.client_group_id)}
 
             >
-                <td>{props.ndcGroupRow.client_id}</td>
-                <td>{props.ndcGroupRow.client_name}</td>
+                <td>{props.ndcGroupRow.client_group_id}</td>
+                <td>{props.ndcGroupRow.effective_date}</td>
 
 
                 {/* <td><button className="btn btn-sm btn-info" id="" ><i className="fa fa-eye"></i> View</button></td> */}
@@ -376,7 +379,7 @@ function MajorMedicalMaximumsList(props)
     const ndsGroupArray=[];
 
     for (let k = 0; k < props.ndcGroupData.length; k++) {
-        ndsGroupArray.push(<NdcGroupRow ndcGroupRow={props.ndcGroupData[k]}   getNDCItemDetails={getNDCItemDetails}   selected={props.selctedNdc} />);
+        ndsGroupArray.push(<NdcGroupRow ndcGroupRow={props.ndcGroupData[k]}  getOneItemDetails={getOneItemDetails}   getNDCItemDetails={getNDCItemDetails}   selected={props.selctedNdc} />);
     }
 
 
@@ -481,6 +484,7 @@ function MajorMedicalMaximumForms(props)
     const { register,reset, handleSubmit, watch, formState: { errors } } = useForm();
 
     // const [selctedNdc, setSelctedNdc] = useOutletContext();
+    console.log(props.viewDiagnosisFormdata);
 
     useEffect(() => { reset(props.viewDiagnosisFormdata) }, [props.viewDiagnosisFormdata]);
     return(
@@ -492,19 +496,19 @@ function MajorMedicalMaximumForms(props)
                                         <div className="col-md-4">
                                             <div className="form-group mb-2">
                                                 <small>Customer ID</small>
-                                                  <input className="form-control" type="text" name="" id="" />
+                                                  <input className="form-control" type="text" name="customer_id" {...register('customer_id')} id="" />
                                                 </div>
                                           </div>
                                          <div className="col-md-4">
                                             <div className="form-group mb-2">
                                                 <small>Client ID</small>
-                                                  <input className="form-control" type="text" name="" id="" />
+                                                  <input className="form-control" type="text" name="client_id" {...register('client_id')} id="" />
                                                 </div>
                                           </div>
                                           <div className="col-md-4">
                                             <div className="form-group mb-2">
                                                 <small>Group ID</small>
-                                                  <input className="form-control" type="text" name="" id="" />
+                                                  <input className="form-control" type="text" name="client_group_id" {...register('client_group_id')} id="" />
                                                 </div>
                                           </div>
                                   </div>
@@ -514,19 +518,19 @@ function MajorMedicalMaximumForms(props)
                                         <div className="col-md-4">
                                             <div className="form-group mb-2">
                                                 <small>Effective Date</small>
-                                                  <input  className="form-control" type="date" name="" id="" />
+                                                  <input  className="form-control" type="date" name="effective_date" {...register('effective_date')} id="" />
                                                 </div>
                                           </div>
                                          <div className="col-md-4">
                                             <div className="form-group mb-2">
                                                 <small>Termination Date</small>
-                                                  <input className="form-control" type="date" name="" id="" />
+                                                  <input className="form-control" type="date" name="group_termination_date" {...register('group_termination_date')} id="" />
                                                 </div>
                                           </div>
                                          <div className="col-md-4">
                                             <div className="form-group mb-2">
                                                 <small>Major Medical Claim Max</small>
-                                                  <input className="form-control" type="date" name="" id="" />
+                                                  <input className="form-control" type="date" name="max_days_interim_elig" {...register('max_days_interim_elig')} id="" />
                                                 </div>
                                           </div>
                                            <div className="col-md-4">
