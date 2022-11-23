@@ -145,7 +145,8 @@ function CopayStepRow(props)
 {
     return(
         <>
-         <tr onClick={e => props.showData(props.rowData)}>
+         <tr onClick={e => props.showData(props.rowData)}
+         >
             <td>{props.dType == 'days_supply' ? props.rowData.days_supply : props.rowData.cost_max}
                 </td>
             <td>-</td>
@@ -157,7 +158,6 @@ function CopayStepRow(props)
 function DataForm(props) {
 const{register, handleSubmit, reset, watch, formState : {error} } = useForm();
 useEffect(() => { reset(props.formData) }, [props.formData]);
-console.log(props.dataType);
     return (
         <>
             <div className="card mt-3 mb-3">
