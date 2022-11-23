@@ -61,40 +61,40 @@ export default function Dashboard() {
                             <Link to="" className='dashboard-nav-item dashboard-nav-dropdown-toggle'>
                                 <i className="fa-solid fa-calendar-days"></i> Third Party Pricing </Link>
                             <div className='dashboard-nav-dropdown-menu'>
-                                <a href="/dashboard/third-party-pricing/price-schedule" className="dashboard-nav-dropdown-item">Price Schedule</a>
-                                <a href="/dashboard/third-party-pricing/copay-schedule" className="dashboard-nav-dropdown-item">Copay Schedule</a>
-                                <a href="/dashboard/third-party-pricing/copay-step-schedule" className="dashboard-nav-dropdown-item">Copay Step Schedule</a>
-                                <a href="/dashboard/third-party-pricing/MAC-list" className="dashboard-nav-dropdown-item">MAC List</a>
-                                <a href="/dashboard/third-party-pricing/tax-schedule" className="dashboard-nav-dropdown-item">Tax Schedule</a>
-                                <a href="/dashboard/third-party-pricing/procedure-UCR-list" className="dashboard-nav-dropdown-item">Procedure UCR List</a>
-                                <a href="/dashboard/third-party-pricing/RAV-list" className="dashboard-nav-dropdown-item">RVA List</a>                                
+                                <Link to="/dashboard/third-party-pricing/price-schedule" className={'dashboard-nav-dropdown-item' + (currentpath == 'price-schedule' ? ' active' : '')}>Price Schedule</Link>
+                                <Link to="/dashboard/third-party-pricing/copay-schedule" className={'dashboard-nav-dropdown-item' + (currentpath == 'copay-schedule' ? ' active' : '')}>Copay Schedule</Link>
+                                <Link to="/dashboard/third-party-pricing/copay-step-schedule" className={'dashboard-nav-dropdown-item' + (currentpath == 'copay-step-schedule' ? ' active' : '')}>Copay Step Schedule</Link>
+                                <Link to="/dashboard/third-party-pricing/MAC-list" className={'dashboard-nav-dropdown-item' + (currentpath == 'MAC-list' ? ' active' : '')}>MAC List</Link>
+                                <Link to="/dashboard/third-party-pricing/tax-schedule" className={'dashboard-nav-dropdown-item' + (currentpath == 'tax-schedule' ? ' active' : '')}>Tax Schedule</Link>
+                                <Link to="/dashboard/third-party-pricing/procedure-UCR-list" className={'dashboard-nav-dropdown-item' + (currentpath == 'benprocedure-UCR-listefits' ? ' active' : '')}>Procedure UCR List</Link>
+                                <Link to="/dashboard/third-party-pricing/RAV-list" className={'dashboard-nav-dropdown-item' + (currentpath == 'RAV-list' ? ' active' : '')}>RVA List</Link>
                             </div>
                         </div>
 
-                         <div className={'dashboard-nav-dropdown' + (['subpath', 'subpath2'].includes(currentpath) ? ' show' : '')}>
+                        <div className={'dashboard-nav-dropdown' + (['subpath', 'subpath2'].includes(currentpath) ? ' show' : '')}>
                             <a href="#!" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
                                 <i className="fa-solid fa-prescription-bottle-medical"></i> Drug Information </a>
                             <div className='dashboard-nav-dropdown-menu'>
-                                <a href="/dashboard/drug-information/drug-database" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Drug Database</a>
-                                <a href="/dashboard/drug-information/ndc-gpi-cross-reference" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>NDC/GPI cross reference</a>
+                                <Link to="/dashboard/drug-information/drug-database" className={'dashboard-nav-dropdown-item' + (currentpath == 'drug-database' ? ' active' : '')}>Drug Database</Link>
+                                <Link to="/dashboard/drug-information/ndc-gpi-cross-reference" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>NDC/GPI cross reference</Link>
                             </div>
-                            </div>
+                        </div>
 
                         <div className={'dashboard-nav-dropdown' + (['subpath', 'subpath2'].includes(currentpath) ? ' show' : '')}>
                             <a href="#!" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
                                 <i className="fa-solid fa-file-alt"></i> Validation Lists </a>
                             <div className='dashboard-nav-dropdown-menu'>
-                            <Link to="/dashboard/validation-lists/diagnosis" className={'dashboard-nav-dropdown-item' + (currentpath == 'diagnosis' ? ' active' : '')}>Diagnosis </Link>
-                            <Link to="/dashboard/validation-lists/speciality" className={'dashboard-nav-dropdown-item' + (currentpath == 'speciality' ? ' active' : '')}>Specialty </Link>
-                            <Link to="/dashboard/validation-lists/eligibility" className={'dashboard-nav-dropdown-item' + (currentpath == 'eligibility' ? ' active' : '')}>Eligibility  </Link>
-                            <Link to="/dashboard/validation-lists/provider" className={'dashboard-nav-dropdown-item' + (currentpath == 'provider' ? ' active' : '')}>Provider </Link>
-                            <Link to="/dashboard/validation-lists/prescriber" className={'dashboard-nav-dropdown-item' + (currentpath == 'prescriber' ? ' active' : '')}>Prescriber </Link>
-                            <Link to="/dashboard/validation-lists/diagnosis-prioritization" className={'dashboard-nav-dropdown-item' + (currentpath == 'diagnosis-prioritization' ? ' active' : '')}>Diagnosis Prioritization </Link>
+                                <Link to="/dashboard/validation-lists/diagnosis" className={'dashboard-nav-dropdown-item' + (currentpath == 'diagnosis' ? ' active' : '')}>Diagnosis </Link>
+                                <Link to="/dashboard/validation-lists/speciality" className={'dashboard-nav-dropdown-item' + (currentpath == 'speciality' ? ' active' : '')}>Specialty </Link>
+                                <Link to="/dashboard/validation-lists/eligibility" className={'dashboard-nav-dropdown-item' + (currentpath == 'eligibility' ? ' active' : '')}>Eligibility  </Link>
+                                <Link to="/dashboard/validation-lists/provider" className={'dashboard-nav-dropdown-item' + (currentpath == 'provider' ? ' active' : '')}>Provider </Link>
+                                <Link to="/dashboard/validation-lists/prescriber" className={'dashboard-nav-dropdown-item' + (currentpath == 'prescriber' ? ' active' : '')}>Prescriber </Link>
+                                <Link to="/dashboard/validation-lists/diagnosis-prioritization" className={'dashboard-nav-dropdown-item' + (currentpath == 'diagnosis-prioritization' ? ' active' : '')}>Diagnosis Prioritization </Link>
                             </div>
                         </div>
 
                  <div className={'dashboard-nav-dropdown' + (['subpath', 'subpath2'].includes(currentpath) ? ' show' : '')}>
-                            <Link to="/dashboard/user/searchprovider" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
+                            <Link to="/dashboard/searchprovider" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
                                 <i className="fa-solid fa-hand-holding-heart"></i> Provider Data </Link>
                             <div className='dashboard-nav-dropdown-menu'>
                             <Link to="/dashboard/searchprovider" className={'dashboard-nav-dropdown-item' + (currentpath == 'provider' ? ' active' : '')}>Provider</Link>
@@ -107,7 +107,7 @@ export default function Dashboard() {
                             </div>
                         </div>
 
-                             {/*  <div className={'dashboard-nav-dropdown' + (['subpath', 'subpath2'].includes(currentpath) ? ' show' : '')}>
+                              <div className={'dashboard-nav-dropdown' + (['subpath', 'subpath2'].includes(currentpath) ? ' show' : '')}>
                             <a href="#!" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
                                 <i className="fa-solid fa-prescription"></i> Prescriber Data </a>
                             <div className='dashboard-nav-dropdown-menu'>
@@ -115,7 +115,7 @@ export default function Dashboard() {
                                 <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Recent</a>
                                 <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}> Projections</a>
                             </div>
-                        </div> */}
+                        </div>
 
                         <div className={'dashboard-nav-dropdown' + (['subpath', 'subpath2'].includes(currentpath) ? ' show' : '')}>
                             <a href="#!" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
@@ -131,32 +131,30 @@ export default function Dashboard() {
                             <a href="#!" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
                                 <i className="fa-solid fa-handshake"></i> Accumulated Benefits </a>
                             <div className='dashboard-nav-dropdown-menu'>
-                                <a href="/dashboard/accumulated-benefits/all" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Accumulated benefits</a>
-                                <a href="/dashboard/accumulated-benefits/gpi-exclusion" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>GPI exclusion lists</a>
-                                <a href="/dashboard/accumulated-benefits/ndc-exclusion" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}> NDC exclusion lists</a>
-                                <a href="/dashboard/accumulated-benefits/major-medical-maximums" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Major medical maximums</a>
-                                
+                                <Link to="/dashboard/accumulated-benefits/all" className={'dashboard-nav-dropdown-item' + (currentpath == 'all' ? ' active' : '')}>Accumulated benefits</Link>
+                                <Link to="/dashboard/accumulated-benefits/gpi-exclusion" className={'dashboard-nav-dropdown-item' + (currentpath == 'gpi-exclusion' ? ' active' : '')}>GPI exclusion lists</Link>
+                                <Link to="/dashboard/accumulated-benefits/ndc-exclusion" className={'dashboard-nav-dropdown-item' + (currentpath == 'ndc-exclusion' ? ' active' : '')}> NDC exclusion lists</Link>
+                                <Link to="/dashboard/accumulated-benefits/major-medical-maximums" className={'dashboard-nav-dropdown-item' + (currentpath == 'ajor-medical-maximums' ? ' active' : '')}>Major medical maximums</Link>
+
                             </div>
                         </div>
 
-                        {/* <div className={'dashboard-nav-dropdown' + (['subpath', 'subpath2'].includes(currentpath) ? ' show' : '')}>
+                        <div className={'dashboard-nav-dropdown' + (['subpath', 'subpath2'].includes(currentpath) ? ' show' : '')}>
                             <a href="#!" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
                                 <i className="fa-solid fa-compass-drafting"></i> Plan Design </a>
                             <div className='dashboard-nav-dropdown-menu'>
-                                <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>All</a>
-                                <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Recent</a>
-                                <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}> Projections</a>
+                                <Link to="/dashboard/plan-design/plan-association" className={'dashboard-nav-dropdown-item' + (currentpath == 'plan-association' ? ' active' : '')}>Plan Association</Link>
+                                <Link to="/dashboard/plan-design/plan-edit" className={'dashboard-nav-dropdown-item' + (currentpath == 'plan-edit' ? ' active' : '')}>Plan Edit</Link>
                             </div>
-                    </div> */}
+                    </div>
 
                         <div className={'dashboard-nav-dropdown' + (['member', 'membership', 'plan-authorisations', 'plan-validations'].includes(currentpath) ? ' show' : '')}>
                             <a href="#!" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
                                 <i className="fa-solid fa-address-card"></i> Membership Data </a>
                             <div className='dashboard-nav-dropdown-menu'>
-                                <Link to="/dashboard/member" className={'dashboard-nav-dropdown-item' + (currentpath == 'member' ? ' active' : '')}>Member</Link>
-                                <Link to="/dashboard/membership" className={'dashboard-nav-dropdown-item' + (currentpath == 'membership' ? ' active' : '')}>Membership</Link>
-                                <Link to="/dashboard/plan-authorisations" className={'dashboard-nav-dropdown-item' + (currentpath == 'plan-authorisations' ? ' active' : '')}>Prior Authorizations</Link>
-                                <Link to="/dashboard/plan-validations" className={'dashboard-nav-dropdown-item' + (currentpath == 'plan-validations' ? ' active' : '')}>Plan Validations</Link>
+                                <Link to="/dashboard/membership/member" className={'dashboard-nav-dropdown-item' + (currentpath == 'member' ? ' active' : '')}>Member</Link>
+                                <Link to="/dashboard/membership/prior-authorization" className={'dashboard-nav-dropdown-item' + (currentpath == 'prior-authorization' ? ' active' : '')}>Prior Authorizations</Link>
+                                <Link to="/dashboard/membership/plan-validations" className={'dashboard-nav-dropdown-item' + (currentpath == 'plan-validations' ? ' active' : '')}>Plan Validations</Link>
                             </div>
                         </div>
 
@@ -177,6 +175,14 @@ export default function Dashboard() {
                                 <Link to="/dashboard/user/customer" className={'dashboard-nav-dropdown-item' + (currentpath == 'customer' ? ' active' : '')}>Customer</Link>
                                 <Link to="/dashboard/user/client" className={'dashboard-nav-dropdown-item' + (currentpath == 'client' ? ' active' : '')}>Client</Link>
                                 <Link to="/dashboard/user/client-group" className={'dashboard-nav-dropdown-item' + (currentpath == 'client-group' ? ' active' : '')}>Client / Client Group</Link>
+                            </div>
+                        </div>
+
+                        <div className={'dashboard-nav-dropdown' + (['subpath', 'subpath2'].includes(currentpath) ? ' show' : '')}>
+                            <a href="#!" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
+                                <i className="fa-solid fa-prescription"></i> Administrator </a>
+                            <div className='dashboard-nav-dropdown-menu'>
+                                <Link to="/dashboard/administrator/user-definition" className={'dashboard-nav-dropdown-item' + (currentpath == 'user-definition' ? ' active' : '')}>User Definition</Link>
                             </div>
                         </div>
 

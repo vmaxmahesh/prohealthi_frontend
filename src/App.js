@@ -9,6 +9,8 @@ import Customer, { Eligibility, Exceptions, Identification, Indicators, Strategy
 import Client, { Eligibility as Ce, Identification as Ci, Indicators as Cin, Coverage as CS } from './pages/dashboard/user/client/Client';
 import Member, { ChnageLog, ClaimHistory, Coverage, CoverageHistory, Health, MemberForm, Notes, Overrides, PriorAuthorisation, ProviderSearch } from './pages/dashboard/members/Member';
 
+import MajorMedicalMaximums from './pages/dashboard/accumulated_benefits/MajorMedicalMaximums'
+
 import SearchProvider, { Provider, Effectivedates, PharmistSystem, NetworkParticipation } from './pages/dashboard/provider/SearchProvider';
 
 import TraditionalNetworks, { Network, Providers } from './pages/dashboard/provider/TraditionalNetworks';
@@ -58,7 +60,6 @@ import DiagnosisPrioritization from './pages/dashboard/validation_lists/Diagnosi
 import AccumulatedBenefits, { ExclusionLimitation, Deductible } from './pages/dashboard/accumulated_benefits/AccumulatedBenefits';
 import GPIExclusion from './pages/dashboard/accumulated_benefits/GPIExclusion';
 import NDCExclusion from './pages/dashboard/accumulated_benefits/NDCExclusion';
-import MajorMedicalMaximums from './pages/dashboard/accumulated_benefits/MajorMedicalMaximums';
 import DrugDatabase, { Distribution, General, IDCodes, Pricing as DrugInformationPricing } from './pages/dashboard/drug_information/DrugDatabase';
 import NDCCrossReference from './pages/dashboard/drug_information/NDCCrossReference';
 import PricingStrategies from './pages/dashboard/strategies/PricingStrategies';

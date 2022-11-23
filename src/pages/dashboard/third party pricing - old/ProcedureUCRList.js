@@ -3,6 +3,7 @@ import React from 'react';
 export default function ProcedureUCRList() {
     return(
         <>
+              
               <div className="row">
                     <div className="col-md-6 mb-3">
                         <div className="breadcrum">
@@ -11,97 +12,81 @@ export default function ProcedureUCRList() {
                                 <li><i className="fas fa-angle-right"></i></li>
                                 <li><a href=""> Third Party Pricing </a></li>
                                 <li><i className="fas fa-angle-right"></i></li>
-                                <li><a href=""> Procedure UCR List </a></li>
+                                <li><a href="">Procedure UCR List</a></li>
                             </ul>
                         </div>
                     </div>
                     <div className="col-md-6 mb-3">
                         <div className="breadcrum ">
                             <ul>
-                                 <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li> 
+                                <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li>
                             </ul>
                         </div>
                     </div>
-                </div>       
-               
-                   <SearchProcedureUCRList />
-                   <ProcedureList />
-                   <ProcedureListForm />
-</>
-    )
-}
+                </div>
 
-function SearchProcedureUCRList()
-{
-    return(
-        <>
-        <div className="card mt-3 mb-3">
+                <div className="card mt-3 mb-3">
                     <div className="card-body">
-                        <div className="row mb-2">
-                            <div className="col-md-12 mb-3">
-                                <div className="form-group">
-                                    <small>Procedure UCR List </small>
-                                    <input type="text" className="form-control" placeholder='Start typing procedure UCR list id/ description to search'
-                                    />
+                        <div className="col-md-12">
+                                <h5 className="mb-2">Procedure UCR List</h5>
+                            </div>
+                            <div className="row mb-2">
+                                <div className="col-md-4 mb-3">
+                                    <div className="form-group">
+                                        <small>ID</small>
+                                       <select className="form-select">
+                                        <option>ais</option>
+                                        <option>AIS UIR</option>
+                                        <option>MASTER</option>
+                                    </select>
+                                       
+                                    </div>
+                                </div>
+                                <div className="col-md-4 mb-3">
+                                    <div className="form-group">
+                                        <small>Description</small>
+                                    <select className="form-select">
+                                        <option>ais usr</option>
+                                        <option>AIS USR PRICE</option>
+                                        <option>SURGICAL ULTRA</option>
+                                    </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-        </>
-    )
-}
 
-function ProcedureList()
-{
-    return(
-        <>
-        <div className="card mt-3 mb-3">
-                <div className="card-body">
-                        <div className="col-md-12">
-                            <h5 className="mb-2">Procedure UCR List</h5>
-                        </div>
-                    <div className="row">
-                    <div className="col-md-6">                        
-                        <table className= "table  table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Procedure UCR ID</th>
-                                    <th>Procedure UCR Description</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                               
-                            </tbody>
-                        </table>                        
-                    </div>
+                    <div className="card mt-3 mb-3">
+                    <div className="card-body">
+                        <div className="row">
+                            <div className="col-md-12">
+                                <h5 className="mb-2">Step Schedules table</h5>
+                            </div>
+                            <table className= "table  table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Effective Date</th>
+                                        <th>Procedure Code</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                     <tr>
+                                        <td>2021-10-23</td>
+                                        <td>100010</td>
+                                    </tr>
+                                     <tr>
+                                        <td>2021-10-10</td>
+                                        <td>200120</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+     
+                       </div>
 
-                <div className="col-md-6">                
-                <table className= "table  table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Effective Date</th>
-                                    <th>Procedure Code</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                               
-                            </tbody>
-                        </table>   
-                </div>
+                   </div>
+                   </div>
 
-            </div>
-           </div>
-         </div> 
-        </>
-    )
-}
-
-function ProcedureListForm()
-{
-    return(
-        <>
-         <div className="card mt-3 mb-3">
+                   <div className="card mt-3 mb-3">
                        <div className="card-body">
                         
                             <div className="row mb-2">
@@ -116,15 +101,15 @@ function ProcedureListForm()
                                        
                                     </div>
                                 </div>
-                                <div className="col-md-8 mb-3">
+                                <div className="col-md-10 mb-3">
                                     <div className="form-group">
                                         <small>UCR Description</small>
-                                       <textarea rows="1" cols="2" className="form-control" placeholder="Surgical Test"></textarea>
+                                       <textarea rows="3" cols="2" className="form-control" placeholder="Surgical Test"></textarea>
                                        
                                     </div>
                                 </div>
                             </div>
-                           <hr />
+                           
                              <div className="row mb-2 ">
                                 <div className="col-md-4 mb-3">
                                     <div className="form-group">
@@ -170,6 +155,6 @@ function ProcedureListForm()
                             </div>
                        </div>
                    </div>
-        </>
+</>
     )
 }

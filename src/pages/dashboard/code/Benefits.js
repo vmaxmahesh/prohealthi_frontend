@@ -33,7 +33,7 @@ export default function Benefits() {
             headers: { 'Content-Type': 'application/json' },
             // body: encodeURIComponent(data)
         };
-        // console.log(watch(data)); 
+        console.log(fdata.target.value); 
 
         if (process.env.REACT_APP_API_BASEURL != 'NOT') {
             fetch(process.env.REACT_APP_API_BASEURL + `/api/codes/benefits?search=${fdata.target.value}`, requestOptions)
