@@ -82,48 +82,11 @@ function FlexibleNetworks(props) {
 
 
 
-                <Row>
-                <Col>
-                    <form >
-                        <div className="card mt-3 mb-3">
-                            <div className="card-body">
-                                <div className="row mb-2">
-                                    <div className="col-md-12 mb-3">
-                                        <div className="form-group">
-                                            <small>Search Network ID/Name</small>
-                                            <input type="text" onKeyUp={(e) => searchCustomer(e)} className="form-control" placeholder='Start typing Network ID or Name' {...register("customerid")} />
-                                            {/* {errors.customerid && <span><p className='notvalid'>This field is required</p></span>} */}
-                                        </div>
-                                    </div>
-                                    {/* <div className="col-md-4 mb-3">
-                                        <div className="form-group">
-                                            <small>Customer Name</small>
-                                            <input type="text" className="form-control" placeholder='Enter Customer Name to search' {...register("customername")} />
-                                        </div>
-                                    </div>
-                                    <div className="col-md-2 mb-2">
-                                        <div className="form-group">
-                                            <small>&nbsp;</small><br />
-                                            <button type="submit" className="btn m-0 p-2 btn-theme" style={{ width: "100%", fontSize: "12px" }} >Search</button>
-                                        </div>
-                                    </div> */}
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </Col>
-            </Row>
+             
 
 
 
-            <Row>
-                <Col>
-                    {/* {customerlist.length > 0 ? */}
-                        <CustomerTable customers={customerlist} />
-                        {/* : ''} */}
-                </Col>
-            </Row>
-
+           
 
               
 
