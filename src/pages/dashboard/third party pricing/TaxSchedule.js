@@ -83,9 +83,11 @@ function TaxScheduleList(props) {
     }
     return (
         <>
+        
             <div className="col-md-4">
+            <div style={{ height: '400px', overflowY: 'scroll' }}>
                 <table className="table  table-bordered">
-                    <thead>
+                    <thead className='stickt-thead'>
                         <tr>
                             <th>Tax Schedule ID</th>
                             <th>Tax Schedule Name</th>
@@ -96,7 +98,7 @@ function TaxScheduleList(props) {
                     </tbody>
                 </table>
             </div>
-
+</div>
         </>
     )
 }

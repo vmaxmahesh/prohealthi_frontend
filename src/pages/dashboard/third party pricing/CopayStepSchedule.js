@@ -121,11 +121,12 @@ function GetStepScheduleTable(props) {
         <>
             <div className="card mt-3 mb-3">
                 <div className="card-body">
-
+                
                     <h5 className="mb-2">Step Schedules table</h5>
                 </div>
+                <div style={{ height: '360px', overflowY: 'scroll' }}>
                 <table className="table  table-bordered">
-                    <thead>
+                    <thead className='stickt-thead'>
                         <tr>
                             <th>{String(type).replace("_", " ").toUpperCase()}
                             </th>
@@ -136,6 +137,7 @@ function GetStepScheduleTable(props) {
                         {listArray}
                     </tbody>
                 </table>
+            </div>
             </div>
         </>
     )
