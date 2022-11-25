@@ -130,9 +130,12 @@ function SearchMacList(props) {
 
 function MacIdList(props) {
     const listArray = [];
-    for (let i = 0; i < props.showMacList.length; i++) {
-        listArray.push(<MacRow rowData={props.showMacList[i]} getMacDesc={props.getMacDesc} />);
+    if (props.showMacList) {
+        for (let i = 0; i < props.showMacList.length; i++) {
+            listArray.push(<MacRow rowData={props.showMacList[i]} getMacDesc={props.getMacDesc} />);
+        }
     }
+
 
     return (
         <>
@@ -210,8 +213,8 @@ function MacDescRow(props) {
 
 
 function MACListForm(props) {
-// console.log(props.macDesc);
-    const{register, handleSubmit, watch, reset, formState : {error} } = useForm();
+    // console.log(props.macDesc);
+    const { register, handleSubmit, watch, reset, formState: { error } } = useForm();
     useEffect(() => { reset(props.macDesc) }, [props.macDesc]);
     return (
         <>
@@ -225,13 +228,13 @@ function MACListForm(props) {
                         <div className="col-md-4 mb-3">
                             <div className="form-group">
                                 <small>MAC List</small>
-                                <input type="text" className="form-control" placeholder="Surgical" {...register("mac_list", { required : true })} autoComplete="off" />
+                                <input type="text" className="form-control" placeholder="Surgical" {...register("mac_list", { required: true })} autoComplete="off" />
                             </div>
                         </div>
                         <div className="col-md-8 mb-3">
                             <div className="form-group">
                                 <small>MAC Description</small>
-                                <textarea rows="1" cols="2" className="form-control" {...register("mac_desc", { required : true })} placeholder="Surgical Test"></textarea>
+                                <textarea rows="1" cols="2" className="form-control" {...register("mac_desc", { required: true })} placeholder="Surgical Test"></textarea>
                             </div>
                         </div>
                     </div>
@@ -241,21 +244,21 @@ function MACListForm(props) {
                         <div className="col-md-4 mb-3">
                             <div className="form-group">
                                 <small>Generic Product ID: </small>
-                                <input type="text" className="form-control" placeholder="30000" {...register("gpi", { required : true })} autoComplete="off" />
+                                <input type="text" className="form-control" placeholder="30000" {...register("gpi", { required: true })} autoComplete="off" />
 
                             </div>
                         </div>
                         <div className="col-md-4 mb-4">
                             <div className="form-group">
                                 <small>Effective Date: </small>
-                                <input type="date" className="form-control" placeholder="0" {...register("effective_date", { required : true })} autoComplete="off" />
+                                <input type="date" className="form-control" placeholder="0" {...register("effective_date", { required: true })} autoComplete="off" />
 
                             </div>
                         </div>
                         <div className="col-md-4 mb-4">
                             <div className="form-group">
                                 <small>Termination Date: </small>
-                                <input type="text" className="form-control" placeholder="83" {...register("termination_date", { required : true })} autoComplete="off" />
+                                <input type="text" className="form-control" placeholder="83" {...register("termination_date", { required: true })} autoComplete="off" />
 
                             </div>
                         </div>
@@ -264,7 +267,7 @@ function MACListForm(props) {
                         <div className="col-md-4 mb-4">
                             <div className="form-group">
                                 <small>Price Source: </small>
-                                <select className="form-select" {...register("price_source", { required : true })}>
+                                <select className="form-select" {...register("price_source", { required: true })}>
                                     <option>Predifined Calculation</option>
                                 </select>
                             </div>
@@ -272,7 +275,7 @@ function MACListForm(props) {
                         <div className="col-md-4 mb-4">
                             <div className="form-group">
                                 <small>Price Type: </small>
-                                <select className="form-select" {...register("price_type", { required : true })}>
+                                <select className="form-select" {...register("price_type", { required: true })}>
                                     <option>Usual and Customary charge</option>
                                 </select>
                             </div>
@@ -280,12 +283,12 @@ function MACListForm(props) {
                         <div className="col-md-4 mb-4">
                             <div className="form-group">
                                 <small>Maximum Available Cost: </small>
-                                <input type="text" className="form-control" placeholder="83" {...register("mac_amount", { required : true })} autoComplete="off" />
+                                <input type="text" className="form-control" placeholder="83" {...register("mac_amount", { required: true })} autoComplete="off" />
                             </div>
                         </div>
                         <div className="col-md-4 mb-4 mt-4">
                             <div className="form-group">
-                                <input type="checkbox" id="ReturnMaxQ" {...register("mac_list", { required : true })} className="d-none" />
+                                <input type="checkbox" id="ReturnMaxQ" {...register("mac_list", { required: true })} className="d-none" />
                                 <label htmlFor="ReturnMaxQ"> Allow Fee (Rx/OTC) </label>
                             </div>
                         </div>

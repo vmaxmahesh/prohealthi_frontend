@@ -6,11 +6,11 @@ export default function Dashboard() {
     const location = useLocation();
     const currentpath = location.pathname.split('/')[3];
     // console.log(currentpath);
-    const user  = useAuth();
+    // const user  = useAuth();
 
-    if (!user) {
-        return <Navigate to="/login" />;
-    }
+    // if (!user) {
+    //     return <Navigate to="/login" />;
+    // }
     return (
         <>
             <div className='dashboard'>
