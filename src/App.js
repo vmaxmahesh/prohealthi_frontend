@@ -8,6 +8,9 @@ import Clientgroup, { Charges as CGCharges, Identification as Cgi, Eligibility a
 import Customer, { Eligibility, Exceptions, Identification, Indicators, Strategy } from './pages/dashboard/user/customer/Customer';
 import Client, { Eligibility as Ce, Identification as Ci, Indicators as Cin, Coverage as CS } from './pages/dashboard/user/client/Client';
 import Member, { ChnageLog, ClaimHistory, Coverage, CoverageHistory, Health, MemberForm, Notes, Overrides, PriorAuthorisation, ProviderSearch } from './pages/dashboard/members/Member';
+
+import MajorMedicalMaximums from './pages/dashboard/accumulated_benefits/MajorMedicalMaximums'
+
 import SearchProvider, { Provider, Effectivedates, PharmistSystem, NetworkParticipation } from './pages/dashboard/provider/SearchProvider';
 import TraditionalNetworks, { Network, Providers } from './pages/dashboard/provider/TraditionalNetworks';
 import FlexibleNetworks, { Rules } from './pages/dashboard/provider/FlexibleNetworks';
@@ -26,11 +29,11 @@ import ServiceType from './pages/dashboard/code/ServiceType';
 import ProviderType from './pages/dashboard/code/ProviderType';
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-import PriceSchedule, { BrandItem, BrandItemGeneric, GetGenericItem } from './pages/dashboard/third party pricing/PriceSchedule';
+import PriceSchedule from './pages/dashboard/third party pricing/PriceSchedule';
 import MacList from './pages/dashboard/third party pricing/MacList';
 import TaxSchedule from './pages/dashboard/third party pricing/TaxSchedule';
 import CopayStepSchedule from './pages/dashboard/third party pricing/CopayStepSchedule';
-import CopaySchedule, { Generic, GenericItem, NonGeneric } from './pages/dashboard/third party pricing/CopaySchedule';
+import CopaySchedule from './pages/dashboard/third party pricing/CopaySchedule';
 import ProcedureUCRList from './pages/dashboard/third party pricing/ProcedureUCRList';
 import RVAList from './pages/dashboard/third party pricing/RVAList';
 import NDC, { ProcessRule, RXLimitationPricing, ValidationsOverride } from './pages/dashboard/exceptionlist/ndc';
@@ -51,7 +54,6 @@ import DiagnosisPrioritization from './pages/dashboard/validation_lists/Diagnosi
 import AccumulatedBenefits, { ExclusionLimitation, Deductible } from './pages/dashboard/accumulated_benefits/AccumulatedBenefits';
 import GPIExclusion from './pages/dashboard/accumulated_benefits/GPIExclusion';
 import NDCExclusion from './pages/dashboard/accumulated_benefits/NDCExclusion';
-import MajorMedicalMaximums from './pages/dashboard/accumulated_benefits/MajorMedicalMaximums';
 import DrugDatabase, { Distribution, General, IDCodes, Pricing as DrugInformationPricing } from './pages/dashboard/drug_information/DrugDatabase';
 import NDCCrossReference from './pages/dashboard/drug_information/NDCCrossReference';
 import PricingStrategies from './pages/dashboard/strategies/PricingStrategies';
@@ -106,7 +108,6 @@ function App() {
   return (
 
     <>
-
       <Routes>
         <Route exact path="/">
           {/* <Home /> */}
@@ -251,6 +252,44 @@ function App() {
           </Route>
 
 
+          <Route path='searchprovider' element={<SearchProvider />}>
+            <Route index element={<Navigate to="provider" replace />} />
+
+            <Route path='provider' element={<Provider />} />
+            <Route path='effectivedates' element={<Effectivedates />} />
+            <Route path='pharmistsystem' element={<PharmistSystem />} />
+
+            <Route path='networkparticipation' element={<NetworkParticipation />} />
+
+
+          </Route>
+
+          <Route path='provider/superprovider' element={<SuperProvider />}>
+           
+
+          </Route>
+
+
+          <Route path='provider/traditionalnetworks' element={<TraditionalNetworks />}>
+            <Route index element={<Navigate to="network" replace />} />
+
+            <Route path='network' element={<Network />} />
+            <Route path='providers' element={<Providers />} />
+          </Route>
+
+
+
+          <Route path='provider/flexiblenetworks' element={<FlexibleNetworks />}>
+            <Route index element={<Navigate to="network" replace />} />
+            <Route path='network' element={<Network />} />
+            <Route path='rules' element={<Rules />} />
+
+          </Route>
+
+          <Route path='provider/prioritizenetworks' element={<PrioritizeNetwork />}>
+           
+          </Route>
+
 
           <Route path='prescriber/' element={<Prescriber />}>
 
@@ -312,10 +351,6 @@ function App() {
           </Route> */}
 
           <Route path="third-party-pricing/price-schedule" element={<PriceSchedule />}>
-            <Route index element={<Navigate to="brand-item" replace />} />
-            <Route index path="brand-item" element={<BrandItem />} />
-            <Route path="brand-item-generic" element={<BrandItemGeneric />} />
-            <Route path="generic-item" element={<GetGenericItem />} />
           </Route>
 
           <Route path="third-party-pricing/copay-schedule" element={<CopaySchedule />}>
@@ -383,14 +418,7 @@ function App() {
           <Route path="exception-list/benefit-derivation" element={<BenefitDerivation />}>
           </Route>
 
-          <Route path="exception-list/provider-type-validation" element={<ProviderTypeValidation />}>
-          </Route>
 
-          <Route path="exception-list/procedure-code-list" element={<ProcedureCode />}>
-          </Route>
-
-          <Route path="exception-list/super-benefit-list" element={<SuperBenefitList />}>
-          </Route>
           {/* exception list route ends  */}
 
           <Route path="code/benefits" element={<Benifits />}>

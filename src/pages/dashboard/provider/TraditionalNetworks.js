@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, Outlet, Route, Routes, useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import Footer from '../../../shared/Footer';
 import { ToastContainer, toast } from 'react-toastify';
 import { Alert } from 'react-bootstrap';
 import { Button, Col, Row } from 'react-bootstrap';
-
 
 
 
@@ -22,6 +21,137 @@ function TraditionalNetworks(props) {
 
     const [traditionalnetwork, SetTraditionalNetwork] = useState([]);
     const [customerlist, setCustomerlist] = useState([]);
+
+
+
+
+
+    const scollToRef = useRef();
+    const [customer, setCustomer] = useState([]);
+
+    
+
+
+    const [ndcData, setNdcData] = useState([]);
+    const [ndcClass, setNdClass] = useState([]);
+    const [selctedNdc, setSelctedNdc] = useState('');
+
+
+    const searchException = (fdata) => {
+
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        };
+
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/provider/traditionalnetwork/search?search=${fdata.target.value}`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                //  console.log(response);
+                // console.log(data.data);
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    setNdcData([]);
+                    return Promise.reject(error);
+
+                } else {
+                    setNdcData(data.data);
+                    return;
+                }
+
+
+
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+    }
+
+
+
+    const getNDCItems = (ndcid) => {
+        // ndc_exception_list
+        var test = {};
+        test.ndc_exception_list = ndcid;
+        setSelctedNdc(test);
+
+        // //  console.log(customerid);
+        const requestOptions = {
+            method: 'GET',
+            // mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            // body: encodeURIComponent(data)
+        };
+        // //  console.log(watch(fdata));
+
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/provider/traditionalnetwork/get/${ndcid}`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                //  console.log(response);
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    setCustomer([]);
+                    return Promise.reject(error);
+                } else {
+                    console.log(data.data);
+                    SetTraditionalNetwork(data.data);
+
+                    // scollToRef.current.scrollIntoView()
+                }
+
+
+                if (response === '200') {
+                }
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+    }
+
+    const getNDCItemDetails = (ndcid) => {
+        //  console.log(ndcid);
+        const requestOptions = {
+            method: 'GET',
+            // mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            // body: encodeURIComponent(data)
+        };
+        //  console.log(watch(fdata));
+
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/speciality/details/${ndcid}`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                //  console.log(response);
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    return Promise.reject(error);
+                } else {
+                    setSelctedNdc(data.data);
+                    // scollToRef.current.scrollIntoView()
+                    // return;
+                }
+
+
+                if (response === '200') {
+                }
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+    }
+
 
     const fillProviderData = (e) => {
         // API  
@@ -68,7 +198,13 @@ function TraditionalNetworks(props) {
 
                 <div className="col-md-12 mb-3">
                     {/* <h4 >Search Client</h4> */}
-                    <SearchTraditionalNetwork />
+
+                    <SearchTraditionalNetwork searchException={searchException} />
+
+
+                    {/* <TraditionalNetworkList ndcListData={ndcData} ndcClassData={ndcClass} getNDCItem={getNDCItems} getNDCItemDetails={getNDCItemDetails} selctedNdc={selctedNdc} /> */}
+
+
                 </div>
 
                 {/* <div className="card mt-3 mb-3">
@@ -104,7 +240,7 @@ function TraditionalNetworks(props) {
 
                 <Row>
                     <Col md="3">
-                        <TraditionalNetworkList />
+                        <TraditionalNetworkList ndcListData={ndcData} ndcClassData={ndcClass} getNDCItem={getNDCItems} getNDCItemDetails={getNDCItemDetails} selctedNdc={selctedNdc} />
                     </Col>
 
                     <Col md="9">
@@ -245,7 +381,20 @@ function TraditionalNetworks(props) {
     )
 }
 
-function SearchTraditionalNetwork() {
+
+
+
+
+function SearchTraditionalNetwork(props) {
+
+
+    
+    const searchException = (fdata) => {
+
+        props.searchException(fdata);
+    }
+
+
     return (
         <>
             <div className="card mt-3 mb-3">
@@ -254,7 +403,7 @@ function SearchTraditionalNetwork() {
                         <div className="col-md-12 mb-3">
                             <div className="form-group">
                                 <small>Traditional NetWork </small>
-                                <input type="text" className="form-control" placeholder='Start typing traditional network id/ name to search'
+                                <input type="text"    onKeyUp={(e) => searchException(e)}  className="form-control" placeholder='Start typing traditional network id/ name to search'
                                 />
                             </div>
                         </div>
@@ -265,7 +414,23 @@ function SearchTraditionalNetwork() {
     )
 }
 
-function TraditionalNetworkList() {
+function TraditionalNetworkList(props) {
+
+    useEffect(() => { }, [props.selctedNdc]);
+    // //  console.log(props.selctedNdc);
+
+    const getNDCItem = (ndciemid) => {
+        props.getNDCItem(ndciemid);
+    }
+
+    const getNDCItemDetails = (ndciemid) => {
+        props.getNDCItemDetails(ndciemid);
+    }
+
+    const ndcListArray = [];
+    for (let i = 0; i < props.ndcListData.length; i++) {
+        ndcListArray.push(<NdcRow ndcRow={props.ndcListData[i]} getNDCItem={getNDCItem} selected={props.selctedNdc} />);
+    }
     return (
         <>
             <div className="card mt-3 mb-3">
@@ -283,6 +448,8 @@ function TraditionalNetworkList() {
                                     </tr>
                                 </thead>
                                 <tbody>
+
+                                    {ndcListArray}
 
                                 </tbody>
                             </table>
@@ -348,6 +515,31 @@ function NoReacords(params) {
     return (
         <>
             <tr style={{padding: '10px', color:'red'}}><td colspan="7">No Records Matches..!</td></tr>
+        </>
+    )
+}
+
+
+function NdcRow(props) {
+
+    useEffect(() => {
+
+    }, [props.selected]);
+
+
+
+    return (
+        <>
+            <tr className={(props.selected && props.ndcRow.network_id == props.selected.network_id ? ' tblactiverow ' : '')}
+
+                onClick={() => props.getNDCItem(props.ndcRow.network_id)}
+            >
+                <td>{props.ndcRow.network_id}</td>
+                <td >{props.ndcRow.network_name}</td>
+                
+
+                {/* <td><button className="btn btn-sm btn-info" id="" ><i className="fa fa-eye"></i> View</button></td> */}
+            </tr>
         </>
     )
 }
@@ -439,9 +631,13 @@ function TraditionalNetworkResults(props) {
 
 export function Network(props) {
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
     const [traditionalnetwork, SetTraditionalNetwork] = useOutletContext();
+
+
+    useEffect(() => { reset(traditionalnetwork) }, [traditionalnetwork]);
+
 
     const onsubmit = (data) => {
 
