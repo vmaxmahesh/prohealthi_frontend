@@ -424,6 +424,8 @@ export default function Benifits() {
             setBenifitData(false);
         }
 
+        document.title = 'Service Type Code | ProHealthi';
+
     }, [benifitsData, adding]);
 
     return (
@@ -446,7 +448,7 @@ export default function Benifits() {
                             <ul>
                                 {/* <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li>  */}
                                 <div className="col-md-3 ms-auto text-end">
-                                    <button className="btn  btn-info" onClick={e => AddForm()}>
+                                    <button className="btn  btn-info btn-sm" onClick={e => AddForm()}>
                                         Add Service Type <i className="fa fa-plus-circle"></i></button>
                                 </div>
                             </ul>

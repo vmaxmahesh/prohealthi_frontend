@@ -6,7 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { Alert } from 'react-bootstrap';
 import { Button, Col, Row } from 'react-bootstrap';
 
-import { Alert, Col, Row } from 'react-bootstrap';
+
 
 
 function TraditionalNetworks(props) {

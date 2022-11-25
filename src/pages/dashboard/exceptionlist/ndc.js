@@ -8,6 +8,7 @@ export default function NDC() {
     const [ndcData, setNdcData] = useState([]);
     const [ndcClass, setNdClass] = useState([]);
     const [selctedNdc, setSelctedNdc] = useState('');
+    
     const getNDCItems = (ndcid) => {
         var test = {};
         test.ndc_exception_list = ndcid;
@@ -71,14 +72,11 @@ export default function NDC() {
                     return Promise.reject(error);
                 } else {
                     setSelctedNdc(data.data);
-                    console.log(selctedNdc);
+
                     scollToRef.current.scrollIntoView()
                     return;
                 }
 
-
-                if (response === '200') {
-                }
             })
             .catch(error => {
                 console.error('There was an error!', error);
@@ -109,9 +107,6 @@ export default function NDC() {
                     setNdcData(data.data);
                     return;
                 }
-
-
-
             })
             .catch(error => {
                 console.error('There was an error!', error);
@@ -122,7 +117,9 @@ export default function NDC() {
         scollToRef.current.scrollIntoView()
     }
 
-    useEffect(() => { }, [ndcData, ndcClass, selctedNdc]);
+    useEffect(() => {
+        document.title = 'NDC Exception | ProHealthi';
+    }, [ndcData, ndcClass, selctedNdc]);
 
     return (
         <>
@@ -225,7 +222,7 @@ function ShowNDCList(props) {
     const [show, setShow] = useState("none");
     const handleShow = () => setShow("block");
 
-    
+
     return (
         <>
             <div className="card mt-3 mb-3">

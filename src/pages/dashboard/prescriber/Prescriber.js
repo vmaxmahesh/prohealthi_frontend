@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
 
-function Prescriber() {
+export default function Prescriber() {
     const location = useLocation();
     const currentpath = location.pathname.split('/').pop();
     const [show, setShow] = useState(false);

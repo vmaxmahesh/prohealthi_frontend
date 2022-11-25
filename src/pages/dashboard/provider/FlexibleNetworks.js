@@ -3,10 +3,10 @@ import { useForm } from 'react-hook-form';
 import { Link, Outlet, Route, Routes, useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import Footer from '../../../shared/Footer';
 import { ToastContainer, toast } from 'react-toastify';
-import { Alert } from 'react-bootstrap';
+
 import { Button, Col, Row } from 'react-bootstrap';
 
-import { Alert, Row, Col } from 'react-bootstrap';
+
 
 
 function FlexibleNetworks(props) {

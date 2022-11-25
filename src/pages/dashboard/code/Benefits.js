@@ -18,9 +18,6 @@ export default function Benefits() {
     const [benifitsData, setBenifitData] = useState(false);
     const [benifitsList, setBenifitList] = useState([]);
     const [adding, setAdding] = useState(false);
-
-
-
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -40,9 +37,8 @@ export default function Benefits() {
             fetch(process.env.REACT_APP_API_BASEURL + `/api/codes/benefits?search=${fdata.target.value}`, requestOptions)
                 .then(async response => {
                     const isJson = response.headers.get('content-type')?.includes('application/json');
-                    const data = isJson && await response.json();
-                    console.log(response);
-
+                    const data = isJson && await response.json(); 
+                   
                     // check for error response
                     if (!response.ok) {
                         // get error message from body or default to response status
@@ -50,7 +46,7 @@ export default function Benefits() {
                         return Promise.reject(error);
                     } else {
                         setBenifitList(data.data);
-                        console.log(benifitsList);
+
                         toast.success(response.message, {
                             position: "top-right",
                             autoClose: 5000,
@@ -59,25 +55,12 @@ export default function Benefits() {
                             pauseOnHover: true,
                             draggable: true,
                             progress: undefined,
-
                         });
                     }
 
                 })
                 .catch(error => {
                     console.error('There was an error!', error);
-
-                    // toast.error(error.response.data.message, {
-                    //     position: "top-right",
-                    //     autoClose: 5000,
-                    //     hideProgressBar: false,
-                    //     closeOnClick: true,
-                    //     pauseOnHover: true,
-                    //     draggable: true,
-                    //     progress: undefined,
-
-
-                    //     });
                 });
 
         } else {
@@ -111,8 +94,9 @@ export default function Benefits() {
             setBenifitData(false);
         }
 
-    }, [benifitsData, adding]);
+        document.title = 'Benefit Code | ProHealthi';
 
+    }, [benifitsData, adding]);
 
     return (
         <>
@@ -277,7 +261,8 @@ function AddBenefit(props) {
                         return Promise.reject(error);
                     } else {
                         reset(data.data);
-                        toast.success('Added Successfully...!', {
+                        var msg = props.adding ? 'Added Successfully...!' : 'Updated Successfully..'
+                        toast.success(msg, {
                             position: "top-right",
                             autoClose: 5000,
                             hideProgressBar: false,
@@ -339,12 +324,12 @@ function AddBenefit(props) {
 
                                     {props.adding ?
                                         <input type="text" className="form-control" name="benefit_code" id=""  {...register("benefit_code", { required: true })} />
-                                    // errors.benefit_code && <span><p className='notvalid'>This field is required</p></span>
+                                        // errors.benefit_code && <span><p className='notvalid'>This field is required</p></span>
 
-                                    :
+                                        :
 
-                                    <input type="text" readOnly className="form-control" name="benefit_code" id=""  {...register("benefit_code", { required: true })} />
-}
+                                        <input type="text" readOnly className="form-control" name="benefit_code" id=""  {...register("benefit_code", { required: true })} />
+                                    }
                                 </div>
                             </div>
                             <div className="col-md-12 mb-2">
@@ -355,7 +340,7 @@ function AddBenefit(props) {
                                 </div>
                             </div>
                         </div>
-                        <Button type='submit' variant="primary">Save</Button>
+                        <Button type='submit' variant="primary">{props.adding ? ' Add' : 'Update'}</Button>
                     </form>
                     {/* </Form> */}
                 </Card.Body>

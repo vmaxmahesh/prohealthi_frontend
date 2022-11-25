@@ -421,6 +421,8 @@ export default function Reason() {
             setBenifitData(false);
         }
 
+        document.title = 'Reason Code | ProHealthi';
+
     }, [benifitsData, adding]);
 
     return (
@@ -443,7 +445,7 @@ export default function Reason() {
                             <ul>
                                 {/* <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li> */}
                                 <div className="col-md-3 ms-auto text-end">
-                                    <button className="btn  btn-info" onClick={e => AddForm()}>
+                                    <button className="btn  btn-info btn-sm" onClick={e => AddForm()}>
                                         Add Reason Code <i className="fa fa-plus-circle"></i></button>
                                 </div>
                             </ul>

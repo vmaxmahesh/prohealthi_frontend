@@ -445,9 +445,9 @@ export default function CauseOfLoss() {
                     <div className="col-md-6 mb-3">
                         <div className="breadcrum ">
                             <ul>
-                                <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li>
+                                {/* <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li> */}
                                 <div className="col-md-3 ms-auto text-end">
-                                    <button className="btn  btn-info" onClick={e => AddForm()}>
+                                    <button className="btn  btn-info btn-sm" onClick={e => AddForm()}>
                                         Add Code <i className="fa fa-plus-circle"></i></button>
                                 </div>
                             </ul>
@@ -496,9 +496,6 @@ export default function CauseOfLoss() {
 
                 </Row>
 
-
-
-
             </div>
         </>
     )
@@ -510,8 +507,6 @@ function List(props) {
     for (let i = 0; i < props.benifitsList.length; i++) {
         benifitList.push(<BenifitRow benifitRowData={props.benifitsList[i]} selected={props.selected} getCode={props.getCode} />);
     }
-
-
 
     return (
         <>
@@ -638,6 +633,8 @@ function AddBenifit(props) {
                 keepValues: false,
             })
         }
+
+        document.title = 'Cause of Loss Code | ProHealthi';
 
 
     }, [props.selected, props.adding]);
