@@ -1,11 +1,46 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 export default function CopayStepSchedule() {
+
+    const[copayStepData, setCopayStepData] = useState([]);
+    const[type, setType] = useState([]);
+    const[formData, setFormData] = useState([]);
+    const selectType = (e) => {
+        setType(e);
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'content-type': 'application/json' }
+        }
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/third-party-pricing/copay-step-schedule/get?search=${e}`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                setCopayStepData(data.data);
+                toast.success(response.message, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+    }
+
+    const showData = (data) => {
+        setFormData(data);
+    }
+    useEffect(() => {}, [copayStepData, formData]);
     return (
         <>
             <div className='dashboard-content clearfix'>
-
                 <div className="row">
                     <div className="col-md-6 mb-3">
                         <div className="breadcrum">
@@ -27,7 +62,6 @@ export default function CopayStepSchedule() {
                     </div>
                 </div>
 
-
                 <div className="card mt-3 mb-3">
                     <div className="card-body">
                         <div className="col-md-12">
@@ -40,7 +74,7 @@ export default function CopayStepSchedule() {
                                     <div className=""><span>Schedule Type:</span></div>
                                     <div className="col-md-6">
                                         <div className="form-check">
-                                            <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
+                                            <input className="form-check-input" type="radio"  onClick={e => selectType("days_supply")} name="flexRadioDefault" id="flexRadioDefault1" />
                                             <label className="form-check-label" htmlFor="flexRadioDefault1">
                                                 Days Supply
                                             </label>
@@ -48,7 +82,7 @@ export default function CopayStepSchedule() {
                                     </div>
                                     <div className="col-md-6 ">
                                         <div className="form-check">
-                                            <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" />
+                                            <input className="form-check-input" onClick={e => selectType("max_cost")} type="radio" name="flexRadioDefault" id="flexRadioDefault2"/>
                                             <label className="form-check-label" htmlFor="flexRadioDefault2">
                                                 Max Cost
                                             </label>
@@ -63,10 +97,10 @@ export default function CopayStepSchedule() {
 
                 <div className="row">
                     <div className="col-md-4">
-                        <GetStepScheduleTable />
+                        <GetStepScheduleTable copayStepData={copayStepData} dataType={type} showData={showData}/>
                     </div>
                     <div className="col-md-8">
-                        <DataForm />
+                        <DataForm  formData={formData} dataType={type}/>
                     </div>
                 </div>
 
@@ -75,110 +109,137 @@ export default function CopayStepSchedule() {
     )
 }
 
-function GetStepScheduleTable() {
+function GetStepScheduleTable(props) {
+    const listArray = [];
+    const type = props.dataType;
+    for(let i=0; i < props.copayStepData.length; i++)
+    {
+        listArray.push(<CopayStepRow rowData={props.copayStepData[i]} dType={type} showData={props.showData}/>);
+    }
+    
     return (
         <>
             <div className="card mt-3 mb-3">
                 <div className="card-body">
-
+                
                     <h5 className="mb-2">Step Schedules table</h5>
                 </div>
+                <div style={{ height: '360px', overflowY: 'scroll' }}>
                 <table className="table  table-bordered">
-                    <thead>
+                    <thead className='stickt-thead'>
                         <tr>
-                            <th>By Day Supply
-                                {/* by maximums cost */}
+                            <th>{String(type).replace("_", " ").toUpperCase()}
                             </th>
                             <th>Description</th>
                         </tr>
                     </thead>
                     <tbody>
-
+                        {listArray}
                     </tbody>
                 </table>
-
             </div>
-
-
+            </div>
         </>
     )
 }
 
-function DataForm(params) {
+function CopayStepRow(props)
+{
+    return(
+        <>
+         <tr onClick={e => props.showData(props.rowData)}
+         >
+            <td>{props.dType == 'days_supply' ? props.rowData.days_supply : props.rowData.cost_max}
+                </td>
+            <td>-</td>
+         </tr>
+        </>
+    )
+}
 
+function DataForm(props) {
+const{register, handleSubmit, reset, watch, formState : {error} } = useForm();
+useEffect(() => { reset(props.formData) }, [props.formData]);
     return (
         <>
             <div className="card mt-3 mb-3">
                 <div className="card-body">
-                    <div class="row mb-2">
-                        <div class="col-md-4 mb-3">
-                            <div class="form-group">
+                    <div className="row mb-2">
+                        <div className="col-md-4 mb-3">
+                            <div className="form-group">
                                 <small>Copay List</small>
-                                <input type="text" class="form-control" placeholder="Surgical" name="" id="" required="" autocomplete="off" />
+                                <input type="text" className="form-control" placeholder="Surgical" {...register("copay_list", {required : true})}  autoComplete="off" />
                             </div>
                         </div>
-                        <div class="col-md-8 mb-3">
-                            <div class="form-group">
+                        <div className="col-md-8 mb-3">
+                            <div className="form-group">
                                 <small>Copay Description</small>
-                                <textarea rows="1" cols="2" class="form-control" placeholder="Surgical Test"></textarea>
+                                <textarea rows="1" cols="2" className="form-control" {...register("copay_list", {required : true})} placeholder="Surgical Test"></textarea>
                             </div>
                         </div>
-                        <div class="col-md-12">
-                            <div class=""><span>Schedule Type:</span></div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
-                                <label class="form-check-label" for="flexRadioDefault1">
+                        <div className="col-md-12">
+                            <div className=""><span>Schedule Type:</span></div>
+                            <div className="form-check">
+
+                                {/* console.log() */}
+                                <input className="form-check-input" type="radio"  checked={props.formData.days_supply != '0'} />
+                                <label className="form-check-label" htmlFor="flexRadioDefault1" >
                                     Days Supply
                                 </label>
                             </div>
                         </div>
-                        <div class="col-md-6 ">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
-                                <label class="form-check-label" for="flexRadioDefault1">
+                        <div className="col-md-6 ">
+                            <div className="form-check">
+                                <input className="form-check-input" type="radio" checked={props.formData.cost_max != '0'}  
+                                // {...props.formData.cost_max == '0' ? '' : defaultChecked } 
+                                />
+                                <label className="form-check-label" htmlFor="flexRadioDefault1">
                                     Max Cost
                                 </label>
                             </div>
                         </div>
                     </div>
-                    <div class="row mb-2 ">
-                        <div class="col-md-3 mb-3">
-                            <div class="form-group">
-                                <small>Day Supply/ Maximum Cost</small>
-                                <input type="text" class="form-control" placeholder="30000" name="" id="" required="" autoComplete="off" />
+                    <div className="row mb-2 ">
+                        <div className="col-md-3 mb-3">
+                            <div className="form-group">
+                                <small>{props.dataType}</small>
+                                {props.dataType == 'days_supply' ? 
+                                <input type="text" className="form-control"  {...register("days_supply", {required : true})} autoComplete="off" /> 
+                                :  <input type="text" className="form-control"  {...register("cost_max", {required : true})} autoComplete="off" /> }
+                               
 
                             </div>
                         </div>
-                        <div class="col-md-3 mb-3">
-                            <div class="form-group">
+                        <div className="col-md-3 mb-3">
+                            <div className="form-group">
                                 <small>$</small>
-                                <input type="text" class="form-control" placeholder="0" name="" id="" required="" autoComplete="off" />
+                                <input type="text" className="form-control" placeholder="0" {...register("copay_amount", {required : true})} autoComplete="off" />
 
                             </div>
                         </div>
-                        <div class="col-md-3 mb-3">
-                            <div class="form-group">
+                        <div className="col-md-3 mb-3">
+                            <div className="form-group">
                                 <small>%</small>
-                                <input type="text" class="form-control" placeholder="83" name="" id="" required="" autoComplete="off" />
+                                <input type="text" className="form-control" placeholder="83" {...register("copay_percentage", {required : true})} autoComplete="off" />
 
                             </div>
                         </div>
 
-                        <div class="col-md-3 mb-3">
-                            <div class="form-group">
+                        <div className="col-md-3 mb-3">
+                            <div className="form-group">
                             <button className='btn btn-primary'>Add</button>
                             </div>
                         </div>
 
-                        {/* <div class="col-md-3 mb-3">
+                        {/* <div className="col-md-3 mb-3">
                             <button className='btn btn-primary'>Add</button>
                         </div> */}
                     </div>
                     
 
-                    <div class="row mb-2 ">
-                        <div class="col-md-9 mb-3">
-                            <table class="table  table-bordered">
+                    <div className="row mb-2 ">
+                        <div className="col-md-9 mb-3">
+                            <table className="table  table-bordered">
                                 <thead>
                                     <tr>
                                         <th>Maximum Cost</th>
@@ -201,7 +262,7 @@ function DataForm(params) {
                             </table>
                         </div>
                        
-                        <div class="col-md-3 mb-3">
+                        <div className="col-md-3 mb-3">
                             <button className='btn btn-danger'>Delete</button>
                         </div>
                     </div>
