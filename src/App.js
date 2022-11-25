@@ -124,7 +124,7 @@ function App() {
             <Route path='exceptions' element={<Exceptions />} />
           </Route>
 
-          <Route path="member" element={<Member />}>
+          {/* <Route path="member" element={<Member />}>
             <Route index element={<Navigate to="member" replace />} />
             <Route path='member' element={<MemberForm />} />
             <Route path='overrides' element={<Overrides />} />
@@ -149,7 +149,7 @@ function App() {
             <Route path='authorization' element={<Authorisation />} />
             <Route path='pricing' element={<Pricing />} />
             <Route path='notes' element={<PANotes />} />
-          </Route>
+          </Route> */}
 
 
           <Route path="plan-validations" element={<PlanValidation />}>
