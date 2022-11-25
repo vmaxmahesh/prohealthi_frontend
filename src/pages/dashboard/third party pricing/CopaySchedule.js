@@ -181,7 +181,8 @@ function CopayListRow(props)
 {
     return(
         <>
-         <tr onClick={e => props.getCopayData(props.rowData)}>
+         <tr onClick={e => props.getCopayData(props.rowData)}
+         className={(props.selected && props.rowData.copay_schedule == props.selected.copay_schedule ? 'tblactiverow' : '')}>
             <td>{props.rowData.copay_schedule}</td>
             <td>{props.rowData.copay_schedule_name}</td>
          </tr>

@@ -204,8 +204,8 @@ function PriceScheduleRow(props) {
     return (
         <>
             <tr onClick={() => props.getPriceScheduleDetails(props.rowData)}
-                className={(props.selected && props.rowData.price_schedule == props.selected.price_schedule ? 'tblactiverow' : '')}>
-                <td>{props.rowData.price_schedule}</td>
+                classNme={(props.selected && props.rowData.price_schedule == props.selected.price_schedule ? 'tblactiverow' : '')}>
+                <td>{props.rowData.price_schedule}</td>a
                 <td>{props.rowData.price_schedule_name}</td>
                 <td>{props.rowData.copay_schedule}</td>
             </tr>
