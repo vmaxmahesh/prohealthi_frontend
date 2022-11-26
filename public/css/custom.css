@@ -644,6 +644,7 @@ marquee p{
 }
 .nav-tabs{
     border-bottom: solid 0px #fff;
+    margin-bottom: 10px;
 }
 .nav-tabs .nav-link{
     color: #000;

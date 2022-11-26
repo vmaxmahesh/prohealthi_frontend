@@ -32,10 +32,6 @@ export default function VerifyDrugCoverage() {
 
             <div>
                 <div className="nav nav-tabs" id="nav-tab" role="tablist">
-                    {/* <button className="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#Rules" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Member</button>
-                    <button className="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#Pricing" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Group</button>
-                    <button className="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#Override" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Plan</button>
-                     */}
 
                     <Link to="member" className="nav-link">Member</Link>
                     <Link to="group" className="nav-link">Group</Link>
@@ -59,7 +55,7 @@ export default function VerifyDrugCoverage() {
                 </div>
             </div>
 
-            {/* </div> */}
+           
         </>
     );
 }

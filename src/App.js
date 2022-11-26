@@ -76,6 +76,8 @@ import VerifyDrugCoverage, { Group, Plan, Member as VDCMember } from './pages/da
 import Zipcodes from './pages/dashboard/administrator/Zipcodes';
 import SystemParameter, { ParametersMaintanace, SystemlimitsEligibility as PSParmeters } from './pages/dashboard/administrator/SystemParameters';
 import SearchAudit from './pages/dashboard/administrator/Searchaudittrail';
+import Audittrail from './pages/dashboard/administrator/Audittrailmaintainance';
+import ClaimsHistorySearch, { General as ClaimHistoryGeneral, Optional as ClaimHistoryOptional } from './pages/dashboard/administrator/ClaimsHistorySearch';
 
 function setToken(userToken) {
   sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -598,6 +600,7 @@ function App() {
           </Route>
 
           <Route path='administrator/verify-drug-coverage' element={<VerifyDrugCoverage />}>
+          <Route index element={<Navigate to="member" replace />} />
             <Route path='member' element={<VDCMember />} />
             <Route path='group' element={<Group />} />
             <Route path='plan' element={<Plan />} />
@@ -609,12 +612,21 @@ function App() {
 
           {/* <Route path='administrator/' element={< />}> </Route> */}
           <Route path='administrator/system-parameter' element={<SystemParameter />}>
+          <Route index element={<Navigate to="parameters-maintanace" replace />} />
             <Route path='parameters-maintanace' element={<ParametersMaintanace />} />
             <Route path='systemlimit-eligibility' element={<PSParmeters />} />
           </Route>
 
-          <Route path='administrator/search-audit-trail' element={<SearchAudit />}>
+          <Route path='administrator/claims-history-search' element={<ClaimsHistorySearch />}>
+          <Route index element={<Navigate to="general-history" replace />} />
+            <Route path='general-history' element={<ClaimHistoryGeneral />} />
+            <Route path='optional-history' element={<ClaimHistoryOptional />} />
+          </Route>
 
+          <Route path='administrator/search-audit-trail' element={<SearchAudit />}>
+          </Route>
+
+          <Route path='administrator/audit-trail-maintanance' element={<Audittrail />}>
           </Route>
 
 
