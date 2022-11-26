@@ -29,11 +29,11 @@ import ServiceType from './pages/dashboard/code/ServiceType';
 import ProviderType from './pages/dashboard/code/ProviderType';
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-import PriceSchedule from './pages/dashboard/third party pricing/PriceSchedule';
+import PriceSchedule, { BrandItemGeneric, GetGenericItem } from './pages/dashboard/third party pricing/PriceSchedule';
 import MacList from './pages/dashboard/third party pricing/MacList';
 import TaxSchedule from './pages/dashboard/third party pricing/TaxSchedule';
 import CopayStepSchedule from './pages/dashboard/third party pricing/CopayStepSchedule';
-import CopaySchedule from './pages/dashboard/third party pricing/CopaySchedule';
+import CopaySchedule, { NonGeneric } from './pages/dashboard/third party pricing/CopaySchedule';
 import ProcedureUCRList from './pages/dashboard/third party pricing/ProcedureUCRList';
 import RVAList from './pages/dashboard/third party pricing/RVAList';
 import NDC, { ProcessRule, RXLimitationPricing, ValidationsOverride } from './pages/dashboard/exceptionlist/ndc';
@@ -72,6 +72,10 @@ import PriorAuthorization, { Authorization, PriorNotes, PriorPricing } from './p
 import PlanValidations from './pages/dashboard/membership/PlanValidation';
 import { ProtectedRoute } from './hooks/ProtectedRoute';
 import UserDefinition, { DataAccessTab, GroupForm, UDefinitionTab, UserDF } from './pages/dashboard/administrator/UserDefinition';
+import VerifyDrugCoverage, { Group, Plan, Member as VDCMember } from './pages/dashboard/administrator/VerifyDrugCoverage';
+import Zipcodes from './pages/dashboard/administrator/Zipcodes';
+import SystemParameter, { ParametersMaintanace, SystemlimitsEligibility as PSParmeters } from './pages/dashboard/administrator/SystemParameters';
+import SearchAudit from './pages/dashboard/administrator/Searchaudittrail';
 
 function setToken(userToken) {
   sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -265,7 +269,7 @@ function App() {
           </Route>
 
           <Route path='provider/superprovider' element={<SuperProvider />}>
-           
+
 
           </Route>
 
@@ -287,7 +291,7 @@ function App() {
           </Route>
 
           <Route path='provider/prioritizenetworks' element={<PrioritizeNetwork />}>
-           
+
           </Route>
 
 
@@ -593,10 +597,30 @@ function App() {
 
           </Route>
 
+          <Route path='administrator/verify-drug-coverage' element={<VerifyDrugCoverage />}>
+            <Route path='member' element={<VDCMember />} />
+            <Route path='group' element={<Group />} />
+            <Route path='plan' element={<Plan />} />
+          </Route>
+          <Route path='administrator/zip-codes' element={<Zipcodes />}>
+
+          </Route>
+
+
+          {/* <Route path='administrator/' element={< />}> </Route> */}
+          <Route path='administrator/system-parameter' element={<SystemParameter />}>
+            <Route path='parameters-maintanace' element={<ParametersMaintanace />} />
+            <Route path='systemlimit-eligibility' element={<PSParmeters />} />
+          </Route>
+
+          <Route path='administrator/search-audit-trail' element={<SearchAudit />}>
+
+          </Route>
+
 
           {/* administrator route ends  */}
-          </Route>
-          {/* </ProtectedRoute> */}
+        </Route>
+        {/* </ProtectedRoute> */}
       </Routes>
 
       <ToastContainer />

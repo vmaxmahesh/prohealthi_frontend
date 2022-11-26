@@ -93,10 +93,18 @@
 
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script src="/js/jquery.min.js"></script>
-
+<script type="text/javascript">
+ 
+</script>
 <script>
+
+  
   const mobileScreen = window.matchMedia("(max-width: 990px )");
   $(document).ready(function () {
+    // setTimeout(function() {
+      $('input').attr('autocomplete', 'off');
+  // }, 2000);
+
     $(".dashboard-nav-dropdown-toggle").click(function () {
       $(this).closest(".dashboard-nav-dropdown")
         .toggleClass("show")
