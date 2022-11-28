@@ -230,7 +230,7 @@ function NdcClassRow(props) {
                 onClick={() => props.getNDCItemDetails(props.ndcClassRow.specialty_id)}
 
             >
-                <td>{props.ndcClassRow.priority}</td>
+                <td>{props.ndcClassRow.specialty_id}</td>
                 <td>{props.ndcClassRow.specialty_status}</td>
               
                 {/* <td><button className="btn btn-sm btn-info" id="" ><i className="fa fa-eye"></i> View</button></td> */}
@@ -309,7 +309,7 @@ function SpecialityList(props) {
                                         <table className="table table-striped table-bordered" style={{ position: 'relative' }}>
                                             <thead className='stickt-thead'>
                                                 <tr>
-                                                    <th>Priority ID</th>
+                                                    <th>Speciality ID</th>
                                                     <th>Speciality Status</th>
                                                 </tr>
                                             </thead>
