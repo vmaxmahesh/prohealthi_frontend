@@ -1,7 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 export default function MembersData() {
+
+    const [memberList, setMemberList] = useState([]);
+
+    const onSearch = (search) => {
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'content-type': 'application/json' }
+        }
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/membership/memberdata/get?search=${search.target.value}`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                console.log(data.data);
+                toast.success(response.message, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+
+    }
+        
+
+    useEffect(() => { }, [memberList]);
+
     return (
         <>
             <div className="dashboard-content clearfix">
@@ -24,8 +57,8 @@ export default function MembersData() {
                             </ul>
                         </div>
                     </div>
-                    <SearchMember />
-                    <MemberList />
+                    <SearchMember onSearch={onSearch} />
+                    <MemberList memberList={memberList} />
                     <MemberTabs />
                 </div>
             </div>
@@ -33,7 +66,7 @@ export default function MembersData() {
     )
 }
 
-function SearchMember() {
+function SearchMember(props) {
     return (
         <>
             <div className="card mt-3 mb-3">
@@ -42,7 +75,7 @@ function SearchMember() {
                         <div className="col-md-12 mb-3">
                             <div className="form-group">
                                 <small>Member </small>
-                                <input type="text" className="form-control" placeholder='Start typing customer ID/ customer name/ client ID/ client name/ last name/ first name/ DOB to search'
+                                <input type="text" onKeyUp={e => props.onSearch(e)} className="form-control" placeholder='Start typing customer ID/ customer name/ client ID/ client name/ last name/ first name/ DOB to search'
                                 />
                             </div>
                         </div>
@@ -53,7 +86,12 @@ function SearchMember() {
     )
 }
 
-function MemberList() {
+function MemberList(props) {
+
+    const memListArray = [];
+    for (let i = 0; i < props.memberList.length; i++) {
+        memListArray.push(<MemberRow memRow={props.memberList[i]} />);
+    }
     return (
         <>
             <div className="card mt-3 mb-3">
@@ -69,91 +107,99 @@ function MemberList() {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td colSpan="5" className="p-0">
-                                    <table className="table table-borderless table-striped ">
-                                        <tr>
-                                            <td width="20%">NHF</td>
-                                            <td width="20%">NHF</td>
-                                            <td width="20%">All_Mild</td>
-                                            <td width="20%">123456</td>
-                                            <td width="20%">0001</td>
-                                        </tr>
-                                        <tr>
-                                            <td colSpan="2" width="60%">
-                                                <div className="row">
-                                                    <div className="col-md-4 mb-2">
-                                                        <small>First Name</small>
-                                                        <p>AARONS</p>
-                                                    </div>
-                                                    <div className="col-md-4 mb-2">
-                                                        <small>Last Name</small>
-                                                        <p>Derrick</p>
-                                                    </div>
-                                                    <div className="col-md-4 mb-2">
-                                                        <small>Date of Birth</small>
-                                                        <p>11-05-1996 </p>
-                                                    </div>
-                                                    <div className="col-md-4">
-                                                        <small>Effective Date</small>
-                                                        <p>12-05-1994</p>
-                                                    </div>
-                                                    <div className="col-md-4">
-                                                        <small>Termination Date</small>
-                                                        <p>14-09-2055</p>
-                                                    </div>
-                                                    <div className="col-md-4">
-                                                        <small>Plan ID</small>
-                                                        <p>--</p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td width="20%">
-                                                <div className="col-md-12 mb-2">
-                                                    <small>Eligibility</small>
-                                                    <p>Member Only (Individual)</p>
-                                                </div>
-                                                <div className="col-md-12">
-                                                    <small>Eligibility</small>
-                                                    <p>Member Only (Individual)</p>
-                                                </div>
-                                            </td>
-                                            <td width="20%">NHF</td>
-                                            <td width="20%">All_Mild</td>
-                                        </tr>
-                                        <tr>
-                                            <td colSpan="2" width="60%">
-                                                <div className="row">
-                                                    <div className="col-md-4 mb-2">
-                                                        <small>First Name</small>
-                                                        <p>AARONS</p>
-                                                    </div>
-                                                    <div className="col-md-4 mb-2">
-                                                        <small>Last Name</small>
-                                                        <p>Derrick</p>
-                                                    </div>
-                                                    <div className="col-md-4 mb-2">
-                                                        <small>Date of Birth</small>
-                                                        <p>11-05-1996 </p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td width="20%">
-                                                <div className="col-md-12 mb-2">
-                                                    <small>Eligibility</small>
-                                                    <p>Member Only (Individual)</p>
-                                                </div>
-                                            </td>
-                                            <td width="20%">NHF</td>
-                                            <td width="20%">All_Mild</td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
+
                         </tbody>
                     </table>
                 </div>
             </div>
+        </>
+    )
+}
+
+function MemberRow(props) {
+    return (
+        <>
+            <tr>
+                <td colSpan="5" className="p-0">
+                    {/* <table className="table table-borderless table-striped ">
+                        <tr>
+                            <td width="20%">NHF{props.memRow.customer_id}</td>
+                            <td width="20%">NHF</td>
+                            <td width="20%">All_Mild</td>
+                            <td width="20%">123456</td>
+                            <td width="20%">0001</td>
+                        </tr>
+                        <tr>
+                            <td colSpan="2" width="60%">
+                                <div className="row">
+                                    <div className="col-md-4 mb-2">
+                                        <small>First Name</small>
+                                        <p>AARONS</p>
+                                    </div>
+                                    <div className="col-md-4 mb-2">
+                                        <small>Last Name</small>
+                                        <p>Derrick</p>
+                                    </div>
+                                    <div className="col-md-4 mb-2">
+                                        <small>Date of Birth</small>
+                                        <p>11-05-1996 </p>
+                                    </div>
+                                    <div className="col-md-4">
+                                        <small>Effective Date</small>
+                                        <p>12-05-1994</p>
+                                    </div>
+                                    <div className="col-md-4">
+                                        <small>Termination Date</small>
+                                        <p>14-09-2055</p>
+                                    </div>
+                                    <div className="col-md-4">
+                                        <small>Plan ID</small>
+                                        <p>--</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td width="20%">
+                                <div className="col-md-12 mb-2">
+                                    <small>Eligibility</small>
+                                    <p>Member Only (Individual)</p>
+                                </div>
+                                <div className="col-md-12">
+                                    <small>Eligibility</small>
+                                    <p>Member Only (Individual)</p>
+                                </div>
+                            </td>
+                            <td width="20%">NHF</td>
+                            <td width="20%">All_Mild</td>
+                        </tr>
+                        <tr>
+                            <td colSpan="2" width="60%">
+                                <div className="row">
+                                    <div className="col-md-4 mb-2">
+                                        <small>First Name</small>
+                                        <p>AARONS</p>
+                                    </div>
+                                    <div className="col-md-4 mb-2">
+                                        <small>Last Name</small>
+                                        <p>Derrick</p>
+                                    </div>
+                                    <div className="col-md-4 mb-2">
+                                        <small>Date of Birth</small>
+                                        <p>11-05-1996 </p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td width="20%">
+                                <div className="col-md-12 mb-2">
+                                    <small>Eligibility</small>
+                                    <p>Member Only (Individual)</p>
+                                </div>
+                            </td>
+                            <td width="20%">NHF</td>
+                            <td width="20%">All_Mild</td>
+                        </tr>
+                    </table> */}
+                </td>
+            </tr>
         </>
     )
 }
@@ -807,404 +853,398 @@ export function CoverageHistoryTab() {
     )
 }
 
-export function HealthConditionsTab()
-{
-    return(
+export function HealthConditionsTab() {
+    return (
         <>
-         <div className="card mt-3 mb-3">
-                                <div className="card-body">
-                                    <div className="row">
-                                        <div className="col-md-12">
-                                            <table className="table table-striped table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Date/Time Modified</th>
-                                                        <th>User ID</th>
-                                                        <th>Chagne Type Indicator</th>
-                                                        <th>Org Eff. Date</th>
-                                                        <th>Org Term Date</th>
-                                                        <th>New Eff Date</th>
-                                                        <th>New Term Date</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>2010-01-24 14:57:23</td>
-                                                        <td>Shekar</td>
-                                                        <td>Coverage Line was Added</td>
-                                                        <td>0000-00-00</td>
-                                                        <td>0000-00-00</td>
-                                                        <td>2010-01-01</td>
-                                                        <td>9999-12-31</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+            <div className="card mt-3 mb-3">
+                <div className="card-body">
+                    <div className="row">
+                        <div className="col-md-12">
+                            <table className="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Date/Time Modified</th>
+                                        <th>User ID</th>
+                                        <th>Chagne Type Indicator</th>
+                                        <th>Org Eff. Date</th>
+                                        <th>Org Term Date</th>
+                                        <th>New Eff Date</th>
+                                        <th>New Term Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>2010-01-24 14:57:23</td>
+                                        <td>Shekar</td>
+                                        <td>Coverage Line was Added</td>
+                                        <td>0000-00-00</td>
+                                        <td>0000-00-00</td>
+                                        <td>2010-01-01</td>
+                                        <td>9999-12-31</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </>
     )
 }
 
-export function NotesTab()
-{
-    return(
+export function NotesTab() {
+    return (
         <>
-         <div className="card mt-3 mb-3">
-                                <div className="card-body">
-                                    <div className="row">
-                                        <div className="col-md-12 mb-2">
-                                            <h5>Notes</h5>
-                                        </div>
-                                        <div className="col-md-12 mb-2">
-                                            <textarea className="form-control" rows="15" style={{border:'solid 1px #ccc'}}></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+            <div className="card mt-3 mb-3">
+                <div className="card-body">
+                    <div className="row">
+                        <div className="col-md-12 mb-2">
+                            <h5>Notes</h5>
+                        </div>
+                        <div className="col-md-12 mb-2">
+                            <textarea className="form-control" rows="15" style={{ border: 'solid 1px #ccc' }}></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </>
     )
 }
 
-export function ClaimHistoryTab()
-{
-    return(
+export function ClaimHistoryTab() {
+    return (
         <>
-         <div className="card mt-3 mb-3">
-                                <div className="card-body">
-                                    <div className="row">
-                                        <div className="col-md-12 mb-3">
-                                            <h5>View Hostory</h5>
-                                        </div>
-                                        <div className="col-md-4 mb-3">
-                                            <div className="form-group">
-                                                <ul className="radios">
-                                                    <li><input type="radio" name="tab" value="igotnone"  onClick={e=> show1()} /> Claim History</li>
-                                                    <li><input type="radio" name="tab" value="igottwo" onClick={e=> show2()} /> Accumulated Benifits</li>
-                                                </ul>
-                                            </div>
-                                        </div>
+            <div className="card mt-3 mb-3">
+                <div className="card-body">
+                    <div className="row">
+                        <div className="col-md-12 mb-3">
+                            <h5>View Hostory</h5>
+                        </div>
+                        <div className="col-md-4 mb-3">
+                            <div className="form-group">
+                                <ul className="radios">
+                                    <li><input type="radio" name="tab" value="igotnone" onClick={e => show1()} /> Claim History</li>
+                                    <li><input type="radio" name="tab" value="igottwo" onClick={e => show2()} /> Accumulated Benifits</li>
+                                </ul>
+                            </div>
+                        </div>
 
-                                        <div className="col-md-8 mb-3">
-                                            <div className="row">
-                                                <div className="col-md-12 mb3">
-                                                    <h6>Date Creteria</h6>
-                                                </div>
-                                                <div className="col-md-4">
-                                                    <div className="form-group">
-                                                        <small>Date</small>
-                                                        <input type="date" name="" className="form-control" id="" />
-                                                    </div><br />
-                                                    <ul className="radios">
-                                                    <li><input type="radio" name="tab" id="date" /> Date</li>
-                                                    <li><input type="radio" name="tab" id="month"/> Month</li>
-                                                    <li className="m-0"><input type="radio" name="tab" id="year"/> Year</li>
-                                                </ul>
-                                                    
-                                                </div>
-                                                <div className="col-md-4 mt-2">
-                                                    <div className="form-group mt-4">
-                                                        <input type="checkbox" id="html" className="d-none" />
-                                                        <label htmlFor="html">View All Dates</label>
-                                                    </div>
-                                                </div>
-                                                <div className="col-md-4">
-                                                    <div className="form-group">
-                                                        <small>View Limitations</small>
-                                                        <select className="form-select">
-                                                            <option value=""></option>
-                                                            <option value=""></option>
-                                                            <option value=""></option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
+                        <div className="col-md-8 mb-3">
+                            <div className="row">
+                                <div className="col-md-12 mb3">
+                                    <h6>Date Creteria</h6>
+                                </div>
+                                <div className="col-md-4">
+                                    <div className="form-group">
+                                        <small>Date</small>
+                                        <input type="date" name="" className="form-control" id="" />
+                                    </div><br />
+                                    <ul className="radios">
+                                        <li><input type="radio" name="tab" id="date" /> Date</li>
+                                        <li><input type="radio" name="tab" id="month" /> Month</li>
+                                        <li className="m-0"><input type="radio" name="tab" id="year" /> Year</li>
+                                    </ul>
 
-                                        </div>
-                                        
-                                        <div className="col-md-1 ms-auto mb-3">
-                                            <a href="" className="btn btn-info btn-sm p-1" style={{width: "100%"}}>Load</a>
-                                        </div>
-
-
-                                        <div className="col-md-12" id="div1">
-                                            <table className="table table-striped table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Date of SVC</th>
-                                                        <th>Provider ID</th>
-                                                        <th>Claim Ref. #</th>
-                                                        <th>Rx. #</th>
-                                                        <th>New/Refil</th>
-                                                        <th>Procedure Code</th>
-                                                        <th>Label Name / Procedure Discription</th>
-                                                        <th>Cardholder ID</th>
-                                                        <th>Person Code</th>
-                                                        <th>Total</th>
-                                                        <th>Status</th>
-                                                        <th>Bin#</th>
-                                                        <th>Plan ID</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>2010-01-24</td>
-                                                        <td>NPP001</td>
-                                                        <td>3000000456</td>
-                                                        <td>000006</td>
-                                                        <td>0</td>
-                                                        <td>200</td>
-                                                        <td>Flomax Cap 0.4 MG</td>
-                                                        <td>1548796</td>
-                                                        <td>001</td>
-                                                        <td>.00</td>
-                                                        <td>Rejected</td>
-                                                        <td>200010</td>
-                                                        <td>NIB_PLAN</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div className="col-md-12 Hide" id="div2">
-                                            <table className="table table-striped table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Date of SVC</th>
-                                                        <th>Provider ID</th>
-                                                        <th>App to Periodic Ded.</th>
-                                                        <th>App to MOP</th>
-                                                        <th>Patient Paid Diff.</th>
-                                                        <th>App to Max Benifit</th>
-                                                        <th>Acc. Excl</th>
-                                                        <th>Status</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>2010-01-24</td>
-                                                        <td>NPP001</td>
-                                                        <td>.00</td>
-                                                        <td>.00</td>
-                                                        <td>.00</td>
-                                                        <td>.00</td>
-                                                        <td>Yes</td>
-                                                        <td>R</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2010-01-24</td>
-                                                        <td>NPP001</td>
-                                                        <td>.00</td>
-                                                        <td>.00</td>
-                                                        <td>.00</td>
-                                                        <td>.00</td>
-                                                        <td>Yes</td>
-                                                        <td>P</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-
+                                </div>
+                                <div className="col-md-4 mt-2">
+                                    <div className="form-group mt-4">
+                                        <input type="checkbox" id="html" className="d-none" />
+                                        <label htmlFor="html">View All Dates</label>
+                                    </div>
+                                </div>
+                                <div className="col-md-4">
+                                    <div className="form-group">
+                                        <small>View Limitations</small>
+                                        <select className="form-select">
+                                            <option value=""></option>
+                                            <option value=""></option>
+                                            <option value=""></option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
+
+                        </div>
+
+                        <div className="col-md-1 ms-auto mb-3">
+                            <a href="" className="btn btn-info btn-sm p-1" style={{ width: "100%" }}>Load</a>
+                        </div>
+
+
+                        <div className="col-md-12" id="div1">
+                            <table className="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Date of SVC</th>
+                                        <th>Provider ID</th>
+                                        <th>Claim Ref. #</th>
+                                        <th>Rx. #</th>
+                                        <th>New/Refil</th>
+                                        <th>Procedure Code</th>
+                                        <th>Label Name / Procedure Discription</th>
+                                        <th>Cardholder ID</th>
+                                        <th>Person Code</th>
+                                        <th>Total</th>
+                                        <th>Status</th>
+                                        <th>Bin#</th>
+                                        <th>Plan ID</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>2010-01-24</td>
+                                        <td>NPP001</td>
+                                        <td>3000000456</td>
+                                        <td>000006</td>
+                                        <td>0</td>
+                                        <td>200</td>
+                                        <td>Flomax Cap 0.4 MG</td>
+                                        <td>1548796</td>
+                                        <td>001</td>
+                                        <td>.00</td>
+                                        <td>Rejected</td>
+                                        <td>200010</td>
+                                        <td>NIB_PLAN</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div className="col-md-12 Hide" id="div2">
+                            <table className="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Date of SVC</th>
+                                        <th>Provider ID</th>
+                                        <th>App to Periodic Ded.</th>
+                                        <th>App to MOP</th>
+                                        <th>Patient Paid Diff.</th>
+                                        <th>App to Max Benifit</th>
+                                        <th>Acc. Excl</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>2010-01-24</td>
+                                        <td>NPP001</td>
+                                        <td>.00</td>
+                                        <td>.00</td>
+                                        <td>.00</td>
+                                        <td>.00</td>
+                                        <td>Yes</td>
+                                        <td>R</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2010-01-24</td>
+                                        <td>NPP001</td>
+                                        <td>.00</td>
+                                        <td>.00</td>
+                                        <td>.00</td>
+                                        <td>.00</td>
+                                        <td>Yes</td>
+                                        <td>P</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </>
     )
 }
 
-export function PriorAuthorizationTab()
-{
-    return(
+export function PriorAuthorizationTab() {
+    return (
         <>
-         <div className="card mt-3 mb-3">
-                                <div className="card-body">
-                                    <div className="row">
-                                        <div className="col-md-12 mb-3">
-                                            <h5>Prior Authorizations</h5>
-                                        </div>
-                                        
-                                        
-                                        <div className="col-md-12" id="div1">
-                                            <table className="table table-striped table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Auth. Number</th>
-                                                        <th>Auth Type</th>
-                                                        <th>NDC</th>
-                                                        <th>GPI</th>
-                                                        <th>Eff. Date</th>
-                                                        <th>Term Date</th>
-                                                        <th>Customer ID</th>
-                                                        <th>Client ID</th>
-                                                        <th>Group ID</th>
-                                                        <th>Member ID</th>
-                                                        <th>0 Person Code</th>
-                                                        <th>0 Prior Auth</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+            <div className="card mt-3 mb-3">
+                <div className="card-body">
+                    <div className="row">
+                        <div className="col-md-12 mb-3">
+                            <h5>Prior Authorizations</h5>
+                        </div>
+
+
+                        <div className="col-md-12" id="div1">
+                            <table className="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Auth. Number</th>
+                                        <th>Auth Type</th>
+                                        <th>NDC</th>
+                                        <th>GPI</th>
+                                        <th>Eff. Date</th>
+                                        <th>Term Date</th>
+                                        <th>Customer ID</th>
+                                        <th>Client ID</th>
+                                        <th>Group ID</th>
+                                        <th>Member ID</th>
+                                        <th>0 Person Code</th>
+                                        <th>0 Prior Auth</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </>
     )
 }
 
-export function ProviderSearchTab()
-{
-    return(
+export function ProviderSearchTab() {
+    return (
         <>
-         <div className="card mt-3 mb-3">
-                                <div className="card-body">
-                                    <div className="row">
-                                        <div className="col-md-12 mb-3">
-                                            <h5>Criteria</h5>
-                                        </div>
-                                        
-                                        <div className="col-md-3">
-                                            <div className="form-group mb-3">
-                                                <small>Plan ID</small>
-                                                <input type="text" className="form-control" name="" id="" required="" />
-                                                <a href=""><span className="fa fa-search form-icon"></span></a>
-                                            </div>
-                                        </div>
-                                        <div className="col-md-3">
-                                            <div className="form-group mb-3">
-                                                <small>City</small>
-                                                <select className="form-select">
-                                                    <option value="">Select City</option>
-                                                    <option value=""></option>
-                                                    <option value=""></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div className="col-md-3">
-                                            <div className="form-group mb-3">
-                                                <small>State</small>
-                                                <select className="form-select">
-                                                    <option value="">Select State</option>
-                                                    <option value=""></option>
-                                                    <option value=""></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div className="col-md-3">
-                                            <div className="form-group mb-3">
-                                                <small>County</small>
-                                                <select className="form-select">
-                                                    <option value="">Select County</option>
-                                                    <option value=""></option>
-                                                    <option value=""></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div className="col-md-3">
-                                            <div className="form-group mb-3">
-                                                <small>ZIP</small>
-                                                <input type="text" className="form-control" name="" id="" required="" />
-                                            </div>
-                                        </div>
-                                        <div className="col-md-3">
-                                            <div className="form-group mb-3">
-                                                <small>Area Code</small>
-                                                <input type="text" className="form-control" name="" id="" required="" />
-                                            </div>
-                                        </div>
-                                        <div className="col-md-3">
-                                            <div className="form-group mb-3">
-                                                <small>Exchange</small>
-                                                <input type="text" className="form-control" name="" id="" required="" />
-                                                <a href=""><span className="fa fa-search form-icon"></span></a>
-                                            </div>
-                                        </div>
-                                        <div className="col-md-12 mb-4 d-flex justify-content-end">
-                                            <a href="" className="btn btn-sm btn-secondary">Clear</a> &nbsp;&nbsp;
-                                            <a href="" className="btn btn-sm btn-info">Search</a>
-                                        </div>
-                                        
-                                        
-                                        <div className="col-md-12" id="div1">
-                                            <table className="table table-striped table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Provider ID</th>
-                                                        <th>Name</th>
-                                                        <th>Address</th>
-                                                        <th>City</th>
-                                                        <th>State</th>
-                                                        <th>Country</th>
-                                                        <th>ZIP</th>
-                                                        <th>Area Code</th>
-                                                        <th>Exchange</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
+            <div className="card mt-3 mb-3">
+                <div className="card-body">
+                    <div className="row">
+                        <div className="col-md-12 mb-3">
+                            <h5>Criteria</h5>
+                        </div>
+
+                        <div className="col-md-3">
+                            <div className="form-group mb-3">
+                                <small>Plan ID</small>
+                                <input type="text" className="form-control" name="" id="" required="" />
+                                <a href=""><span className="fa fa-search form-icon"></span></a>
                             </div>
+                        </div>
+                        <div className="col-md-3">
+                            <div className="form-group mb-3">
+                                <small>City</small>
+                                <select className="form-select">
+                                    <option value="">Select City</option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div className="col-md-3">
+                            <div className="form-group mb-3">
+                                <small>State</small>
+                                <select className="form-select">
+                                    <option value="">Select State</option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div className="col-md-3">
+                            <div className="form-group mb-3">
+                                <small>County</small>
+                                <select className="form-select">
+                                    <option value="">Select County</option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div className="col-md-3">
+                            <div className="form-group mb-3">
+                                <small>ZIP</small>
+                                <input type="text" className="form-control" name="" id="" required="" />
+                            </div>
+                        </div>
+                        <div className="col-md-3">
+                            <div className="form-group mb-3">
+                                <small>Area Code</small>
+                                <input type="text" className="form-control" name="" id="" required="" />
+                            </div>
+                        </div>
+                        <div className="col-md-3">
+                            <div className="form-group mb-3">
+                                <small>Exchange</small>
+                                <input type="text" className="form-control" name="" id="" required="" />
+                                <a href=""><span className="fa fa-search form-icon"></span></a>
+                            </div>
+                        </div>
+                        <div className="col-md-12 mb-4 d-flex justify-content-end">
+                            <a href="" className="btn btn-sm btn-secondary">Clear</a> &nbsp;&nbsp;
+                            <a href="" className="btn btn-sm btn-info">Search</a>
+                        </div>
+
+
+                        <div className="col-md-12" id="div1">
+                            <table className="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Provider ID</th>
+                                        <th>Name</th>
+                                        <th>Address</th>
+                                        <th>City</th>
+                                        <th>State</th>
+                                        <th>Country</th>
+                                        <th>ZIP</th>
+                                        <th>Area Code</th>
+                                        <th>Exchange</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </>
     )
 }
 
-export function ChangeLogTab()
-{
-    return(
+export function ChangeLogTab() {
+    return (
         <>
-        <div className="card mt-3 mb-3">
-                                <div className="card-body">
-                                    <div className="row">
-                                        <div className="col-md-12" id="div1">
-                                            <table className="table table-striped table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th>User ID Changed</th>
-                                                        <th>Date Changed</th>
-                                                        <th>Time Changed</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            </>
+            <div className="card mt-3 mb-3">
+                <div className="card-body">
+                    <div className="row">
+                        <div className="col-md-12" id="div1">
+                            <table className="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>User ID Changed</th>
+                                        <th>Date Changed</th>
+                                        <th>Time Changed</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
     )
 }
