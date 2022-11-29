@@ -378,7 +378,8 @@ function CopayStrategyForm(props) {
                         <div className="col-md-3 mb-3">
                             <div className="form-group">
                                 <small>Provider Type:</small>
-                                <select className="form-select">
+                                <select className="form-select" name="pharm_type_variation_ind" {...register('pharm_type_variation_ind')}>
+                                    <option value="">--select--</option>
                                     <option value="R">Retail</option>
                                     <option value="M">Mail Service </option>
                                     <option value="*">WildCard - No Variation</option>
