@@ -21,6 +21,9 @@ code {
   top: 0;
   z-index: 10;
 }
+.active{
+  background-color: #65c1d3;
+}
 
 .tblactiverow {
   background-color: #0dcaf0;
@@ -57,6 +60,26 @@ code {
 
 .draggablelist {}
 
+
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #eee; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #047e96; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #0dcaf0; 
+}
 .form-btm p,input {
   margin-bottom:5px;
 }

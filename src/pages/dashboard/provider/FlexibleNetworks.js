@@ -10,9 +10,12 @@ import Footer from '../../../shared/Footer';
 function FlexibleNetworks(props) {
     const location = useLocation();
     const currentpath = location.pathname.split('/').pop();
+    const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
 
     const [provider, setProvider] = useState([]);
     const [ProviderData, setProviderdata] = useState([]);
+    const [customerlist, setCustomerlist] = useState([]);
+
 
 
     const [tableData, settableData] = useState([]);
@@ -71,11 +74,19 @@ function FlexibleNetworks(props) {
                     <div className="col-md-6 mb-3">
                         <div className="breadcrum ">
                             <ul>
-                                <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li>
+                                 <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li> 
                             </ul>
                         </div>
                     </div>
                 </div>
+
+
+
+             
+
+
+
+           
 
               
 
@@ -274,6 +285,80 @@ function FlexibleNetworkList() {
                     </div>
                 </div>
             </div>
+        </>
+    )
+}
+
+
+
+
+function CustomerTable(props) {
+
+    // const getCustomer = (customerid) => {
+    //     // console.log(customerid);
+    //     props.getCustomer(customerid);
+    // }
+
+    const CustomerList = [];
+    // for (let i = 0; i < props.customers.length; i++) {
+    //     CustomerList.push(<Cutomer customer={props.customers[i]} getCustomer={getCustomer} />);
+    // }
+
+    if (props.customers.length > 0) {
+        for (let i = 0; i < props.customers.length; i++) {
+            CustomerList.push(<Cutomer customer={props.customers[i]} />);
+        }
+    } else {
+        CustomerList.push(<NoReacords/>);
+    }
+    return (
+        <>
+            <div className="card mt-3 mb-3">
+                <div className="card-body">
+                    <div className="row">
+                        <div className="col-md-12">
+                            <h5 className="mb-2">Flexible Network List</h5>
+                        </div>
+                        <div style={{    height: '400px', overflowY: 'scroll'}}>
+                        <table className="table  table-bordered" style={{position:'relative'}}>
+                            <thead className='stickt-thead'>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>NAME</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                {CustomerList}
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
+    )
+
+}
+
+function NoReacords(params) {
+    return (
+        <>
+            <tr style={{padding: '10px', color:'red'}}><td colspan="7">No Records Matches..!</td></tr>
+        </>
+    )
+}
+
+
+function Cutomer(props) {
+    return (
+        <>
+            <tr>
+                <td>{props.customer.customer_id}</td>
+                <td>{props.customer.customer_name}</td>
+                <td><Button variant="primary" onClick={() => props.getCustomer(props.customer.customer_id)}>View</Button></td>
+            </tr>
         </>
     )
 }

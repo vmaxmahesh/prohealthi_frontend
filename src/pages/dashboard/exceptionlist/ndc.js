@@ -8,6 +8,7 @@ export default function NDC() {
     const [ndcData, setNdcData] = useState([]);
     const [ndcClass, setNdClass] = useState([]);
     const [selctedNdc, setSelctedNdc] = useState('');
+    
     const getNDCItems = (ndcid) => {
         var test = {};
         test.ndc_exception_list = ndcid;
@@ -71,14 +72,11 @@ export default function NDC() {
                     return Promise.reject(error);
                 } else {
                     setSelctedNdc(data.data);
-                    console.log(selctedNdc);
+
                     scollToRef.current.scrollIntoView()
                     return;
                 }
 
-
-                if (response === '200') {
-                }
             })
             .catch(error => {
                 console.error('There was an error!', error);
@@ -109,16 +107,19 @@ export default function NDC() {
                     setNdcData(data.data);
                     return;
                 }
-
-
-
             })
             .catch(error => {
                 console.error('There was an error!', error);
             });
     }
 
-    useEffect(() => { }, [ndcData, ndcClass, selctedNdc]);
+    const AddForm = () => {
+        scollToRef.current.scrollIntoView()
+    }
+
+    useEffect(() => {
+        document.title = 'NDC Exception | ProHealthi';
+    }, [ndcData, ndcClass, selctedNdc]);
 
     return (
         <>
@@ -134,10 +135,18 @@ export default function NDC() {
                         </ul>
                     </div>
                 </div>
-                <div className="col-md-6 mb-3">
+                <div className="col-md-2 mb-3 ">
+                </div>
+                {/* <div className="col-md-2 mb-3"></div> */}
+                <div className="col-md-2 mb-3 ">
+
+                </div>
+                <div className="col-md-2 mb-3 right text-end">
                     <div className="breadcrum ">
                         <ul>
-                            <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li>
+                            {/* <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li> */}
+                            <button className="btn btn-sm btn-warning" id="show" onClick={e => AddForm()}><i className="fa plus-circle"></i> Add NDC List</button>
+
                         </ul>
                     </div>
                 </div>
@@ -186,6 +195,7 @@ function SearchNDC(props) {
 }
 
 function ShowNDCList(props) {
+    const scollToRef = useRef();
 
     useEffect(() => { }, [props.selctedNdc]);
     // //  console.log(props.selctedNdc);
@@ -211,17 +221,17 @@ function ShowNDCList(props) {
     const [ncdListData, setNcdListData] = useState();
     const [show, setShow] = useState("none");
     const handleShow = () => setShow("block");
+
+
     return (
         <>
             <div className="card mt-3 mb-3">
                 <div className="card-body">
                     <div className="row">
-                        <div className="col-md-8 mb-2">
+                        <div className="col-md-12 mb-2">
                             <h5>NDC Exception List</h5>
                         </div>
-                        <div className="col-md-4 mb-3 text-end">
-                            <button className="btn btn-sm btn-warning" id="show" onClick={e => handleShow()}><i className="fa plus-circle"></i> Add NDC List</button>
-                        </div>
+
                         <div className="col-md-4">
                             <div className="card mt-3 mb-3">
                                 <div className="card-body">

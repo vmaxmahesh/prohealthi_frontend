@@ -39,9 +39,6 @@ export default function BenefitList() {
                     // scollToRef.current.scrollIntoView()
                 }
 
-
-                if (response === '200') {
-                }
             })
             .catch(error => {
                 console.error('There was an error!', error);
@@ -121,7 +118,9 @@ export default function BenefitList() {
 
 
 
-    useEffect(() => { }, [ndcData, ndcClass, selctedNdc]);
+    useEffect(() => {
+        document.title = 'Benifit List | ProHealthi';
+     }, [ndcData, ndcClass, selctedNdc]);
 
     return (
         <>
@@ -140,7 +139,7 @@ export default function BenefitList() {
                 <div className="col-md-6 mb-3">
                     <div className="breadcrum ">
                         <ul>
-                            <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li>
+                             <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li> 
                         </ul>
                     </div>
                 </div>
@@ -239,7 +238,7 @@ function ShowNDCList(props) {
                                                 <tr>
                                                     <th>ID</th>
                                                     <th>Name</th>
-                                                    <th>Action</th>
+                                                    {/* <th>Action</th> */}
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -260,7 +259,7 @@ function ShowNDCList(props) {
                                                 <tr>
                                                     <th>Effective Date</th>
                                                     <th>Benefit Code</th>
-                                                    <th>Action</th>
+                                                    {/* <th>Action</th> */}
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -281,10 +280,12 @@ function ShowNDCList(props) {
 function NdcRow(props) {
     return (
         <>
-            <tr>
+            <tr  onClick={() => props.getNDCItem(props.ndcRow.ndc_exception_list)}
+                 className={(props.selected && props.ndcRow.ndc_exception_list == props.selected.ndc_exception_list ? ' tblactiverow ' : '')}
+            >
                 <td>{props.ndcRow.ndc_exception_list}</td>
                 <td>{props.ndcRow.exception_name}</td>
-                <td><button className="btn btn-sm btn-info" id="" onClick={() => props.getNDCItem(props.ndcRow.ndc_exception_list)}><i className="fa fa-eye"></i> View</button></td>
+                {/* <td><button className="btn btn-sm btn-info" id=""><i className="fa fa-eye"></i> View</button></td> */}
             </tr>
         </>
     )

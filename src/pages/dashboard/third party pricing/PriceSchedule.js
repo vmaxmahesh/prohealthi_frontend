@@ -155,9 +155,12 @@ function GetPriceSchedules(props) {
     const currentpath = location.pathname.split('/')[4];
 
     const listArray = [];
-    for (let i = 0; i < props.listData.length; i++) {
-        listArray.push(<PriceScheduleRow rowData={props.listData[i]} getPriceScheduleDetails={props.getPriceScheduleDetails} />)
+    if (props.listData) {
+        for (let i = 0; i < props.listData.length; i++) {
+            listArray.push(<PriceScheduleRow rowData={props.listData[i]} getPriceScheduleDetails={props.getPriceScheduleDetails} />)
+        }
     }
+
     return (
         <>
             {/* <div className="card mt-3 mb-3">
@@ -167,7 +170,7 @@ function GetPriceSchedules(props) {
             <h5>Price Schedule List</h5>
             {/* </div> */}
             {/* <div className="col-md-4 mb-3 text-end"> */}
-                {/* <button className="btn btn-sm btn-warning" id="show" onClick={e => handleShow()}><i className="fa plus-circle"></i> Add NDC List</button> */}
+            {/* <button className="btn btn-sm btn-warning" id="show" onClick={e => handleShow()}><i className="fa plus-circle"></i> Add NDC List</button> */}
             {/* </div> */}
 
             {/* <div className="col-md-4">
@@ -218,7 +221,7 @@ function PriceScheduleRow(props) {
 
 export function BrandItem() {
     const [scheduleData, setScheduleData] = useOutletContext(false);
-    const{register, handleSubmit, watch, reset, formState : {error} } = useForm();
+    const { register, handleSubmit, watch, reset, formState: { error } } = useForm();
     useEffect(() => { reset(scheduleData) }, [scheduleData]);
     return (
         <>
@@ -257,25 +260,25 @@ export function BrandItem() {
                         <div className="col-md-3">
                             <div className="form-group mb-2">
                                 <small>Source</small>
-                                <input type="text" className="form-control" {...register("bng1_source", {required:true})} placeholder="Source " />
+                                <input type="text" className="form-control" {...register("bng1_source", { required: true })} placeholder="Source " />
                             </div>
                         </div>
                         <div className="col-md-3">
                             <div className="form-group mb-2">
                                 <small>Mkp</small>
-                                <input type="text" className="form-control" {...register("bng1_markup_amount", {required:true})} placeholder="Percentage" />
+                                <input type="text" className="form-control" {...register("bng1_markup_amount", { required: true })} placeholder="Percentage" />
                             </div>
                         </div>
                         <div className="col-md-3">
                             <div className="form-group mb-2">
                                 <small>Mkp</small>
-                                <input type="text" className="form-control" {...register("bng1_markup_percent", {required:true})} placeholder="In dollars" />
+                                <input type="text" className="form-control" {...register("bng1_markup_percent", { required: true })} placeholder="In dollars" />
                             </div>
                         </div>
                         <div className="col-md-3">
                             <div className="form-group mb-2">
                                 <small>Type</small>
-                                <select className="form-select" {...register("bng1_type", {required:true})}>
+                                <select className="form-select" {...register("bng1_type", { required: true })}>
                                     <option>Type 1</option>
                                     <option>Type 2</option>
                                     <option>Type 3</option>
@@ -285,18 +288,18 @@ export function BrandItem() {
                         <div className="col-md-3">
                             <small>Fee</small>
                             <div className="form-group mb-2">
-                                <input type="text" className="form-control" {...register("bng1_fee_amount", {required:true})} placeholder="Percentage" />
+                                <input type="text" className="form-control" {...register("bng1_fee_amount", { required: true })} placeholder="Percentage" />
                             </div>
                         </div>
                         <div className="col-md-3">
                             <div className="form-group mb-2">
                                 <small>Fee</small>
-                                <input type="text" className="form-control" {...register("bng1_fee_percent", {required:true})} placeholder="In dollars" />
+                                <input type="text" className="form-control" {...register("bng1_fee_percent", { required: true })} placeholder="In dollars" />
                             </div>
                         </div>
                         <div className="col-md-2">
                             <div className="form-group mt-4">
-                                <input type="checkbox" id="Return2" className="d-none" {...register("bng1_stdpkg", {required:true})}/>
+                                <input type="checkbox" id="Return2" className="d-none" {...register("bng1_stdpkg", { required: true })} />
                                 <label htmlFor="Return2">Std Pkg</label>
                             </div>
                         </div>
@@ -321,7 +324,7 @@ export function BrandItem() {
 
 export function BrandItemGeneric() {
     const [scheduleData, setScheduleData] = useOutletContext(false);
-    const{register, handleSubmit, watch, reset, formState : {error} } = useForm();
+    const { register, handleSubmit, watch, reset, formState: { error } } = useForm();
     useEffect(() => { reset(scheduleData) }, [scheduleData]);
 
     return (
@@ -361,25 +364,25 @@ export function BrandItemGeneric() {
                         <div className="col-md-3">
                             <div className="form-group mb-2">
                                 <small>Source</small>
-                                <input type="text" className="form-control" {...register("bga1_source", {required:true})} placeholder="Source " />
+                                <input type="text" className="form-control" {...register("bga1_source", { required: true })} placeholder="Source " />
                             </div>
                         </div>
                         <div className="col-md-3">
                             <div className="form-group mb-2">
                                 <small>Mkp</small>
-                                <input type="text" className="form-control" {...register("bga1_fee_amount", {required:true})} placeholder="Percentage" />
+                                <input type="text" className="form-control" {...register("bga1_fee_amount", { required: true })} placeholder="Percentage" />
                             </div>
                         </div>
                         <div className="col-md-3">
                             <div className="form-group mb-2">
                                 <small>Mkp</small>
-                                <input type="text" className="form-control" {...register("bga1_fee_percent", {required:true})} placeholder="In dollars" />
+                                <input type="text" className="form-control" {...register("bga1_fee_percent", { required: true })} placeholder="In dollars" />
                             </div>
                         </div>
                         <div className="col-md-3">
                             <div className="form-group mb-2">
                                 <small>Type</small>
-                                <select className="form-select" {...register("bga1_type", {required:true})}>
+                                <select className="form-select" {...register("bga1_type", { required: true })}>
                                     <option>Type 1</option>
                                     <option>Type 2</option>
                                     <option>Type 3</option>
@@ -389,18 +392,18 @@ export function BrandItemGeneric() {
                         <div className="col-md-3">
                             <small>Fee</small>
                             <div className="form-group mb-2">
-                                <input type="text" className="form-control" {...register("bga1_fee_factor", {required:true})} placeholder="Percentage" />
+                                <input type="text" className="form-control" {...register("bga1_fee_factor", { required: true })} placeholder="Percentage" />
                             </div>
                         </div>
                         <div className="col-md-3">
                             <div className="form-group mb-2">
                                 <small>Fee</small>
-                                <input type="text" className="form-control" {...register("bga1_fee_matrix", {required:true})} placeholder="In dollars" />
+                                <input type="text" className="form-control" {...register("bga1_fee_matrix", { required: true })} placeholder="In dollars" />
                             </div>
                         </div>
                         <div className="col-md-2">
                             <div className="form-group mt-4">
-                                <input type="checkbox" id="Return5" className="d-none" {...register("bga1   _stdpkg", {required:true})}/>
+                                <input type="checkbox" id="Return5" className="d-none" {...register("bga1   _stdpkg", { required: true })} />
                                 <label htmlFor="Return5">Std Pkg</label>
                             </div>
                         </div>
@@ -420,8 +423,8 @@ export function BrandItemGeneric() {
 }
 
 export function GetGenericItem() {
-    const [scheduleData, setScheduleData] = useOutletContext(false);    
-    const{register, handleSubmit, watch, reset, formState : {error} } = useForm();
+    const [scheduleData, setScheduleData] = useOutletContext(false);
+    const { register, handleSubmit, watch, reset, formState: { error } } = useForm();
     console.log(scheduleData);
     useEffect(() => { reset(scheduleData) }, [scheduleData]);
 
@@ -462,25 +465,25 @@ export function GetGenericItem() {
                         <div className="col-md-3">
                             <div className="form-group mb-2">
                                 <small>Source</small>
-                                <input type="text" className="form-control" {...register("gen1_source", {required:true})} placeholder="Source " />
+                                <input type="text" className="form-control" {...register("gen1_source", { required: true })} placeholder="Source " />
                             </div>
                         </div>
                         <div className="col-md-3">
                             <div className="form-group mb-2">
                                 <small>Mkp</small>
-                                <input type="text" className="form-control" {...register("gen1_fee_percent", {required:true})} placeholder="Percentage" />
+                                <input type="text" className="form-control" {...register("gen1_fee_percent", { required: true })} placeholder="Percentage" />
                             </div>
                         </div>
                         <div className="col-md-3">
                             <div className="form-group mb-2">
                                 <small>Mkp</small>
-                                <input type="text" className="form-control" {...register("gen1_fee_amount", {required:true})} placeholder="In dollars" />
+                                <input type="text" className="form-control" {...register("gen1_fee_amount", { required: true })} placeholder="In dollars" />
                             </div>
                         </div>
                         <div className="col-md-3">
                             <div className="form-group mb-2">
                                 <small>Type</small>
-                                <select className="form-select" {...register("gen1_type", {required:true})}>
+                                <select className="form-select" {...register("gen1_type", { required: true })}>
                                     <option>Type 1</option>
                                     <option>Type 2</option>
                                     <option>Type 3</option>
@@ -490,18 +493,18 @@ export function GetGenericItem() {
                         <div className="col-md-3">
                             <small>Fee</small>
                             <div className="form-group mb-2">
-                                <input type="text" className="form-control" {...register("gen1_fee_factor", {required:true})} placeholder="Percentage" />
+                                <input type="text" className="form-control" {...register("gen1_fee_factor", { required: true })} placeholder="Percentage" />
                             </div>
                         </div>
                         <div className="col-md-3">
                             <div className="form-group mb-2">
                                 <small>Fee</small>
-                                <input type="text" className="form-control" {...register("gen1_fee_matrix", {required:true})} placeholder="In dollars" />
+                                <input type="text" className="form-control" {...register("gen1_fee_matrix", { required: true })} placeholder="In dollars" />
                             </div>
                         </div>
                         <div className="col-md-2">
                             <div className="form-group mt-4">
-                                <input type="checkbox" id="Return8" className="d-none" {...register("gen1_stdpkg", {required:true})}/>
+                                <input type="checkbox" id="Return8" className="d-none" {...register("gen1_stdpkg", { required: true })} />
                                 <label htmlFor="Return8">Std Pkg</label>
                             </div>
                         </div>

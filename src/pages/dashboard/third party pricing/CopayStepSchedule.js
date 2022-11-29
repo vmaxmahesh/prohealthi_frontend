@@ -5,9 +5,9 @@ import { toast } from 'react-toastify';
 
 export default function CopayStepSchedule() {
 
-    const[copayStepData, setCopayStepData] = useState([]);
-    const[type, setType] = useState([]);
-    const[formData, setFormData] = useState([]);
+    const [copayStepData, setCopayStepData] = useState([]);
+    const [type, setType] = useState([]);
+    const [formData, setFormData] = useState([]);
     const selectType = (e) => {
         setType(e);
         const requestOptions = {
@@ -37,7 +37,7 @@ export default function CopayStepSchedule() {
     const showData = (data) => {
         setFormData(data);
     }
-    useEffect(() => {}, [copayStepData, formData]);
+    useEffect(() => { }, [copayStepData, formData]);
     return (
         <>
             <div className='dashboard-content clearfix'>
@@ -74,7 +74,7 @@ export default function CopayStepSchedule() {
                                     <div className=""><span>Schedule Type:</span></div>
                                     <div className="col-md-6">
                                         <div className="form-check">
-                                            <input className="form-check-input" type="radio"  onClick={e => selectType("days_supply")} name="flexRadioDefault" id="flexRadioDefault1" />
+                                            <input className="form-check-input" type="radio" onClick={e => selectType("days_supply")} name="flexRadioDefault" id="flexRadioDefault1" />
                                             <label className="form-check-label" htmlFor="flexRadioDefault1">
                                                 Days Supply
                                             </label>
@@ -82,7 +82,7 @@ export default function CopayStepSchedule() {
                                     </div>
                                     <div className="col-md-6 ">
                                         <div className="form-check">
-                                            <input className="form-check-input" onClick={e => selectType("max_cost")} type="radio" name="flexRadioDefault" id="flexRadioDefault2"/>
+                                            <input className="form-check-input" onClick={e => selectType("max_cost")} type="radio" name="flexRadioDefault" id="flexRadioDefault2" />
                                             <label className="form-check-label" htmlFor="flexRadioDefault2">
                                                 Max Cost
                                             </label>
@@ -97,10 +97,10 @@ export default function CopayStepSchedule() {
 
                 <div className="row">
                     <div className="col-md-4">
-                        <GetStepScheduleTable copayStepData={copayStepData} dataType={type} showData={showData}/>
+                        <GetStepScheduleTable copayStepData={copayStepData} dataType={type} showData={showData} />
                     </div>
                     <div className="col-md-8">
-                        <DataForm  formData={formData} dataType={type}/>
+                        <DataForm formData={formData} dataType={type} />
                     </div>
                 </div>
 
@@ -112,54 +112,55 @@ export default function CopayStepSchedule() {
 function GetStepScheduleTable(props) {
     const listArray = [];
     const type = props.dataType;
-    for(let i=0; i < props.copayStepData.length; i++)
-    {
-        listArray.push(<CopayStepRow rowData={props.copayStepData[i]} dType={type} showData={props.showData}/>);
+    if (props.copayStepData) {
+        for (let i = 0; i < props.copayStepData.length; i++) {
+            listArray.push(<CopayStepRow rowData={props.copayStepData[i]} dType={type} showData={props.showData} />);
+        }
     }
-    
+
+
     return (
         <>
             <div className="card mt-3 mb-3">
                 <div className="card-body">
-                
+
                     <h5 className="mb-2">Step Schedules table</h5>
                 </div>
                 <div style={{ height: '360px', overflowY: 'scroll' }}>
-                <table className="table  table-bordered">
-                    <thead className='stickt-thead'>
-                        <tr>
-                            <th>{String(type).replace("_", " ").toUpperCase()}
-                            </th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {listArray}
-                    </tbody>
-                </table>
-            </div>
+                    <table className="table  table-bordered">
+                        <thead className='stickt-thead'>
+                            <tr>
+                                <th>{String(type).replace("_", " ").toUpperCase()}
+                                </th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {listArray}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </>
     )
 }
 
-function CopayStepRow(props)
-{
-    return(
+function CopayStepRow(props) {
+    return (
         <>
-         <tr onClick={e => props.showData(props.rowData)}
-         >
-            <td>{props.dType == 'days_supply' ? props.rowData.days_supply : props.rowData.cost_max}
+            <tr onClick={e => props.showData(props.rowData)}
+            >
+                <td>{props.dType == 'days_supply' ? props.rowData.days_supply : props.rowData.cost_max}
                 </td>
-            <td>-</td>
-         </tr>
+                <td>-</td>
+            </tr>
         </>
     )
 }
 
 function DataForm(props) {
-const{register, handleSubmit, reset, watch, formState : {error} } = useForm();
-useEffect(() => { reset(props.formData) }, [props.formData]);
+    const { register, handleSubmit, reset, watch, formState: { error } } = useForm();
+    useEffect(() => { reset(props.formData) }, [props.formData]);
     return (
         <>
             <div className="card mt-3 mb-3">
@@ -168,13 +169,13 @@ useEffect(() => { reset(props.formData) }, [props.formData]);
                         <div className="col-md-4 mb-3">
                             <div className="form-group">
                                 <small>Copay List</small>
-                                <input type="text" className="form-control" placeholder="Surgical" {...register("copay_list", {required : true})}  autoComplete="off" />
+                                <input type="text" className="form-control" placeholder="Surgical" {...register("copay_list", { required: true })} autoComplete="off" />
                             </div>
                         </div>
                         <div className="col-md-8 mb-3">
                             <div className="form-group">
                                 <small>Copay Description</small>
-                                <textarea rows="1" cols="2" className="form-control" {...register("copay_list", {required : true})} placeholder="Surgical Test"></textarea>
+                                <textarea rows="1" cols="2" className="form-control" {...register("copay_list", { required: true })} placeholder="Surgical Test"></textarea>
                             </div>
                         </div>
                         <div className="col-md-12">
@@ -182,7 +183,7 @@ useEffect(() => { reset(props.formData) }, [props.formData]);
                             <div className="form-check">
 
                                 {/* console.log() */}
-                                <input className="form-check-input" type="radio"  checked={props.formData.days_supply != '0'} />
+                                <input className="form-check-input" type="radio" checked={props.formData.days_supply != '0'} />
                                 <label className="form-check-label" htmlFor="flexRadioDefault1" >
                                     Days Supply
                                 </label>
@@ -190,7 +191,7 @@ useEffect(() => { reset(props.formData) }, [props.formData]);
                         </div>
                         <div className="col-md-6 ">
                             <div className="form-check">
-                                <input className="form-check-input" type="radio" checked={props.formData.cost_max != '0'}  
+                                <input className="form-check-input" type="radio" checked={props.formData.cost_max != '0'}
                                 // {...props.formData.cost_max == '0' ? '' : defaultChecked } 
                                 />
                                 <label className="form-check-label" htmlFor="flexRadioDefault1">
@@ -203,31 +204,31 @@ useEffect(() => { reset(props.formData) }, [props.formData]);
                         <div className="col-md-3 mb-3">
                             <div className="form-group">
                                 <small>{props.dataType}</small>
-                                {props.dataType == 'days_supply' ? 
-                                <input type="text" className="form-control"  {...register("days_supply", {required : true})} autoComplete="off" /> 
-                                :  <input type="text" className="form-control"  {...register("cost_max", {required : true})} autoComplete="off" /> }
-                               
+                                {props.dataType == 'days_supply' ?
+                                    <input type="text" className="form-control"  {...register("days_supply", { required: true })} autoComplete="off" />
+                                    : <input type="text" className="form-control"  {...register("cost_max", { required: true })} autoComplete="off" />}
+
 
                             </div>
                         </div>
                         <div className="col-md-3 mb-3">
                             <div className="form-group">
                                 <small>$</small>
-                                <input type="text" className="form-control" placeholder="0" {...register("copay_amount", {required : true})} autoComplete="off" />
+                                <input type="text" className="form-control" placeholder="0" {...register("copay_amount", { required: true })} autoComplete="off" />
 
                             </div>
                         </div>
                         <div className="col-md-3 mb-3">
                             <div className="form-group">
                                 <small>%</small>
-                                <input type="text" className="form-control" placeholder="83" {...register("copay_percentage", {required : true})} autoComplete="off" />
+                                <input type="text" className="form-control" placeholder="83" {...register("copay_percentage", { required: true })} autoComplete="off" />
 
                             </div>
                         </div>
 
                         <div className="col-md-3 mb-3">
                             <div className="form-group">
-                            <button className='btn btn-primary'>Add</button>
+                                <button className='btn btn-primary'>Add</button>
                             </div>
                         </div>
 
@@ -235,7 +236,7 @@ useEffect(() => { reset(props.formData) }, [props.formData]);
                             <button className='btn btn-primary'>Add</button>
                         </div> */}
                     </div>
-                    
+
 
                     <div className="row mb-2 ">
                         <div className="col-md-9 mb-3">
@@ -261,7 +262,7 @@ useEffect(() => { reset(props.formData) }, [props.formData]);
                                 </tbody>
                             </table>
                         </div>
-                       
+
                         <div className="col-md-3 mb-3">
                             <button className='btn btn-danger'>Delete</button>
                         </div>

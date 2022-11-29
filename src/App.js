@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Link, Navigate, Route, Router, Routes } from 'react-router-dom';
 import Login from './pages/auth/Login';
 import Dashboard from './pages/dashboard/Dashboard';
@@ -9,12 +9,12 @@ import Customer, { Eligibility, Exceptions, Identification, Indicators, Strategy
 import Client, { Eligibility as Ce, Identification as Ci, Indicators as Cin, Coverage as CS } from './pages/dashboard/user/client/Client';
 import Member, { ChnageLog, ClaimHistory, Coverage, CoverageHistory, Health, MemberForm, Notes, Overrides, PriorAuthorisation, ProviderSearch } from './pages/dashboard/members/Member';
 
+import MajorMedicalMaximums from './pages/dashboard/accumulated_benefits/MajorMedicalMaximums'
+
 import SearchProvider, { Provider, Effectivedates, PharmistSystem, NetworkParticipation } from './pages/dashboard/provider/SearchProvider';
-
 import TraditionalNetworks, { Network, Providers } from './pages/dashboard/provider/TraditionalNetworks';
-
 import FlexibleNetworks, { Rules } from './pages/dashboard/provider/FlexibleNetworks';
-
+import PrioritizeNetwork from './pages/dashboard/provider/PrioritizeNetwork';
 import Membership, { SearchById, SearchByName } from './pages/dashboard/members/Membership';
 import PlanAuthorisation, { Authorisation, PANotes, Pricing } from './pages/dashboard/members/PlanAuthorisation';
 import PlanValidation from './pages/dashboard/members/PlanValidation';
@@ -29,11 +29,11 @@ import ServiceType from './pages/dashboard/code/ServiceType';
 import ProviderType from './pages/dashboard/code/ProviderType';
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-import PriceSchedule, { BrandItem, BrandItemGeneric, GetGenericItem } from './pages/dashboard/third party pricing/PriceSchedule';
+import PriceSchedule, { BrandItemGeneric, GetGenericItem } from './pages/dashboard/third party pricing/PriceSchedule';
 import MacList from './pages/dashboard/third party pricing/MacList';
 import TaxSchedule from './pages/dashboard/third party pricing/TaxSchedule';
 import CopayStepSchedule from './pages/dashboard/third party pricing/CopayStepSchedule';
-import CopaySchedule, { Generic, GenericItem, NonGeneric } from './pages/dashboard/third party pricing/CopaySchedule';
+import CopaySchedule, { NonGeneric } from './pages/dashboard/third party pricing/CopaySchedule';
 import ProcedureUCRList from './pages/dashboard/third party pricing/ProcedureUCRList';
 import RVAList from './pages/dashboard/third party pricing/RVAList';
 import NDC, { ProcessRule, RXLimitationPricing, ValidationsOverride } from './pages/dashboard/exceptionlist/ndc';
@@ -54,7 +54,6 @@ import DiagnosisPrioritization from './pages/dashboard/validation_lists/Diagnosi
 import AccumulatedBenefits, { ExclusionLimitation, Deductible } from './pages/dashboard/accumulated_benefits/AccumulatedBenefits';
 import GPIExclusion from './pages/dashboard/accumulated_benefits/GPIExclusion';
 import NDCExclusion from './pages/dashboard/accumulated_benefits/NDCExclusion';
-import MajorMedicalMaximums from './pages/dashboard/accumulated_benefits/MajorMedicalMaximums';
 import DrugDatabase, { Distribution, General, IDCodes, Pricing as DrugInformationPricing } from './pages/dashboard/drug_information/DrugDatabase';
 import NDCCrossReference from './pages/dashboard/drug_information/NDCCrossReference';
 import PricingStrategies from './pages/dashboard/strategies/PricingStrategies';
@@ -63,7 +62,7 @@ import AccumulatedBenefitStrategy from './pages/dashboard/strategies/Accumulated
 import PlanAssociation from './pages/dashboard/plan_design/PlanAssociation';
 import PlanEdit, { DateLimitations, PlanEditNotes, PlanFormulary, RefillLimitations, RxLimitations } from './pages/dashboard/plan_design/PlanEdit';
 import SuperProvider from './pages/dashboard/provider/SuperProvider';
-import PrioritizeNetwork from './pages/dashboard/provider/PrioritizeNetworks';
+// import PrioritizeNetwork from './pages/dashboard/provider/PrioritizeNetworks';
 import Prescriber from './pages/dashboard/prescriber/Prescriber';
 import ProviderTypeValidation from './pages/dashboard/exceptionlist/ProviderTypeValidation';
 import ProcedureCode from './pages/dashboard/exceptionlist/ProcedureCode';
@@ -71,7 +70,12 @@ import SuperBenefitList from './pages/dashboard/exceptionlist/SuperBenefitList';
 import MembersData, { ChangeLogTab, ClaimHistoryTab, CoverageHistoryTab, HealthConditionsTab, MemberTab, NotesTab, OverridesTab, PriorAuthorizationTab, ProviderSearchTab } from './pages/dashboard/membership/MembersData';
 import PriorAuthorization, { Authorization, PriorNotes, PriorPricing } from './pages/dashboard/membership/PriorAuthorization';
 import PlanValidations from './pages/dashboard/membership/PlanValidation';
+import { ProtectedRoute } from './hooks/ProtectedRoute';
 import UserDefinition, { DataAccessTab, GroupForm, UDefinitionTab, UserDF } from './pages/dashboard/administrator/UserDefinition';
+import VerifyDrugCoverage, { Group, Plan, Member as VDCMember } from './pages/dashboard/administrator/VerifyDrugCoverage';
+import Zipcodes from './pages/dashboard/administrator/Zipcodes';
+import SystemParameter, { ParametersMaintanace, SystemlimitsEligibility as PSParmeters } from './pages/dashboard/administrator/SystemParameters';
+import SearchAudit from './pages/dashboard/administrator/Searchaudittrail';
 
 function setToken(userToken) {
   sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -87,28 +91,43 @@ function getToken() {
 function App() {
   const { token, setToken } = useToken();
 
-  console.log('app.js');
+  // console.log('app.js');
 
   // if (!token) {
   //   return <Navigate to="login" replace />
   // }
 
+  // useEffect(() => {
+  //   //  if(!token) {
+  //   // AuthMiddlware();
+  //   //  }
+  // }, [token]);
+
+  const AuthMiddlware = () => {
+    if (!token) {
+      return <Navigate to="login" replace />
+    }
+  }
+
   return (
 
     <>
-
       <Routes>
         <Route exact path="/">
           {/* <Home /> */}
         </Route>
+
+        {/* <ProtectedRoute> */}
         <Route path="/dashboard" element={<Dashboard />}>
+          {/* <Route index element={<Navigate to="d" replace />} />
+
+          <Route path='d' element={<Dashboardpage />} /> */}
           <Route path='user/client' element={<Client />} >
             <Route index element={<Navigate to="identification" replace />} />
             <Route path='identification' element={<Ci />} />
             <Route path='strategy' element={<CS />} />
             <Route path='eligibility' element={<Ce />} />
             <Route path='indicators' element={<Cin />} />
-
           </Route>
 
           <Route path='user/client-group' element={<Clientgroup />} >
@@ -156,6 +175,53 @@ function App() {
             <Route path='notes' element={<PANotes />} />
           </Route> */}
 
+          {/* </Route> */}
+
+          <Route path='user/client-group' element={<Clientgroup />} >
+            <Route index element={<Navigate to="identification" replace />} />
+            <Route path='identification' element={<Cgi />} />
+            <Route path='strategy' element={<CGStrategy />} />
+            <Route path='eligibility' element={<CGEligibility />} />
+            <Route path='indicators' element={<CGIndicators />} />
+            <Route path='charges' element={<CGCharges />} />
+          </Route>
+
+          <Route path='user/customer' element={<Customer />} >
+            <Route index element={<Navigate to="identification" replace />} />
+            <Route path='identification' element={<Identification />} />
+            <Route path='strategy' element={<Strategy />} />
+            <Route path='eligibility' element={<Eligibility />} />
+            <Route path='indicators' element={<Indicators />} />
+            <Route path='exceptions' element={<Exceptions />} />
+          </Route>
+
+          <Route path="member" element={<Member />}>
+            <Route index element={<Navigate to="member" replace />} />
+            <Route path='member' element={<MemberForm />} />
+            <Route path='overrides' element={<Overrides />} />
+            <Route path='coverage' element={<Coverage />} />
+            <Route path='coverage-history' element={<CoverageHistory />} />
+            <Route path='health-conditions' element={<Health />} />
+            <Route path='notes' element={<Notes />} />
+            <Route path='claim-History' element={<ClaimHistory />} />
+            <Route path='authorizations' element={<PriorAuthorisation />} />
+            <Route path='provider' element={<ProviderSearch />} />
+            <Route path='change' element={<ChnageLog />} />
+          </Route>
+
+          <Route path="membership" element={<Membership />}>
+            <Route index element={<Navigate to="search-by-id" replace />} />
+            <Route path='search-by-id' element={<SearchById />} />
+            <Route path='search-by-name' element={<SearchByName />} />
+          </Route>
+
+          <Route path="plan-authorisations" element={<PlanAuthorisation />}>
+            <Route index element={<Navigate to="authorization" replace />} />
+            <Route path='authorization' element={<Authorisation />} />
+            <Route path='pricing' element={<Pricing />} />
+            <Route path='notes' element={<PANotes />} />
+          </Route>
+
 
           <Route path="plan-validations" element={<PlanValidation />}>
 
@@ -188,7 +254,9 @@ function App() {
 
           <Route path="code/provider-type" element={<ProviderType />}>
           </Route>
-          <Route path='provider' element={<SearchProvider />}>
+
+
+          <Route path='searchprovider' element={<SearchProvider />}>
             <Route index element={<Navigate to="provider" replace />} />
 
             <Route path='provider' element={<Provider />} />
@@ -196,20 +264,41 @@ function App() {
             <Route path='pharmistsystem' element={<PharmistSystem />} />
 
             <Route path='networkparticipation' element={<NetworkParticipation />} />
+
+
+          </Route>
+
+          <Route path='provider/superprovider' element={<SuperProvider />}>
+
+
           </Route>
 
 
           <Route path='provider/traditionalnetworks' element={<TraditionalNetworks />}>
             <Route index element={<Navigate to="network" replace />} />
+
             <Route path='network' element={<Network />} />
             <Route path='providers' element={<Providers />} />
           </Route>
+
+
 
           <Route path='provider/flexiblenetworks' element={<FlexibleNetworks />}>
             <Route index element={<Navigate to="network" replace />} />
             <Route path='network' element={<Network />} />
             <Route path='rules' element={<Rules />} />
+
           </Route>
+
+          <Route path='provider/prioritizenetworks' element={<PrioritizeNetwork />}>
+
+          </Route>
+
+
+          <Route path='prescriber/' element={<Prescriber />}>
+
+          </Route>
+
 
           <Route path='provider/superprovider' element={<SuperProvider />}></Route>
 
@@ -218,6 +307,7 @@ function App() {
           {/* codes routes start  */}
 
           <Route path="code/benefits" element={<Benifits />}>
+
 
           </Route>
 
@@ -248,7 +338,9 @@ function App() {
           {/* codes routes ends  */}
 
           {/* third party pricing started  */}
-          <Route path="third-party-pricing/price-schedule" element={<PriceSchedule />}>
+
+          {/* third party pricing started  */}
+          {/* <Route path="third-party-pricing/price-schedule" element={<PriceSchedule />}>
             <Route index element={<Navigate to="brand-item" replace />} />
             <Route index path="brand-item" element={<BrandItem />} />
             <Route path="brand-item-generic" element={<BrandItemGeneric />} />
@@ -256,14 +348,24 @@ function App() {
           </Route>
 
           <Route path="third-party-pricing/copay-schedule" element={<CopaySchedule />}>
-           <Route index element={<Navigate to="brand-item" replace />} />
-           <Route path="brand-item" element={<NonGeneric />} />
-           <Route path="brand-item-generic" element={<Generic />} />
+            <Route index element={<Navigate to="brand-item" replace />} />
+            <Route path="brand-item" element={<NonGeneric />} />
+            <Route path="brand-item-generic" element={<Generic />} />
             <Route path="generic-item" element={<GenericItem />} />
+          </Route> */}
+
+          <Route path="third-party-pricing/price-schedule" element={<PriceSchedule />}>
+          </Route>
+
+          <Route path="third-party-pricing/copay-schedule" element={<CopaySchedule />}>
+            <Route index element={<Navigate to="brand-item" replace />} />
+            <Route index path="brand-item" element={<NonGeneric />} />
+            <Route path="brand-item-generic" element={<BrandItemGeneric />} />
+            <Route path="generic-item" element={<GetGenericItem />} />
           </Route>
 
           <Route path="third-party-pricing/copay-step-schedule" element={<CopayStepSchedule />}>
-          
+
           </Route>
 
           <Route path="third-party-pricing/MAC-list" element={<MacList />}>
@@ -320,14 +422,7 @@ function App() {
           <Route path="exception-list/benefit-derivation" element={<BenefitDerivation />}>
           </Route>
 
-          <Route path="exception-list/provider-type-validation" element={<ProviderTypeValidation />}>
-          </Route>
 
-          <Route path="exception-list/procedure-code-list" element={<ProcedureCode />}>
-          </Route>
-
-          <Route path="exception-list/super-benefit-list" element={<SuperBenefitList />}>
-          </Route>
           {/* exception list route ends  */}
 
           <Route path="code/benefits" element={<Benifits />}>
@@ -361,9 +456,11 @@ function App() {
 
 
           {/* validation list route starts  */}
+
+
+
           <Route path="validation-lists/diagnosis" element={<DiagnosisValidation />}>
           </Route>
-
           <Route path="validation-lists/speciality" element={<SpecialityValidation />}>
           </Route>
 
@@ -396,12 +493,12 @@ function App() {
           </Route>
 
           <Route path="accumulated-benefits/major-medical-maximums" element={<MajorMedicalMaximums />}>
-          </Route>        
+          </Route>
           {/* Accumulated Benefit Route Ends  */}
 
           {/* Drug Information Route starts */}
           <Route path="drug-information/drug-database" element={<DrugDatabase />}>
-            <Route index element={<Navigate to="general" replace/>} />
+            <Route index element={<Navigate to="general" replace />} />
             <Route path='general' element={<General />} />
             <Route path='id-codes' element={<IDCodes />} />
             <Route path='distribution' element={<Distribution />} />
@@ -420,11 +517,11 @@ function App() {
 
           {/* plan design route starts  */}
           <Route path="plan-design/plan-association" element={<PlanAssociation />} />
-          <Route path="plan-design/plan-edit" element={<PlanEdit />} > 
-          <Route index element={<Navigate to="plan-formulary" replace/>} />
-            <Route  path="plan-formulary" element={<PlanFormulary />} />
-            <Route  path="rx-limitations" element={<RxLimitations />} />
-            <Route  path="date-limitations" element={<DateLimitations />} />
+          <Route path="plan-design/plan-edit" element={<PlanEdit />} >
+            <Route index element={<Navigate to="plan-formulary" replace />} />
+            <Route path="plan-formulary" element={<PlanFormulary />} />
+            <Route path="rx-limitations" element={<RxLimitations />} />
+            <Route path="date-limitations" element={<DateLimitations />} />
             <Route path="refill-limitations" element={<RefillLimitations />} />
             <Route path="notes" element={<PlanEditNotes />} />
           </Route>
@@ -449,7 +546,7 @@ function App() {
           </Route>
 
           <Route path='membership/prior-authorization' element={<PriorAuthorization />}>
-            <Route index element={<Navigate to="authorization"/>}></Route>
+            <Route index element={<Navigate to="authorization" />}></Route>
             <Route path='authorization' element={<Authorization />} />
             <Route path='pricing' element={<PriorPricing />} />
             <Route path='notes' element={<PriorNotes />} />
@@ -457,40 +554,73 @@ function App() {
 
           <Route path='membership/plan-validations' element={<PlanValidations />}>
           </Route>
+
+
+          <Route path='provider' element={<SearchProvider />}>
+            <Route index element={<Navigate to="provider" replace />} />
+
+            <Route path='provider' element={<Provider />} />
+            <Route path='effectivedates' element={<Effectivedates />} />
+            <Route path='pharmistsystem' element={<PharmistSystem />} />
+
+            <Route path='networkparticipation' element={<NetworkParticipation />} />
+          </Route>
+
+          <Route path='provider/superprovider' element={<SuperProvider />} />
+
+
+          <Route path='provider/traditionalnetworks' element={<TraditionalNetworks />}>
+            <Route index element={<Navigate to="network" replace />} />
+            <Route path='network' element={<Network />} />
+            <Route path='providers' element={<Providers />} />
+          </Route>
+
+          <Route path='provider/flexiblenetworks' element={<FlexibleNetworks />}>
+            <Route index element={<Navigate to="network" replace />} />
+            <Route path='network' element={<Network />} />
+            <Route path='rules' element={<Rules />} />
+          </Route>
+
+          <Route path='provider/prioritizenetworks' element={<PrioritizeNetwork />}>
+
+          </Route>
+
           {/* membership route ends  */}
 
           {/* administrator route starts  */}
           <Route path='administrator/user-definition' element={<UserDefinition />}>
             <Route index element={<Navigate to="definition" />} />
             <Route path='definition' element={<UDefinitionTab />} />
-            
+
             <Route path='data-access' element={<DataAccessTab />} />
             <Route path='group' element={<GroupForm />} />
-            
+
           </Route>
 
-         
+          <Route path='administrator/verify-drug-coverage' element={<VerifyDrugCoverage />}>
+            <Route path='member' element={<VDCMember />} />
+            <Route path='group' element={<Group />} />
+            <Route path='plan' element={<Plan />} />
+          </Route>
+          <Route path='administrator/zip-codes' element={<Zipcodes />}>
+
+          </Route>
+
+
+          {/* <Route path='administrator/' element={< />}> </Route> */}
+          <Route path='administrator/system-parameter' element={<SystemParameter />}>
+            <Route path='parameters-maintanace' element={<ParametersMaintanace />} />
+            <Route path='systemlimit-eligibility' element={<PSParmeters />} />
+          </Route>
+
+          <Route path='administrator/search-audit-trail' element={<SearchAudit />}>
+
+          </Route>
+
+
           {/* administrator route ends  */}
-
-
         </Route>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        {/* </ProtectedRoute> */}
       </Routes>
 
       <ToastContainer />
