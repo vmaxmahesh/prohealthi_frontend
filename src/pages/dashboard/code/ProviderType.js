@@ -273,8 +273,9 @@ export default function ProviderType() {
 
     const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
 
-    const [benifitsData, setBenifitData] = useState({});
+    const [benifitsData, setBenifitData] = useState(false);
     const [benifitsList, setBenifitList] = useState([]);
+    const [adding, setAdding] = useState(false);
 
 
 
@@ -405,7 +406,26 @@ export default function ProviderType() {
     }
 
 
-    useEffect(() => { }, [benifitsData]);
+    const AddForm = () => {
+        setBenifitData(false);
+        setAdding(true);
+        reset();
+
+    }
+
+
+    useEffect(() => {
+        if (benifitsData) {
+            setAdding(false);
+
+        } else {
+            setAdding(true);
+            setBenifitData(false);
+        }
+
+        document.title = 'Provider Type Code | ProHealthi';
+
+    }, [benifitsData, adding]);
 
     return (
         <>
@@ -425,10 +445,10 @@ export default function ProviderType() {
                     <div className="col-md-6 mb-3">
                         <div className="breadcrum ">
                             <ul>
-                                 <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li> 
+                                {/* <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li>  */}
                                 <div className="col-md-3 ms-auto text-end">
-                                    {/* <button className="btn  btn-info" onClick={e => handleShow()}>
-                                        Add Provider Type <i className="fa fa-plus-circle"></i></button> */}
+                                    <button className="btn  btn-info btn-sm" onClick={e => AddForm()}>
+                                        Add Provider Type <i className="fa fa-plus-circle"></i></button>
                                 </div>
                             </ul>
                         </div>
@@ -467,7 +487,7 @@ export default function ProviderType() {
                     <Col md="8" lg="8">
                         <Card>
                             <div ref={scollToRef}>
-                                <AddBenifit show={show} handleClose={handleClose} selected={benifitsData} updateSelected={updateSelected} />
+                                <AddBenifit show={show} adding={adding} handleClose={handleClose} selected={benifitsData} updateSelected={updateSelected} />
 
                             </div>
                         </Card>
@@ -533,8 +553,7 @@ function BenifitRow(props) {
 }
 
 function AddBenifit(props) {
-    const [code, setCode] = useState();
-    const [description, setDescription] = useState();
+
     const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
 
 
@@ -573,7 +592,6 @@ function AddBenifit(props) {
                         return Promise.reject(error);
                     } else {
                         reset(data.data);
-                        props.updateSelected(data.data);
                         toast.success('Added Successfully...!', {
                             position: "top-right",
                             autoClose: 5000,
@@ -601,12 +619,30 @@ function AddBenifit(props) {
         e.preventDefault();
     }
 
-    useEffect(() => { reset(props.selected) }, [props.selected]);
+    useEffect(() => {
+
+
+        if (props.adding) {
+            reset({ provider_type: '', description: '', new: 1 }, {
+                keepValues: false,
+            })
+        } else {
+            reset(props.selected);
+        }
+
+        if (!props.selected) {
+            reset({ provider_type: '', description: '', new: 1 }, {
+                keepValues: false,
+            })
+        }
+
+
+    }, [props.selected, props.adding]);
 
     return (
         <>
             <Card>
-                <Card.Header>Provider Type</Card.Header>
+                <Card.Header>Provider Type{props.adding ? ' - (Adding)' : '- (' + props.selected.provider_type + ' )'}</Card.Header>
                 <Card.Body>
                     {/* <Form> */}
                     <form onSubmit={handleSubmit(addCode)}>
@@ -614,8 +650,14 @@ function AddBenifit(props) {
                             <div className="col-md-12 mb-2">
                                 <div className="form-group">
                                     <small>Provider type code</small>
-                                    <input type="text" readOnly className="form-control" name="benefit_code" id=""  {...register("provider_type", { required: true })} />
-                                    {errors.benefit_code && <span><p className='notvalid'>This field is required</p></span>}
+                                    {props.adding ?
+                                        <input type="text" className="form-control" name="benefit_code" id=""  {...register("benefit_code", { required: true })} />
+                                        // errors.benefit_code && <span><p className='notvalid'>This field is required</p></span>
+
+                                        :
+
+                                        <input type="text" readOnly className="form-control" name="benefit_code" id=""  {...register("benefit_code", { required: true })} />
+                                    }
                                 </div>
                             </div>
                             <div className="col-md-12 mb-2">

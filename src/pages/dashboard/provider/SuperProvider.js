@@ -210,31 +210,69 @@ function SuperProviderList(props)
     for (let i = 0; i < props.ndcListData.length; i++) {
         ndcListArray.push(<NdcRow ndcRow={props.ndcListData[i]} getNDCItem={getNDCItem} selected={props.selctedNdc} />);
     }
-    return(
+
+    const ndcClassArray = [];
+    for (let j = 0; j < props.ndcClassData.length; j++) {
+        ndcClassArray.push(<NdcClassRow ndcClassRow={props.ndcClassData[j]} getNDCItemDetails={getNDCItemDetails} />);
+    }
+
+    const [ncdListData, setNcdListData] = useState();
+    const [show, setShow] = useState("none");
+    const handleShow = () => setShow("block");
+    return (
         <>
-         <div className="card mt-3 mb-3">
+            <div className="card mt-3 mb-3">
                 <div className="card-body">
-                    <div className="col-md-12">
-                        <h5 className="mb-2">Super Provider Network List </h5>
-                    </div>
                     <div className="row">
-                        <div className="col-md-12">
-                            <table className="table  table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Priority</th>
-                                        <th>Network ID</th>
-                                        <th>Effective Date</th>
-                                        <th>Network Type</th>
-                                        <th>Price Schedule</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                        <div className="col-md-8 mb-2">
+                            <h5>Super Provider Network List</h5>
+                        </div>
+                        <div className="col-md-4 mb-3 text-end">
+                            <button className="btn btn-sm btn-warning" id="show" onClick={e => handleShow()}><i className="fa plus-circle"></i> Add Benefit List</button>
+                        </div>
+                        <div className="col-md-4">
+                            <div className="card mt-3 mb-3">
+                                <div className="card-body">
+                                    <div style={{ height: '400px', overflowY: 'scroll' }}>
+                                        <table className="table table-striped table-bordered" style={{ position: 'relative' }}>
+                                            <thead className='stickt-thead'>
+                                                <tr>
+                                                    <th>NETWORK ID</th>
+                                                    <th>NAME</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {ndcListArray}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                                    {ndcListArray}
-
-                                </tbody>
-                            </table>
+                        <div className="col-md-8">
+                            <div className="card mt-3 mb-3">
+                                <div className="card-body">
+                                    <div style={{ height: '400px', overflowY: 'scroll' }}>
+                                        <table className="table table-striped table-bordered" style={{ position: 'relative' }}>
+                                            <thead className='stickt-thead'>
+                                                <tr>
+                                                    <th>Priority</th>
+                                                    <th>Network Id</th>
+                                                    <th>eff. Date</th>
+                                                    <th>Network Type</th>
+                                                    <th>Price schedule</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {ndcClassArray}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

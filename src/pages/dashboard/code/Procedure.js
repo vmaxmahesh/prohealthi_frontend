@@ -279,8 +279,9 @@ export default function Procedure() {
 
     const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
 
-    const [benifitsData, setBenifitData] = useState({});
+    const [benifitsData, setBenifitData] = useState(false);
     const [benifitsList, setBenifitList] = useState([]);
+    const [adding, setAdding] = useState(false);
 
 
 
@@ -411,7 +412,26 @@ export default function Procedure() {
     }
 
 
-    useEffect(() => { }, [benifitsData]);
+    const AddForm = () => {
+        setBenifitData(false);
+        setAdding(true);
+        reset();
+
+    }
+
+
+    useEffect(() => {
+        if (benifitsData) {
+            setAdding(false);
+
+        } else {
+            setAdding(true);
+            setBenifitData(false);
+        }
+
+        document.title = 'Procedure Code | ProHealthi';
+
+    }, [benifitsData, adding]);
 
     return (
         <>
@@ -431,10 +451,10 @@ export default function Procedure() {
                     <div className="col-md-6 mb-3">
                         <div className="breadcrum ">
                             <ul>
-                                 <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li> 
+                                {/* <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li>  */}
                                 <div className="col-md-3 ms-auto text-end">
-                                    {/* <button className="btn  btn-info" onClick={e => handleShow()}>
-                                        Add Procedure Code <i className="fa fa-plus-circle"></i></button> */}
+                                    <button className="btn  btn-info btn-sm" onClick={e => AddForm()}>
+                                        Add Procedure Code <i className="fa fa-plus-circle"></i></button>
                                 </div>
                             </ul>
                         </div>
@@ -474,7 +494,7 @@ export default function Procedure() {
                     <Col md="8" lg="8">
                         <Card>
                             <div ref={scollToRef}>
-                                <AddBenifit show={show} handleClose={handleClose} selected={benifitsData} updateSelected={updateSelected} />
+                                <AddBenifit show={show} adding={adding} handleClose={handleClose} selected={benifitsData} updateSelected={updateSelected} />
 
                             </div>
                         </Card>
@@ -542,8 +562,7 @@ function BenifitRow(props) {
 }
 
 function AddBenifit(props) {
-    const [code, setCode] = useState();
-    const [description, setDescription] = useState();
+
     const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
 
 
@@ -581,8 +600,8 @@ function AddBenifit(props) {
                         const error = (data && data.message) || response.status;
                         return Promise.reject(error);
                     } else {
-                        reset();
-                        props.updateSelected(data.data);
+                        reset(data.data);
+                        // props.updateSelected(data.data);
                         toast.success('Added Successfully...!', {
                             position: "top-right",
                             autoClose: 5000,
@@ -610,12 +629,29 @@ function AddBenifit(props) {
         e.preventDefault();
     }
 
-    useEffect(() => { reset(props.selected) }, [props.selected]);
+    useEffect(() => {
 
+
+        if (props.adding) {
+            reset({ procedure_code: '', description: '', new: 1 }, {
+                keepValues: false,
+            })
+        } else {
+            reset(props.selected);
+        }
+
+        if (!props.selected) {
+            reset({ procedure_code: '', description: '', new: 1 }, {
+                keepValues: false,
+            })
+        }
+
+
+    }, [props.selected, props.adding]);
     return (
         <>
             <Card>
-                <Card.Header>Procedure Codes</Card.Header>
+                <Card.Header>Procedure Codes{props.adding ? ' - (Adding)' : '- (' + props.selected.procedure_code + ' )'}</Card.Header>
                 <Card.Body>
                     {/* <Form> */}
                     <form onSubmit={handleSubmit(addCode)}>
@@ -623,8 +659,15 @@ function AddBenifit(props) {
                             <div className="col-md-12 mb-2">
                                 <div className="form-group">
                                     <small>Procedure Code</small>
-                                    <input type="text" className="form-control" name="benefit_code" id="" readOnly  {...register("procedure_code", { required: true })} />
-                                    {errors.benefit_code && <span><p className='notvalid'>This field is required</p></span>}
+
+                                    {props.adding ?
+                                        <input type="text" className="form-control" name="procedure_code" id=""  {...register("procedure_code", { required: true })} />
+                                        // errors.benefit_code && <span><p className='notvalid'>This field is required</p></span>
+
+                                        :
+
+                                        <input type="text" readOnly className="form-control" name="procedure_code" id=""  {...register("procedure_code", { required: true })} />
+                                    }
                                 </div>
                             </div>
                             <div className="col-md-12 mb-2">

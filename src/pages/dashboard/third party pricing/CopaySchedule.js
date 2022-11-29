@@ -11,8 +11,8 @@ import { toast } from 'react-toastify';
 export default function CopaySchedule() {
     const location = useLocation();
     const currentpath = location.pathname.split('/')[4];
-    const[copayList, setCopayScheduleList] = useState([]);
-    const[copaySchedule, setCopaySchedule] = useState(false);
+    const [copayList, setCopayScheduleList] = useState([]);
+    const [copaySchedule, setCopaySchedule] = useState(false);
     const onCopaySearch = (search) => {
         const requestOptions = {
             method: 'GET',
@@ -47,7 +47,7 @@ export default function CopaySchedule() {
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
-                
+
                 setCopaySchedule(data.data);
                 toast.success(response.message, {
                     position: "top-right",
@@ -64,7 +64,7 @@ export default function CopaySchedule() {
             });
     }
 
-    useEffect(() => {}, [copayList]);
+    useEffect(() => { }, [copayList]);
 
     return (
         <>
@@ -88,7 +88,7 @@ export default function CopaySchedule() {
                     </div>
                 </div>
             </div>
-            <CopaySearch onSearch={onCopaySearch}/>
+            <CopaySearch onSearch={onCopaySearch} />
 
             <div className="card mt-3 mb-3">
                 <div className="card-body">
@@ -99,25 +99,25 @@ export default function CopaySchedule() {
                         <div className="col-md-4 mb-3 text-end">
                             {/* <button className="btn btn-sm btn-warning" id="show" onClick={e => handleShow()}><i className="fa plus-circle"></i> Add NDC List</button> */}
                         </div>
-                        <List listData={copayList} getCopayData={getCopayData}/>
+                        <List listData={copayList} getCopayData={getCopayData} />
                         {/* <CopayScheduleTabs /> */}
                         <div className="col-md-8">
-                <div className="card mt-3 mb-3">
-                    <div className="card-body">
-                        <div className="data">
-                            <div className="nav nav-tabs" id="nav-tab" role="tablist">
-                                <Link to="brand-item" className={'nav-link' + (currentpath == 'brand-item' ? ' active' : '')}>Brand Item, No Generic / Non-Drug</Link>
-                                <Link to="brand-item-generic" className={'nav-link' + (currentpath == 'brand-item-generic' ? ' active' : '')}>Brand Item,Generic Available</Link>
-                                <Link to="generic-item" className={'nav-link' + (currentpath == 'generic-item' ? ' active' : '')}>Generic Item</Link>
-                            </div>
-                            <hr />
-                            <div className="tab-content" id="nav-tabContent">
-                                <Outlet context={[copaySchedule, setCopaySchedule]}/>
+                            <div className="card mt-3 mb-3">
+                                <div className="card-body">
+                                    <div className="data">
+                                        <div className="nav nav-tabs" id="nav-tab" role="tablist">
+                                            <Link to="brand-item" className={'nav-link' + (currentpath == 'brand-item' ? ' active' : '')}>Brand Item, No Generic / Non-Drug</Link>
+                                            <Link to="brand-item-generic" className={'nav-link' + (currentpath == 'brand-item-generic' ? ' active' : '')}>Brand Item,Generic Available</Link>
+                                            <Link to="generic-item" className={'nav-link' + (currentpath == 'generic-item' ? ' active' : '')}>Generic Item</Link>
+                                        </div>
+                                        <hr />
+                                        <div className="tab-content" id="nav-tabContent">
+                                            <Outlet context={[copaySchedule, setCopaySchedule]} />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
                     </div>
                 </div>
             </div>
@@ -148,10 +148,12 @@ function CopaySearch(props) {
 function List(props) {
 
     const listArray = [];
-    for(let i=0; i < props.listData.length; i++)
-    {
-        listArray.push(<CopayListRow rowData={props.listData[i]} getCopayData={props.getCopayData}/>);
+    if (props.listData) {
+        for (let i = 0; i < props.listData.length; i++) {
+            listArray.push(<CopayListRow rowData={props.listData[i]} getCopayData={props.getCopayData} />);
+        }
     }
+
     return (
         <>
             <div className="col-md-4">
@@ -177,22 +179,21 @@ function List(props) {
     )
 }
 
-function CopayListRow(props)
-{
-    return(
+function CopayListRow(props) {
+    return (
         <>
-         <tr onClick={e => props.getCopayData(props.rowData)}
-         className={(props.selected && props.rowData.copay_schedule == props.selected.copay_schedule ? 'tblactiverow' : '')}>
-            <td>{props.rowData.copay_schedule}</td>
-            <td>{props.rowData.copay_schedule_name}</td>
-         </tr>
+            <tr onClick={e => props.getCopayData(props.rowData)}
+                className={(props.selected && props.rowData.copay_schedule == props.selected.copay_schedule ? 'tblactiverow' : '')}>
+                <td>{props.rowData.copay_schedule}</td>
+                <td>{props.rowData.copay_schedule_name}</td>
+            </tr>
         </>
     )
 }
 
 export function NonGeneric(props) {
-    const{register, handleSubmit, reset, watch, formState : {error} } = useForm();
-    const [copaySchedule, setCopaySchedule] = useOutletContext(false);    
+    const { register, handleSubmit, reset, watch, formState: { error } } = useForm();
+    const [copaySchedule, setCopaySchedule] = useOutletContext(false);
     useEffect(() => { reset(copaySchedule) }, [copaySchedule]);
     return (
         <>
@@ -263,7 +264,7 @@ export function NonGeneric(props) {
                                         <div className="col-md-3">
                                             <div className="form-group mb-2">
                                                 <small>Source</small>
-                                                <select className="form-select" {...register("bng1_source", {register : true})}>
+                                                <select className="form-select" {...register("bng1_source", { register: true })}>
                                                     <option>Based on Caluculated Amount</option>
                                                     <option>Type 2</option>
                                                     <option>Type 3</option>
@@ -273,27 +274,27 @@ export function NonGeneric(props) {
                                         <div className="col-md-3">
                                             <div className="form-group mb-2">
                                                 <small>&nbsp;</small>
-                                                <input type="text" className="form-control"  placeholder="In dollars"
-                                                 {...register("bng1_copay_amount", {register : true})}/>
+                                                <input type="text" className="form-control" placeholder="In dollars"
+                                                    {...register("bng1_copay_amount", { register: true })} />
                                             </div>
                                         </div>
                                         <div className="col-md-3">
                                             <div className="form-group mb-2">
                                                 <small> &nbsp;</small>
-                                                <input type="text" className="form-control"  placeholder="Percentage"
-                                                {...register("bng1_copay_percent", {register : true})} />
+                                                <input type="text" className="form-control" placeholder="Percentage"
+                                                    {...register("bng1_copay_percent", { register: true })} />
                                             </div>
                                         </div>
                                         <div className="col-md-3">
                                             <div className="form-group mb-2">
                                                 <small> List</small>
                                                 <input type="text" className="form-control" placeholder=""
-                                                {...register("copay_schedule", {register : true})} />
+                                                    {...register("copay_schedule", { register: true })} />
                                             </div>
                                         </div>
                                         <div className="col-md-3">
                                             <small>Type</small>
-                                            <select className="form-select" {...register("bng1_type", {register : true})}>
+                                            <select className="form-select" {...register("bng1_type", { register: true })}>
                                                 <option>Total Price Calculated</option>
                                                 <option>Type 2</option>
                                                 <option>Type 3</option>
@@ -302,7 +303,7 @@ export function NonGeneric(props) {
                                         <div className="col-md-3">
                                             <div className="form-group mb-2">
                                                 <small>Factor</small>
-                                                <select className="form-select" {...register("bng1_copay_factor", {register : true})}>
+                                                <select className="form-select" {...register("bng1_copay_factor", { register: true })}>
                                                     <option>Factor 0</option>
                                                     <option>Factor 1</option>
                                                     <option>Factor 2</option>
@@ -330,8 +331,8 @@ export function NonGeneric(props) {
 }
 
 export function Generic() {
-    const{register, handleSubmit, reset, watch, formState : {error} } = useForm();
-    const [copaySchedule, setCopaySchedule] = useOutletContext(false);    
+    const { register, handleSubmit, reset, watch, formState: { error } } = useForm();
+    const [copaySchedule, setCopaySchedule] = useOutletContext(false);
     useEffect(() => { reset(copaySchedule) }, [copaySchedule]);
     return (
         <>
@@ -391,7 +392,7 @@ export function Generic() {
                                         <div className="col-md-3">
                                             <div className="form-group mb-2">
                                                 <small>Source</small>
-                                                <select className="form-select" {...register("bga1_source", {register : true})}>
+                                                <select className="form-select" {...register("bga1_source", { register: true })}>
                                                     <option>Based on Caluculated Amount</option>
                                                     <option>Type 2</option>
                                                     <option>Type 3</option>
@@ -401,24 +402,24 @@ export function Generic() {
                                         <div className="col-md-3">
                                             <div className="form-group mb-2">
                                                 <small>&nbsp;</small>
-                                                <input type="text" className="form-control" {...register("bga1_copay_amount", {register : true})} placeholder="In dollars" />
+                                                <input type="text" className="form-control" {...register("bga1_copay_amount", { register: true })} placeholder="In dollars" />
                                             </div>
                                         </div>
                                         <div className="col-md-3">
                                             <div className="form-group mb-2">
                                                 <small> &nbsp;</small>
-                                                <input type="text" className="form-control" {...register("bga1_copay_percent", {register : true})} placeholder="Percentage" />
+                                                <input type="text" className="form-control" {...register("bga1_copay_percent", { register: true })} placeholder="Percentage" />
                                             </div>
                                         </div>
                                         <div className="col-md-3">
                                             <div className="form-group mb-2">
                                                 <small> List</small>
-                                                <input type="text" className="form-control" {...register("copay_schedule", {register : true})} placeholder="" />
+                                                <input type="text" className="form-control" {...register("copay_schedule", { register: true })} placeholder="" />
                                             </div>
                                         </div>
                                         <div className="col-md-3">
                                             <small>Type</small>
-                                            <select className="form-select" {...register("bga1_type", {register : true})}>
+                                            <select className="form-select" {...register("bga1_type", { register: true })}>
                                                 <option>Total Price Calculated</option>
                                                 <option>Type 2</option>
                                                 <option>Type 3</option>
@@ -427,7 +428,7 @@ export function Generic() {
                                         <div className="col-md-3">
                                             <div className="form-group mb-2">
                                                 <small>Factor</small>
-                                                <select className="form-select" {...register("bga1_copay_factor", {register : true})}>
+                                                <select className="form-select" {...register("bga1_copay_factor", { register: true })}>
                                                     <option>Factor 0</option>
                                                     <option>Factor 1</option>
                                                     <option>Factor 2</option>
@@ -455,8 +456,8 @@ export function Generic() {
 }
 
 export function GenericItem() {
-    const{register, handleSubmit, reset, watch, formState : {error} } = useForm();
-    const [copaySchedule, setCopaySchedule] = useOutletContext(false);    
+    const { register, handleSubmit, reset, watch, formState: { error } } = useForm();
+    const [copaySchedule, setCopaySchedule] = useOutletContext(false);
     useEffect(() => { reset(copaySchedule) }, [copaySchedule]);
     return (
         <>
@@ -516,7 +517,7 @@ export function GenericItem() {
                                         <div className="col-md-3">
                                             <div className="form-group mb-2">
                                                 <small>Source</small>
-                                                <select className="form-select" {...register("gen1_source", {register : true})}>
+                                                <select className="form-select" {...register("gen1_source", { register: true })}>
                                                     <option>Based on Caluculated Amount</option>
                                                     <option>Type 2</option>
                                                     <option>Type 3</option>
@@ -526,24 +527,24 @@ export function GenericItem() {
                                         <div className="col-md-3">
                                             <div className="form-group mb-2">
                                                 <small>&nbsp;</small>
-                                                <input type="text" className="form-control" {...register("gen1_copay_amount", {register : true})} placeholder="In dollars" />
+                                                <input type="text" className="form-control" {...register("gen1_copay_amount", { register: true })} placeholder="In dollars" />
                                             </div>
                                         </div>
                                         <div className="col-md-3">
                                             <div className="form-group mb-2">
                                                 <small> &nbsp;</small>
-                                                <input type="text" className="form-control" {...register("gen1_copay_percent", {register : true})} placeholder="Percentage" />
+                                                <input type="text" className="form-control" {...register("gen1_copay_percent", { register: true })} placeholder="Percentage" />
                                             </div>
                                         </div>
                                         <div className="col-md-3">
                                             <div className="form-group mb-2">
                                                 <small> List</small>
-                                                <input type="text" className="form-control" {...register("copay_schedule", {register : true})} placeholder="" />
+                                                <input type="text" className="form-control" {...register("copay_schedule", { register: true })} placeholder="" />
                                             </div>
                                         </div>
                                         <div className="col-md-3">
                                             <small>Type</small>
-                                            <select className="form-select" {...register("gen1_type", {register : true})}>
+                                            <select className="form-select" {...register("gen1_type", { register: true })}>
                                                 <option>Total Price Calculated</option>
                                                 <option>Type 2</option>
                                                 <option>Type 3</option>
@@ -552,7 +553,7 @@ export function GenericItem() {
                                         <div className="col-md-3">
                                             <div className="form-group mb-2">
                                                 <small>Factor</small>
-                                                <select className="form-select" {...register("gen1_copay_factor", {register : true})}>
+                                                <select className="form-select" {...register("gen1_copay_factor", { register: true })}>
                                                     <option>Factor 0</option>
                                                     <option>Factor 1</option>
                                                     <option>Factor 2</option>

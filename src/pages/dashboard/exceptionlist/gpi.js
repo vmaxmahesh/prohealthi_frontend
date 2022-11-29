@@ -121,7 +121,9 @@ export default function GPI() {
 
 
 
-    useEffect(() => { }, [ndcData, ndcClass, selctedNdc]);
+    useEffect(() => { 
+        document.title = 'GPI Exception | ProHealthi';
+    }, [ndcData, ndcClass, selctedNdc]);
 
     return (
         <>

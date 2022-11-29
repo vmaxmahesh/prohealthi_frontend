@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, Outlet, Route, Routes, useLocation, useNavigate, useOutletContext } from 'react-router-dom';
-// import Footer from '../../../../shared/Footer';
-import { ToastContainer, toast } from 'react-toastify';
 import Footer from '../../../shared/Footer';
+import { ToastContainer, toast } from 'react-toastify';
+// import Footer from '../../../shared/Footer';
 
 
 function SearchProvider() {

@@ -118,7 +118,9 @@ export default function BenefitList() {
 
 
 
-    useEffect(() => { }, [ndcData, ndcClass, selctedNdc]);
+    useEffect(() => {
+        document.title = 'Benifit List | ProHealthi';
+     }, [ndcData, ndcClass, selctedNdc]);
 
     return (
         <>
