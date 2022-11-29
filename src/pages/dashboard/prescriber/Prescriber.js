@@ -18,16 +18,8 @@ export default function Prescriber() {
     const [provider, setProvider] = useState([]);
     const [ProviderData, setProviderdata] = useState([]);
    
-
-
-
-
-
-
     const fillProviderData = (e) => {
 
-        // API  
-        // var staticProviderType =; 
         var arr = [
             { id: '123', name: 'Mahesh', storenumber: '101', chain: 'Hyderabad' },
             { id: '1234', name: 'Mahesh', storenumber: '101', chain: 'Hyderabad' },

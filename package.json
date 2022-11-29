@@ -44,6 +44,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "proxy": "https://c119-2405-201-c024-6020-740e-3c76-df00-e405.in.ngrok.io"
+  }
 }
