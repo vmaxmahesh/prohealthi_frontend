@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import { Link, Outlet,  useLocation, useOutletContext } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useForm } from 'react-hook-form';
 
 export default function MembersData() {
 
+    const location = useLocation();
+    const currentpath = location.pathname.split('/').pop();
+
     const [memberList, setMemberList] = useState([]);
+    const [memberFormData, setMemberFormData] = useState(false);
 
     const onSearch = (search) => {
         const requestOptions = {
@@ -15,7 +20,8 @@ export default function MembersData() {
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
-                console.log(data.data);
+                setMemberList(data.data);
+                
                 toast.success(response.message, {
                     position: "top-right",
                     autoClose: 5000,
@@ -29,11 +35,14 @@ export default function MembersData() {
             .catch(error => {
                 console.error('There was an error!', error);
             });
-
     }
-        
 
-    useEffect(() => { }, [memberList]);
+    const getFormData = (formdata) => {
+        setMemberFormData(formdata);
+    }
+
+
+    useEffect(() => { }, [memberList, memberFormData]);
 
     return (
         <>
@@ -58,8 +67,21 @@ export default function MembersData() {
                         </div>
                     </div>
                     <SearchMember onSearch={onSearch} />
-                    <MemberList memberList={memberList} />
-                    <MemberTabs />
+                    <MemberList memberList={memberList} getFormData={getFormData} memberFormData={memberFormData} />
+                    <div className="nav nav-tabs" id="nav-tab" role="tablist">
+                        <Link to="member" className={'nav-link' + (currentpath == 'member' ? ' active' : '')}>Member</Link>
+                        <Link to="overrides" className={'nav-link' + (currentpath == 'overrides' ? ' active' : '')}>Overrides</Link>
+                        <Link to="coverage-history" className={'nav-link' + (currentpath == 'coverage-history' ? ' active' : '')}>Coverage History</Link>
+                        <Link to="health-conditions" className={'nav-link' + (currentpath == 'health-conditions' ? ' active' : '')}>Health Conditions</Link>
+                        <Link to="notes" className={'nav-link' + (currentpath == 'notes' ? ' active' : '')}>Notes</Link>
+                        <Link to="claim-history" className={'nav-link' + (currentpath == 'claim-history' ? ' active' : '')}>Claim History</Link>
+                        <Link to="prior-authorization" className={'nav-link' + (currentpath == 'prior-authorization' ? ' active' : '')}>Prior Authorizations</Link>
+                        <Link to="provider-search" className={'nav-link' + (currentpath == 'provider-search' ? ' active' : '')}>Provider Search</Link>
+                        <Link to="change-log" className={'nav-link' + (currentpath == 'change-log' ? ' active' : '')}>Change Log</Link>
+                    </div>
+                    <div>
+                        <Outlet context={[memberFormData, setMemberFormData]}/>
+                    </div>
                 </div>
             </div>
         </>
@@ -90,26 +112,28 @@ function MemberList(props) {
 
     const memListArray = [];
     for (let i = 0; i < props.memberList.length; i++) {
-        memListArray.push(<MemberRow memRow={props.memberList[i]} />);
+        memListArray.push(<MemberRow memRow={props.memberList[i]} getFormData={props.getFormData} />);
     }
     return (
         <>
             <div className="card mt-3 mb-3">
                 <div className="card-body">
-                    <table className="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th width="20%">Customer</th>
-                                <th width="20%">Client</th>
-                                <th width="20%">Group</th>
-                                <th width="20%">Member ID</th>
-                                <th width="20%">Person Code</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                        </tbody>
-                    </table>
+                    <div style={{ height: '400px', overflowY: 'scroll' }}>
+                        <table className="table table-bordered">
+                            <thead className='stickt-thead'>
+                                <tr>
+                                    <th width="20%">Customer</th>
+                                    <th width="20%">Client</th>
+                                    <th width="20%">Group</th>
+                                    <th width="20%">Member ID</th>
+                                    <th width="20%">Person Code</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {memListArray}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </>
@@ -119,38 +143,39 @@ function MemberList(props) {
 function MemberRow(props) {
     return (
         <>
-            <tr>
+            <tr onClick={e => props.getFormData(props.memRow)}>
                 <td colSpan="5" className="p-0">
-                    {/* <table className="table table-borderless table-striped ">
+
+                    <table className="table table-borderless table-striped ">
                         <tr>
-                            <td width="20%">NHF{props.memRow.customer_id}</td>
-                            <td width="20%">NHF</td>
-                            <td width="20%">All_Mild</td>
-                            <td width="20%">123456</td>
-                            <td width="20%">0001</td>
+                            <td width="20%">{props.memRow.customer_id}</td>
+                            <td width="20%">{props.memRow.client_id}</td>
+                            <td width="20%">{props.memRow.client_group_id}</td>
+                            <td width="20%">{props.memRow.member_id}</td>
+                            <td width="20%">{props.memRow.person_code}</td>
                         </tr>
                         <tr>
                             <td colSpan="2" width="60%">
                                 <div className="row">
                                     <div className="col-md-4 mb-2">
                                         <small>First Name</small>
-                                        <p>AARONS</p>
+                                        <p>{props.memRow.member_first_name}</p>
                                     </div>
                                     <div className="col-md-4 mb-2">
                                         <small>Last Name</small>
-                                        <p>Derrick</p>
+                                        <p>{props.memRow.member_last_name}</p>
                                     </div>
                                     <div className="col-md-4 mb-2">
                                         <small>Date of Birth</small>
-                                        <p>11-05-1996 </p>
+                                        <p>{props.memRow.date_of_birth} </p>
                                     </div>
                                     <div className="col-md-4">
                                         <small>Effective Date</small>
-                                        <p>12-05-1994</p>
+                                        <p>{props.memRow.effective_date_override}</p>
                                     </div>
                                     <div className="col-md-4">
                                         <small>Termination Date</small>
-                                        <p>14-09-2055</p>
+                                        <p>{props.memRow.person_code}</p>
                                     </div>
                                     <div className="col-md-4">
                                         <small>Plan ID</small>
@@ -161,17 +186,17 @@ function MemberRow(props) {
                             <td width="20%">
                                 <div className="col-md-12 mb-2">
                                     <small>Eligibility</small>
-                                    <p>Member Only (Individual)</p>
+                                    <p>{props.memRow.eligibility_ovrd}</p>
                                 </div>
-                                <div className="col-md-12">
+                                {/* <div className="col-md-12">
                                     <small>Eligibility</small>
                                     <p>Member Only (Individual)</p>
-                                </div>
+                                </div> */}
                             </td>
-                            <td width="20%">NHF</td>
-                            <td width="20%">All_Mild</td>
+                            <td width="20%">(member Flag)</td>
+                            {/* <td width="20%">All_Mild</td> */}
                         </tr>
-                        <tr>
+                        {/* <tr>
                             <td colSpan="2" width="60%">
                                 <div className="row">
                                     <div className="col-md-4 mb-2">
@@ -196,44 +221,19 @@ function MemberRow(props) {
                             </td>
                             <td width="20%">NHF</td>
                             <td width="20%">All_Mild</td>
-                        </tr>
-                    </table> */}
+                        </tr> */}
+                    </table>
                 </td>
             </tr>
         </>
     )
 }
 
-function MemberTabs() {
-    const location = useLocation();
-    const currentpath = location.pathname.split('/').pop();
-    return (
-        <>
-            <div className="card mt-5 mb-3">
-                <div className="card-body">
-                    <div className="data">
-                        <div className="nav nav-tabs" id="nav-tab" role="tablist">
-                            <Link to="member" className={'nav-link' + (currentpath == 'member' ? ' active' : '')}>Member</Link>
-                            <Link to="overrides" className={'nav-link' + (currentpath == 'overrides' ? ' active' : '')}>Overrides</Link>
-                            <Link to="coverage-history" className={'nav-link' + (currentpath == 'coverage-history' ? ' active' : '')}>Coverage History</Link>
-                            <Link to="health-conditions" className={'nav-link' + (currentpath == 'health-conditions' ? ' active' : '')}>Health Conditions</Link>
-                            <Link to="notes" className={'nav-link' + (currentpath == 'notes' ? ' active' : '')}>Notes</Link>
-                            <Link to="claim-history" className={'nav-link' + (currentpath == 'claim-history' ? ' active' : '')}>Claim History</Link>
-                            <Link to="prior-authorization" className={'nav-link' + (currentpath == 'prior-authorization' ? ' active' : '')}>Prior Authorizations</Link>
-                            <Link to="provider-search" className={'nav-link' + (currentpath == 'provider-search' ? ' active' : '')}>Provider Search</Link>
-                            <Link to="change-log" className={'nav-link' + (currentpath == 'change-log' ? ' active' : '')}>Change Log</Link>
-                        </div>
-                    </div>
-                    <div>
-                        <Outlet />
-                    </div>
-                </div>
-            </div>
-        </>
-    )
-}
-
 export function MemberTab() {
+    const [memberFormData, setMemberFormData] = useOutletContext();
+    const {register, handleSubmit, watch, reset, formState : {error} } = useForm();
+    useEffect(() => {reset(memberFormData)}, [memberFormData]);
+    
     return (
         <>
             <div className="card mt-3 mb-3">
@@ -251,26 +251,26 @@ export function MemberTab() {
                         <div className="col">
                             <div className="form-group mb-3">
                                 <small>Customer ID</small>
-                                <input type="text" className="form-control" name="" placeholder="Enter Customer ID" id="" required="" />
+                                <input type="text" className="form-control"  placeholder="Enter Customer ID" {...register("customer_id", { required : true })} />
                                 <a href=""><span className="fa fa-search form-icon"></span></a>
                             </div>
                         </div>
                         <div className="col">
                             <div className="form-group mb-3">
-                                <small>ID Detials</small>
-                                <input type="text" className="form-control" name="" placeholder="ID Full Name" id="" required="" />
+                                <small>ID Details </small>
+                                <input type="text" className="form-control" placeholder="ID Full Name" {...register("customer_name", { required : true })} />
                             </div>
                         </div>
                         <div className="col">
                             <div className="form-group mb-3">
                                 <small>Effective Date</small>
-                                <input type="date" className="form-control" name="" id="" required="" />
+                                <input type="date" className="form-control" {...register("cust_eff_date", { required : true })} />
                             </div>
                         </div>
                         <div className="col">
                             <div className="form-group mb-3">
                                 <small>Termination Date</small>
-                                <input type="date" className="form-control" name="" id="" required="" />
+                                <input type="date" className="form-control" {...register("cust_term_date", { required : true })} />
                             </div>
                         </div>
 
@@ -281,23 +281,23 @@ export function MemberTab() {
                         </div>
                         <div className="col">
                             <div className="form-group mb-3">
-                                <input type="text" className="form-control" name="" placeholder="Enter Customer ID" id="" required="" />
+                                <input type="text" className="form-control" placeholder="Enter Customer ID" {...register("client_cust_id", { required : true })} />
                                 <a href=""><span className="fa fa-search form-icon"></span></a>
                             </div>
                         </div>
                         <div className="col">
                             <div className="form-group mb-3">
-                                <input type="text" className="form-control" name="" placeholder="ID Full Name" id="" required="" />
+                                <input type="text" className="form-control" placeholder="ID Full Name" {...register("client_name", { required : true })} />
                             </div>
                         </div>
                         <div className="col">
                             <div className="form-group mb-3">
-                                <input type="date" className="form-control" name="" id="" required="" />
+                                <input type="date" className="form-control" {...register("client_eff_date", { required : true })} />
                             </div>
                         </div>
                         <div className="col">
                             <div className="form-group mb-3">
-                                <input type="date" className="form-control" name="" id="" required="" />
+                                <input type="date" className="form-control" {...register("client_term_date", { required : true })} />
                             </div>
                         </div>
 
@@ -308,23 +308,23 @@ export function MemberTab() {
                         </div>
                         <div className="col">
                             <div className="form-group mb-3">
-                                <input type="text" className="form-control" name="" placeholder="Enter Customer ID" id="" required="" />
+                                <input type="text" className="form-control" placeholder="Enter Customer ID" {...register("client_group_cust_id", { required : true })} />
                                 <a href=""><span className="fa fa-search form-icon"></span></a>
                             </div>
                         </div>
                         <div className="col">
                             <div className="form-group mb-3">
-                                <input type="text" className="form-control" name="" placeholder="ID Full Name" id="" required="" />
+                                <input type="text" className="form-control" placeholder="ID Full Name" {...register("group_name", { required : true })} />
                             </div>
                         </div>
                         <div className="col">
                             <div className="form-group mb-3">
-                                <input type="date" className="form-control" name="" id="" required="" />
+                                <input type="date" className="form-control" {...register("client_group_eff_date", { required : true })} />
                             </div>
                         </div>
                         <div className="col">
                             <div className="form-group mb-3">
-                                <input type="date" className="form-control" name="" id="" required="" />
+                                <input type="date" className="form-control" {...register("client_group_term_date", { required : true })} />
                             </div>
                         </div>
 
@@ -335,22 +335,22 @@ export function MemberTab() {
                         </div>
                         <div className="col">
                             <div className="form-group mb-3">
-                                <input type="text" className="form-control" name="" placeholder="" id="" required="" />
+                                <input type="text" className="form-control" placeholder=""  />
                             </div>
                         </div>
                         <div className="col">
                             <div className="form-group mb-3">
-                                <input type="text" className="form-control" name="" placeholder="" id="" required="" />
+                                <input type="text" className="form-control" placeholder=""  />
                             </div>
                         </div>
                         <div className="col">
                             <div className="form-group mb-3">
-                                <input type="text" className="form-control" name="" id="" required="" />
+                                <input type="text" className="form-control"  />
                             </div>
                         </div>
                         <div className="col">
                             <div className="form-group mb-3">
-                                <input type="text" className="form-control" name="" id="" required="" />
+                                <input type="text" className="form-control"  />
                             </div>
                         </div>
 
@@ -361,22 +361,22 @@ export function MemberTab() {
                         </div>
                         <div className="col">
                             <div className="form-group mb-3">
-                                <input type="text" className="form-control" name="" placeholder="" id="" required="" />
+                                <input type="text" className="form-control" placeholder="" {...register("member_id", { required : true })} />
                             </div>
                         </div>
                         <div className="col">
                             <div className="form-group mb-3">
-                                <input type="text" className="form-control" name="" placeholder="" id="" required="" />
+                                <input type="text" className="form-control" placeholder="" {...register("member_first_name", { required : true })} />
                             </div>
                         </div>
                         <div className="col">
                             <div className="form-group mb-3">
-                                <input type="date" className="form-control" name="" id="" required="" />
+                                <input type="date" className="form-control" {...register("effective_date_override", { required : true })}/>
                             </div>
                         </div>
                         <div className="col">
                             <div className="form-group mb-3">
-                                <input type="date" className="form-control" name="" id="" required="" />
+                                <input type="date" className="form-control" {...register("member_first_name", { required : true })} />
                             </div>
                         </div>
                     </div>
@@ -391,24 +391,24 @@ export function MemberTab() {
                         <div className="col-md-4">
                             <div className="form-group mb-3">
                                 <small>Elgiibility</small>
-                                <select className="form-select">
-                                    <option value="">Member Only</option>
-                                    <option value="">Member - Spouse</option>
-                                    <option value="">Member Childred Only</option>
+                                <select className="form-select" {...register("eligibility_ovrd", { required : true })}>
+                                    <option value="1">Member Only</option>
+                                    <option value="2">Member - Spouse</option>
+                                    <option value="3">Member Childred Only</option>
                                 </select>
                             </div>
                         </div>
                         <div className="col-md-4">
                             <div className="form-group mb-3">
                                 <small>Validation ID</small>
-                                <input type="text" className="form-control" name="" placeholder="Enter Customer ID" id="" required="" />
+                                <input type="text" className="form-control" placeholder="Enter Customer ID" {...register("elig_validation_id", { required : true })} />
                                 <a href=""><span className="fa fa-search form-icon"></span></a>
                             </div>
                         </div>
                         <div className="col-md-4">
                             <div className="form-group mb-3">
                                 <small>Status</small>
-                                <select className="form-select">
+                                <select className="form-select" {...register("status", { required : true })}>
                                     <option value="">Active</option>
                                     <option value="">Pending</option>
                                     <option value="">Tereminated</option>
@@ -428,25 +428,25 @@ export function MemberTab() {
                         <div className="col-md-3">
                             <div className="form-group mb-3">
                                 <small>Elgiibility Lock Date</small>
-                                <input type="date" className="form-control" name="" placeholder="" id="" required="" />
+                                <input type="date" className="form-control" placeholder="" {...register("elig_lock_date", { required : true })}/>
                             </div>
                         </div>
                         <div className="col-md-3">
                             <div className="form-group mb-3">
                                 <small>Member Flag ID</small>
-                                <input type="text" className="form-control" name="" placeholder="Enter Customer ID" id="" required="" />
+                                <input type="text" className="form-control" placeholder="Enter Customer ID"  />
                             </div>
                         </div>
                         <div className="col-md-3">
                             <div className="form-group mb-3">
                                 <small>Load Process Date</small>
-                                <input type="date" className="form-control" name="" placeholder="" id="" required="" />
+                                <input type="date" className="form-control"  placeholder="" {...register("load_process_date", { required : true })} />
                             </div>
                         </div>
                         <div className="col-md-3">
                             <div className="form-group mb-3">
                                 <small>Prim. Cvg. Ins. Carrier</small>
-                                <input type="text" className="form-control" name="" placeholder="Enter Customer ID" id="" required="" />
+                                <input type="text" className="form-control" placeholder="Enter Customer ID" {...register("prim_coverage_ins_carrier", { required : true })}/>
                             </div>
                         </div>
                     </div>
@@ -461,31 +461,31 @@ export function MemberTab() {
                         <div className="col-md-3">
                             <div className="form-group mb-3">
                                 <small>First Name</small>
-                                <input type="text" className="form-control" name="" placeholder="First Name" id="" required="" />
+                                <input type="text" className="form-control" placeholder="First Name" {...register("member_first_name", { required : true })} />
                             </div>
                         </div>
                         <div className="col-md-3">
                             <div className="form-group mb-3">
                                 <small>Last Name</small>
-                                <input type="text" className="form-control" name="" placeholder="Last Name" id="" required="" />
+                                <input type="text" className="form-control" placeholder="Last Name" {...register("member_last_name", { required : true })} />
                             </div>
                         </div>
                         <div className="col-md-3">
                             <div className="form-group mb-3">
                                 <small>Address 1</small>
-                                <input type="text" className="form-control" name="" placeholder="Address" id="" required="" />
+                                <input type="text" className="form-control" placeholder="Address" {...register("address_1", { required : true })} />
                             </div>
                         </div>
                         <div className="col-md-3">
                             <div className="form-group mb-3">
                                 <small>Address 2</small>
-                                <input type="text" className="form-control" name="" placeholder="Address" id="" required="" />
+                                <input type="text" className="form-control" placeholder="Address" {...register("address_2", { required : true })} />
                             </div>
                         </div>
                         <div className="col-md-3">
                             <div className="form-group mb-3">
                                 <small>City</small>
-                                <select className="form-select">
+                                <select className="form-select" {...register("city", { required : true })}>
                                     <option value="">Select City / State</option>
                                     <option value="">City 1</option>
                                     <option value="">City 2</option>
@@ -495,7 +495,7 @@ export function MemberTab() {
                         <div className="col-md-3">
                             <div className="form-group mb-3">
                                 <small>Country</small>
-                                <select className="form-select">
+                                <select className="form-select" {...register("country", { required : true })}>
                                     <option value="">Select Country</option>
                                     <option value="">Jamaica</option>
                                     <option value="">Jamaica</option>
@@ -505,13 +505,13 @@ export function MemberTab() {
                         <div className="col-md-3">
                             <div className="form-group mb-3">
                                 <small>Date of Birth</small>
-                                <input type="date" className="form-control" name="" placeholder="Address" id="" required="" />
+                                <input type="date" className="form-control" placeholder="Address" {...register("date_of_birth", { required : true })}/>
                             </div>
                         </div>
                         <div className="col-md-3">
                             <div className="form-group mb-3">
                                 <small>Relationship</small>
-                                <select className="form-select">
+                                <select className="form-select" {...register("relationship", { required : true })}>
                                     <option value="">Select Relationship</option>
                                     <option value="">1 Cardholder</option>
                                     <option value="">2 Souse</option>
@@ -527,28 +527,28 @@ export function MemberTab() {
                         <div className="col-md-3">
                             <div className="form-group mb-3">
                                 <small>Anniversary</small>
-                                <input type="date" className="form-control" name="" placeholder="Address" id="" required="" />
+                                <input type="date" className="form-control" placeholder="Address" {...register("anniv_date", { required : true })} />
                             </div>
                         </div>
                         <div className="col-md-3">
                             <div className="form-group mb-3">
                                 <small>Patient ID Number</small>
-                                <input type="text" className="form-control" name="" placeholder="Address" id="" required="" />
+                                <input type="text" className="form-control" placeholder="Address" {...register("patient_pin_number", { required : true })} />
                             </div>
                         </div>
                         <div className="col-md-3">
                             <div className="form-group mb-3">
                                 <small>Alternate Member ID</small>
-                                <input type="date" className="form-control" name="" placeholder="Address" id="" required="" />
+                                <input type="date" className="form-control"  placeholder="Address" {...register("alt_member_id", { required : true })} />
                             </div>
                         </div>
                         <div className="col-md-3">
                             <div className="form-group mb-3">
                                 <small>Gender</small>
                                 <div className="form-group mt-2">
-                                    <input type="checkbox" id="male" className="d-none" />
+                                    <input type="checkbox" {...register("sex_of_patient", { required : true })} checked={memberFormData.sex_of_patient == 1 ? '1' : '0'} className="d-none" />
                                     <label htmlFor="male">Male</label> &nbsp; &nbsp;
-                                    <input type="checkbox" id="female" className="d-none" />
+                                    <input type="checkbox" {...register("sex_of_patient", { required : true })} checked={memberFormData.sex_of_patient == 2 ? '1' : '0'} className="d-none" />
                                     <label htmlFor="female">Female</label>
                                 </div>
                             </div>
