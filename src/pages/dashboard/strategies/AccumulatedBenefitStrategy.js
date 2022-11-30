@@ -21,7 +21,6 @@ export default function AccumulatedBenefitStrategy()
     const [selctedNdc, setSelctedNdc] = useState('');
 
     const [benifitsData, setBenifitData] = useState(false);
-    const [benifitsList, setBenifitList] = useState([]);
     const [adding, setAdding] = useState(false);
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
