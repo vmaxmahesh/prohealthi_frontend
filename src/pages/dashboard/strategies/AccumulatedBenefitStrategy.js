@@ -189,13 +189,17 @@ export default function AccumulatedBenefitStrategy()
                         <ul>
                             <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li>
                         </ul>
-                        <div className="col-md-3 ms-auto text-end">
-                                    <button className="btn  btn-info btn-sm" onClick={e => AddForm()}>
-                                        Add Benefit Code <i className="fa fa-plus-circle"></i></button>
-                                </div>
+                      
                     </div>
+                     
                 </div>
             </div> 
+
+            <div className="col-md-3 ms-auto text-end">
+                    <button className="btn  btn-info btn-sm" onClick={e => AddForm()}>
+                    Accumulated Benefit Strategy <i className="fa fa-plus-circle"></i></button>
+            </div>
+
             <SearchAccumulatedStrategy searchException={searchException} />
 
             <AccumulatedBenefitStrategyList ndcListData={ndcData} ndcClassData={ndcClass} getNDCItem={getNDCItems} getNDCItemDetails={getNDCItemDetails} selctedNdc={selctedNdc} />
@@ -509,13 +513,21 @@ function AccumeBenefitStrategyForm(props)
                                 <div className="col-md-6 mb-3">
                                     <div className="form-group">
                                         <small> Strategy ID: </small>
-                                       <input type="text" name="accum_bene_strategy_id" {...register('accum_bene_strategy_id')} placeholder="" className="form-control" />
+                                       <input type="text" name="accum_bene_strategy_id" {...register('accum_bene_strategy_id',{
+                                        required:true,
+                                       })} placeholder="" className="form-control" />
+                                       {errors.accum_bene_strategy_id && <span><p role="alert" className="notvalid">This field is required</p></span>}
+
                                     </div>
                                 </div>
                                 <div className="col-md-6 mb-3">
                                     <div className="form-group">
                                         <small> Strategy Name: </small>
-                                    <input type="text" name="accum_bene_strategy_name" {...register('accum_bene_strategy_name')}  className="form-control" />
+                                    <input type="text" name="accum_bene_strategy_name" {...register('accum_bene_strategy_name',{
+                                        required:true,
+                                    })}  className="form-control" />
+                                    {errors.accum_bene_strategy_name && <span><p role="alert" className="notvalid">This field is required</p></span>}
+
                                     </div>
                                 </div>
                             </div>
@@ -533,49 +545,69 @@ function AccumeBenefitStrategyForm(props)
                     <div className="col-md-3 mb-3">
                         <div className="form-group">
                             <small>Provider Type:</small>
-                                <select className="form-select" name="pharm_type_variation_ind" {...register('pharm_type_variation_ind')}>\
+                                <select className="form-select" name="pharm_type_variation_ind" {...register('pharm_type_variation_ind',{
+                                    required:true,
+                                })}>
                                     <option value="">--select--</option>
                                     <option value="R">Retail</option>
                                     <option value="M">Mail Service </option>
                                     <option value="*">WildCard - No Variation</option>
                                 </select>
+
+                                {errors.pharm_type_variation_ind && <span><p role="alert" className="notvalid">This field is required</p></span>}
+
                         </div>
                     </div>
                     <div className="col-md-3 mb-3">
                         <div className="form-group">
                             <small>Network Partification:</small>
-                                <select className="form-select" name="network_part_variation_ind" {...register('network_part_variation_ind')}>
+                                <select className="form-select" name="network_part_variation_ind" {...register('network_part_variation_ind',{
+                                    required:true,
+                                })}>
                                     <option value="">--select--</option>
                                     <option value="I">In Network</option>
                                     <option value="O">Out of Network </option>
                                     <option value="*">WildCard - No Variation</option>
                                 </select>
+
+                                {errors.network_part_variation_ind && <span><p role="alert" className="notvalid">This field is required</p></span>}
+
                                 
                         </div>
                     </div>
                     <div className="col-md-3 mb-3">
                         <div className="form-group">
                             <small>Claim Type:</small>
-                                <select className="form-select" name='claim_type_variation_ind' {...register('claim_type_variation_ind')}>
+                                <select className="form-select" name='claim_type_variation_ind' {...register('claim_type_variation_ind',{
+                                    required:true,
+                                })}>
                                     <option value="">--select--</option>
                                     <option value="P">POS</option>
                                     <option value="D">DMR </option>
                                     <option value="U">UCF</option>
                                     <option value="*">WildCard - No Variation</option>
                                 </select>
+
+                                {errors.claim_type_variation_ind && <span><p role="alert" className="notvalid">This field is required</p></span>}
+
                                 
                         </div>
                     </div>
                     <div className="col-md-3 mb-3">
                         <div className="form-group">
                             <small>Formulary:</small>
-                                <select className="form-select" name='formulary_variation_ind' {...register('formulary_variation_ind')}>
+                                <select className="form-select" name='formulary_variation_ind' {...register('formulary_variation_ind',{
+                                    required:true,
+                                })}>
                                     <option value="">--select--</option>
                                     <option value="F">Formularly</option>
                                     <option value="N">Non-Formulary </option>
                                     {/* <option>UCF</option> */}
                                     <option value="*">Wild Card - No Variation</option>
                                 </select>
+
+                                {errors.formulary_variation_ind && <span><p role="alert" className="notvalid">This field is required</p></span>}
+
                                 
                         </div>
                     </div>
