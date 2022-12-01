@@ -898,7 +898,6 @@ export function CoverageHistoryTab() {
 
 function CHRow(props) {
 
-    console.log(props.formdata);
     // if (props.cHFormData) {
     //     console.log(props.cHFormData.client_group_id);
     // }
@@ -908,8 +907,8 @@ function CHRow(props) {
 
     return (
         <>
-         {/* && props.CHRow.person_code == props.cHFormData.person_code */}
-         {/* <tr onClick={e => props.fillCHForm(props.chRow)} 
+            {/* && props.CHRow.person_code == props.cHFormData.person_code */}
+            {/* <tr onClick={e => props.fillCHForm(props.chRow)} 
          className={(props.formdata && 
             props.CHRow.client_group_id 
             == props.formdata.client_group_id
@@ -927,40 +926,225 @@ function CHRow(props) {
 }
 
 export function HealthConditionsTab() {
+    const [memberFormData, setMemberFormData] = useOutletContext();
+    const { register, handleSubmit, watch, reset, formState: { error } } = useForm();
+    const [healthConditionList, setHealthConditionList] = useState(false);
+    const [formData, setFormData] = useState(false);
+    const [historyData, setHistoryData] = useState([]);
+
+    const getHealthConditionData = (member_id) => {
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'content-type': 'application/json' }
+        }
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/membership/memberdata/get-health-condition?search=${member_id}`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                setHealthConditionList(data.data);
+                toast.success(response.message, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+    }
+
+    const fillHealthConForm = (formdata) => {
+        setFormData(formdata);
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'content-type': 'application/json' }
+        }
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/membership/memberdata/get-diagnosis-history?search=${formdata.diagnosis_id}`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                setHistoryData(data.data);
+                toast.success(response.message, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+    }
+
+    useEffect(() => {
+        reset(memberFormData)
+        if (!healthConditionList) {
+            getHealthConditionData(memberFormData.member_id);
+        }
+    }, [memberFormData, healthConditionList, formData, historyData]);
+
     return (
         <>
             <div className="card mt-3 mb-3">
                 <div className="card-body">
                     <div className="row">
-                        <div className="col-md-12">
-                            <table className="table table-striped table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Date/Time Modified</th>
-                                        <th>User ID</th>
-                                        <th>Chagne Type Indicator</th>
-                                        <th>Org Eff. Date</th>
-                                        <th>Org Term Date</th>
-                                        <th>New Eff Date</th>
-                                        <th>New Term Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>2010-01-24 14:57:23</td>
-                                        <td>Shekar</td>
-                                        <td>Coverage Line was Added</td>
-                                        <td>0000-00-00</td>
-                                        <td>0000-00-00</td>
-                                        <td>2010-01-01</td>
-                                        <td>9999-12-31</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div className="col-md-6">
+                            <DiagnosisTable healthConditionList={healthConditionList} fillHealthConForm={fillHealthConForm} formData={formData} />
                         </div>
+
+                        <div className="col-md-6">
+                            <DiagnosisForm formData={formData} />
+                        </div>
+
                     </div>
                 </div>
             </div>
+
+            <div className="card mt-3 mb-3">
+                <div className="card-body">
+                    <div className="row">
+                        <History historyData={historyData} />
+                    </div>
+                </div>
+            </div>
+        </>
+    )
+}
+
+function History(props) {    
+    const historyArray = [];
+    for (let i = 0; i < props.historyData.length; i++) {
+        historyArray.push(<DiagHistoryRow historyRow={props.historyData[i]} />);
+    }
+    
+    return (
+        <>  
+            <div className="col-md-12">
+                <div style={{ height: '400px', overflowY: 'scroll' }}>
+                    <table className="table table-striped table-bordered">
+                        <thead className='stickt-thead'>
+                            <tr>
+                                <th>Date/Time Modified</th>
+                                <th>User ID</th>
+                                <th>Chagne Type Indicator</th>
+                                <th>From Eff. Date</th>
+                                <th>From Term Date</th>
+                                <th>To Eff Date</th>
+                                <th>To Term Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {historyArray}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </>
+    )
+}
+
+function DiagHistoryRow(props) {    
+    console.log(props.historyRow);
+    return (
+        <>
+         <tr>
+            <td>{props.historyRow.date_time_created}</td>
+            <td>{props.historyRow.user_id_created}</td>
+            <td>{props.historyRow.chg_type_ind}</td>
+            <td>{props.historyRow.from_effective_date}</td>
+            <td>{props.historyRow.from_termination_date}</td>
+            <td>{props.historyRow.to_effective_date}</td>
+            <td>{props.historyRow.to_termination_date}</td>
+         </tr>
+        </>
+    )
+}
+
+
+
+function DiagnosisTable(props) {
+    const diagnArray = [];
+    for (let i = 0; i < props.healthConditionList.length; i++) {
+        diagnArray.push(<HealthConditionRow healthConRow={props.healthConditionList[i]} fillHealthConForm={props.fillHealthConForm} />);
+    }
+    return (
+        <>
+            <div className="col-md-12 mb-2">
+                <h5>Diagnosis</h5>
+            </div>
+            <div style={{ height: '400px', overflowY: 'scroll' }}>
+                <table className="table table-striped table-bordered">
+                    <thead className='stickt-thead'>
+                        <tr>
+                            <th>Effective Date</th>
+                            <th>Termination Date</th>
+                            <th>Diagnosis</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {diagnArray}
+                    </tbody>
+                </table>
+            </div>
+        </>
+    )
+}
+
+function DiagnosisForm(props) {
+    const { register, handleSubmit, watch, reset, formState: { error } } = useForm();
+    useEffect(() => { reset(props.formData) }, [props.formData]);
+    return (
+        <>
+            <div className="row">
+                <div className="col-md-12 mb-2">
+                    <h5>Diagnosis</h5>
+                </div>
+                <div className="col-md-12">
+                    <div className="form-group mb-3">
+                        <small>Diagnosis</small>
+                        <input type="text" className="form-control" {...register("diagnosis_id", { required: true })} />
+                        <a href=""><span className="fa fa-search form-icon"></span></a>
+                    </div>
+                </div>
+                <div className="col-md-12">
+                    <div className="form-group mb-3">
+                        <small>Effective Date</small>
+                        <input type="date" className="form-control" {...register("effective_date", { required: true })} />
+                    </div>
+                </div>
+                <div className="col-md-12">
+                    <div className="form-group mb-3">
+                        <small>Termination Date</small>
+                        <input type="date" className="form-control" {...register("termination_date", { required: true })} />
+                    </div>
+                </div>
+                <div className="col-md-12 mb-4 d-flex justify-content-end">
+                    <a href="" className="btn btn-sm btn-secondary">Clear</a> &nbsp;&nbsp;
+                    <a href="" className="btn btn-sm btn-warning">Remove Item</a> &nbsp;&nbsp;
+                    <a href="" className="btn btn-sm btn-info">Update Item</a>
+                </div>
+            </div>
+        </>
+    )
+}
+
+function HealthConditionRow(props) {
+    return (
+        <>
+            <tr onClick={e => props.fillHealthConForm(props.healthConRow)}>
+                <td>{props.healthConRow.effective_date}</td>
+                <td>{props.healthConRow.termination_date}</td>
+                <td>{props.healthConRow.diagnosis_id}</td>
+                <td>{props.healthConRow.description}</td>
+            </tr>
         </>
     )
 }
