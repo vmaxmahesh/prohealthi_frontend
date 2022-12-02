@@ -1018,14 +1018,14 @@ export function HealthConditionsTab() {
     )
 }
 
-function History(props) {    
+function History(props) {
     const historyArray = [];
     for (let i = 0; i < props.historyData.length; i++) {
         historyArray.push(<DiagHistoryRow historyRow={props.historyData[i]} />);
     }
-    
+
     return (
-        <>  
+        <>
             <div className="col-md-12">
                 <div style={{ height: '400px', overflowY: 'scroll' }}>
                     <table className="table table-striped table-bordered">
@@ -1050,24 +1050,22 @@ function History(props) {
     )
 }
 
-function DiagHistoryRow(props) {    
+function DiagHistoryRow(props) {
     console.log(props.historyRow);
     return (
         <>
-         <tr>
-            <td>{props.historyRow.date_time_created}</td>
-            <td>{props.historyRow.user_id_created}</td>
-            <td>{props.historyRow.chg_type_ind}</td>
-            <td>{props.historyRow.from_effective_date}</td>
-            <td>{props.historyRow.from_termination_date}</td>
-            <td>{props.historyRow.to_effective_date}</td>
-            <td>{props.historyRow.to_termination_date}</td>
-         </tr>
+            <tr>
+                <td>{props.historyRow.date_time_created}</td>
+                <td>{props.historyRow.user_id_created}</td>
+                <td>{props.historyRow.chg_type_ind}</td>
+                <td>{props.historyRow.from_effective_date}</td>
+                <td>{props.historyRow.from_termination_date}</td>
+                <td>{props.historyRow.to_effective_date}</td>
+                <td>{props.historyRow.to_termination_date}</td>
+            </tr>
         </>
     )
 }
-
-
 
 function DiagnosisTable(props) {
     const diagnArray = [];
@@ -1313,6 +1311,53 @@ export function ClaimHistoryTab() {
 }
 
 export function PriorAuthorizationTab() {
+    const { register, handleSubmit, reset, watch, formState: { error } } = useForm();
+    const [memberFormData, setMemberFormData] = useOutletContext();
+    const [priorAuthList, setPriorAuthList] = useState(false);
+    const priorAuthArray = [];
+
+    const getPriorAuthorizationList = (member_id, client_id, client_group_id) => {
+        // console.log(`member_id ${member_id}, client_id ${client_id}, client_group_id ${client_group_id}`);
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'content-type': 'application/json' }
+        }
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/membership/memberdata/get-prior-authorization?member_id=${member_id}&client_id=${client_id}
+        &client_group_id=${client_group_id}`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                // console.log(data.data);
+                setPriorAuthList(data.data);
+                toast.success(response.message, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+
+    }
+
+
+    useEffect(() => {
+        reset(memberFormData)
+        if (!priorAuthList) {
+            if (memberFormData.member_id && memberFormData.client_id && memberFormData.client_group_id) {
+                getPriorAuthorizationList(memberFormData.member_id, memberFormData.client_id, memberFormData.client_group_id);
+            }
+        }
+    }, [memberFormData, priorAuthList]);
+
+    for (let i = 0; i < priorAuthList.length; i++) {
+        priorAuthArray.push(<PriorAuthRow priorAuthRow={priorAuthList[i]} />);
+    }
     return (
         <>
             <div className="card mt-3 mb-3">
@@ -1321,8 +1366,6 @@ export function PriorAuthorizationTab() {
                         <div className="col-md-12 mb-3">
                             <h5>Prior Authorizations</h5>
                         </div>
-
-
                         <div className="col-md-12" id="div1">
                             <table className="table table-striped table-bordered">
                                 <thead>
@@ -1342,26 +1385,34 @@ export function PriorAuthorizationTab() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
+                                    {priorAuthArray}
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
+        </>
+    )
+}
+
+function PriorAuthRow(props) {
+    return (
+        <>
+            <tr>
+                <td></td>
+                <td>{props.priorAuthRow.prior_auth_type}</td>
+                <td>{props.priorAuthRow.ndc}</td>
+                <td>{props.priorAuthRow.generic_product_id}</td>
+                <td>{props.priorAuthRow.effective_date}</td>
+                <td>{props.priorAuthRow.termination_date}</td>
+                <td>{props.priorAuthRow.customer_id}</td>
+                <td>{props.priorAuthRow.client_id}</td>
+                <td>{props.priorAuthRow.client_group_id}</td>
+                <td>{props.priorAuthRow.member_id}</td>
+                <td>{props.priorAuthRow.person_code}</td>
+                <td>{props.priorAuthRow.prior_auth_code_num}</td>
+            </tr>
         </>
     )
 }
@@ -1476,6 +1527,54 @@ export function ProviderSearchTab() {
 }
 
 export function ChangeLogTab() {
+
+    const { register, handleSubmit, reset, watch, formState: { error } } = useForm();
+    const [memberFormData, setMemberFormData] = useOutletContext();
+    const [changeLogData, setChangeLogData] = useState(false);
+    const logArray = [];
+
+
+    const getChangeLogList = (member_id, client_id, client_group_id, customer_id) => {
+        // console.log(`member_id ${member_id}, client_id ${client_id}, client_group_id ${client_group_id}, customer_id ${customer_id}`);
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'content-type': 'application/json' }
+        }
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/membership/memberdata/get-log-change-data?member_id=${member_id}&client_id=${client_id}
+        &client_group_id=${client_group_id}&customer_id=${customer_id}`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                setChangeLogData(data.data);
+                console.log(data.data);
+                toast.success(response.message, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+    }
+
+    useEffect(() => {
+        reset(memberFormData)
+        if (!changeLogData) {
+            if (memberFormData.member_id && memberFormData.client_id && memberFormData.client_group_id, memberFormData.customer_id) {
+                getChangeLogList(memberFormData.member_id, memberFormData.client_id, memberFormData.client_group_id, memberFormData.customer_id);
+            }
+        }
+    }, [memberFormData, changeLogData]);
+    
+    for (let i = 0; i < changeLogData.length; i++) {
+        logArray.push(<LogRow logRow={changeLogData[i]} />);
+    }
+
     return (
         <>
             <div className="card mt-3 mb-3">
@@ -1491,17 +1590,26 @@ export function ChangeLogTab() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
+                                    {logArray}
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
+        </>
+    )
+}
+
+function LogRow(props) {
+
+    return (
+        <>
+            <tr>
+                <td>{props.logRow.user_id}</td>
+                <td>{props.logRow.date_time_modified}</td>
+                <td>{props.logRow.date_time_modified}</td>
+            </tr>
         </>
     )
 }
