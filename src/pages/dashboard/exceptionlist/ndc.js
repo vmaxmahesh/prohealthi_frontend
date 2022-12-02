@@ -515,17 +515,17 @@ export function RXLimitationPricing(props) {
                                         <small>Rx Quantity</small>
                                         <div className="row">
                                             <div className="col-md-6">
-                                                <input type="text" name="" id="" placeholder="Minimum" className="form-control" />
+                                                <input type="text" name="min_rx_qty" {...register('min_rx_qty')} id="" placeholder="Minimum" className="form-control" />
                                             </div>
                                             <div className="col-md-6">
-                                                <input type="text" name="" id="" placeholder="Maximum" className="form-control" />
+                                                <input type="text" name="max_rx_qty" id="" {...register('max_rx_qty')} placeholder="Maximum" className="form-control" />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="col-md-4">
                                     <small>Rxs/Patient</small>
-                                    <input type="text" name="" id="" placeholder="Max" className="form-control" />
+                                    <input type="text" name="max_rxs_patient" {...register('max_rxs_patient')} id="" placeholder="Max" className="form-control" />
                                 </div>
                             </div>
                             <div className="row mb-2">
@@ -534,17 +534,17 @@ export function RXLimitationPricing(props) {
                                         <small>Amount Due</small>
                                         <div className="row">
                                             <div className="col-md-6">
-                                                <input type="text" name="" id="" placeholder="Minimum" className="form-control" />
+                                                <input type="text" name="min_price" {...register('min_price')} id="" placeholder="Minimum" className="form-control" />
                                             </div>
                                             <div className="col-md-6">
-                                                <input type="text" name="" id="" placeholder="Maximum" className="form-control" />
+                                                <input type="text" name="max_price" {...register('max_price')} id="" placeholder="Maximum" className="form-control" />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="col-md-4">
                                     <small>Accum. Ben./Patient</small>
-                                    <input type="text" name="" id="" placeholder="Max" className="form-control" />
+                                    <input type="text" name="max_rxs_patient"   {...register('max_rxs_patient')} id="" placeholder="Max" className="form-control" />
                                 </div>
                             </div>
                             <div className="row mb-2">
@@ -553,17 +553,17 @@ export function RXLimitationPricing(props) {
                                         <small>Day Supply</small>
                                         <div className="row">
                                             <div className="col-md-6">
-                                                <input type="text" name="" id="" placeholder="Minimum" className="form-control" />
+                                                <input type="text" name="days_supply_opt_multiplier" {...register('days_supply_opt_multiplier')} id="" placeholder="Minimum" className="form-control" />
                                             </div>
                                             <div className="col-md-6">
-                                                <input type="text" name="" id="" placeholder="Maximum" className="form-control" />
+                                                <input type="text" name="max_days_supply_opt"  {...register('max_days_supply_opt')} id="" placeholder="Maximum" className="form-control" />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="col-md-4">
                                     <small>Retail Fills</small>
-                                    <input type="text" name="" id="" placeholder="Max" className="form-control" />
+                                    <input type="text" name="retail_max_fills_opt"   {...register('retail_max_fills_opt')} id="" placeholder="Max" className="form-control" />
                                 </div>
                             </div>
                             <div className="row mb-2">
@@ -572,10 +572,10 @@ export function RXLimitationPricing(props) {
                                         <small>Ctl Days Supply</small>
                                         <div className="row">
                                             <div className="col-md-6">
-                                                <input type="text" name="" id="" placeholder="Minimum" className="form-control" />
+                                                <input type="text" name="min_ctl_days" {...register('min_ctl_days')} id="" placeholder="Minimum" className="form-control" />
                                             </div>
                                             <div className="col-md-6">
-                                                <input type="text" name="" id="" placeholder="Maximum" className="form-control" />
+                                                <input type="text" name="max_ctl_days"   {...register('max_ctl_days')} id="" placeholder="Maximum" className="form-control" />
                                             </div>
                                         </div>
                                     </div>
