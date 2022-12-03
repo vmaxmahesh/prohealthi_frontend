@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import {  useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/AuthProvider';
 
 
 
 async function loginUser(credentials) {
-    return fetch(process.env.REACT_APP_API_BASEURL +'/api/users/login', {
+    return fetch(process.env.REACT_APP_API_BASEURL + '/api/users/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -20,28 +20,34 @@ async function loginUser(credentials) {
 export default function Login({ setToken }) {
     const [username, setUserName] = useState();
     const [password, setPassword] = useState();
-    const { login } = useAuth();
-    // let navigate = useNavigate();
+    const { login, errors, user } = useAuth();
+    let navigate = useNavigate();
+
+    useEffect(() => {
+
+        if (user) {
+            navigate("/dashboard");
+        }
+    });
 
     const handleSubmit = async e => {
         e.preventDefault();
-        // const token = await loginUser({
-            // USER_ID: username,
-            // USER_PASSWORD: password
-        // });
-        // setToken(token);
-
+        
+        console.log('logging>>>>>>')
 
         login({
             USER_ID: username,
             USER_PASSWORD: password
         });
 
-        // // if (token) {
-        // //     navigate('/dashbooard');
-        // }
-
+        console.log('code completed');
     }
+
+    useEffect(() => {
+        // if (errors) {
+            console.log(errors);
+        // }
+    }, [errors]);
 
     return (
         <>
@@ -111,7 +117,7 @@ export default function Login({ setToken }) {
                             <input type="text" name="USER_ID" id="username" onChange={e => setUserName(e.target.value)} className="form-control" placeholder="Username" required />
                         </div>
                         <div className="gorm-group mb-4">
-                            <input type="text" name="USER_PASSWORD" id="password" onChange={e => setPassword(e.target.value)} className="form-control" placeholder="Password" required />
+                            <input type="password" name="USER_PASSWORD" id="password" onChange={e => setPassword(e.target.value)} className="form-control" placeholder="Password" required />
                         </div>
                         <button type="submit" className="btn btn-theme" value="" style={{ width: '100%' }}>login</button>
                     </form>

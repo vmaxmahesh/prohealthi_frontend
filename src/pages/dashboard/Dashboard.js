@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/AuthProvider';
 
@@ -6,11 +6,15 @@ export default function Dashboard() {
     const location = useLocation();
     const currentpath = location.pathname.split('/')[3];
     // console.log(currentpath);
-    // const user  = useAuth();
+    const {user, logout}  = useAuth();
 
-    // if (!user) {
-    //     return <Navigate to="/login" />;
-    // }
+    useEffect(() => {
+        console.log(user);
+    });
+
+    if (!user) {
+        return <Navigate to="/login" />;
+    }
     return (
         <>
             <div className='dashboard'>
@@ -210,8 +214,8 @@ export default function Dashboard() {
                                 <li><a href="" className="btn btn-create btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal1">Add new</a></li>
                                 <li className="dropdown"><a href="" className="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                     <div className="d-flex align-items-center">
-                                        <div><small>Welcome User</small>
-                                            <p><b>Adam</b></p>
+                                        <div><small>Welcome </small>
+                                            <p><b>{user.name}</b></p>
                                         </div>
                                         <div className="profile">
                                             <img src="images/profile-pic.png" className="img-fluid" alt="" />
@@ -221,7 +225,7 @@ export default function Dashboard() {
                                     <div className="dropdown-menu user-menu" aria-labelledby="dropdownMenuButton">
                                         <a className="dropdown-item" href="#">My Profile</a>
                                         <a className="dropdown-item" href="#">Update Information</a>
-                                        <a className="dropdown-item" href="#">Logout</a>
+                                        <Link className="dropdown-item" onClick={(e) => logout(e)}>Logout</Link>
                                     </div>
                                 </li>
                             </ul>
