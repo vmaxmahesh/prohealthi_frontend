@@ -94,8 +94,7 @@ export default function BenefitList() {
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
-                //  console.log(response);
-
+                
                 // check for error response
                 if (!response.ok) {
                     // get error message from body or default to response status
@@ -107,8 +106,6 @@ export default function BenefitList() {
                     setNdcData(data.data);
                     return;
                 }
-
-
 
             })
             .catch(error => {
@@ -151,7 +148,6 @@ export default function BenefitList() {
             <div ref={scollToRef}>
                 <AddNcdList selectedNdc={selctedNdc} />
             </div>
-
 
         </>
     )
@@ -315,7 +311,6 @@ function AddNcdList(props) {
     const currentpath = location.pathname.split('/').pop();
 
     useEffect(() => { setSelctedNdc(props.selectedNdc) }, [props.selectedNdc, selctedNdc]);
-    // //  console.log(selctedNdc);
 
     return (
         <>
