@@ -1,15 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useReducer, createContext } from 'react';
+import { Form } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { Link, Outlet, useLocation, useOutletContext } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 
+
+
 export default function PriceSchedule() {
+
+    const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
 
     const [priceScheduleList, setPriceScheduleList] = useState([]);
     const [scheduleData, setScheduleData] = useState(false);
-    // const[benefitGenAvailable, setGenericAvailable] = useState([]);
-    // const[generic, setGeneric] = useState([]);
+    const [adding, setAdding] = useState(false);
+
     const location = useLocation();
     const currentpath = location.pathname.split('/')[4];
 
@@ -67,7 +72,26 @@ export default function PriceSchedule() {
                 });
             })
     }
-    useEffect(() => { }, [priceScheduleList, scheduleData]);
+
+    const AddForm = () => {
+        setScheduleData(false);
+        setAdding(true);
+        reset();
+        console.log(scheduleData);
+    }
+
+    useEffect(() => {
+        if (scheduleData) {
+            setAdding(false);
+            // alert("reset");
+        } else {
+            // alert("else ");
+            setAdding(true);
+            setScheduleData(false);
+        }
+        document.title = 'Price Schedule | ProHealthi';
+
+    }, [priceScheduleList, scheduleData, adding]);
     return (
         <>
             <div className="row">
@@ -91,6 +115,10 @@ export default function PriceSchedule() {
                 </div>
             </div>
             <SearchPriceSchedule OnSearchPriceSchedule={OnSearchPriceSchedule} />
+            <div className="col-md-3 ms-auto text-end">
+                <button type="button" className="btn btn-info btn-sm" onClick={e => AddForm()}>
+                    Add Price Schedule <i className="fa fa-plus-circle"></i></button>
+            </div>
             <div className="card mt-3 mb-3">
                 <div className="card-body">
                     <div className="row">
@@ -105,7 +133,7 @@ export default function PriceSchedule() {
                             <div className="card mt-3 mb-3">
                                 <div className="card-body">
                                     <div className="col-md-8 mb-2">
-                                        <h5>Price Schedule Form</h5>
+                                        <h5>Price Schedule Form {adding ? "(Add New Data)" : "(Update Data)"}</h5>
                                     </div>
                                     <div className="data">
                                         <div className="nav nav-tabs" id="nav-tab" role="tablist">
@@ -115,7 +143,8 @@ export default function PriceSchedule() {
                                         </div>
                                         <hr />
                                         <div className="tab-content" id="nav-tabContent">
-                                            <Outlet context={[scheduleData, setScheduleData]} />
+                                            {/* <Outlet context={[scheduleData, setScheduleData]}/> */}
+                                            <Outlet context={{ data: [scheduleData, setScheduleData], adding: [adding, setAdding] }} />
                                         </div>
                                     </div>
                                 </div>
@@ -138,7 +167,7 @@ function SearchPriceSchedule(props) {
                     <div className="row mb-2">
                         <div className="col-md-12 mb-3">
                             <div className="form-group">
-                                <small>Price Schedule </small>
+                                <small> Price Schedule </small>
                                 <input type="text" onKeyUp={e => props.OnSearchPriceSchedule(e)} className="form-control" placeholder='Start typing price schedule id/ name/ copay schedule to search'
                                 />
                             </div>
@@ -208,7 +237,7 @@ function PriceScheduleRow(props) {
         <>
             <tr onClick={() => props.getPriceScheduleDetails(props.rowData)}
                 className={(props.selected && props.rowData.price_schedule == props.selected.price_schedule ? 'tblactiverow' : '')}>
-                <td>{props.rowData.price_schedule}</td>a
+                <td>{props.rowData.price_schedule}</td>
                 <td>{props.rowData.price_schedule_name}</td>
                 <td>{props.rowData.copay_schedule}</td>
             </tr>
@@ -220,113 +249,163 @@ function PriceScheduleRow(props) {
 
 
 export function BrandItem() {
-    const [scheduleData, setScheduleData] = useOutletContext(false);
-    const { register, handleSubmit, watch, reset, formState: { error } } = useForm();
-    useEffect(() => { reset(scheduleData) }, [scheduleData]);
+
+    // const [scheduleData, setScheduleData] = useOutletContext(false);
+
+    const {
+        data: [scheduleData, setScheduleData],
+        adding: [adding, setAdding],
+    } = useOutletContext();
+
+    const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
+    useEffect(() => {
+        if (adding) {
+            reset({ bng1_source: '', bng1_markup_amount: '', bng1_markup_percent: '', bng1_type: '', bng1_fee_percent: '', bng1_fee_amount: '', bng1_stdpkg: '0' },
+                { keepValues: false, });
+        }
+        reset(scheduleData)
+    }, [scheduleData, adding]);
+
+    const addBrandItem = (brand_item_form) => {
+        console.log(brand_item_form)
+    }
+
     return (
         <>
-            <div className='row'>
-                <div className="col-md-12">
-                    <h5 className="mb-2">Brand Item, No Generic / Non-Drug</h5>
-                    <div className="row mt-3 mb-3">
-                        <div className="col-md-2">
-                            <div className="form-check">
-                                <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
-                                <label className="form-check-label" htmlFor="flexRadioDefault1">
-                                    First available
-                                </label>
+            <Form onSubmit={handleSubmit(addBrandItem)}>
+                <div className='row'>
+                    <div className="col-md-12">
+                        <h5 className="mb-2">Brand Item, No Generic / Non-Drug</h5>
+                        <div className="row mt-3 mb-3">
+                            <div className="col-md-2">
+                                <div className="form-check">
+                                    <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
+                                    <label className="form-check-label" htmlFor="flexRadioDefault1">
+                                        First available
+                                    </label>
+                                </div>
                             </div>
-                        </div>
-                        <div className="col-md-3">
-                            <div className="form-check">
-                                <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
-                                <label className="form-check-label" htmlFor="flexRadioDefault1">
-                                    Greatest off all available
-                                </label>
+                            <div className="col-md-3">
+                                <div className="form-check">
+                                    <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
+                                    <label className="form-check-label" htmlFor="flexRadioDefault1">
+                                        Greatest off all available
+                                    </label>
+                                </div>
                             </div>
-                        </div>
-                        <div className="col-md-2">
-                            <div className="form-check">
-                                <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
-                                <label className="form-check-label" htmlFor="flexRadioDefault1">
-                                    Least off all available
-                                </label>
+                            <div className="col-md-2">
+                                <div className="form-check">
+                                    <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
+                                    <label className="form-check-label" htmlFor="flexRadioDefault1">
+                                        Least off all available
+                                    </label>
+                                </div>
                             </div>
+
                         </div>
 
-                    </div>
-
-                    <div className="row">
-                        <div className="col-md-3">
-                            <div className="form-group mb-2">
-                                <small>Source</small>
-                                <input type="text" className="form-control" {...register("bng1_source", { required: true })} placeholder="Source " />
+                        <div className="row">
+                            <div className="col-md-3">
+                                <div className="form-group mb-2">
+                                    <small>Source</small>
+                                    <input type="text" className="form-control" {...register("bng1_source", { required: true })} placeholder="Source " />
+                                    {errors.bng1_source && <span><p className='notvalid'>This field is required</p></span>}
+                                </div>
                             </div>
-                        </div>
-                        <div className="col-md-3">
-                            <div className="form-group mb-2">
-                                <small>Mkp</small>
-                                <input type="text" className="form-control" {...register("bng1_markup_amount", { required: true })} placeholder="Percentage" />
+                            <div className="col-md-3">
+                                <div className="form-group mb-2">
+                                    <small>Mkp</small>
+                                    <input type="text" className="form-control" {...register("bng1_markup_amount", { required: true })} placeholder="Percentage" />
+                                    {errors.bng1_markup_amount && <span><p className='notvalid'>This field is required</p></span>}
+                                </div>
                             </div>
-                        </div>
-                        <div className="col-md-3">
-                            <div className="form-group mb-2">
-                                <small>Mkp</small>
-                                <input type="text" className="form-control" {...register("bng1_markup_percent", { required: true })} placeholder="In dollars" />
+                            <div className="col-md-3">
+                                <div className="form-group mb-2">
+                                    <small>Mkp</small>
+                                    <input type="text" className="form-control" {...register("bng1_markup_percent", { required: true })} placeholder="In dollars" />
+                                    {errors.bng1_markup_percent && <span><p className='notvalid'>This field is required</p></span>}
+                                </div>
                             </div>
-                        </div>
-                        <div className="col-md-3">
-                            <div className="form-group mb-2">
-                                <small>Type</small>
-                                <select className="form-select" {...register("bng1_type", { required: true })}>
-                                    <option>Type 1</option>
-                                    <option>Type 2</option>
-                                    <option>Type 3</option>
-                                </select>
+                            <div className="col-md-3">
+                                <div className="form-group mb-2">
+                                    <small>Type</small>
+                                    <select className="form-select" {...register("bng1_type", { required: true })}>
+                                        <option value="">Type 1</option>
+                                        <option value="">Type 2</option>
+                                        <option value="">Type 3</option>
+                                    </select>
+                                    {errors.bng1_type && <span><p className='notvalid'>This field is required</p></span>}
+                                </div>
                             </div>
-                        </div>
-                        <div className="col-md-3">
-                            <small>Fee</small>
-                            <div className="form-group mb-2">
-                                <input type="text" className="form-control" {...register("bng1_fee_amount", { required: true })} placeholder="Percentage" />
-                            </div>
-                        </div>
-                        <div className="col-md-3">
-                            <div className="form-group mb-2">
+                            <div className="col-md-3">
                                 <small>Fee</small>
-                                <input type="text" className="form-control" {...register("bng1_fee_percent", { required: true })} placeholder="In dollars" />
+                                <div className="form-group mb-2">
+                                    <input type="text" className="form-control" {...register("bng1_fee_amount", { required: true })} placeholder="Percentage" />
+                                    {errors.bng1_fee_amount && <span><p className='notvalid'>This field is required</p></span>}
+                                </div>
+                            </div>
+                            <div className="col-md-3">
+                                <div className="form-group mb-2">
+                                    <small>Fee</small>
+                                    <input type="text" className="form-control" {...register("bng1_fee_percent", { required: true })} placeholder="In dollars" />
+                                    {errors.bng1_fee_percent && <span><p className='notvalid'>This field is required</p></span>}
+                                </div>
+                            </div>
+                            <div className="col-md-2">
+                                <div className="form-group mt-4">
+                                    <input type="checkbox" id="Return2" className="d-none" {...register("bng1_stdpkg", { required: true })} />
+                                    <label htmlFor="Return2">Std Pkg </label>
+                                </div>
+                                {errors.bng1_stdpkg && <span><p className='notvalid'>This field is required</p></span>}
+                            </div>
+                            <div className="col-md-2">
+                                <div className="form-group mt-4">
+                                    <input type="checkbox" id="Return3" className="d-none" />
+                                    <label htmlFor="Return3">1 per fill</label>
+                                </div>
+                                {/* {errors.bng1_source && <span><p className='notvalid'>This field is required</p></span>} */}
+                            </div>
+                            {/* <div className="col-md-2 mt-4">
+                                <div className="">
+                                    <button type="submit" className="btn m-0 p-2 btn-theme" style={{ width: "100%", fontSize: "12px" }}>Search</button>
+                                </div>
+                            </div> */}
+                            <div className='row'>
+                                <div className="col-md-2 mt-4">
+                                    <div className="">
+                                        <button type="submit" className="btn m-0 p-2 btn-theme " style={{ width: "100%", fontSize: "12px" }}>{adding ? "Add" : "Update"}</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div className="col-md-2">
-                            <div className="form-group mt-4">
-                                <input type="checkbox" id="Return2" className="d-none" {...register("bng1_stdpkg", { required: true })} />
-                                <label htmlFor="Return2">Std Pkg</label>
-                            </div>
-                        </div>
-                        <div className="col-md-2">
-                            <div className="form-group mt-4">
-                                <input type="checkbox" id="Return3" className="d-none" />
-                                <label htmlFor="Return3">1 per fill</label>
-                            </div>
-                        </div>
-                        <div className="col-md-2 mt-4">
-                            <div className="">
-                                <button type="submit" className="btn m-0 p-2 btn-theme" style={{ width: "100%", fontSize: "12px" }}>Search</button>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
-            </div>
+            </Form>
         </>
     )
 }
 
 export function BrandItemGeneric() {
-    const [scheduleData, setScheduleData] = useOutletContext(false);
-    const { register, handleSubmit, watch, reset, formState: { error } } = useForm();
-    useEffect(() => { reset(scheduleData) }, [scheduleData]);
+    // const [scheduleData, setScheduleData] = useOutletContext(false);
+    // const { register, handleSubmit, watch, reset, formState: { error } } = useForm();
+    // useEffect(() => { reset(scheduleData) }, [scheduleData]);
 
+    const {
+        data: [scheduleData, setScheduleData],
+        adding: [adding, setAdding],
+    } = useOutletContext();
+
+    const { register, handleSubmit, watch, reset, formState: { error } } = useForm();
+    useEffect(() => {
+        if (adding) {
+            reset({
+                bga1_source: '', bga1_markup_amount: '', bga1_markup_percent: '', bga1_type: '', bga1_fee_percent: '', bga1_fee_amount: ''
+                , bga1_stdpkg: '0'
+            },
+                { keepValues: false, });
+        }
+        reset(scheduleData)
+    }, [scheduleData, adding]);
     return (
         <>
             <div className='row'>
@@ -370,13 +449,13 @@ export function BrandItemGeneric() {
                         <div className="col-md-3">
                             <div className="form-group mb-2">
                                 <small>Mkp</small>
-                                <input type="text" className="form-control" {...register("bga1_fee_amount", { required: true })} placeholder="Percentage" />
+                                <input type="text" className="form-control" {...register("bga1_fee_percent", { required: true })} placeholder="Percentage" />
                             </div>
                         </div>
                         <div className="col-md-3">
                             <div className="form-group mb-2">
                                 <small>Mkp</small>
-                                <input type="text" className="form-control" {...register("bga1_fee_percent", { required: true })} placeholder="In dollars" />
+                                <input type="text" className="form-control" {...register("bga1_fee_amount", { required: true })} placeholder="In dollars" />
                             </div>
                         </div>
                         <div className="col-md-3">
@@ -414,6 +493,13 @@ export function BrandItemGeneric() {
                             </div>
                         </div>
 
+                        <div className='row'>
+                            <div className="col-md-2 mt-4">
+                                <div className="">
+                                    <button type="submit" className="btn m-0 p-2 btn-theme " style={{ width: "100%", fontSize: "12px" }}>{adding ? "Add" : "Update"}</button>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
@@ -423,10 +509,27 @@ export function BrandItemGeneric() {
 }
 
 export function GetGenericItem() {
-    const [scheduleData, setScheduleData] = useOutletContext(false);
+    // const [scheduleData, setScheduleData] = useOutletContext(false);
+    // const { register, handleSubmit, watch, reset, formState: { error } } = useForm();
+    // // console.log(scheduleData);
+    // useEffect(() => { reset(scheduleData) }, [scheduleData]);
+
+    const {
+        data: [scheduleData, setScheduleData],
+        adding: [adding, setAdding],
+    } = useOutletContext();
+
     const { register, handleSubmit, watch, reset, formState: { error } } = useForm();
-    console.log(scheduleData);
-    useEffect(() => { reset(scheduleData) }, [scheduleData]);
+    useEffect(() => {
+        if (adding) {
+            reset({
+                gen1_source: '', gen1_markup_amount: '', gen1_markup_percent: '', gen1_type: '', gen1_fee_percent: '', gen1_fee_amount: ''
+                , gen1_stdpkg: '0'
+            },
+                { keepValues: false, });
+        }
+        reset(scheduleData)
+    }, [scheduleData, adding]);
 
     return (
         <>
@@ -519,6 +622,14 @@ export function GetGenericItem() {
                              <button type="submit" className="btn m-0 p-2 btn-theme" style="width: 100%;font-size: 12px;">Search</button>
                             </div>
                         </div> */}
+
+                        <div className='row'>
+                            <div className="col-md-2 mt-4">
+                                <div className="">
+                                    <button type="submit" className="btn m-0 p-2 btn-theme" style={{ width: "100%", fontSize: "12px" }}>{adding ? "Add" : "Update"}</button>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
                 </div>

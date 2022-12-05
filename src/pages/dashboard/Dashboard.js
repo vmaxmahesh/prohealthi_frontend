@@ -7,11 +7,11 @@ export default function Dashboard() {
     const currentpath = location.pathname.split('/')[3];
     // console.log(currentpath);
     const { user, logout } = useAuth();
-    console.log(currentpath);
+    // console.log(currentpath);
     // const user  = useAuth();
 
     useEffect(() => {
-        console.log(user);
+        // console.log(user);
     });
 
     if (!user) {
