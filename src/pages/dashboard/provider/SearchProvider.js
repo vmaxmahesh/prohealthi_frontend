@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { Link, Outlet, Route, Routes, useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import Footer from '../../../shared/Footer';
 import { ToastContainer, toast } from 'react-toastify';
+import { Button } from 'react-bootstrap';
 // import Footer from '../../../shared/Footer';
 
 
@@ -1082,19 +1083,30 @@ export function NetworkParticipation(props) {
 
 
     const [formData, setFormData] = useState(false);
-    const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const traditionalhandleShow = () => setShow(true);
     const [networkData, setNetworkData] = useState([]);
     const [traditionalData, setTraditionalData] = useState([]);
 
     const [data, setData] = useState([])
+    const [adding, setAdding] = useState(false);
+    const [show, setShow] = useState(false);
 
     const [flexibleData, setFlexibleData] = useState([]);
     // useEffect(() => { reset(traditionalData) }, [traditionalData]);
 
+    const [benifitsData, setBenifitData] = useState(false);
+
+
  
 
+    const AddForm = () => {
+        setBenifitData(false);
+        setAdding(true);
+
+        
+
+    }
 
     function loadData() {
 
@@ -1178,133 +1190,128 @@ export function NetworkParticipation(props) {
     }
 
 
+    const addCode = (data) => {
+        // console.log(data);
+        const requestOptions = {
+            method: 'POST',
+            // mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+
+        };
+        // console.log(watch(data)); 
+        if (process.env.REACT_APP_API_BASEURL == 'NOT') {
+            toast.success('Added Successfully...!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+
+            });
+        } else {
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/provider/traditionalnetwork/add`, requestOptions)
+                .then(async response => {
+                    const isJson = response.headers.get('content-type')?.includes('application/json');
+                    const data = isJson && await response.json();
+                    // console.log(response);
+
+                    // check for error response
+                    if (!response.ok) {
+                        // get error message from body or default to response status
+                        const error = (data && data.message) || response.status;
+                        return Promise.reject(error);
+                    } else {
+                        reset(data.data);
+                        console.log(data.data);
+                        var msg = props.adding ? 'Added Successfully...!' : 'Updated Successfully..'
+                        toast.success(msg, {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+
+                        });
+                    }
 
 
+                    if (response === '200') {
+                    }
+
+                })
+                .catch(error => {
+                    console.error('There was an error!', error);
+                });
+        }
+
+    }
+    const onSubmit3 = (e) => {
+        e.preventDefault();
+    }
+
+
+
+
+
+    useEffect(() => {
+
+
+        if (props.adding) {
+            reset({ accum_bene_strategy_name: '', description: '', new: 1 }, {
+                keepValues: false,
+            })
+        } else {
+            reset(props.selected);
+        }
+
+        if (!props.selected) {
+            reset({ accum_bene_strategy_name: '',accum_bene_strategy_id:'', description: '',pharm_type_variation_ind:'',network_part_variation_ind:'',claim_type_variation_ind:'',plan_accum_deduct_id:'', new: 1 }, {
+                keepValues: false,
+            })
+        }
+
+
+    }, [props.selected, props.adding]);
+
+
+    useEffect(() => { reset(props.selected) }, [props.selected]);
+
+
+    useEffect(() => {
+        if (benifitsData) {
+            setAdding(false);
+
+        } else {
+            setAdding(true);
+            setBenifitData(false);
+        }
+
+        document.title = 'Benefit Code | ProHealthi';
+
+    }, [benifitsData, adding]);
 
 
 
     return (
         <>
 
-            <form key={1} onSubmit={handleSubmit(onSubmit)}>
+
+<div className="col-md-3 ms-auto text-end">
+                    <button className="btn  btn-info btn-sm" onClick={e => AddForm()}>
+                    Accumulated Benefit Strategy <i className="fa fa-plus-circle"></i></button>
+            </div>
 
 
-                <div class="card mt-3 mb-3">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-12 mb-2">
-                                <h5>Treditional Networks</h5>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group mb-2">
-                                    <small>Treditional ID</small>
-                                    <input type="text" class="form-control" name="traditional_id"  {...register('network_id', {
-                                        required: true,
-                                    })} id="" required="" />
-                                    <a href=""><span class="fa fa-search form-icon"></span></a>
-
-                                    {errors.traditional_id?.type === 'required' && <p role="alert" className="notvalid">Treditional ID is required </p>}
-
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group mb-2">
-                                    <small>Network Name</small>
-                                    <input type="text" class="form-control" name="network_name" {...register('network_name', {
-                                        required: true,
-                                    })} id="" />
-                                    {errors.network_name?.type === 'required' && <p role="alert" className="notvalid">Network Name is required </p>}
-
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group mb-2">
-                                    <small>Price Schedule</small>
-                                    <input type="text" class="form-control" name="price_schedule" {...register('default_price_schedule_ovrd', {
-                                        required: true,
-                                    })} id="" required="" />
-                                    <a href=""><span class="fa fa-search form-icon"></span></a>
-                                    {errors.price_schedule?.type === 'required' && <p role="alert" className="notvalid">Price Schedule is required </p>}
-
-                                </div>
-
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group mt-4">
-                                    <input type="checkbox" name="denied" id="Denied" {...register('denied', {
-                                        required: true,
-                                    })} class="d-none" />
-                                    <label for="Denied">Participation Denied</label>
-                                    {errors.denied?.type === 'required' && <p role="alert" className="notvalid">Participation Denied is required </p>}
-
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group mb-2">
-                                    <small>Effective Date</small>
-                                    <input type="date" class="form-control" name="effective_date" {...register('effective_date', {
-                                        required: true,
-                                    })} id="" />
-                                    {errors.effective_date?.type === 'required' && <p role="alert" className="notvalid">Effective Date is required </p>}
-
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group mb-2">
-                                    <small>Termination Date</small>
-                                    <input type="date" class="form-control" name="termination_date"  {...register('termination_date', {
-                                        required: true,
-                                    })} id="" required="" />
-                                    {errors.termination_date?.type === 'required' && <p role="alert" className="notvalid">Termination Date is required </p>}
-
-                                </div>
-                            </div>
-
-                            <div class="col-md-12 mt-3 mb-3 text-end">
-                                {/* <button class="btn btn-sm btn-warning">Remove Item</button> &nbsp;&nbsp; */}
-                                <button type="submit" class="btn btn-sm btn-info">Add Item dsfsdf</button>
-                            </div>
-
-                            {/* <div class="col-md-12">
-                            <table class="table table-striped table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Price Schedule</th>
-                                        <th>Denied</th>
-                                        <th>Effective Date</th>
-                                        <th>Termination Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>GOJ_Pre</td>
-                                        <td>GOJ</td>
-                                        <td>--</td>
-                                        <td>No</td>
-                                        <td>2010-01-01</td>
-                                        <td>9999-12-31</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div> */}
+<TraditionalNetworksForm    show={show} adding={adding} handleClose={handleClose} selected={formData} />
 
 
-                            {/* {networkData.length > 0 ? */}
-                            <TraditionalResults selected={data} getNDCItem={getNDCItem} typedata={networkData} />
-                            {/* // : ''} */}
+            <TraditionalResults selected={data} getNDCItem={getNDCItem} typedata={networkData} />
 
-
-                        </div>
-                    </div>
-                </div>
-
-
-
-
-
-            </form>
 
             <form key={2} onSubmit={handleSubmit2(onSubmit2)}>
                 <div class="card-body">
@@ -1396,6 +1403,229 @@ export function NetworkParticipation(props) {
 }
 
 
+function TraditionalNetworksForm(props)
+{
+
+    const { register, reset, handleSubmit, watch, formState: { errors } } = useForm();
+
+
+
+
+
+    const addCode = (data) => {
+        // console.log(data);
+        const requestOptions = {
+            method: 'POST',
+            // mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+
+        };
+        // console.log(watch(data)); 
+        if (process.env.REACT_APP_API_BASEURL == 'NOT') {
+            toast.success('Added Successfully...!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+
+            });
+        } else {
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/provider/traditionalnetwork/add`, requestOptions)
+                .then(async response => {
+                    const isJson = response.headers.get('content-type')?.includes('application/json');
+                    const data = isJson && await response.json();
+                    // console.log(response);
+
+                    // check for error response
+                    if (!response.ok) {
+                        // get error message from body or default to response status
+                        const error = (data && data.message) || response.status;
+                        return Promise.reject(error);
+                    } else {
+                        reset(data.data);
+                        console.log(data.data);
+                        var msg = props.adding ? 'Added Successfully...!' : 'Updated Successfully..'
+                        toast.success(msg, {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+
+                        });
+                    }
+
+
+                    if (response === '200') {
+                    }
+
+                })
+                .catch(error => {
+                    console.error('There was an error!', error);
+                });
+        }
+
+    }
+    const onSubmit = (e) => {
+        e.preventDefault();
+    }
+
+    useEffect(() => {
+
+
+        if (props.adding) {
+            reset({ accum_bene_strategy_name: '', description: '', new: 1 }, {
+                keepValues: false,
+            })
+        } else {
+            reset(props.selected);
+        }
+
+        if (!props.selected) {
+            reset({ accum_bene_strategy_name: '',accum_bene_strategy_id:'', description: '',pharm_type_variation_ind:'',network_part_variation_ind:'',claim_type_variation_ind:'',plan_accum_deduct_id:'', new: 1 }, {
+                keepValues: false,
+            })
+        }
+
+
+    }, [props.selected, props.adding]);
+
+
+    useEffect(() => { reset(props.selected) }, [props.selected]);
+    return(
+        <>
+
+<form key={1} onSubmit={handleSubmit(addCode)} >
+
+
+
+<div class="card mt-3 mb-3">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12 mb-2">
+                <h5 className="mb-2">Traditional Networks  {props.adding ? ' - (Adding)' : '- (' + props.selected.network_id+ ' )'}</h5>
+
+            </div>
+            <div class="col-md-4">
+                <div class="form-group mb-2">
+                    <small>Treditional ID</small>
+                    <input type="text" class="form-control" name="traditional_id"  {...register('network_id', {
+                        required: true,
+                    })} id="" required="" />
+                    <a href=""><span class="fa fa-search form-icon"></span></a>
+
+                    {errors.traditional_id?.type === 'required' && <p role="alert" className="notvalid">Treditional ID is required </p>}
+
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group mb-2">
+                    <small>Network Name</small>
+                    <input type="text" class="form-control" name="network_name" {...register('network_name', {
+                        required: true,
+                    })} id="" />
+                    {errors.network_name?.type === 'required' && <p role="alert" className="notvalid">Network Name is required </p>}
+
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group mb-2">
+                    <small>Price Schedule</small>
+                    <input type="text" class="form-control" name="price_schedule_ovrd" {...register('price_schedule_ovrd', {
+                        required: true,
+                    })} id="" required="" />
+                    <a href=""><span class="fa fa-search form-icon"></span></a>
+                    {errors.price_schedule?.type === 'required' && <p role="alert" className="notvalid">Price Schedule is required </p>}
+
+                </div>
+
+            </div>
+            <div class="col-md-4">
+                <div class="form-group mt-4">
+                    <input type="checkbox" name="denied" id="Denied" {...register('denied', {
+                        required: true,
+                    })} class="d-none" />
+                    <label for="Denied">Participation Denied</label>
+                    {errors.denied?.type === 'required' && <p role="alert" className="notvalid">Participation Denied is required </p>}
+
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group mb-2">
+                    <small>Effective Date</small>
+                    <input type="date" class="form-control" name="effective_date" {...register('effective_date', {
+                        required: true,
+                    })} id="" />
+                    {errors.effective_date?.type === 'required' && <p role="alert" className="notvalid">Effective Date is required </p>}
+
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group mb-2">
+                    <small>Termination Date</small>
+                    <input type="date" class="form-control" name="termination_date"  {...register('termination_date', {
+                        required: true,
+                    })} id="" required="" />
+                    {errors.termination_date?.type === 'required' && <p role="alert" className="notvalid">Termination Date is required </p>}
+
+                </div>
+            </div>
+
+         
+
+            {/* <div class="col-md-12">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Price Schedule</th>
+                        <th>Denied</th>
+                        <th>Effective Date</th>
+                        <th>Termination Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>GOJ_Pre</td>
+                        <td>GOJ</td>
+                        <td>--</td>
+                        <td>No</td>
+                        <td>2010-01-01</td>
+                        <td>9999-12-31</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div> */}
+
+
+            {/* {networkData.length > 0 ? */}
+            {/* // : ''} */}
+
+
+        </div>
+    </div>
+</div>
+
+
+<Button type='submit' variant="primary">{props.adding ? ' Add' : 'Update'}</Button>
+
+
+
+</form>
+
+      
+
+           
+        </>
+    )
+}
 
 
 function TraditionalResults(props) {
@@ -1405,7 +1635,7 @@ function TraditionalResults(props) {
 
     var networkData = [];
     for (let index = 0; index < props.typedata.length; index++) {
-        networkData.push(<TraditionalTypeRow getNDCItem={props.getNDCItem} selected={props.selctedNdc} datar={props.typedata[index]}
+        networkData.push(<TraditionalTypeRow getNDCItem={props.getNDCItem}  datar={props.typedata[index]}
         />);
     }
 
@@ -1549,7 +1779,7 @@ function TraditionalTypeRow(props) {
             >
                 <td>{props.datar.network_id}</td>
                 <td>{props.datar.network_name}</td>
-                <td>{props.datar.default_price_schedule_ovrd}</td>
+                <td>{props.datar.price_schedule_ovrd}</td>
                 {/* <td>{rops.datar.}</td> */}
                 {props.datar.denied == ischecked ? (
                     <td>Yes</td>
