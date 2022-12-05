@@ -14,7 +14,7 @@ function SearchProvider() {
     const [ProviderData, setProviderdata] = useState([]);
 
 
-    
+
     const [ndcData, setNdcData] = useState([]);
     const [ndcClass, setNdClass] = useState([]);
 
@@ -100,10 +100,10 @@ function SearchProvider() {
     }
 
 
-   
 
 
-   
+
+
 
     useEffect(() => {
     }, [ProviderData]);
@@ -134,7 +134,7 @@ function SearchProvider() {
                 <div className="col-md-6 mb-3">
                     <div className="breadcrum ">
                         <ul>
-                             <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li> 
+                            <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li>
                         </ul>
                     </div>
                 </div>
@@ -142,7 +142,7 @@ function SearchProvider() {
             <SearchProviderId searchException={searchException} />
 
             {/* < /> */}
-            <ProviderList ndcListData={ndcData} ndcClassData={ndcClass} getNDCItem={getNDCItems}  selctedNdc={selctedNdc} />
+            <ProviderList ndcListData={ndcData} ndcClassData={ndcClass} getNDCItem={getNDCItems} selctedNdc={selctedNdc} />
 
             <div className="card mt-3 mb-3">
                 <div className="card-body">
@@ -151,11 +151,11 @@ function SearchProvider() {
                     {ProviderData.length > 0 ?
                         <Results typedata={ProviderData} />
                         : ''}
-                       
+
                     <div className="row">
                     </div>
 
-                    
+
                     <div className="nav nav-tabs col-md-12" id="nav-tab" role="tablist">
                         <Link to="provider" className={'nav-link' + (currentpath == 'provider' ? ' active' : '')}>Provider</Link>
                         <Link to="effectivedates" className={'nav-link' + (currentpath == 'effectivedates' ? ' active' : '')}>Effective Dates</Link>
@@ -168,17 +168,16 @@ function SearchProvider() {
                         <Outlet context={[provider, setProvider]} />
 
                     </div>
-                    </div>
-                    
                 </div>
-                
+
+            </div>
+
             <Footer />
         </>
     );
 }
 
-function SearchProviderId(props)
-{
+function SearchProviderId(props) {
 
 
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
@@ -187,21 +186,21 @@ function SearchProviderId(props)
 
         props.searchException(fdata);
     }
-    return(
+    return (
         <>
-          <div className="card mt-3 mb-3">
-                    <div className="card-body">
-                        <div className="row mb-2">
-                            <div className="col-md-12 mb-3">
-                                <div className="form-group">
-                                    <small>Provider </small>
-                                    <input type="text" className="form-control" onKeyUp={(e) => searchException(e)} placeholder='Start typing provider id/ name/ store no. to search'
-                                    />
-                                </div>
+            <div className="card mt-3 mb-3">
+                <div className="card-body">
+                    <div className="row mb-2">
+                        <div className="col-md-12 mb-3">
+                            <div className="form-group">
+                                <small>Provider </small>
+                                <input type="text" className="form-control" onKeyUp={(e) => searchException(e)} placeholder='Start typing provider id/ name/ store no. to search'
+                                />
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
         </>
     )
 }
@@ -227,7 +226,7 @@ function NdcRow(props) {
                 <td>{props.ndcRow.pharmacy_chain}</td>
 
 
-                
+
 
                 {/* <td><button className="btn btn-sm btn-info" id="" ><i className="fa fa-eye"></i> View</button></td> */}
             </tr>
@@ -235,8 +234,7 @@ function NdcRow(props) {
     )
 }
 
-function ProviderList(props)
-{
+function ProviderList(props) {
 
 
     const scollToRef = useRef();
@@ -245,11 +243,12 @@ function ProviderList(props)
     // //  console.log(props.selctedNdc);
 
     const getNDCItem = (ndciemid) => {
-        // alert(ndciemid);
+        alert(ndciemid);
         props.getNDCItem(ndciemid);
+
     }
 
-   
+
 
 
     const ndcListArray = [];
@@ -257,34 +256,34 @@ function ProviderList(props)
         ndcListArray.push(<NdcRow ndcRow={props.ndcListData[i]} getNDCItem={getNDCItem} selected={props.selctedNdc} />);
     }
 
-   
-    return(
+
+    return (
         <>
-         <div className="card mt-3 mb-3">
+            <div className="card mt-3 mb-3">
                 <div className="card-body">
-                        <div className="col-md-12">
-                            <h5 className="mb-2">Provider List </h5>
-                        </div>
+                    <div className="col-md-12">
+                        <h5 className="mb-2">Provider List </h5>
+                    </div>
                     <div className="row">
-                    <div className="col-md-12">                        
-                        <table className= "table  table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Provider ID</th>
-                                    <th>Name</th>
-                                    <th>Store ID</th>
-                                    <th>Chain</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {ndcListArray}
-                               
-                            </tbody>
-                        </table>                        
-                    </div>   
+                        <div className="col-md-12">
+                            <table className="table  table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Provider ID</th>
+                                        <th>Name</th>
+                                        <th>Store ID</th>
+                                        <th>Chain</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {ndcListArray}
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
-           </div>
-         </div> 
         </>
     )
 }
@@ -364,8 +363,8 @@ export function Provider(props) {
     const { register, reset, handleSubmit, watch, formState: { errors } } = useForm();
 
     const [provider, setProvider] = useOutletContext();
-    
-    
+
+
     useEffect(() => { reset(provider) }, [provider]);
 
     return (
@@ -380,7 +379,7 @@ export function Provider(props) {
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>ID</small>
-                                    <input type="text" className="form-control" placeholder="ID"  name="pharmacy_nabp" {...register('pharmacy_nabp')} id="" required="" />
+                                    <input type="text" className="form-control" placeholder="ID" name="pharmacy_nabp" {...register('pharmacy_nabp')} id="" required="" />
                                 </div>
                             </div>
                             <div className="col-md-3 mb-2">
@@ -404,7 +403,7 @@ export function Provider(props) {
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>Phone</small>
-                                    <input type="text" className="form-control" placeholder="Phone" name="phone" {...register('phone')} id=""  required="" />
+                                    <input type="text" className="form-control" placeholder="Phone" name="phone" {...register('phone')} id="" required="" />
                                 </div>
                             </div>
                             <div className="col-md-3 mb-2">
@@ -416,20 +415,20 @@ export function Provider(props) {
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>Contact</small>
-                                    <input type="text" className="form-control" placeholder="Contact" name="contact" {...register('contact')}  id="" required="" />
+                                    <input type="text" className="form-control" placeholder="Contact" name="contact" {...register('contact')} id="" required="" />
                                 </div>
                             </div>
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>EDI Address</small>
-                                    <input type="text" className="form-control" placeholder="Address" name="edi_address" {...register('edi_address')}  id="" required="" />
+                                    <input type="text" className="form-control" placeholder="Address" name="edi_address" {...register('edi_address')} id="" required="" />
                                 </div>
                             </div>
 
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>ABA Routing #</small>
-                                    <input type="text" className="form-control" placeholder="Routing Name" name="aba_rtn" {...register('aba_rtn')}  id="" required="" />
+                                    <input type="text" className="form-control" placeholder="Routing Name" name="aba_rtn" {...register('aba_rtn')} id="" required="" />
                                 </div>
                             </div>
                             <div className="col-md-3 mb-2">
@@ -448,7 +447,7 @@ export function Provider(props) {
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>Based ID</small>
-                                    <input type="text" className="form-control" placeholder="" name="base_pharmacy_nabp"  {...register('base_pharmacy_nabp')}  id="" required="" />
+                                    <input type="text" className="form-control" placeholder="" name="base_pharmacy_nabp"  {...register('base_pharmacy_nabp')} id="" required="" />
                                     <a href=""><span className="fa fa-search form-icon"></span></a>
                                 </div>
                             </div>
@@ -469,7 +468,7 @@ export function Provider(props) {
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>Provider Type</small>
-                                    <input type="text" className="form-control" placeholder="" name="dispenser_type" {...register('dispenser_type')}  id="" required="" />
+                                    <input type="text" className="form-control" placeholder="" name="dispenser_type" {...register('dispenser_type')} id="" required="" />
                                     <a href=""><span className="fa fa-search form-icon"></span></a>
                                 </div>
                             </div>
@@ -483,14 +482,14 @@ export function Provider(props) {
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>Address</small>
-                                    <input type="text" className="form-control" placeholder="Address" name="address_1" {...register('address_1')}  id="" required="" />
+                                    <input type="text" className="form-control" placeholder="Address" name="address_1" {...register('address_1')} id="" required="" />
                                     <a href=""><span className="fa fa-search form-icon"></span></a>
                                 </div>
                             </div>
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>Address Line 2 </small>
-                                    <input type="text" className="form-control" placeholder="Address 2"  name="address_2"  {...register('address_2')} id="" required="" />
+                                    <input type="text" className="form-control" placeholder="Address 2" name="address_2"  {...register('address_2')} id="" required="" />
                                 </div>
                             </div>
 
@@ -532,7 +531,7 @@ export function Provider(props) {
                                         </div>
 
                                         <div className="col-md-4">
-                                            <input type="text" className="form-control" placeholder="Ext" name="ext"  id="" required="" />
+                                            <input type="text" className="form-control" placeholder="Ext" name="ext" id="" required="" />
                                         </div>
                                     </div>
                                 </div>
@@ -540,13 +539,13 @@ export function Provider(props) {
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>Region</small>
-                                    <input type="text" className="form-control" placeholder="Address" name="region" {...register('region')}  id="" required="" />
+                                    <input type="text" className="form-control" placeholder="Address" name="region" {...register('region')} id="" required="" />
                                 </div>
                             </div>
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>District</small>
-                                    <input type="text" className="form-control" placeholder="Address" name="district" {...register('district')}  id="" required="" />
+                                    <input type="text" className="form-control" placeholder="Address" name="district" {...register('district')} id="" required="" />
                                 </div>
                             </div>
                             <div className="col-md-3 mb-2">
@@ -567,21 +566,21 @@ export function Provider(props) {
                                     <div className="col-md-4 mb-2">
                                         <div className="form-group">
                                             <small>Address</small>
-                                            <input type="text" className="form-control" placeholder="Address" name="mailing_address_1" {...register('mailing_address_1')}  id="" required="" />
+                                            <input type="text" className="form-control" placeholder="Address" name="mailing_address_1" {...register('mailing_address_1')} id="" required="" />
                                             <a href=""><span className="fa fa-search form-icon"></span></a>
                                         </div>
                                     </div>
                                     <div className="col-md-4 mb-2">
                                         <div className="form-group">
                                             <small>Address Line 2 </small>
-                                            <input type="text" className="form-control" placeholder="Address 2" name="mailing_address_2" {...register('mailing_address_2')}  id="" required="" />
+                                            <input type="text" className="form-control" placeholder="Address 2" name="mailing_address_2" {...register('mailing_address_2')} id="" required="" />
                                         </div>
                                     </div>
 
                                     <div className="col-md-4 mb-2">
                                         <div className="form-group">
                                             <small>City</small>
-                                            <input type="text" className="form-control" placeholder="City" name="mailing_city"  {...register('mailing_city')}  id="" required="" />
+                                            <input type="text" className="form-control" placeholder="City" name="mailing_city"  {...register('mailing_city')} id="" required="" />
                                         </div>
                                     </div>
 
@@ -613,10 +612,10 @@ export function Provider(props) {
                                             <small>ZIP Code</small>
                                             <div className="row">
                                                 <div className="col-md-8">
-                                                    <input type="text" className="form-control" placeholder="ZIP" name="mailing_zip_code" {...register('mailing_zip_code')}  id="" required="" />
+                                                    <input type="text" className="form-control" placeholder="ZIP" name="mailing_zip_code" {...register('mailing_zip_code')} id="" required="" />
                                                 </div>
                                                 <div className="col-md-4">
-                                                    <input type="text" className="form-control" placeholder="Ext" name="mailing_ext"   id="" required="" />
+                                                    <input type="text" className="form-control" placeholder="Ext" name="mailing_ext" id="" required="" />
                                                 </div>
                                             </div>
                                         </div>
@@ -632,14 +631,14 @@ export function Provider(props) {
                                     <div className="col-md-12 mb-2">
                                         <div className="form-group">
                                             <small>Chain</small>
-                                            <input type="text" className="form-control" placeholder="Address" name="mailing_chain"  id="" required="" />
+                                            <input type="text" className="form-control" placeholder="Address" name="mailing_chain" id="" required="" />
                                             <a href=""><span className="fa fa-search form-icon"></span></a>
                                         </div>
                                     </div>
                                     <div className="col-md-12 mb-2">
                                         <div className="form-group">
                                             <small>Store No.</small>
-                                            <input type="text" className="form-control" placeholder="Address" name="mailing_store_no"  id="" required="" />
+                                            <input type="text" className="form-control" placeholder="Address" name="mailing_store_no" id="" required="" />
                                         </div>
                                     </div>
                                     <div className="col-md-12 mb-2 pe-0">
@@ -676,10 +675,10 @@ export function Effectivedates(props) {
     const { register, reset, handleSubmit, watch, formState: { errors } } = useForm();
 
     const [provider, setProvider] = useOutletContext();
-    
-    
+
+
     useEffect(() => { reset(provider) }, [provider]);
-    
+
 
     return (
         <>
@@ -701,7 +700,7 @@ export function Effectivedates(props) {
                                 <div className="col-md-4 mb-2">
                                     <div className="from-group">
                                         <small>Termination</small>
-                                        <input type="date" name="termination_date_1" {...register('termination_date_1')}  class="form-control" />
+                                        <input type="date" name="termination_date_1" {...register('termination_date_1')} class="form-control" />
 
                                     </div>
                                 </div>
@@ -718,7 +717,7 @@ export function Effectivedates(props) {
                                 <div className="clearfix"></div>
                                 <div className="col-md-4 mb-2">
                                     <div className="from-group">
-                                        <input type="date" class="form-control" name='effective_date_2' {...register('effective_date_2')}  />
+                                        <input type="date" class="form-control" name='effective_date_2' {...register('effective_date_2')} />
 
                                     </div>
                                 </div>
@@ -734,13 +733,13 @@ export function Effectivedates(props) {
                                 <div className="clearfix"></div>
                                 <div className="col-md-4 mb-2">
                                     <div className="from-group">
-                                        <input type="date" name="effective_date_3" {...register('effective_date_3')}  class="form-control" />
+                                        <input type="date" name="effective_date_3" {...register('effective_date_3')} class="form-control" />
 
                                     </div>
                                 </div>
                                 <div className="col-md-4 mb-2">
                                     <div className="from-group">
-                                        <input type="date" name="termination_date_3"   {...register('termination_date_3')}  class="form-control" />
+                                        <input type="date" name="termination_date_3"   {...register('termination_date_3')} class="form-control" />
 
                                     </div>
                                 </div>
@@ -761,21 +760,21 @@ export function Effectivedates(props) {
                                 <div className="col-md-4">
                                     <div className="from-group">
                                         <small>Termination</small>
-                                        <input type="date" name="tax_termination_date_1" {...register('tax_termination_date_1')}  class="form-control" />
+                                        <input type="date" name="tax_termination_date_1" {...register('tax_termination_date_1')} class="form-control" />
 
                                     </div>
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group mb-3">
                                         <small>Schedule ID</small>
-                                        <input type="text" className="form-control" name="tax_schedule_id_1" {...register('tax_schedule_id_1')}  placeholder="" id="" required="" />
+                                        <input type="text" className="form-control" name="tax_schedule_id_1" {...register('tax_schedule_id_1')} placeholder="" id="" required="" />
                                         <a href=""><span className="fa fa-search form-icon"></span></a>
                                     </div>
                                 </div>
 
                                 <div className="col-md-4">
                                     <div className="from-group">
-                                        <input type="date" name="tax_effective_date_2"    {...register('tax_effective_date_2')}  class="form-control" />
+                                        <input type="date" name="tax_effective_date_2"    {...register('tax_effective_date_2')} class="form-control" />
 
                                     </div>
                                 </div>
@@ -787,7 +786,7 @@ export function Effectivedates(props) {
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group mb-3">
-                                        <input type="text" className="form-control" name="tax_schedule_id_2" {...register('tax_schedule_id_2')}  placeholder="" id="" required="" />
+                                        <input type="text" className="form-control" name="tax_schedule_id_2" {...register('tax_schedule_id_2')} placeholder="" id="" required="" />
                                         <a href=""><span className="fa fa-search form-icon"></span></a>
                                     </div>
                                 </div>
@@ -821,12 +820,12 @@ export function Effectivedates(props) {
 
                                     <div className="col-md-12 mb-2">
                                         <div className="form-group mt-2">
-                                            <input type="checkbox" id="male" name="individual_store"  className="d-none" />
+                                            <input type="checkbox" id="male" name="individual_store" className="d-none" />
                                             <label for="male">Individual Store</label> &nbsp; &nbsp;
 
                                         </div>
                                         <div className="form-group mb-2">
-                                            <input type="checkbox" name="head_office"  id="female" className="d-none" />
+                                            <input type="checkbox" name="head_office" id="female" className="d-none" />
                                             <label for="female">Head Office</label>
                                         </div>
                                     </div>
@@ -838,7 +837,7 @@ export function Effectivedates(props) {
                                 <div className="col-md-12">
                                     <div className="form-group mb-3">
                                         <small>Paid</small>
-                                        <input type="text" className="form-control" name="paid" placeholder=""  id="" required="" />
+                                        <input type="text" className="form-control" name="paid" placeholder="" id="" required="" />
                                     </div>
                                 </div>
                                 <div className="col-md-12 mb-3">
@@ -854,7 +853,7 @@ export function Effectivedates(props) {
                                 <div className="col-md-12">
                                     <div className="form-group mb-3">
                                         <small>Senior Citizen Discount Age Threshold</small>
-                                        <input type="text" className="form-control" name="cash_pricing"  placeholder="" id="" required="" />
+                                        <input type="text" className="form-control" name="cash_pricing" placeholder="" id="" required="" />
                                     </div>
                                 </div>
 
@@ -884,10 +883,10 @@ export function PharmistSystem(props) {
     const { register, reset, handleSubmit, watch, formState: { errors } } = useForm();
 
     const [provider, setProvider] = useOutletContext();
-    
-    
+
+
     useEffect(() => { reset(provider) }, [provider]);
-    
+
 
 
 
@@ -905,13 +904,13 @@ export function PharmistSystem(props) {
                                 <div class="col-md-6 mb-2">
                                     <div class="form-group mb-3">
                                         <small>Name</small>
-                                        <input type="text" class="form-control" name="name"  placeholder="" id="" required="" />
+                                        <input type="text" class="form-control" name="name" placeholder="" id="" required="" />
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-2">
                                     <div class="form-group mb-3">
                                         <small>Title</small>
-                                        <input type="text" class="form-control" name="title"  placeholder="" id="" required="" />
+                                        <input type="text" class="form-control" name="title" placeholder="" id="" required="" />
                                     </div>
                                 </div>
 
@@ -922,7 +921,7 @@ export function PharmistSystem(props) {
                                 </div>
                                 <div class="col-md-12 mb-3">
                                     <div class="form-group mt-2">
-                                        <input type="checkbox" id="Transmit" name="transmit_all"  class="d-none" />
+                                        <input type="checkbox" id="Transmit" name="transmit_all" class="d-none" />
                                         <label for="Transmit">Transmit All Claims</label>
                                     </div>
                                 </div>
@@ -930,7 +929,7 @@ export function PharmistSystem(props) {
                                 <div class="col-md-6">
                                     <div class="form-group mb-2">
                                         <small>% Claims 3rd Party</small>
-                                        <input type="text" class="form-control" name="claims_3rd_party"  placeholder="" id="" required="" />
+                                        <input type="text" class="form-control" name="claims_3rd_party" placeholder="" id="" required="" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -947,7 +946,7 @@ export function PharmistSystem(props) {
                                 <div class="col-md-6">
                                     <div class="form-group mb-2">
                                         <small>% Claims Cash</small>
-                                        <input type="text" class="form-control" name="claims_cash"  placeholder="" id="" required="" />
+                                        <input type="text" class="form-control" name="claims_cash" placeholder="" id="" required="" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -964,13 +963,13 @@ export function PharmistSystem(props) {
                                 <div class="col-md-6">
                                     <div class="form-group mb-2">
                                         <small>Store Hours</small>
-                                        <input type="text" class="form-control" name="store_hours"  placeholder="" id="" required="" />
+                                        <input type="text" class="form-control" name="store_hours" placeholder="" id="" required="" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group mb-2">
                                         <small>Switch Trans Rate</small>
-                                        <input type="text" class="form-control" name="switch_trans_rate"  placeholder="" id="" required="" />
+                                        <input type="text" class="form-control" name="switch_trans_rate" placeholder="" id="" required="" />
                                     </div>
                                 </div>
 
@@ -979,12 +978,12 @@ export function PharmistSystem(props) {
                                 <div className="col-md-12 mb-2">
 
                                     <div className="form-group mt-2">
-                                        <input type="checkbox" id="Open" class="d-none" name="open24_hours"  />
+                                        <input type="checkbox" id="Open" class="d-none" name="open24_hours" />
                                         <label for="Open">Open 24 Hours</label>
 
                                     </div>
                                     <div className="form-group mb-2">
-                                        <input type="checkbox" id="Injectable" name="injectable_prov"  class="d-none" />
+                                        <input type="checkbox" id="Injectable" name="injectable_prov" class="d-none" />
                                         <label for="Injectable">Injectable Prov</label>
                                     </div>
                                 </div>
@@ -999,7 +998,7 @@ export function PharmistSystem(props) {
                                 <div class="col-md-6">
                                     <div class="form-group mb-2">
                                         <small>System Version</small>
-                                        <input type="text" class="form-control" name="system_version"  placeholder="" id="" required="" />
+                                        <input type="text" class="form-control" name="system_version" placeholder="" id="" required="" />
                                     </div>
                                 </div>
 
@@ -1016,7 +1015,7 @@ export function PharmistSystem(props) {
                                 <div class="col-md-6">
                                     <div class="form-group mb-2">
                                         <small>Modem Type</small>
-                                        <input type="text" class="form-control" name="modem_type"  placeholder="" id="" required="" />
+                                        <input type="text" class="form-control" name="modem_type" placeholder="" id="" required="" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -1032,7 +1031,7 @@ export function PharmistSystem(props) {
                                 <div class="col-md-6">
                                     <div class="form-group mb-2">
                                         <small>Terminals</small>
-                                        <input type="text" class="form-control" name="terminals"  placeholder="" id="" required="" />
+                                        <input type="text" class="form-control" name="terminals" placeholder="" id="" required="" />
                                     </div>
                                 </div>
 
@@ -1044,7 +1043,7 @@ export function PharmistSystem(props) {
                                 <h5>Notes</h5>
                             </div>
                             <div class="form-group">
-                                <textarea name="note"  class="form-control" rows="25" style={mystyle} />
+                                <textarea name="note" class="form-control" rows="25" style={mystyle} />
                             </div>
                         </div>
                     </div>
@@ -1063,10 +1062,15 @@ export function NetworkParticipation(props) {
     const { register, reset, handleSubmit, watch, formState: { errors } } = useForm();
 
     const [provider, setProvider] = useOutletContext();
-    
-    
+
+    const [selctedNdc, setSelctedNdc] = useState('');
+
+
+
     useEffect(() => { reset(provider) }, [provider]);
-    
+
+
+
 
     const {
         register: register2,
@@ -1077,15 +1081,22 @@ export function NetworkParticipation(props) {
     });
 
 
-
+    const [formData, setFormData] = useState(false);
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const traditionalhandleShow = () => setShow(true);
     const [networkData, setNetworkData] = useState([]);
+    const [traditionalData, setTraditionalData] = useState([]);
+
+    const [data, setData] = useState([])
 
     const [flexibleData, setFlexibleData] = useState([]);
+    // useEffect(() => { reset(traditionalData) }, [traditionalData]);
 
-function loadData(){
+ 
+
+
+    function loadData() {
 
         const requestOptions = {
             method: 'GET',
@@ -1097,7 +1108,7 @@ function loadData(){
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
                 //  console.log(response);
-                console.log(data.data);
+                // console.log(data.data);
 
                 // check for error response
                 if (!response.ok) {
@@ -1117,8 +1128,17 @@ function loadData(){
             .catch(error => {
                 console.error('There was an error!', error);
             });
-    
-}
+
+    }
+
+
+
+       const getNDCItem = (rowdata) => {
+        console.log(rowdata);
+        setFormData(rowdata);
+    }
+
+
 
     const fillProviderData = (e) => {
         // API  
@@ -1131,9 +1151,13 @@ function loadData(){
         // setNetworkData(arr);
     }
 
+
+
     useEffect(() => {
         loadData()
-    }, [flexibleData]);
+        reset(formData);
+
+    }, [flexibleData, formData]);
 
     const onSubmit = data => {
 
@@ -1145,7 +1169,7 @@ function loadData(){
 
     const onSubmit2 = data => {
 
-        console.log(data);
+        // console.log(data);
         setFlexibleData([data]);
 
 
@@ -1162,7 +1186,6 @@ function loadData(){
     return (
         <>
 
-
             <form key={1} onSubmit={handleSubmit(onSubmit)}>
 
 
@@ -1175,7 +1198,7 @@ function loadData(){
                             <div class="col-md-4">
                                 <div class="form-group mb-2">
                                     <small>Treditional ID</small>
-                                    <input type="text" class="form-control" name="traditional_id" {...register('traditional_id', {
+                                    <input type="text" class="form-control" name="traditional_id"  {...register('network_id', {
                                         required: true,
                                     })} id="" required="" />
                                     <a href=""><span class="fa fa-search form-icon"></span></a>
@@ -1197,7 +1220,7 @@ function loadData(){
                             <div class="col-md-4">
                                 <div class="form-group mb-2">
                                     <small>Price Schedule</small>
-                                    <input type="text" class="form-control" name="price_schedule" {...register('price_schedule', {
+                                    <input type="text" class="form-control" name="price_schedule" {...register('default_price_schedule_ovrd', {
                                         required: true,
                                     })} id="" required="" />
                                     <a href=""><span class="fa fa-search form-icon"></span></a>
@@ -1239,7 +1262,7 @@ function loadData(){
 
                             <div class="col-md-12 mt-3 mb-3 text-end">
                                 {/* <button class="btn btn-sm btn-warning">Remove Item</button> &nbsp;&nbsp; */}
-                                <button type="submit" class="btn btn-sm btn-info">Add Item</button>
+                                <button type="submit" class="btn btn-sm btn-info">Add Item dsfsdf</button>
                             </div>
 
                             {/* <div class="col-md-12">
@@ -1269,7 +1292,7 @@ function loadData(){
 
 
                             {/* {networkData.length > 0 ? */}
-                            <TraditionalResults typedata={networkData} />
+                            <TraditionalResults selected={data} getNDCItem={getNDCItem} typedata={networkData} />
                             {/* // : ''} */}
 
 
@@ -1335,7 +1358,7 @@ function loadData(){
                                     required: true,
 
                                 })} name="inclusion_by" id="" required="" />
-                                                                {errors2.inclusion_by?.type === 'required' && <p role="alert" className="notvalid">Inclusion By is required </p>}
+                                {errors2.inclusion_by?.type === 'required' && <p role="alert" className="notvalid">Inclusion By is required </p>}
 
                             </div>
                         </div>
@@ -1346,7 +1369,7 @@ function loadData(){
                                     required: true,
 
                                 })} name="exclusion_by" id="" required="" />
-                                                                {errors2.exclusion_by?.type === 'required' && <p role="alert" className="notvalid">Exclusion By is required </p>}
+                                {errors2.exclusion_by?.type === 'required' && <p role="alert" className="notvalid">Exclusion By is required </p>}
 
                             </div>
                         </div>
@@ -1377,12 +1400,12 @@ function loadData(){
 
 function TraditionalResults(props) {
 
-
+    // console.log(props.data)
 
 
     var networkData = [];
     for (let index = 0; index < props.typedata.length; index++) {
-        networkData.push(<TraditionalTypeRow datar={props.typedata[index]}
+        networkData.push(<TraditionalTypeRow getNDCItem={props.getNDCItem} selected={props.selctedNdc} datar={props.typedata[index]}
         />);
     }
 
@@ -1507,7 +1530,11 @@ function TraditionalTypeRow(props) {
     const currentpath = location.pathname.split('/').pop();
     const ischecked = true;
 
+    
 
+    const alert = () => {
+        alert(props.datar.network_id)
+    }
     const deleteRow = (e) => {
 
         alert(e.currentTarget.value);
@@ -1516,10 +1543,14 @@ function TraditionalTypeRow(props) {
 
     return (
         <>
-            <tr>
-                <td>{props.datar.traditional_id}</td>
+            <tr className={(props.selected && props.datar.pharmacy_nabp == props.selected.pharmacy_nabp ? ' tblactiverow ' : '')}
+
+                onClick={() => props.getNDCItem(props.datar)}
+            >
+                <td>{props.datar.network_id}</td>
                 <td>{props.datar.network_name}</td>
-                <td>{props.datar.price_schedule}</td>
+                <td>{props.datar.default_price_schedule_ovrd}</td>
+                {/* <td>{rops.datar.}</td> */}
                 {props.datar.denied == ischecked ? (
                     <td>Yes</td>
                 ) : (
