@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { Link, Outlet, useLocation, useNavigate, useOutletContext } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function UserDefinition() {
     const navigate = useNavigate();
@@ -12,6 +14,41 @@ export default function UserDefinition() {
     const loadGroupDefinitionForm = (group) => {
         navigate('/dashboard/administrator/user-definition/group');
     }
+
+    const [userDefList, setUserDefList] = useState([]);
+    const [formData, setFormData] = useState(false);
+
+    const onSearch = (search) => {
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'content-type': 'application/json' }
+        }
+
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/administrator/user-defination/get?search=${search.target.value}`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                setUserDefList(data.data);
+                toast.success(response.message, {
+                    position: 'top-right',
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    pauseOnHover: true,
+                    closeOnClick: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+    }
+
+    const showFormData = (row) => {
+        setFormData(row);
+    }
+
+    useEffect(() => { }, [userDefList, formData]);
 
 
     return (
@@ -37,7 +74,7 @@ export default function UserDefinition() {
                 </div>
             </div>
 
-            <SearchUserDefinition />
+            <SearchUserDefinition onSearch={onSearch} />
 
             <div className="card mt-3 mb-3">
                 <div className="row">
@@ -47,7 +84,7 @@ export default function UserDefinition() {
                                 <div className="col-md-8 mb-2">
                                     <h5>User Definition</h5>
                                 </div>
-                                <UserDefinitionList loadUserDefinitionForm={loadUserDefinitionForm} />
+                                <UserDefinitionList loadUserDefinitionForm={loadUserDefinitionForm} userDefList={userDefList} showFormData={showFormData} />
                             </div>
                         </div>
                     </div>
@@ -70,9 +107,9 @@ export default function UserDefinition() {
                     <div className="col-md-12">
                         <div className="card mt-3 mb-3">
                             <div className="card-body">
-                                <UserDF />
+                                <UserDF formData={formData} />
                                 <div className="tab-content" id="nav-tabContent">
-                                    <Outlet />
+                                    <Outlet context={[formData, setFormData]} />
                                 </div>
                             </div>
                         </div>
@@ -85,7 +122,7 @@ export default function UserDefinition() {
     )
 }
 
-function SearchUserDefinition() {
+function SearchUserDefinition(props) {
     return (
         <>
             <div className="card mt-3 mb-3">
@@ -94,7 +131,7 @@ function SearchUserDefinition() {
                         <div className="col-md-12 mb-3">
                             <div className="form-group">
                                 <small>User Definition </small>
-                                <input type="text" className="form-control" placeholder='Start typing price user id/ last name/ first name to search'
+                                <input type="text" onKeyUp={e => props.onSearch(e)} className="form-control" placeholder='Start typing price user id/ last name/ first name to search'
                                 />
                             </div>
                         </div>
@@ -106,6 +143,10 @@ function SearchUserDefinition() {
 }
 
 function UserDefinitionList(props) {
+    const userArry = [];
+    for (let i = 0; i < props.userDefList.length; i++) {
+        userArry.push(<UserDefRow userDefRow={props.userDefList[i]} showFormData={props.showFormData} />);
+    }
     return (
         <>
             <div style={{ height: '400px', overflowY: 'scroll' }}>
@@ -118,7 +159,7 @@ function UserDefinitionList(props) {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr onClick={e => props.loadUserDefinitionForm(e)}>
+                        {/* <tr onClick={e => props.loadUserDefinitionForm(e)}>
                             <td>User ID 1</td>
                             <td>User Last Name 1</td>
                             <td>User First Name 1</td>
@@ -127,10 +168,23 @@ function UserDefinitionList(props) {
                             <td>User ID 2</td>
                             <td>User Last Name 2</td>
                             <td>User First Name 2</td>
-                        </tr>
+                        </tr> */}
+                        {userArry}
                     </tbody>
                 </table>
             </div>
+        </>
+    )
+}
+
+function UserDefRow(props) {
+    return (
+        <>
+            <tr onClick={e => props.showFormData(props.userDefRow)}>
+                <td>{props.userDefRow.user_id}</td>
+                <td>{props.userDefRow.user_last_name}</td>
+                <td>{props.userDefRow.user_first_name}</td>
+            </tr>
         </>
     )
 }
@@ -163,9 +217,13 @@ function UserGroupDefinitionList(props) {
     )
 }
 
-export function UserDF() {
+export function UserDF(props) {
     const location = useLocation();
     const currentpath = location.pathname.split('/')[4];
+    const { register, handleSubmit, reset, watch, formState: { error } } = useForm();
+    // const [formData, setFormData] = useState();
+
+    useEffect(() => { reset(props.formData) }, [props.formData]);
     return (
         <>
             {/* <div className="card mt-3 mb-3">
@@ -198,6 +256,9 @@ export function UserDF() {
     )
 }
 export function UDefinitionTab() {
+    const [formData, setFormData] = useOutletContext();
+    const{register, handleSubmit, reset, watch, formState : {error} } = useForm();
+    useEffect(() => {reset(formData)},[formData]);
     return (
         <>
             <div className="card mt-3 mb-3">
@@ -206,41 +267,39 @@ export function UDefinitionTab() {
                     <div className="col-md-12 mb-2">
                         <h5>User Information</h5>
                     </div>
-                    <Form>
-                        <div className="row">
-                            <div className="col-md-6 mb-3">
-                                <div className="form-group">
-                                    <small>Group ID</small>
-                                    <input type="text" className="form-control" />
-                                </div>
-                            </div>
-                            <div className="col-md-6 mb-3">
-                                <div className="form-group">
-                                    <small>Password</small>
-                                    <input type="text" className="form-control" />
-                                </div>
-                            </div>
-                            <div className="col-md-4 mb-3">
-                                <div className="form-group">
-                                    <small>First Name</small>
-                                    <input type="text" className="form-control" />
-                                </div>
-                            </div>
-                            <div className="col-md-4 mb-3">
-                                <div className="form-group">
-                                    <small>Last Name</small>
-                                    <input type="text" className="form-control" />
-                                </div>
-                            </div>
-                            <div className="col-md-4 mb-3">
-                                <div className="form-group">
-                                    <small>Group</small>
-                                    <input type="text" className="form-control" />
-                                </div>
+
+                    <div className="row">
+                        <div className="col-md-6 mb-3">
+                            <div className="form-group">
+                                <small>Group ID</small>
+                                <input type="text" className="form-control" {...register("group_id", {required:true})}/>
                             </div>
                         </div>
-                    </Form>
-
+                        <div className="col-md-6 mb-3">
+                            <div className="form-group">
+                                <small>Password</small>
+                                <input type="text" className="form-control" {...register("user_password", {required:true})}/>
+                            </div>
+                        </div>
+                        <div className="col-md-4 mb-3">
+                            <div className="form-group">
+                                <small>First Name</small>
+                                <input type="text" className="form-control" {...register("user_first_name", {required:true})}/>
+                            </div>
+                        </div>
+                        <div className="col-md-4 mb-3">
+                            <div className="form-group">
+                                <small>Last Name</small>
+                                <input type="text" className="form-control" {...register("user_last_name", {required:true})}/>
+                            </div>
+                        </div>
+                        <div className="col-md-4 mb-3">
+                            <div className="form-group">
+                                <small>Group</small>
+                                <input type="text" className="form-control" {...register("group_name", {required:true})}/>
+                            </div>
+                        </div>
+                    </div>
 
                     <div className="row">
                         <div className="col-md-12 mb-3">
@@ -336,6 +395,9 @@ export function UDefinitionTab() {
 }
 
 export function DataAccessTab() {
+    const [formData, setFormData] = useOutletContext();
+    const{register, handleSubmit, reset, watch, formState : {error} } = useForm();
+    useEffect(() => {reset(formData)},[formData]);
     return (
         <>
             <div className="card-body">
@@ -349,28 +411,28 @@ export function DataAccessTab() {
                             <div className="col-md-4 mb-2">
                                 <div className="form-group">
                                     <small>Customer</small>
-                                    <input type="text" name="" id="" className="form-control" />
+                                    <input type="text" {...register("customer_id", {required : true})} className="form-control" />
                                     <a href=""><span className="fa fa-search form-icon"></span></a>
                                 </div>
                             </div>
                             <div className="col-md-4 mb-2">
                                 <div className="form-group">
                                     <small>Client</small>
-                                    <input type="text" name="" id="" className="form-control" />
+                                    <input type="text" {...register("client_id", {required : true})}className="form-control" />
                                     <a href=""><span className="fa fa-search form-icon"></span></a>
                                 </div>
                             </div>
                             <div className="col-md-4 mb-2">
                                 <div className="form-group">
                                     <small>Client Group</small>
-                                    <input type="text" name="" id="" className="form-control" />
+                                    <input type="text" {...register("client_group_id", {required : true})} className="form-control" />
                                     <a href=""><span className="fa fa-search form-icon"></span></a>
                                 </div>
                             </div>
                             <div className="col-md-6 mb-2">
                                 <div className="form-group">
                                     <small>Status</small>
-                                    <select className="form-select">
+                                    <select className="form-select" {...register("customer_id", {required : true})}>
                                         <option value="">Select</option>
                                     </select>
                                 </div>
@@ -378,7 +440,7 @@ export function DataAccessTab() {
                             <div className="col-md-6 mb-2">
                                 <div className="form-group">
                                     <small>Exclude Flag</small>
-                                    <select className="form-select">
+                                    <select className="form-select" {...register("customer_id", {required : true})}>
                                         <option value="">Select</option>
                                     </select>
                                 </div>
@@ -392,7 +454,7 @@ export function DataAccessTab() {
                     </from>
 
                     <div className="col-md-12">
-                        <table className="table table-striped table-bordered">
+                        <table className="table table-striped table-bordered" {...register("customer_id", {required : true})}>
                             <thead>
                                 <tr>
                                     <th>Customer ID</th>
