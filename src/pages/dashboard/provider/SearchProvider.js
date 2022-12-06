@@ -1671,17 +1671,15 @@ function FlexibleNetworks(props){
                             <div class="form-group mb-2">
                                 <small>Exclusion By</small>
                                 <input type="text" class="form-control" name="exclude_rule" {...register('exclude_rule', {
-                                    // required: true,
+                                    required: true,
 
                                 })}  id="" required="" />
-                                {errors.exclusion_by?.type === 'required' && <p role="alert" className="notvalid">Exclusion By is required </p>}
+                                {errors.exclude_rule?.type === 'required' && <p role="alert" className="notvalid">Exclusion By is required </p>}
 
                             </div>
                         </div>
 
-                        <div class="col-md-12 mt-3 mb-3 text-end">
-                            <button type="submit" class="btn btn-sm btn-info">add Item</button>
-                        </div>
+                        
 
 
 
