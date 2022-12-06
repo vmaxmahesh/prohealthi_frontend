@@ -1023,7 +1023,6 @@ function History(props) {
     for (let i = 0; i < props.historyData.length; i++) {
         historyArray.push(<DiagHistoryRow historyRow={props.historyData[i]} />);
     }
-
     return (
         <>
             <div className="col-md-12">
