@@ -1292,7 +1292,7 @@ export function NetworkParticipation(props) {
 
             <div className="col-md-3 ms-auto text-end">
                 <button className="btn  btn-info btn-sm" onClick={e => AddForm()}>
-                    Accumulated Benefit Strategy <i className="fa fa-plus-circle"></i></button>
+                    Add Traditional Network <i className="fa fa-plus-circle"></i></button>
             </div>
 
 
@@ -1493,7 +1493,7 @@ function FlexibleNetworks(props){
 
 <div className="col-md-3 ms-auto text-end">
                 <button className="btn  btn-info btn-sm" onClick={e => AddForm()}>
-                    Accumulated Benefit Strategy <i className="fa fa-plus-circle"></i></button>
+                    Add Flexible Network <i className="fa fa-plus-circle"></i></button>
             </div>
 
 <FlixibleNetworksForm  show={show} adding={adding} handleClose={handleClose} selected={selctedNdc} />
@@ -1783,7 +1783,7 @@ function TraditionalNetworksForm(props) {
         // console.log(props.selected);
 
         if (props.adding) {
-            reset({ rx_network_rule_id: '', network_name: '', new: 1 }, {
+            reset({ rx_network_rule_id: '', rx_network_rule_name: '',price_schedule_ovrd:'', new: 1 }, {
                 keepValues: false,
             })
         } else {
@@ -1791,7 +1791,7 @@ function TraditionalNetworksForm(props) {
         }
 
         if (!props.selected) {
-            reset({ rx_network_rule_id: '', network_name: '', description: '', pharm_type_variation_ind: '', network_part_variation_ind: '', claim_type_variation_ind: '', plan_accum_deduct_id: '', new: 1 }, {
+            reset({ rx_network_rule_id: '', rx_network_rule_name: '',price_schedule_ovrd:'', description: '', pharm_type_variation_ind: '', network_part_variation_ind: '', claim_type_variation_ind: '', plan_accum_deduct_id: '', new: 1 }, {
                 keepValues: false,
             })
         }
