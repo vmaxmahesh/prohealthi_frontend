@@ -237,6 +237,8 @@ function NdcRow(props) {
 
 function ProviderList(props) {
 
+    const [selctedNdc, setSelctedNdc] = useState('');
+
 
     const scollToRef = useRef();
 
@@ -246,6 +248,8 @@ function ProviderList(props) {
     const getNDCItem = (ndciemid) => {
         alert(ndciemid);
         props.getNDCItem(ndciemid);
+
+
 
     }
 
@@ -1082,6 +1086,7 @@ export function NetworkParticipation(props) {
     });
 
 
+
     const [formData, setFormData] = useState(false);
     const handleClose = () => setShow(false);
     const traditionalhandleShow = () => setShow(true);
@@ -1098,13 +1103,13 @@ export function NetworkParticipation(props) {
     const [benifitsData, setBenifitData] = useState(false);
 
 
- 
+
 
     const AddForm = () => {
         setBenifitData(false);
         setAdding(true);
 
-        
+
 
     }
 
@@ -1145,23 +1150,17 @@ export function NetworkParticipation(props) {
 
 
 
-       const getNDCItem = (rowdata) => {
-        console.log(rowdata);
-        setFormData(rowdata);
+    const getNDCItem = (rowdata) => {
+        // console.log(rowdata);
+        // setFormData(rowdata);
+        // setBenifitData(true);
+        setSelctedNdc(rowdata);
+
+
     }
 
 
 
-    const fillProviderData = (e) => {
-        // API  
-        // var staticProviderType =; 
-        var arr = [
-            { traditional_id: '123', name: 'Mahesh', priceschedule: '101', denied: 'Hyderabad', effective_date: '2022-08-2022', termination_date: '02-20-2022' },
-
-        ];
-
-        // setNetworkData(arr);
-    }
 
 
 
@@ -1179,16 +1178,7 @@ export function NetworkParticipation(props) {
 
     }
 
-    const onSubmit2 = data => {
-
-        // console.log(data);
-        setFlexibleData([data]);
-
-
-
-
-    }
-
+    
 
     const addCode = (data) => {
         // console.log(data);
@@ -1225,7 +1215,6 @@ export function NetworkParticipation(props) {
                         return Promise.reject(error);
                     } else {
                         reset(data.data);
-                        console.log(data.data);
                         var msg = props.adding ? 'Added Successfully...!' : 'Updated Successfully..'
                         toast.success(msg, {
                             position: "top-right",
@@ -1270,7 +1259,7 @@ export function NetworkParticipation(props) {
         }
 
         if (!props.selected) {
-            reset({ accum_bene_strategy_name: '',accum_bene_strategy_id:'', description: '',pharm_type_variation_ind:'',network_part_variation_ind:'',claim_type_variation_ind:'',plan_accum_deduct_id:'', new: 1 }, {
+            reset({ accum_bene_strategy_name: '', accum_bene_strategy_id: '', description: '', pharm_type_variation_ind: '', network_part_variation_ind: '', claim_type_variation_ind: '', plan_accum_deduct_id: '', new: 1 }, {
                 keepValues: false,
             })
         }
@@ -1301,19 +1290,331 @@ export function NetworkParticipation(props) {
         <>
 
 
-<div className="col-md-3 ms-auto text-end">
-                    <button className="btn  btn-info btn-sm" onClick={e => AddForm()}>
+            <div className="col-md-3 ms-auto text-end">
+                <button className="btn  btn-info btn-sm" onClick={e => AddForm()}>
                     Accumulated Benefit Strategy <i className="fa fa-plus-circle"></i></button>
             </div>
 
 
-<TraditionalNetworksForm    show={show} adding={adding} handleClose={handleClose} selected={formData} />
+            <TraditionalNetworksForm show={show} adding={adding} handleClose={handleClose} selected={selctedNdc} />
 
 
-            <TraditionalResults selected={data} getNDCItem={getNDCItem} typedata={networkData} />
+            <TraditionalResults getNDCItem={getNDCItem} selected={selctedNdc} typedata={networkData} />
 
 
-            <form key={2} onSubmit={handleSubmit2(onSubmit2)}>
+            {/* <FlixibleNetworksForm /> */}
+
+            <FlexibleNetworks  />
+
+
+
+
+
+
+        </>
+    )
+}
+
+
+function FlexibleNetworks(props){
+
+    const { register, reset, handleSubmit, watch, formState: { errors } } = useForm();
+    const [formData, setFormData] = useState(false);
+
+
+    const [provider, setProvider] = useOutletContext();
+
+    const [selctedNdc, setSelctedNdc] = useState('');
+
+    const [show, setShow] = useState(false);
+
+    const [adding, setAdding] = useState(false);
+
+    const [flexibleData, setFlexibleData] = useState(false);
+
+
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    // useEffect(() => { reset(provider) }, [provider]);
+
+    const [benifitsData, setBenifitData] = useState(false);
+
+
+
+
+    const AddForm = () => {
+        setBenifitData(false);
+        setAdding(true);
+
+
+
+    }
+
+
+    const addCode = (data) => {
+        // console.log(data);
+        const requestOptions = {
+            method: 'POST',
+            // mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+
+        };
+        // console.log(watch(data)); 
+        if (process.env.REACT_APP_API_BASEURL == 'NOT') {
+            toast.success('Added Successfully...!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+
+            });
+        } else {
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/provider/flexiblenetwork/add`, requestOptions)
+                .then(async response => {
+                    const isJson = response.headers.get('content-type')?.includes('application/json');
+                    const data = isJson && await response.json();
+                    // console.log(response);
+
+                    // check for error response
+                    if (!response.ok) {
+                        // get error message from body or default to response status
+                        const error = (data && data.message) || response.status;
+                        return Promise.reject(error);
+                    } else {
+                        reset(data.data);
+                        console.log(data.data);
+                        var msg = props.adding ? 'Added Successfully...!' : 'Updated Successfully..'
+                        toast.success(msg, {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+
+                        });
+                    }
+
+
+                    if (response === '200') {
+                    }
+
+                })
+                .catch(error => {
+                    console.error('There was an error!', error);
+                });
+        }
+
+    }
+    const onSubmit = (e) => {
+        e.preventDefault();
+    }
+    const getNDCItem = (rowdata) => {
+        // console.log(rowdata);
+        // setFormData(rowdata);
+        setBenifitData(true);
+        setSelctedNdc(rowdata);
+
+
+    }
+
+
+    useEffect(() => {
+        // reset(flexibleData);
+
+        reset(formData);
+
+
+        if(!flexibleData){
+            loadData()
+        }
+
+    },[flexibleData,formData]);
+    console.log(formData);
+
+
+
+    useEffect(() => {
+        if (benifitsData) {
+            setAdding(false);
+
+        } else {
+            setAdding(true);
+            setBenifitData(false);
+        }
+
+        document.title = 'Benefit Code | ProHealthi';
+
+    }, [benifitsData, adding]);
+
+    function loadData() {
+
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        };
+
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/provider/flexiblenetwork/all`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                //  console.log(response);
+                // console.log(data.data);
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    setFlexibleData([]);
+                    return Promise.reject(error);
+
+                } else {
+                    setFlexibleData(data.data);
+                    return;
+                }
+
+
+
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+
+    }
+    return (
+        <>
+
+<div className="col-md-3 ms-auto text-end">
+                <button className="btn  btn-info btn-sm" onClick={e => AddForm()}>
+                    Accumulated Benefit Strategy <i className="fa fa-plus-circle"></i></button>
+            </div>
+
+<FlixibleNetworksForm  show={show} adding={adding} handleClose={handleClose} selected={selctedNdc} />
+
+
+<FlexibleResults getNDCItem={getNDCItem} typedata={flexibleData}   selected={selctedNdc}/>
+
+
+
+
+
+        
+        
+        </>
+    )
+}
+
+
+
+ function FlixibleNetworksForm(props) {
+
+
+    const { register, reset, handleSubmit, watch, formState: { errors } } = useForm();
+
+
+    const addCode = (data) => {
+        // console.log(data);
+        const requestOptions = {
+            method: 'POST',
+            // mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+
+        };
+        // console.log(watch(data)); 
+        if (process.env.REACT_APP_API_BASEURL == 'NOT') {
+            toast.success('Added Successfully...!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+
+            });
+        } else {
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/provider/flexiblenetwork/add`, requestOptions)
+                .then(async response => {
+                    const isJson = response.headers.get('content-type')?.includes('application/json');
+                    const data = isJson && await response.json();
+                    // console.log(response);
+
+                    // check for error response
+                    if (!response.ok) {
+                        // get error message from body or default to response status
+                        const error = (data && data.message) || response.status;
+                        return Promise.reject(error);
+                    } else {
+                        reset(data.data);
+                        console.log(data.data);
+                        var msg = props.adding ? 'Added Successfully...!' : 'Updated Successfully..'
+                        toast.success(msg, {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+
+                        });
+                    }
+
+
+                    if (response === '200') {
+                    }
+
+                })
+                .catch(error => {
+                    console.error('There was an error!', error);
+                });
+        }
+
+    }
+    const onSubmit = (e) => {
+        e.preventDefault();
+    }
+
+
+    useEffect(() => {
+
+        console.log(props.selected);
+
+        if (props.adding) {
+            reset({ network_id: '', network_name: '', new: 1 }, {
+                keepValues: false,
+            })
+        } else {
+            reset(props.selected);
+        }
+
+        if (!props.selected) {
+            reset({ network_id: '', network_name: '', description: '', pharm_type_variation_ind: '', network_part_variation_ind: '', claim_type_variation_ind: '', plan_accum_deduct_id: '', new: 1 }, {
+                keepValues: false,
+            })
+        }
+
+
+    }, [props.selected, props.adding]);
+
+
+    useEffect(() => { reset(props.selected) }, [props.selected]);
+   
+
+
+
+    return (
+        <>
+
+               <form key={1} onSubmit={handleSubmit(addCode)} >
                 <div class="card-body">
                     <div class="row">
 
@@ -1322,61 +1623,58 @@ export function NetworkParticipation(props) {
 
 
                         <div class="col-md-12 mb-2">
-                            <h5>Flexible Networks</h5>
+                            <h5 className="mb-2">Flexible Networks  {props.adding ? ' - (Adding)' : '- (' + props.selected.rx_network_rule_id + ' )'}</h5>
+
                         </div>
                         <div class="col-md-4">
                             <div class="form-group mb-2">
                                 <small>Flexible Network ID</small>
-                                <input type="text" class="form-control"   {...register2('flexible_network_id', {
-                                    required: true,
-                                })} name="flexible_network_id" id="" />
+                                <input  type="text" class="form-control"   {...register('rx_network_rule_id', {
+                                })} name="rx_network_rule_id" id=""  />
                                 <a href=""><span class="fa fa-search form-icon"></span></a>
-                                {errors2.flexible_network_id?.type === 'required' && <p role="alert" className="notvalid">Flexible Network ID is required </p>}
+                                {errors.flexible_network_id?.type === 'required' && <p role="alert" className="notvalid">Flexible Network ID is required </p>}
 
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group mb-2">
                                 <small>Network Name</small>
-                                <input type="text" class="form-control" {...register2('flexible_network_name', {
-                                    required: true,
+                                <input type="text" class="form-control" {...register('rx_network_rule_name', {
 
-                                })} name="flexible_network_name" id="" required="" />
-                                {errors2.flexible_network_name?.type === 'required' && <p role="alert" className="notvalid">Network Name is required </p>}
+                                })} name="rx_network_rule_name" id="" required="" />
+                                {errors.rx_network_rule_name?.type === 'required' && <p role="alert" className="notvalid">Network Name is required </p>}
 
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group mb-2">
                                 <small>Price Schedule</small>
-                                <input type="text" class="form-control" {...register2('flexible_price_schedule', {
-                                    required: true,
+                                <input type="text" class="form-control" {...register('price_schedule_ovrd', {
 
-                                })} name="flexible_price_schedule" id="" required="" />
+                                })} name="price_schedule_ovrd" id="" required="" />
                                 <a href=""><span class="fa fa-search form-icon"></span></a>
-                                {errors2.flexible_price_schedule?.type === 'required' && <p role="alert" className="notvalid">Price Schedule is required </p>}
+                                {errors.flexible_price_schedule?.type === 'required' && <p role="alert" className="notvalid">Price Schedule is required </p>}
 
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group mb-2">
                                 <small>Inclusion By</small>
-                                <input type="date" class="form-control" {...register2('inclusion_by', {
-                                    required: true,
+                                <input type="text" class="form-control" {...register('inclusion_by', {
 
                                 })} name="inclusion_by" id="" required="" />
-                                {errors2.inclusion_by?.type === 'required' && <p role="alert" className="notvalid">Inclusion By is required </p>}
+                                {errors.inclusion_by?.type === 'required' && <p role="alert" className="notvalid">Inclusion By is required </p>}
 
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group mb-2">
                                 <small>Exclusion By</small>
-                                <input type="date" class="form-control" {...register2('exclusion_by', {
-                                    required: true,
+                                <input type="text" class="form-control" name="exclude_rule" {...register('exclude_rule', {
+                                    // required: true,
 
-                                })} name="exclusion_by" id="" required="" />
-                                {errors2.exclusion_by?.type === 'required' && <p role="alert" className="notvalid">Exclusion By is required </p>}
+                                })}  id="" required="" />
+                                {errors.exclusion_by?.type === 'required' && <p role="alert" className="notvalid">Exclusion By is required </p>}
 
                             </div>
                         </div>
@@ -1388,26 +1686,30 @@ export function NetworkParticipation(props) {
 
 
                         {/* {networkData.length > 0 ? */}
-                        <FlexibleResults typedata={flexibleData} />
                         {/* // : ''} */}
 
 
 
                     </div>
+                    {console.log(props.adding)}
+                    <Button type='submit' variant="primary">{props.adding ? ' Add' : 'Update'}</Button>
+
                 </div>
+
             </form>
+
+
 
 
         </>
     )
+
 }
 
 
-function TraditionalNetworksForm(props)
-{
+function TraditionalNetworksForm(props) {
 
     const { register, reset, handleSubmit, watch, formState: { errors } } = useForm();
-
 
 
 
@@ -1478,9 +1780,10 @@ function TraditionalNetworksForm(props)
 
     useEffect(() => {
 
+        // console.log(props.selected);
 
         if (props.adding) {
-            reset({ accum_bene_strategy_name: '', description: '', new: 1 }, {
+            reset({ rx_network_rule_id: '', network_name: '', new: 1 }, {
                 keepValues: false,
             })
         } else {
@@ -1488,7 +1791,7 @@ function TraditionalNetworksForm(props)
         }
 
         if (!props.selected) {
-            reset({ accum_bene_strategy_name: '',accum_bene_strategy_id:'', description: '',pharm_type_variation_ind:'',network_part_variation_ind:'',claim_type_variation_ind:'',plan_accum_deduct_id:'', new: 1 }, {
+            reset({ rx_network_rule_id: '', network_name: '', description: '', pharm_type_variation_ind: '', network_part_variation_ind: '', claim_type_variation_ind: '', plan_accum_deduct_id: '', new: 1 }, {
                 keepValues: false,
             })
         }
@@ -1498,88 +1801,87 @@ function TraditionalNetworksForm(props)
 
 
     useEffect(() => { reset(props.selected) }, [props.selected]);
-    return(
+    return (
         <>
 
-<form key={1} onSubmit={handleSubmit(addCode)} >
+            <form key={1} onSubmit={handleSubmit(addCode)} >
 
 
 
-<div class="card mt-3 mb-3">
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-12 mb-2">
-                <h5 className="mb-2">Traditional Networks  {props.adding ? ' - (Adding)' : '- (' + props.selected.network_id+ ' )'}</h5>
+                <div class="card mt-3 mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12 mb-2">
+                                <h5 className="mb-2">Traditional Networks  {props.adding ? ' - (Adding)' : '- (' + props.selected.network_id + ' )'}</h5>
 
-            </div>
-            <div class="col-md-4">
-                <div class="form-group mb-2">
-                    <small>Treditional ID</small>
-                    <input type="text" class="form-control" name="traditional_id"  {...register('network_id', {
-                        required: true,
-                    })} id="" required="" />
-                    <a href=""><span class="fa fa-search form-icon"></span></a>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-2">
+                                    <small>Treditional ID</small>
+                                    <input type="text" class="form-control" name="traditional_id"  {...register('network_id', {
+                                        required: true,
+                                    })} id="" required="" />
+                                    <a href=""><span class="fa fa-search form-icon"></span></a>
 
-                    {errors.traditional_id?.type === 'required' && <p role="alert" className="notvalid">Treditional ID is required </p>}
+                                    {errors.traditional_id?.type === 'required' && <p role="alert" className="notvalid">Treditional ID is required </p>}
 
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group mb-2">
-                    <small>Network Name</small>
-                    <input type="text" class="form-control" name="network_name" {...register('network_name', {
-                        required: true,
-                    })} id="" />
-                    {errors.network_name?.type === 'required' && <p role="alert" className="notvalid">Network Name is required </p>}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-2">
+                                    <small>Network Name</small>
+                                    <input type="text" class="form-control" name="network_name" {...register('network_name', {
+                                        required: true,
+                                    })} id="" />
+                                    {errors.network_name?.type === 'required' && <p role="alert" className="notvalid">Network Name is required </p>}
 
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group mb-2">
-                    <small>Price Schedule</small>
-                    <input type="text" class="form-control" name="price_schedule_ovrd" {...register('price_schedule_ovrd', {
-                        required: true,
-                    })} id="" required="" />
-                    <a href=""><span class="fa fa-search form-icon"></span></a>
-                    {errors.price_schedule?.type === 'required' && <p role="alert" className="notvalid">Price Schedule is required </p>}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-2">
+                                    <small>Price Schedule</small>
+                                    <input type="text" class="form-control" name="price_schedule_ovrd" {...register('price_schedule_ovrd', {
+                                        required: true,
+                                    })} id="" required="" />
+                                    <a href=""><span class="fa fa-search form-icon"></span></a>
+                                    {errors.price_schedule?.type === 'required' && <p role="alert" className="notvalid">Price Schedule is required </p>}
 
-                </div>
+                                </div>
 
-            </div>
-            <div class="col-md-4">
-                <div class="form-group mt-4">
-                    <input type="checkbox" name="denied" id="Denied" {...register('denied', {
-                        required: true,
-                    })} class="d-none" />
-                    <label for="Denied">Participation Denied</label>
-                    {errors.denied?.type === 'required' && <p role="alert" className="notvalid">Participation Denied is required </p>}
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mt-4">
+                                    <input type="checkbox" name="denied" id="Denied" {...register('denied', {
+                                        required: true,
+                                    })} class="d-none" />
+                                    <label for="Denied">Participation Denied</label>
+                                    {errors.denied?.type === 'required' && <p role="alert" className="notvalid">Participation Denied is required </p>}
 
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group mb-2">
-                    <small>Effective Date</small>
-                    <input type="date" class="form-control" name="effective_date" {...register('effective_date', {
-                        required: true,
-                    })} id="" />
-                    {errors.effective_date?.type === 'required' && <p role="alert" className="notvalid">Effective Date is required </p>}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-2">
+                                    <small>Effective Date</small>
+                                    <input type="date" class="form-control" name="effective_date" {...register('effective_date', {
 
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group mb-2">
-                    <small>Termination Date</small>
-                    <input type="date" class="form-control" name="termination_date"  {...register('termination_date', {
-                        required: true,
-                    })} id="" required="" />
-                    {errors.termination_date?.type === 'required' && <p role="alert" className="notvalid">Termination Date is required </p>}
+                                    })} id="" />
+                                    {errors.effective_date?.type === 'required' && <p role="alert" className="notvalid">Effective Date is required </p>}
 
-                </div>
-            </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-2">
+                                    <small>Termination Date</small>
+                                    <input type="date" class="form-control" name="termination_date"  {...register('termination_date', {
+                                    })} id="" required="" />
+                                    {errors.termination_date?.type === 'required' && <p role="alert" className="notvalid">Termination Date is required </p>}
 
-         
+                                </div>
+                            </div>
 
-            {/* <div class="col-md-12">
+
+
+                            {/* <div class="col-md-12">
             <table class="table table-striped table-bordered">
                 <thead>
                     <tr>
@@ -1605,27 +1907,30 @@ function TraditionalNetworksForm(props)
         </div> */}
 
 
-            {/* {networkData.length > 0 ? */}
-            {/* // : ''} */}
+                            {/* {networkData.length > 0 ? */}
+                            {/* // : ''} */}
 
 
-        </div>
-    </div>
-</div>
+                        </div>
+                    </div>
+                </div>
 
 
-<Button type='submit' variant="primary">{props.adding ? ' Add' : 'Update'}</Button>
+                <Button type='submit' variant="primary">{props.adding ? ' Add' : 'Update'}</Button>
 
 
 
-</form>
+            </form>
 
-      
 
-           
+
+
         </>
     )
 }
+
+
+
 
 
 function TraditionalResults(props) {
@@ -1635,7 +1940,7 @@ function TraditionalResults(props) {
 
     var networkData = [];
     for (let index = 0; index < props.typedata.length; index++) {
-        networkData.push(<TraditionalTypeRow getNDCItem={props.getNDCItem}  datar={props.typedata[index]}
+        networkData.push(<TraditionalTypeRow getNDCItem={props.getNDCItem} datar={props.typedata[index]}
         />);
     }
 
@@ -1652,6 +1957,8 @@ function TraditionalResults(props) {
                 <div className="card-body">
                     <div className="row">
                         <div className="col-md-12">
+                        <div style={{height:"200px", overflowY:"scroll"}}>
+
                             <table className="table table-striped table-
 bordered">
                                 <thead>
@@ -1670,6 +1977,7 @@ bordered">
 
                                 </tbody>
                             </table>
+                            </div>
                         </div>
                         <div className="col-md-3 ms-auto text-end">
                             {/* <button className="btn  btn-info" data-bs-
@@ -1698,7 +2006,7 @@ function FlexibleResults(props) {
 
     var networkData = [];
     for (let index = 0; index < props.typedata.length; index++) {
-        networkData.push(<FlexibleTypeRow datar={props.typedata[index]}
+        networkData.push(<FlexibleTypeRow getNDCItem={props.getNDCItem}   datar={props.typedata[index]}
         />);
     }
 
@@ -1715,6 +2023,7 @@ function FlexibleResults(props) {
                 <div className="card-body">
                     <div className="row">
                         <div className="col-md-12">
+                            <div style={{height:"200px", overflowY:"scroll"}}>
                             <table className="table table-striped table-
 bordered">
                                 <thead>
@@ -1727,12 +2036,13 @@ bordered">
                                         <th>Exclusion By</th>
                                         <th>Action</th>
                                     </tr>
-                                </thead>
+                                </thead>                                
                                 <tbody>
                                     {networkData}
 
                                 </tbody>
                             </table>
+                            </div>
                         </div>
                         <div className="col-md-3 ms-auto text-end">
                             {/* <button className="btn  btn-info" data-bs-
@@ -1760,7 +2070,7 @@ function TraditionalTypeRow(props) {
     const currentpath = location.pathname.split('/').pop();
     const ischecked = true;
 
-    
+
 
     const alert = () => {
         alert(props.datar.network_id)
@@ -1814,13 +2124,18 @@ function FlexibleTypeRow(props) {
 
     return (
         <>
-            <tr>
-                <td>{props.datar.flexible_network_id}</td>
-                <td>{props.datar.flexible_network_name}</td>
-                <td>{props.datar.flexible_price_schedule}</td>
+
+                
+            <tr className={(props.selected && props.datar.pharmacy_nabp == props.selected.pharmacy_nabp ? ' tblactiverow ' : '')}
+
+onClick={() => props.getNDCItem(props.datar)}
+>
+                <td>{props.datar.rx_network_rule_id}</td>
+                <td>{props.datar.rx_network_rule_name}</td>
+                <td>{props.datar.price_schedule_ovrd}</td>
 
                 <td>{props.datar.inclusion_by}</td>
-                <td>{props.datar.exclusion_by}</td>
+                <td>{props.datar.exclude_rule}</td>
                 <td><button onClick={flexdeleteRow} value={props.datar.flexible_network_id} className='btn btn-sm btn-warning'><i className='fa fa-trash-alt'></i></button></td>
 
 
