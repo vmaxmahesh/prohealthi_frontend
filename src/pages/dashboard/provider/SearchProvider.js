@@ -8,6 +8,9 @@ import { Button } from 'react-bootstrap';
 
 
 function SearchProvider() {
+
+    const { register, handleSubmit,reset, watch, formState: { errors } } = useForm();
+
     const location = useLocation();
     const currentpath = location.pathname.split('/').pop();
 
@@ -21,6 +24,82 @@ function SearchProvider() {
 
 
     const [selctedNdc, setSelctedNdc] = useState('');
+
+
+    useEffect(() => { reset(provider) }, [provider]);
+
+
+
+// const data=provider;
+
+    const addCode = (data) => {
+
+
+
+        
+        console.log(data);
+        const requestOptions = {
+            method: 'POST',
+            // mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(provider)
+
+        };
+        console.log(watch(data)); 
+        if (process.env.REACT_APP_API_BASEURL == 'NOT') {
+            toast.success('Added Successfully...!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+
+            });
+        } else {
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/provider/provider/add`, requestOptions)
+                .then(async response => {
+                    const isJson = response.headers.get('content-type')?.includes('application/json');
+                    const data = isJson && await response.json();
+                    // console.log(response);
+
+                    // check for error response
+                    if (!response.ok) {
+                        // get error message from body or default to response status
+                        const error = (data && data.message) || response.status;
+                        return Promise.reject(error);
+                    } else {
+                        reset(data.data);
+                        // console.log(data.data);
+                        var msg = props.adding ? 'Added Successfully...!' : 'Updated Successfully..'
+                        toast.success(msg, {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+
+                        });
+                    }
+
+
+                    if (response === '200') {
+                    }
+
+                })
+                .catch(error => {
+                    console.error('There was an error!', error);
+                });
+        }
+
+    }
+    const onSubmit = (e) => {
+        alert()
+        e.preventDefault();
+    }
 
 
 
@@ -110,6 +189,9 @@ function SearchProvider() {
     }, [ProviderData]);
 
 
+ 
+
+
 
     const clearForm = () => {
         document.getElementById("search-form").reset();
@@ -166,7 +248,21 @@ function SearchProvider() {
                     </div>
 
                     <div className="tab-content" id="nav-tabContent">
-                        <Outlet context={[provider, setProvider]} />
+
+                    <form key={1} onSubmit={handleSubmit(addCode)} >
+
+                        <Outlet context={[provider, setProvider]}
+                        
+                        />
+                        <Button type='submit' variant="primary">Update</Button>
+
+                        {/* <Button type='submit' variant="primary">{props.adding ? ' Add' : 'Update'}</Button> */}
+
+
+
+                        </form>
+
+
 
                     </div>
                 </div>
@@ -373,13 +469,31 @@ export function Provider(props) {
     const [provider, setProvider] = useOutletContext();
 
 
+    const addCode = (data) => {
+        alert('mahesh');
+       
+
+    }
+
+  const  nameChange=()=>{
+        alert()
+    }
+    const onSubmit = (e) => {
+        e.preventDefault();
+    }
+
+    useEffect(()=>{
+        
+    })
+
+
     useEffect(() => { reset(provider) }, [provider]);
 
     return (
         <>
             <div className="card mt-3 mb-3">
                 <div className="card-body">
-                    <form method="" action="">
+                <form key={1} onSubmit={handleSubmit(addCode)} >
                         <div className="row mb-4">
                             <div className="col-md-12 mb-2">
                                 <h5>Provider</h5>
@@ -387,13 +501,13 @@ export function Provider(props) {
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>ID</small>
-                                    <input type="text" className="form-control" placeholder="ID" name="pharmacy_nabp" {...register('pharmacy_nabp')} id="" required="" />
+                                    <input type="text" className="form-control" placeholder="ID"   name="pharmacy_nabp" {...register('pharmacy_nabp')} id="" required="" />
                                 </div>
                             </div>
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>Name</small>
-                                    <input type="text" className="form-control" placeholder="Name" name="pharmacy_name"  {...register('pharmacy_name')} id="" required="" />
+                                    <input type="text" className="form-control" placeholder="Name" onChange={nameChange} name="pharmacy_name"  {...register('pharmacy_name')} id="" required="" />
                                 </div>
                             </div>
                             <div className="col-md-3 mb-2">
@@ -665,6 +779,8 @@ export function Provider(props) {
 
 
                         </div>
+
+
                     </form>
 
                 </div>
