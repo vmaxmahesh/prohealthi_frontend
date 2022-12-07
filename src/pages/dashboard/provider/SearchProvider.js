@@ -271,6 +271,8 @@ function ProviderList(props) {
                     </div>
                     <div className="row">
                         <div className="col-md-12">
+                        <div style={{height:"200px", overflowY:"scroll"}}>
+
                             <table className="table  table-bordered">
                                 <thead>
                                     <tr>
@@ -285,6 +287,7 @@ function ProviderList(props) {
 
                                 </tbody>
                             </table>
+                            </div>
                         </div>
                     </div>
                 </div>
