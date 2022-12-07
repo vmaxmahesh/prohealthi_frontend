@@ -10,7 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 export default function PriceSchedule() {
 
     const methods = useForm();
-    const {register, handleSubmit, watch, reset, formState : {errors} } = useForm();
+
     const [priceScheduleList, setPriceScheduleList] = useState([]);
     const [scheduleData, setScheduleData] = useState(false);
     const [adding, setAdding] = useState(false);
@@ -57,7 +57,7 @@ export default function PriceSchedule() {
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
-                (data.data);
+                // console.log(data.data);
                 setScheduleData(data.data);
                 // setGenericAvailable(data.data);
                 // setGeneric(data.data);
@@ -77,38 +77,7 @@ export default function PriceSchedule() {
         setScheduleData(false);
         setAdding(true);
         methods.reset();
-        (scheduleData);
-    }
-
-    const addBrandItem_old = (brand_item_form) => {
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(brand_item_form)
-        }
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/third-party-pricing/price-schedule/update`, requestOptions)
-            .then(async response => {
-                const isJson = response.headers.get('content-type')?.includes('application/json');
-                const data = isJson && await response.json();
-                if (!response.ok) {
-                    // get error message from body or default to response status
-                    const error = (data && data.message) || response.status;
-                    return Promise.reject(error);
-                } else {
-                    reset(data.data);
-                    // var msg = props.adding ? 'Added Successfully...!' : 'Updated Successfully..'
-                    toast.success(data.message, {
-                        position: "top-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-
-                    });
-                }
-            });
+        // console.log(scheduleData);
     }
 
     const addBrandItem = (brand_item_form) => {
@@ -144,7 +113,6 @@ export default function PriceSchedule() {
             });
     }
 
-
     useEffect(() => {
         if (adding) {
             methods.reset({
@@ -158,6 +126,7 @@ export default function PriceSchedule() {
 
     useEffect(() => {
 
+        console.log(methods)
         if (scheduleData) {
             setAdding(false);
             // alert("reset");
@@ -169,7 +138,6 @@ export default function PriceSchedule() {
         document.title = 'Price Schedule | ProHealthi';
 
     }, [priceScheduleList, scheduleData, adding]);
-
     return (
         <>
             <div className="row">
@@ -214,7 +182,7 @@ export default function PriceSchedule() {
                                         <h5>Price Schedule Form {adding ? "(Add New Data)" : "(Update Data)"}</h5>
                                     </div><hr />
                                     <FormProvider {...methods} >
-                                        <Form onSubmit={handleSubmit(addBrandItem)}>
+                                        <Form onSubmit={methods.handleSubmit(methods.addBrandItem)}>
                                             <StrategyInputs />
                                             <hr />
                                             <div className="data">
@@ -251,12 +219,12 @@ export default function PriceSchedule() {
     );
 }
 
-function StrategyInputs(handleClick) {
+function StrategyInputs(props) {
 
     const { register, handleSubmit, watch, reset, formState: { errors } } = useFormContext();
 
     return (
-        <>              
+        <>
             <div className="row">
                 <div className="col-md-3">
                     <div className="form-group mb-2">
@@ -610,7 +578,7 @@ export function BrandItemGeneric() {
 export function GetGenericItem() {
     // const [scheduleData, setScheduleData] = useOutletContext(false);
     // const { register, handleSubmit, watch, reset, formState: { error } } = useForm();
-    // (scheduleData);
+    // // console.log(scheduleData);
     // useEffect(() => { reset(scheduleData) }, [scheduleData]);
 
     const {
