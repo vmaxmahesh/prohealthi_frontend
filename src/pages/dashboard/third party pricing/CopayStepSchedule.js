@@ -219,7 +219,6 @@ function DataForm(props) {
                 copay_list: '', copay_amount: '', copay_percentage: '', days_supply: '', max_cost: '', new: 1, max_cost: ''
             },
                 { keepValues: false, });
-
         }
         reset(props.formData)
     }, [props.formData]);
@@ -244,7 +243,7 @@ function DataForm(props) {
                                     <textarea rows="1" cols="2" className="form-control"  ></textarea>
                                 </div>
                             </div>
-                            <div className="col-md-12">
+                            {/* {/* <div className="col-md-12">
                                 <div className=""><span>Schedule Type:</span></div>
                                 <div className="form-check">
                                     <input className="form-check-input" type="radio"
@@ -253,7 +252,7 @@ function DataForm(props) {
                                         Days Supply
                                     </label>
                                 </div>
-                            </div>
+                            </div> 
                             <div className="col-md-6 ">
                                 <div className="form-check">
                                     <input className="form-check-input" type="radio"
@@ -262,7 +261,7 @@ function DataForm(props) {
                                         Max Cost
                                     </label>
                                 </div>
-                            </div>
+                            </div> */}
                             {errors.step_schedule_indicator && <span><p className='notvalid'>This field is required</p></span>}
                         </div>
                         <div className="row mb-2 ">
@@ -311,7 +310,7 @@ function DataForm(props) {
                     </form>
 
 
-                    <div className="row mb-2 ">
+                    {/* <div className="row mb-2 ">
                         <div className="col-md-9 mb-3">
                             <table className="table  table-bordered">
                                 <thead>
@@ -338,8 +337,8 @@ function DataForm(props) {
 
                         {/* <div className="col-md-3 mb-3">
                             <button className='btn btn-danger'>Delete</button>
-                        </div> */}
-                    </div>
+                        </div> 
+                    </div> */}
                 </div>
             </div >
 
