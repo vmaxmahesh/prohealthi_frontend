@@ -12,12 +12,13 @@ export default function PrioritizeNetwork()
 
      
     const scollToRef = useRef();
-    const [adding, setAdding] = useState(false);
 
 
 
     const [ndcData, setNdcData] = useState([]);
     const [ndcClass, setNdClass] = useState([]);
+
+        const [adding, setAdding] = useState(false);
 
     const [benifitsData, setBenifitData] = useState(false);
 
