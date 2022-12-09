@@ -329,6 +329,7 @@ function NdcClassRow(props) {
 
 function AddNcdList(props) {
     const location = useLocation();
+    const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
     const [selctedNdc, setSelctedNdc] = useState({});
 
@@ -336,7 +337,12 @@ function AddNcdList(props) {
     const currentpath = location.pathname.split('/').pop();
 
     useEffect(() => { setSelctedNdc(props.selectedNdc) }, [props.selectedNdc, selctedNdc]);
-    //  console.log(selctedNdc);
+    const add=(selctedNdc)=>{
+     console.log(props.selectedNdc);
+}
+
+
+
 
     return (
         <>
@@ -349,7 +355,11 @@ function AddNcdList(props) {
 
                 </div>
                 <div className="tab-content" id="nav-tabContent">
+                    <form onSubmit={handleSubmit(add)}>
                     <Outlet context={[selctedNdc, setSelctedNdc]} />
+
+                            <button>mahesh</button>
+                    </form>
 
                 </div>
             </div>
@@ -364,7 +374,16 @@ export function ProcessRule(props) {
     const [selctedNdc, setSelctedNdc] = useOutletContext();
 
     useEffect(() => { reset(selctedNdc) }, [selctedNdc]);
-    //  console.log(selctedNdc);
+
+    const  ndcchange=(e)=>{
+        selctedNdc.ndc_exception_list=e.target.value;
+      }
+
+    console.log(selctedNdc);
+
+
+
+    
 
     return (
         <>
@@ -377,13 +396,13 @@ export function ProcessRule(props) {
                                 <div className="col-md-12">
                                     <div className="form-group mb-2">
                                         <small>ID</small>
-                                        <input type="text"  {...register("exception_list", {})} className="form-control" name="" id="" placeholder="Enter ID" />
+                                        <input type="text"  onChangeCapture={ndcchange}  {...register("exception_list", {})} className="form-control" name="" id="" placeholder="Enter ID" />
                                     </div>
                                 </div>
                                 <div className="col-md-6">
                                     <div className="form-group mb-2">
                                         <small>Name</small>
-                                        <input type="text" className="form-control"  {...register("exception_name", {})} name="" id="" placeholder="Name" />
+                                        <input type="text" className="form-control"   {...register("exception_name", {})} name="" id="" placeholder="Name" />
                                     </div>
                                 </div>
                                 <div className="col-md-6">
