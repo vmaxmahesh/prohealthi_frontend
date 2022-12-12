@@ -7,6 +7,7 @@ import { Button, Col, Row } from 'react-bootstrap';
 import { objToQueryString } from '../../../../hooks/healper';
 import Select from 'react-select';
 import SelectSearch from 'react-select-search';
+import 'react-select-search/style.css'
 
 
 
@@ -375,10 +376,14 @@ export function Identification(props) {
                 console.log(data.data);
                 setStates(data.data);
 
+                resolve(states.map(({ country_code, strDrink }) => ({ value: country_code, name: strDrink })))
+
+
                 // props.onChange(data);
 
                 // this.setState({ postId: data.id })
             })
+
             .catch(error => {
                 // this.setState({ errorMessage: error.toString() });
                 console.error('There was an error!', error);
@@ -423,18 +428,31 @@ export function Identification(props) {
     ];
 
 
-    const [states, setStates] = useState([]);
+    const [states, setStates] = useState();
 
     // const [countries, setCountries] = useState();
     
-    const [selectedOption, setSelectedOption] = useState(null);
+    const [selectedOption, setSelectedOption] = useState();
 
 
     const onStateChange = (e) => {
         getStates();
     }
 
+    // const options = [
+    //     {name: 'Swedish', value: 'sv'},
+    //     {name: 'English', value: 'en'},
+       
+    // ];
 
+    useEffect(()=>{
+        getStates();
+        
+
+    })
+
+
+    
 
 
     return (
@@ -516,6 +534,9 @@ export function Identification(props) {
                                                 onChange={setSelectedOption}
                                                 options={countries}
                                             />
+
+{/* <SelectSearch options={states} search={true}  value="sv" name="language" placeholder="Choose your language" /> */}
+
 
                                             {errors.country?.type === 'required' && <p role="alert" className="notvalid">Country is  required</p>}
 
