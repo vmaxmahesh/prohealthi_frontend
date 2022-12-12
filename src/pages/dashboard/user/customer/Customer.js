@@ -291,15 +291,7 @@ export function Identification(props) {
         setCountry(e.target.value);
         getCountries();
     }
-
-
-
-
-
-
     const navigate = useNavigate();
-
-
     function StartDateChange(e) {
 
         setStartDate(e.target.value);
@@ -418,8 +410,8 @@ export function Identification(props) {
 
     useEffect(() => { reset(customer) }, [customer]);
     const countries = [
-        { value: 'Jamica', label: 'Jamaica' },
-        
+        { value: 'Jamica', label: 'Jamaica' }, 
+        { value: 'Jamica2', label: 'Jamaica2' },        
     ];
 
 
@@ -433,10 +425,6 @@ export function Identification(props) {
     const onStateChange = (e) => {
         getStates();
     }
-
-
-
-
     return (
         <>
 
@@ -506,7 +494,6 @@ export function Identification(props) {
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Country</small>
-                                               
 
                                             <Select   {...register("country", {
                                                 required: true,
@@ -527,7 +514,8 @@ export function Identification(props) {
                                             <Select {...register("city", {
                                                 required: true,
 
-                                            })} onClick={onStateChange}  name="city" className="form-select"  defaultValue={{ label: "AD", value: 1 }}          options={Cstates}
+                                            })} onClick={onStateChange}  name="city" className="form-select"  defaultValue={{ label: "AD", value: 1 }}
+                                                      options={Cstates}
                                             />
 
                                                 {/* {states.map(option => (

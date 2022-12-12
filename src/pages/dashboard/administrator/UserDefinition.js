@@ -2,9 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { json, Link, Outlet, useLocation, useNavigate, useOutletContext } from "react-router-dom";
+import SelectSearch, { useSelect } from 'react-select-search';
 import { toast } from "react-toastify";
+import 'react-select-search/style.css'
+
 
 export default function UserDefinition() {
+    const [groupRowData, setGroupRowData] = useState(false);
     const navigate = useNavigate();
 
     const loadUserDefinitionForm = (user) => {
@@ -12,7 +16,11 @@ export default function UserDefinition() {
     }
 
     const loadGroupDefinitionForm = (group) => {
-        navigate('/dashboard/administrator/user-definition/group');
+        setGroupRowData(group);
+        // navigate('/dashboard/administrator/user-definition/group');
+        navigate('/dashboard/administrator/user-definition/group', { state: { group_id: group.group_id, group_name: group.group_name, type: 'groupForm' } });
+
+
     }
 
     const [userDefList, setUserDefList] = useState([]);
@@ -57,7 +65,7 @@ export default function UserDefinition() {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
                 setUserDefList(data.data);
-                
+
             })
             .catch(error => {
                 console.error('There was an error!', error);
@@ -69,7 +77,6 @@ export default function UserDefinition() {
     }
 
     useEffect(() => { }, [userDefList, formData, groupData]);
-
 
     return (
         <>
@@ -104,8 +111,8 @@ export default function UserDefinition() {
                                 <div className="col-md-8 mb-2">
                                     <h5>User Definition</h5>
                                 </div>
-                                {/* <UserDefinitionList loadUserDefinitionForm={loadUserDefinitionForm} userDefList={userDefList} showFormData={showFormData} /> */}
-                                <UserDefinitionList userDefList={userDefList} showFormData={showFormData} />
+                                <UserDefinitionList loadUserDefinitionForm={loadUserDefinitionForm} userDefList={userDefList} showFormData={showFormData} />
+                                {/* <UserDefinitionList userDefList={userDefList} showFormData={showFormData} /> */}
                             </div>
                         </div>
                     </div>
@@ -115,8 +122,8 @@ export default function UserDefinition() {
                                 <div className="col-md-8 mb-2">
                                     <h5> User Group Definition </h5>
                                 </div>
-                                {/* <UserGroupDefinitionList loadGroupDefinitionForm={loadGroupDefinitionForm} getGroupData={getGroupData} groupData={groupData} /> */}
-                                <UserGroupDefinitionList getGroupData={getGroupData} groupData={groupData} />
+                                <UserGroupDefinitionList loadGroupDefinitionForm={loadGroupDefinitionForm} getGroupData={getGroupData} groupData={groupData} groupRowData={groupRowData} />
+                                {/* <UserGroupDefinitionList getGroupData={getGroupData} groupData={groupData} /> */}
                             </div>
                         </div>
 
@@ -244,7 +251,7 @@ function UserGroupDefinitionList(props) {
 function GroupRow(props) {
     return (
         <>
-            <tr onClick={e => props.loadGroupDefinitionForm(e)}>
+            <tr onClick={e => props.loadGroupDefinitionForm(props.groupRow)}>
                 <td>{props.groupRow.group_id}</td>
                 <td>{props.groupRow.group_name}</td>
             </tr>
@@ -253,7 +260,7 @@ function GroupRow(props) {
 }
 
 export function UserDF(props) {
-    const location = useLocation();
+    const { state } = useLocation();
     const currentpath = location.pathname.split('/')[4];
     const { register, handleSubmit, reset, watch, formState: { error } } = useForm();
     // const [formData, setFormData] = useState();
@@ -290,6 +297,7 @@ export function UserDF(props) {
         </>
     )
 }
+
 export function UDefinitionTab() {
     const [formData, setFormData] = useOutletContext();
     const { register, handleSubmit, reset, watch, formState: { errors } } = useForm();
@@ -578,8 +586,96 @@ export function UDefinitionTab() {
 
 export function DataAccessTab() {
     const [formData, setFormData] = useOutletContext();
-    const { register, handleSubmit, reset, watch, formState: { error } } = useForm();
-    useEffect(() => { reset(formData) }, [formData]);
+    const { register, handleSubmit, reset, watch, formState: { errors } } = useForm();
+    const [custData, setCustData] = useState([]);
+
+
+    const getCustomers = (user_id) => {
+        // axios
+        //     .get('https://cataas.com/cat?json=true')
+        //     .then((res) => {
+        //         console.log(res);
+        //         setCatUrl('https://cataas.com' + res.data.url);
+        //     })
+        //     .catch((err) => {
+        //         console.error('Error:', err);
+        //         setError(err);
+        //     });
+
+        return new Promise((resolve, reject) => {
+            const requestOptions = {
+                method: 'GET',
+                headers: { 'content-type': 'application/json' }
+            }
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/administrator/user-defination/get-customers?search=${user_id}`, requestOptions)
+                .then(async response => {
+                    const isJson = response.headers.get('content-type')?.includes('application/json');
+                    const data = isJson && await response.json();
+                    setCustData(data.data);
+                    console.log(custData);
+                    // custData.map(opt => ({ label: data.data.customer_name, value: data.data.customer_id }));
+                    // custData.map(opt => { console.log(opt); });
+
+                    // let printFish = custData.map(individualFish => ({label: individualFish.customer_name, value: individualFish.customer_id                        
+                    // }));
+
+                    resolve(custData.map(({ label, value }) => ({
+                        value: custData.value, label: custData.label
+                    })));
+                    console.log(custData);
+                });
+        });
+    }
+
+
+
+
+
+    const customers = [
+        { value: '123', label: 'lab1' },
+        { value: '1234', label: 'lab2' },
+        { value: '1235', label: 'lab3' },
+        { value: '1236', label: 'lab4' },
+    ];
+
+
+    const clients = [
+        { value: '123', label: 'client1' },
+        { value: '1234', label: 'client2' },
+        { value: '1235', label: 'client3' },
+        { value: '1236', label: 'client4' },
+    ];
+
+    const client_groups = [
+        { value: '123', label: 'client_groups1' },
+        { value: '1234', label: 'client_groups2' },
+        { value: '1235', label: 'client_groups3' },
+        { value: '1236', label: 'client_groups4' },
+    ];
+
+    const custListArray = [];
+
+    useEffect(() => {
+        reset(formData)
+
+    }, [formData, custData]);
+
+    useEffect(() => {
+        getCustomers(formData.user_id);
+    }, []);
+
+    const options = [
+        { name: 'Swedish', value: 'sv' },
+        { name: 'English', value: 'en' },
+        {
+            type: 'group',
+            name: 'Group name',
+            items: [
+                { name: 'Spanish', value: 'es' },
+            ]
+        },
+    ];
+
     return (
         <>
             <div className="card-body">
@@ -587,28 +683,104 @@ export function DataAccessTab() {
                     <div className="col-md-12 mb-3">
                         <h5>Data Access</h5>
                     </div>
-
-                    <from>
+                    <form>
                         <div className="row mb-3">
                             <div className="col-md-4 mb-2">
                                 <div className="form-group">
                                     <small>Customer</small>
-                                    <input type="text" {...register("customer_id", { required: true })} className="form-control" />
-                                    <a href=""><span className="fa fa-search form-icon"></span></a>
+                                    <SelectSearch {...register("customer_id", { required: true })}
+                                        options={[]}
+                                        multiple
+                                        getOptions={(query) => {
+                                            return new Promise((resolve, reject) => {
+                                                fetch(
+                                                    process.env.REACT_APP_API_BASEURL + `/api/administrator/user-defination/get-customers?search=${query}&user_id=${formData.user_id}`
+                                                )
+                                                    .then((response) => response.json())
+                                                    .then(({ data }) => {
+                                                        resolve(
+                                                            data.map(({ value, label }) => ({
+                                                                value: value,
+                                                                name: label,
+                                                            })),
+                                                        );
+                                                    })
+                                                    .catch(reject);
+                                            });
+                                        }}
+                                        search
+                                        placeholder="Enter Customer ID/Name"
+                                    />
+                                    {/* {console.log(custData)} */}
+
+                                     {/* <Select {...register("client_id", { required: true })}
+                                        className="form-select" defaultValue={{ label: "Select Client", value: "" }}
+                                        options={clients} /> */}
                                 </div>
                             </div>
                             <div className="col-md-4 mb-2">
                                 <div className="form-group">
                                     <small>Client</small>
-                                    <input type="text" {...register("client_id", { required: true })} className="form-control" />
-                                    <a href=""><span className="fa fa-search form-icon"></span></a>
+                                    {/* <Select {...register("client_id", { required: true })}
+                                        className="form-select" defaultValue={{ label: "Select Client", value: "" }}
+                                        options={clients} /> */}
+
+                                    <SelectSearch {...register("client_id", { required: true })}
+                                        options={[]}
+                                        multiple
+                                        getOptions={(query) => {
+                                            return new Promise((resolve, reject) => {
+                                                fetch(
+                                                    process.env.REACT_APP_API_BASEURL + `/api/administrator/user-defination/get-clients?search=${query}&user_id=${formData.user_id}`
+                                                )
+                                                    .then((response) => response.json())
+                                                    .then(({ data }) => {
+                                                        resolve(
+                                                            data.map(({ value, label }) => ({
+                                                                value: value,
+                                                                name: label,
+                                                            })),
+                                                        );
+                                                    })
+                                                    .catch(reject);
+                                            });
+                                        }}
+                                        search
+                                        placeholder="Enter Client ID/Name"
+                                    />
                                 </div>
                             </div>
                             <div className="col-md-4 mb-2">
                                 <div className="form-group">
                                     <small>Client Group</small>
-                                    <input type="text" {...register("client_group_id", { required: true })} className="form-control" />
-                                    <a href=""><span className="fa fa-search form-icon"></span></a>
+                                    {/* <Select  {...register("client_groups", { required: true })}
+                                        className="form-select" defaultValue={{ label: "Select Client Group", value: "" }}
+                                        options={client_groups} /> */}
+
+                                    <SelectSearch {...register("client_groups", { required: true })}
+                                        options={[]}
+                                        multiple
+                                        getOptions={(query) => {
+                                            return new Promise((resolve, reject) => {
+                                                fetch(
+                                                    process.env.REACT_APP_API_BASEURL + `/api/administrator/user-defination/get-client-groups?search=${query}&user_id=${formData.user_id}`
+                                                )
+                                                    .then((response) => response.json())
+                                                    .then(({ data }) => {
+                                                        resolve(
+                                                            data.map(({ value, label }) => ({
+                                                                value: value,
+                                                                name: label,
+                                                            })),
+                                                        );
+                                                    })
+                                                    .catch(reject);
+                                            });
+                                        }}
+                                        search
+                                        placeholder="Enter Client Group ID/Name"
+                                    />
+
                                 </div>
                             </div>
                             <div className="col-md-6 mb-2">
@@ -633,7 +805,7 @@ export function DataAccessTab() {
                                 <button href="provider-search.html" className="btn btn-info">Add</button>
                             </div>
                         </div>
-                    </from>
+                    </form>
 
                     <div className="col-md-12">
                         <table className="table table-striped table-bordered" {...register("customer_id", { required: true })}>
@@ -647,13 +819,7 @@ export function DataAccessTab() {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
+
                             </tbody>
                         </table>
                     </div>
@@ -663,29 +829,57 @@ export function DataAccessTab() {
     )
 }
 
+function CustRow(props) {
+    // console.log(props.custRow);
+    return (
+        <>
+            <tr>
+                <td>{props.custRow.customer_id}</td>
+                <td>{props.custRow.customer_id}</td>
+                <td>{props.custRow.customer_id}</td>
+                <td>{props.custRow.customer_id}</td>
+                <td>{props.custRow.customer_id}</td>
+            </tr>
+        </>
+    )
+}
+
+function GetCustomer(props) {
+    return (
+        <>
+            {props.custData.customer_name}
+            <option value={props.custData.customer_id}>{props.custData.customer_name}</option>
+        </>
+    )
+}
+
 export function GroupForm() {
+    const { state } = useLocation();
+    const { register, handleSubmit, reset, watch, formState: { errors } } = useForm();
+    // const { data: { id } = {} } = useLocation();
+    useEffect(() => { reset(state) }, [state]);
+
     return (
         <>
             <div className="col-md-8 mb-2 mt-5">
-                <h5>Group Information</h5>
+                <h5>Group Information </h5>
             </div>
             <Form>
                 <div className="row">
                     <div className="col-md-3">
                         <div className="form-group">
                             <small>Group ID</small>
-                            <input type="text" className="form-control" />
+                            <input type="text" className="form-control" {...register("group_id")} />
                         </div>
                     </div>
                     <div className="col-md-3">
                         <div className="form-group">
                             <small>Group Name</small>
-                            <input type="text" className="form-control" />
+                            <input type="text" className="form-control" {...register("group_name")} />
                         </div>
                     </div>
                 </div>
             </Form>
-
 
             <div className="col-md-8 mb-2 mt-5">
                 <h5>Program Security Options</h5>
