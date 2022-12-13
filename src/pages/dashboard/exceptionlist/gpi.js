@@ -465,13 +465,13 @@ function AddNcdList(props) {
                                                 <div className="col-md-6">
                                                     <div className="form-group mb-2">
                                                         <small>Name</small>
-                                                        <input type="text" className="form-control"  {...register("exception_name", {})} name="" id="" placeholder="Name" />
+                                                        <input type="text" className="form-control"  {...register("exception_name", {})} name="" id="exception_name" placeholder="Name" />
                                                     </div>
                                                 </div>
                                                 <div className="col-md-6">
                                                     <div className="form-group mb-2">
                                                         <small>NDC</small>
-                                                        <input type="text" className="form-control" name="ndc" {...register('ndc')} id="" placeholder="NDC" />
+                                                        <input type="text" className="form-control" name="generic_product_id" {...register('generic_product_id')} id="" placeholder="NDC" />
                                                         <a href=""><span className="fa fa-search form-icon"></span></a>
                                                     </div>
                                                 </div>
