@@ -238,9 +238,17 @@ function ShowNDCList(props) {
     }
 
     const ndcListArray = [];
-    for (let i = 0; i < props.ndcListData.length; i++) {
-        ndcListArray.push(<NdcRow ndcRow={props.ndcListData[i]} getNDCItem={getNDCItem} selected={props.selctedNdc} />);
+
+    const EmptyData={
+        gpi_exception_list:'no data'
     }
+   
+
+        for (let i = 0; i < props.ndcListData.length; i++) {
+            ndcListArray.push(<NdcRow ndcRow={props.ndcListData[i]} getNDCItem={getNDCItem} selected={props.selctedNdc} />);
+        }
+
+   
 
     const ndcClassArray = [];
     for (let j = 0; j < props.ndcClassData.length; j++) {
@@ -311,17 +319,25 @@ function ShowNDCList(props) {
 }
 
 function NdcRow(props) {
-    return (
-        <>
-            <tr onClick={() => props.getNDCItem(props.ndcRow.gpi_exception_list)}
-                className={(props.selected && props.ndcRow.gpi_exception_list == props.selected.gpi_exception_list ? ' tblactiverow ' : '')}
-            >
-                <td>{props.ndcRow.gpi_exception_list}</td>
-                <td>{props.ndcRow.exception_name}</td>
-                {/* <td><button className="btn btn-sm btn-info" id="" onClick={() => props.getNDCItem(props.ndcRow.gpi_exception_list)}><i className="fa fa-eye"></i> View</button></td> */}
-            </tr>
-        </>
-    )
+
+   
+      return (
+            <>
+           
+                <tr  onClick={() => props.getNDCItem(props.ndcRow.gpi_exception_list)}
+                    className={(props.selected && props.ndcRow.gpi_exception_list == props.selected.gpi_exception_list ? ' tblactiverow ' : '')}
+                >
+                    <td>{props.ndcRow.gpi_exception_list}</td>
+                    <td>{props.ndcRow.exception_name}</td>
+
+                    
+                    {/* <td><button className="btn btn-sm btn-info" id="" onClick={() => props.getNDCItem(props.ndcRow.gpi_exception_list)}><i className="fa fa-eye"></i> View</button></td> */}
+                </tr>
+            </>
+        )
+
+  
+   
 }
 
 function NdcClassRow(props) {
@@ -459,7 +475,9 @@ function AddNcdList(props) {
                                                 <div className="col-md-12">
                                                     <div className="form-group mb-2">
                                                         <small>ID</small>
-                                                        <input type="text"  {...register("gpi_exception_list", {})} className="form-control" name="gpi_exception_list" id="" placeholder="Enter ID" />
+                                                        <input type="text"  {...register("gpi_exception_list", {
+                                                            required:true
+                                                        })} className="form-control" name="gpi_exception_list" id="" placeholder="Enter ID" />
                                                     </div>
                                                 </div>
                                                 <div className="col-md-6">
