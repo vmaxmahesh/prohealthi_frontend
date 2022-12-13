@@ -29,7 +29,7 @@ function TraditionalNetworks(props) {
     const scollToRef = useRef();
     const [customer, setCustomer] = useState([]);
 
-    
+
 
 
     const [ndcData, setNdcData] = useState([]);
@@ -154,8 +154,8 @@ function TraditionalNetworks(props) {
 
 
     const fillProviderData = (e) => {
-        // API  
-        // var staticProviderType =; 
+        // API
+        // var staticProviderType =;
         var arr = [
             { id: '123', name: 'Mahesh', storenumber: '101', chain: 'Hyderabad' },
             { id: '1234', name: 'Mahesh', storenumber: '101', chain: 'Hyderabad' },
@@ -190,7 +190,7 @@ function TraditionalNetworks(props) {
                     <div className="col-md-6 mb-3">
                         <div className="breadcrum ">
                             <ul>
-                                 <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li> 
+                                 <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li>
                             </ul>
                         </div>
                     </div>
@@ -201,42 +201,8 @@ function TraditionalNetworks(props) {
 
                     <SearchTraditionalNetwork searchException={searchException} />
 
-
-                    {/* <TraditionalNetworkList ndcListData={ndcData} ndcClassData={ndcClass} getNDCItem={getNDCItems} getNDCItemDetails={getNDCItemDetails} selctedNdc={selctedNdc} /> */}
-
-
                 </div>
 
-                {/* <div className="card mt-3 mb-3">
-                    <div className="card-body" onClick={e =>
-                        fillProviderData()}>
-
-                        <div className="row">
-                            <div className="col-md-12">
-
-                                {ProviderData.length > 0 ?
-                                    <TraditionalNetworkResults typedata={ProviderData} />
-                                    : ''}
-                                <table className="table table-striped table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Name</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>FreeDrug</td>
-                                            <td>Free drug</td>
-                                            <td><button type="submit" onClick={handleshow} className="btn btn-sm btn-info" id="show"><i className="fa fa-eye"></i> View</button></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div> */}
 
                 <Row>
                     <Col md="3">
@@ -257,124 +223,6 @@ function TraditionalNetworks(props) {
 
                     </Col>
                 </Row>
-
-
-
-                {/* <div className="data" style={{ display: '' }} >
-                    <div className="nav nav-tabs" id="nav-tab" role="tablist">
-
-                        <Link to="network" className={'nav-link' + (currentpath == 'network' ? ' active' : '')}>NetWork</Link>
-                        <Link to="providers" className={'nav-link' + (currentpath == 'providers' ? ' active' : '')}>Providers</Link>
-
-                    </div>
-                    <div className="tab-content" id="nav-tabContent">
-
-                        <Outlet context={[traditionalnetwork, SetTraditionalNetwork]} /> */}
-
-                        {/* const [traditionalnetwork, SetTraditionalNetwork] = useState([]); */}
-
-                        {/* <div className="tab-pane fade" id="Providers" role="tabpanel" aria-labelledby="nav-profile-tab">
-
-                            <div className="card mt-3 mb-3">
-                                <div className="card-body">
-                                    <div className="row">
-                                        <div className="col-md-12">
-                                            <h5 className="mb-2">Providers within Network</h5>
-                                        </div>
-
-                                        <div className="col-md-12">
-                                            <table className="table table-striped table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th>ID</th>
-                                                        <th>Name</th>
-                                                        <th>Effective Date</th>
-                                                        <th>Termination Date</th>
-                                                        <th>Price Schedule</th>
-                                                        <th>Denied</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>ANP0005</td>
-                                                        <td>Mangrove Cay</td>
-                                                        <td>2010-09-09</td>
-                                                        <td>9999-12-31</td>
-                                                        <td>--</td>
-                                                        <td>No</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>ANP0005</td>
-                                                        <td>Mangrove Cay</td>
-                                                        <td>2010-09-09</td>
-                                                        <td>9999-12-31</td>
-                                                        <td>--</td>
-                                                        <td>No</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>ANP0005</td>
-                                                        <td>Mangrove Cay</td>
-                                                        <td>2010-09-09</td>
-                                                        <td>9999-12-31</td>
-                                                        <td>--</td>
-                                                        <td>No</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-
-                                        <div className="col-md-6">
-                                            <div className="form-group mb-3">
-                                                <small>Provider ID</small>
-                                                <input type="text" className="form-control" name="" placeholder="Enter Customer ID" id="" required="" />
-                                                <a href=""><span className="fa fa-search form-icon"></span></a>
-                                            </div>
-                                        </div>
-
-                                        <div className="col-md-6">
-                                            <div className="form-group mb-3">
-                                                <small>Price Schedule</small>
-                                                <input type="text" className="form-control" name="" placeholder="Enter Customer ID" id="" required="" />
-                                                <a href=""><span className="fa fa-search form-icon"></span></a>
-                                            </div>
-                                        </div>
-
-                                        <div className="col-md-4">
-                                            <div className="form-group mb-3 mt-4">
-                                                <small>&nbsp;</small>
-                                                <input type="checkbox" id="male" className="d-none" />
-                                                <label htmlFor="male">Parcipation Denied</label>
-                                            </div>
-                                        </div>
-                                        <div className="col-md-4">
-                                            <div className="form-group mb-3">
-                                                <small>Effective Date</small>
-                                                <input type="date" className="form-control" name="" placeholder="Enter Customer ID" id="" required="" />
-                                            </div>
-                                        </div>
-                                        <div className="col-md-4">
-                                            <div className="form-group mb-3">
-                                                <small>Termination Date</small>
-                                                <input type="date" className="form-control" name="" placeholder="Enter Customer ID" id="" required="" />
-                                            </div>
-                                        </div>
-                                        <div className="clearfix mb-2"></div>
-
-                                        <div className="col-md-6 ms-auto text-end mb-3">
-                                            <a href="" className="btn btn-danger">Clear</a>&nbsp;&nbsp;
-                                            <a href="" className="btn btn-warning ">Remove From List</a>&nbsp;&nbsp;
-                                            <a href="provider-search.html" className="btn btn-info">Add to List</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-md-1 float-end">
-                                <a href="" className="btn btn-theme pt-2 pb-2" style="width: 100%">Next</a> *
-                            </div>
-                        </div> */}
-                    {/* </div>
-                </div>
-            </div> */}
             <Footer />
             </div>
         </>
@@ -388,7 +236,7 @@ function TraditionalNetworks(props) {
 function SearchTraditionalNetwork(props) {
 
 
-    
+
     const searchException = (fdata) => {
 
         props.searchException(fdata);
@@ -536,7 +384,7 @@ function NdcRow(props) {
             >
                 <td>{props.ndcRow.network_id}</td>
                 <td >{props.ndcRow.network_name}</td>
-                
+
 
                 {/* <td><button className="btn btn-sm btn-info" id="" ><i className="fa fa-eye"></i> View</button></td> */}
             </tr>
@@ -1010,7 +858,7 @@ function ProvidersResults(props) {
                         </div>
                         <div className="col-md-3 ms-auto text-end">
                             {/* <button className="btn  btn-info" data-bs-
-toggle="modal" data-bs-target="#exampleModal"> 
+toggle="modal" data-bs-target="#exampleModal">
                                 Add Provider Types <i className="fa fa-plus-
 circle"></i></button> */}
                             {/* <button className="btn  btn-info" onClick={e =>

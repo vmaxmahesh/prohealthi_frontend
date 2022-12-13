@@ -19,8 +19,8 @@ function SearchProvider() {
 
 
     const fillProviderData = (e) => {
-        // API  
-        // var staticProviderType =; 
+        // API
+        // var staticProviderType =;
         var arr = [
             { id: '123', name: 'Mahesh', storenumber: '101', chain: 'Hyderabad' },
             { id: '1234', name: 'Mahesh', storenumber: '101', chain: 'Hyderabad' },
@@ -60,7 +60,7 @@ function SearchProvider() {
                 <div className="col-md-6 mb-3">
                     <div className="breadcrum ">
                         <ul>
-                             <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li> 
+                             <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li>
                         </ul>
                     </div>
                 </div>
@@ -74,11 +74,11 @@ function SearchProvider() {
                     {ProviderData.length > 0 ?
                         <Results typedata={ProviderData} />
                         : ''}
-                       
+
                     <div className="row">
                     </div>
 
-                    
+
                     <div className="nav nav-tabs col-md-12" id="nav-tab" role="tablist">
                         <Link to="provider" className={'nav-link' + (currentpath == 'provider' ? ' active' : '')}>Provider</Link>
                         <Link to="effectivedates" className={'nav-link' + (currentpath == 'effectivedates' ? ' active' : '')}>Effective Dates</Link>
@@ -92,9 +92,9 @@ function SearchProvider() {
 
                     </div>
                     </div>
-                    
+
                 </div>
-                
+
             <Footer />
         </>
     );
@@ -131,7 +131,7 @@ function ProviderList()
                             <h5 className="mb-2">Provider List </h5>
                         </div>
                     <div className="row">
-                    <div className="col-md-12">                        
+                    <div className="col-md-12">
                         <table className= "table  table-bordered">
                             <thead>
                                 <tr>
@@ -142,13 +142,13 @@ function ProviderList()
                                 </tr>
                             </thead>
                             <tbody>
-                               
+
                             </tbody>
-                        </table>                        
-                    </div>   
+                        </table>
+                    </div>
             </div>
            </div>
-         </div> 
+         </div>
         </>
     )
 }
@@ -1024,8 +1024,8 @@ export function NetworkParticipation(props) {
 
 
     const fillProviderData = (e) => {
-        // API  
-        // var staticProviderType =; 
+        // API
+        // var staticProviderType =;
         var arr = [
             { traditional_id: '123', name: 'Mahesh', priceschedule: '101', denied: 'Hyderabad', effective_date: '2022-08-2022', termination_date: '02-20-2022' },
 
@@ -1322,7 +1322,7 @@ bordered">
                         </div>
                         <div className="col-md-3 ms-auto text-end">
                             {/* <button className="btn  btn-info" data-bs-
-toggle="modal" data-bs-target="#exampleModal"> 
+toggle="modal" data-bs-target="#exampleModal">
                                 Add Provider Types <i className="fa fa-plus-
 circle"></i></button> */}
                             {/* <button className="btn  btn-info" onClick={e =>
@@ -1385,7 +1385,7 @@ bordered">
                         </div>
                         <div className="col-md-3 ms-auto text-end">
                             {/* <button className="btn  btn-info" data-bs-
-toggle="modal" data-bs-target="#exampleModal"> 
+toggle="modal" data-bs-target="#exampleModal">
                                 Add Provider Types <i className="fa fa-plus-
 circle"></i></button> */}
                             {/* <button className="btn  btn-info" onClick={e =>

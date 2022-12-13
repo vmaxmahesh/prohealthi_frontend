@@ -8,7 +8,7 @@ export default function PrioritizeNetwork()
 {
 
 
-     
+
     const scollToRef = useRef();
 
 
@@ -55,7 +55,7 @@ export default function PrioritizeNetwork()
     const getNDCItems = (ndcid) => {
         // ndc_exception_list
 
-       
+
         // //  console.log(customerid);
         const requestOptions = {
             method: 'GET',
@@ -170,7 +170,7 @@ function NdcRow(props) {
             >
                 <td>{props.ndcRow.super_rx_network_id}</td>
                 <td >{props.ndcRow.super_rx_network_id_name}</td>
-                
+
 
                 {/* <td><button className="btn btn-sm btn-info" id="" ><i className="fa fa-eye"></i> View</button></td> */}
             </tr>
@@ -226,12 +226,12 @@ function PrioritizeList(props)
                             </table>
                         </div>
                         <div className="col-md-9">
-                        <PrioritizeForm  viewDiagnosisFormdata={props.selctedNdc}/> 
+                        <PrioritizeForm  viewDiagnosisFormdata={props.selctedNdc}/>
 
                         </div>
                     </div>
 
-                        
+
 
                 </div>
             </div>
@@ -320,7 +320,7 @@ function PrioritizeForm(props)
                 {/* <DiagPrioritizeDragable dragData={props.viewDiagnosisFormdata['list']} /> */}
 
 
-                
+
 
                 <DraggableList width={300} height={50} rowSize={1} className="draggablelist">
 
@@ -367,7 +367,7 @@ function DiagPrioritizeDragable(props) {
     return (
         <>
             <DraggableList width={300} height={50} rowSize={1} className="draggablelist">
-                {/* {props.dragData ? 
+                {/* {props.dragData ?
                 props.dragData.map((item, index) => (
                     <li key={index}>{`${index + 1}.  ${item.super_rx_network_priority}`}</li>
                 )) : ''} */}
@@ -378,12 +378,12 @@ function DiagPrioritizeDragable(props) {
                         console.log(element)
 ;
                         <li key={element}>{element[0]}</li>
-                        
+
                     }):''
 
 
                 } */}
-                
+
 
 
 
@@ -395,6 +395,6 @@ function DiagPrioritizeDragable(props) {
 
 
             </DraggableList>
-        </>     
+        </>
     )
 }
