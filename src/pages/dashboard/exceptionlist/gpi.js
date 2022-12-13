@@ -471,20 +471,20 @@ function AddNcdList(props) {
                                                 <div className="col-md-6">
                                                     <div className="form-group mb-2">
                                                         <small>NDC</small>
-                                                        <input type="text" className="form-control" name="" id="" placeholder="NDC" />
+                                                        <input type="text" className="form-control" name="ndc" {...register('ndc')} id="" placeholder="NDC" />
                                                         <a href=""><span className="fa fa-search form-icon"></span></a>
                                                     </div>
                                                 </div>
                                                 <div className="col-md-6">
                                                     <div className="form-group mb-2">
                                                         <small>Termination Date</small>
-                                                        <input type="date" className="form-control" name="" id="" />
+                                                        <input type="date" className="form-control" {...register('termination_date')} name="termination_date" id="" />
                                                     </div>
                                                 </div>
                                                 <div className="col-md-6">
                                                     <div className="form-group mb-2">
                                                         <small>Effective Date</small>
-                                                        <input type="date" className="form-control" name="" id="" />
+                                                        <input type="date" className="form-control" name="effective_date" {...register('effective_date')} id="" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -497,17 +497,17 @@ function AddNcdList(props) {
                                                 <div className="col-md-6">
                                                     <div className="form-group mb-2">
                                                         <small>New Drug Status</small>
-                                                        <select className="form-select">
+                                                        <select className="form-select" name="new_drug_status" {...register('new_drug_status')}>
                                                             <option value="">Select</option>
-                                                            <option value="">Approved</option>
-                                                            <option value="">Non Fourmulary</option>
+                                                            <option value="1">Approved</option>
+                                                            <option value="2">Non Fourmulary</option>
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <div className="col-md-6">
                                                     <div className="form-group mb-2">
                                                         <small>Rule</small>
-                                                        <select className="form-select">
+                                                        <select className="form-select" name="process_rule" {...register('process_rule')}>
                                                             <option value="">Select</option>
                                                             <option value="">R - Reject if status indicator</option>
                                                             <option value="">L - Limitations are Exceeded</option>
@@ -516,7 +516,7 @@ function AddNcdList(props) {
                                                 </div>
                                                 <div className="col-md-12 mb-4">
                                                     <div className="form-group">
-                                                        <input type="checkbox" id="user" className="d-none" />
+                                                        <input type="checkbox" id="user" className="d-none" name="module_exit" {...register('module_exit')} />
                                                         <label htmlFor="user">User Exit will not be Invoked for this Section</label>
                                                     </div>
                                                 </div>
@@ -527,14 +527,14 @@ function AddNcdList(props) {
                                                 <div className="col-md-6">
                                                     <div className="form-group mb-2">
                                                         <small>Preferred NDC</small>
-                                                        <input type="text" className="form-control" name="" id="" placeholder="NDC" />
+                                                        <input type="text" className="form-control" name="preferred_product_ndc" {...register('preferred_product_ndc')} id="" placeholder="NDC" />
                                                         <a href=""><span className="fa fa-search form-icon"></span></a>
                                                     </div>
                                                 </div>
                                                 <div className="col-md-6">
                                                     <div className="form-group mb-2">
                                                         <small>Conversion NDC</small>
-                                                        <input type="text" className="form-control" name="" id="" placeholder="NDC" />
+                                                        <input type="text" className="form-control" name="conversion_product_ndc"  {...register('conversion_product_ndc')} id="" placeholder="NDC" />
                                                         <a href=""><span className="fa fa-search form-icon"></span></a>
                                                     </div>
                                                 </div>
@@ -549,19 +549,19 @@ function AddNcdList(props) {
                                         <div className="col-md-12 mb-2">
                                             <div className="form-group">
                                                 <small>Message</small>
-                                                <textarea className="form-control" rows="3"></textarea>
+                                                <textarea {...register('message')} className="form-control" rows="3"></textarea>
                                                 <p className="input-hint">Message Returned to the Provider</p>
                                             </div>
                                         </div>
                                         <div className="col-md-6 mb-2">
                                             <div className="form-group">
                                                 <small>Stop Date</small>
-                                                <input type="date" name="" id="" className="form-control" />
+                                                <input type="date"  id="" className="form-control" name="message_stop_date" {...register('message_stop_date')} />
                                             </div>
                                         </div>
                                         <div className="col-md-6 mt-4 mb-4">
                                             <div className="form-group">
-                                                <input type="checkbox" id="message" className="d-none" />
+                                                <input type="checkbox" id="message" className="d-none" name="reject_only_msg_flag" {...register('reject_only_msg_flag')} />
                                                 <label htmlFor="message">Message sent only when Transation is Rejected</label>
                                             </div>
                                         </div>
@@ -585,10 +585,10 @@ function AddNcdList(props) {
                                                         <small>Rx Quantity</small>
                                                         <div class="row">
                                                             <div class="col-md-6">
-                                                                <input type="text" name="" id="" placeholder="Minimum" class="form-control" />
+                                                                <input type="text" name="" {...register('min_rx_qty')} id="" placeholder="Minimum" class="form-control" />
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <input type="text" name="" id="" placeholder="Maximum" class="form-control" />
+                                                                <input type="text" name="" {...register('max_rx_qty')} id="" placeholder="Maximum" class="form-control" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -623,17 +623,17 @@ function AddNcdList(props) {
                                                         <small>Day Supply</small>
                                                         <div class="row">
                                                             <div class="col-md-6">
-                                                                <input type="text" name="" id="" placeholder="Minimum" class="form-control" />
+                                                                <input type="text" name="" id="" {...register('min_days_supply_opt')} placeholder="Minimum" class="form-control" />
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <input type="text" name="" id="" placeholder="Maximum" class="form-control" />
+                                                                <input type="text" name="" {...register('max_days_supply_opt')} id="" placeholder="Maximum" class="form-control" />
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <small>Retail Fills</small>
-                                                    <input type="text" name="" id="" placeholder="Max" class="form-control" />
+                                                    <input type="text" name="" id="" {...register('retail_max_fills_opt')} placeholder="Max" class="form-control" />
                                                 </div>
                                             </div>
                                             <div class="row mb-2">
@@ -642,31 +642,31 @@ function AddNcdList(props) {
                                                         <small>Ctl Days Supply</small>
                                                         <div class="row">
                                                             <div class="col-md-6">
-                                                                <input type="text" name="" id="" placeholder="Minimum" class="form-control" />
+                                                                <input type="text" name="min_ctl_days" {...register('min_ctl_days')} id="" placeholder="Minimum" class="form-control" />
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <input type="text" name="" id="" placeholder="Maximum" class="form-control" />
+                                                                <input type="text" name="max_ctl_days"  {...register('max_ctl_days')} id="" placeholder="Maximum" class="form-control" />
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <small>Quantity/Fill</small>
-                                                    <input type="text" name="" id="" placeholder="Max" class="form-control" />
+                                                    <input type="text" name="max_qty_per_fill"  {...register('max_qty_per_fill')} id="" placeholder="Max" class="form-control" />
                                                 </div>
                                             </div>
                                             <div class="row mb-2">
                                                 <div class="col-md-4">
                                                     <small>Days Fill</small>
-                                                    <input type="text" name="" id="" placeholder="Max" class="form-control" />
+                                                    <input type="text" name="max_days_per_fill"  {...register('max_days_per_fill')} id="" placeholder="Max" class="form-control" />
                                                 </div>
                                                 <div class="col-md-4">
                                                     <small>Daily Dose</small>
-                                                    <input type="text" name="" id="" placeholder="Max" class="form-control" />
+                                                    <input type="text" name="max_dose" {...register('max_dose')} id="" placeholder="Max" class="form-control" />
                                                 </div>
                                                 <div class="col-md-4">
                                                     <small>Starter Dose Days</small>
-                                                    <input type="text" name="" id="" placeholder="Max" class="form-control" />
+                                                    <input type="text" name="starter_dose_days" {...register('starter_dose_days')} id="" placeholder="Max" class="form-control" />
                                                 </div>
                                             </div>
                                             <div class="row mb-2">
@@ -676,13 +676,13 @@ function AddNcdList(props) {
                                                 </div>
                                                 <div class="col-md-4">
                                                     <small>Star Dose Bypass Days</small>
-                                                    <input type="text" name="" id="" placeholder="Max" class="form-control" />
+                                                    <input type="text" name="starter_dose_bypass_days" {...register('starter_dose_bypass_days')} id="" placeholder="Max" class="form-control" />
                                                 </div>
                                             </div>
                                             <div class="row mb-2">
                                                 <div class="col-md-8">
-                                                    <small>Acute Dosing Days</small>
-                                                    <input type="text" name="" id="" placeholder="Max" class="form-control" />
+                                                    <small>Acute Dosing Days</small> 
+                                                    <input type="text" name="acute_dosing_days" id=""  {...register('acute_dosing_days')} placeholder="Max" class="form-control" />
                                                 </div>
                                                 <div class="col-md-4">
                                                     <small>Star Dose Maint. by Days</small>
@@ -697,17 +697,17 @@ function AddNcdList(props) {
                                                         <small>Age</small>
                                                         <div class="row">
                                                             <div class="col-md-6">
-                                                                <input type="text" name="" id="" placeholder="Minimum" class="form-control" />
+                                                                <input type="text" name="min_age" {...register('min_age')} id="" placeholder="Minimum" class="form-control" />
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <input type="text" name="" id="" placeholder="Maximum" class="form-control" />
+                                                                <input type="text" name="max_age" {...register('max_age')} id="" placeholder="Maximum" class="form-control" />
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <small>Maint. Daily Dose</small>
-                                                    <input type="text" name="" id="" placeholder="Max" class="form-control" />
+                                                    <input type="text" name="maint_dose_units_day"   {...register('maint_dose_units_day')} id="" placeholder="Max" class="form-control" />
                                                 </div>
 
                                             </div>
@@ -720,13 +720,13 @@ function AddNcdList(props) {
                                                 </div>
                                                 <div class="col-md-4 mb-2">
                                                     <small>Quantity Over Time </small>
-                                                    <input type="text" name="" id="" placeholder="Max" class="form-control" />
+                                                    <input type="text" name="" {...register('max_qty_over_time')} id="" placeholder="Max" class="form-control" />
                                                 </div>
                                                 <div class="col-md-8 mb-2">
                                                 </div>
                                                 <div class="col-md-4 mb-2">
                                                     <small>Days Over Time </small>
-                                                    <input type="text" name="" id="" placeholder="Max" class="form-control" />
+                                                    <input type="text" name="max_days_over_time" {...register('max_days_over_time')} id="" placeholder="Max" class="form-control" />
                                                 </div>
                                             </div>
                                         </div>
@@ -738,10 +738,10 @@ function AddNcdList(props) {
                                                         <small>Daily Supply</small>
                                                         <div class="row">
                                                             <div class="col-md-6">
-                                                                <input type="text" class="form-control" placeholder="" name="" id="" />
+                                                                <input type="text" class="form-control" placeholder=""  {...register('mail_ord_max_days_supply_opt')} name="mail_ord_max_days_supply_opt" id="" />
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <input type="text" class="form-control" placeholder="" name="" id="" />
+                                                                <input type="text" class="form-control" placeholder="" name="mail_ord_max_days_supply_opt"  {...register('mail_ord_max_days_supply_opt')} id="" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -749,7 +749,7 @@ function AddNcdList(props) {
                                                 <div class="col-md-12 mb-2">
                                                     <div class="form-group">
                                                         <small>Mail Service Fills</small>
-                                                        <input type="text" class="form-control" name="" id="" />
+                                                        <input type="text" class="form-control" name="mail_ord_max_fills_opt" {...register('mail_ord_max_fills_opt')} id="" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -759,7 +759,7 @@ function AddNcdList(props) {
                                             <div class="col-md-12 mb-2">
                                                 <div class="form-group">
                                                     <small>Valid Relationship</small>
-                                                    <select class="form-select">
+                                                    <select class="form-select" name="valid_relation_code" {...register('valid_relation_code')}>
                                                         <option value="">Select</option>
                                                         <option value=""></option>
                                                         <option value=""></option>
@@ -773,13 +773,13 @@ function AddNcdList(props) {
                                                     <div class="row">
                                                         <div class="col-md-4 mt-2">
                                                             <div class="form-group">
-                                                                <input type="checkbox" id="male" class="d-none" />
+                                                                <input type="checkbox" id="male" name="sex_restriction" {...register('sex_restriction')} class="d-none" />
                                                                 <label for="male"> Male</label>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-4 mt-2">
                                                             <div class="form-group">
-                                                                <input type="checkbox" id="female" class="d-none" />
+                                                                <input type="checkbox" id="female" name="sex_restriction" {...register('sex_restriction')} class="d-none" />
                                                                 <label for="female"> Female</label>
                                                             </div>
                                                         </div>
@@ -797,27 +797,27 @@ function AddNcdList(props) {
                                             <div class="col-md-12 mb-2">
                                                 <div class="form-group">
                                                     <small>Alt Price Schedule</small>
-                                                    <input type="text" class="form-control" name="" id="" />
+                                                    <input type="text" class="form-control" {...register('alternate_price_schedule')} name="alternate_price_schedule" id="" />
                                                     <a href=""><span class="fa fa-search form-icon"></span></a>
                                                 </div>
                                             </div>
                                             <div class="col-md-12 mb-2">
                                                 <div class="form-group">
                                                     <small>Alt Copay Schedule</small>
-                                                    <input type="text" class="form-control" name="" id="" />
+                                                    <input type="text" class="form-control" {...register('alternate_copay_sched')} name="alternate_copay_sched" id="" />
                                                     <a href=""><span class="fa fa-search form-icon"></span></a>
                                                 </div>
                                             </div>
                                             <div class="col-md-12 mb-2">
                                                 <div class="form-group">
                                                     <small>Brand Copay Amount</small>
-                                                    <input type="text" class="form-control" name="" id="" />
+                                                    <input type="text" class="form-control" {...register('brand_copay_amt')} name="brand_copay_amt" id="" />
                                                 </div>
                                             </div>
                                             <div class="col-md-12 mb-2">
                                                 <div class="form-group">
                                                     <small>Generic Copay Amount</small>
-                                                    <input type="text" class="form-control" name="" id="" />
+                                                    <input type="text" class="form-control" name="generic_copay_amt" {...register('generic_copay_amt')} id="" />
                                                 </div>
                                             </div>
                                             <div class="col-md-12 mb-2">
@@ -859,14 +859,14 @@ function AddNcdList(props) {
                                         <div class="col-md-3 mb-2">
                                             <small>Specilty</small>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" name="" id="" required="" />
+                                                <input type="text" class="form-control" name="physician_specialty_list" {...register('physician_specialty_list')} id="" required="" />
                                                 <a href=""><span class="fa fa-search form-icon"></span></a>
                                             </div>
                                         </div>
                                         <div class="col-md-3 mb-2">
                                             <small>Diagnosis</small>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" name="" id="" required="" />
+                                                <input type="text" class="form-control" name="diagnosis_list" {...register('diagnosis_list')} id="" required="" />
                                                 <a href=""><span class="fa fa-search form-icon"></span></a>
                                             </div>
                                         </div>
@@ -878,7 +878,7 @@ function AddNcdList(props) {
                                         </div>
                                         <div class="col-md-4 mb-2">
                                             <small>Generic Indicator</small>
-                                            <select class="form-select">
+                                            <select class="form-select" name="gen_inc_exc_ind" {...register('gen_inc_exc_ind')}>
                                                 <option value="">Select</option>
                                                 <option value=""></option>
                                                 <option value=""></option>
@@ -886,7 +886,7 @@ function AddNcdList(props) {
                                         </div>
                                         <div class="col-md-4 mb-2">
                                             <small>Denial Override Code</small>
-                                            <input type="text" class="form-control" name="" id="" />
+                                            <input type="text" class="form-control" name="denial_override"  {...register('denial_override')} id="" />
                                         </div>
                                         <div class="col-md-4 mb-2">
                                             <small>Denial Override Code</small>
@@ -900,19 +900,19 @@ function AddNcdList(props) {
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <div class="form-group">
-                                                <input type="checkbox" id="one" class="d-none" />
+                                                <input type="checkbox" id="one"{...register('bng_sngl_inc_exc_ind')} class="d-none" />
                                                 <label for="one">Exclude Single Source Brand Drugs</label>
                                             </div>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <div class="form-group">
-                                                <input type="checkbox" id="two" class="d-none" />
+                                                <input type="checkbox" id="two" name="bng_multi_inc_exc_ind" {...register('bng_multi_inc_exc_ind')} class="d-none" />
                                                 <label for="two">Exclude Multi-Source Brand Drugs</label>
                                             </div>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <div class="form-group">
-                                                <input type="checkbox" id="three" class="d-none" />
+                                                <input type="checkbox" name="bga_inc_exc_ind" {...register('bga_inc_exc_ind')} id="three" class="d-none" />
                                                 <label for="three">Exclued Original with Generic Drugs</label>
                                             </div>
                                         </div>
