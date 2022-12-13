@@ -430,26 +430,7 @@ const onSubmit = (e) => {
 }
 
 
-// useEffect(() => {
 
-//     console.log(props.selected);
-
-//     if (props.adding) {
-//         reset({ network_id: '', network_name: '', new: 1 }, {
-//             keepValues: false,
-//         })
-//     } else {
-//         reset(props.selected);
-//     }
-
-//     if (!props.selected) {
-//         reset({ network_id: '', network_name: '', description: '', pharm_type_variation_ind: '', network_part_variation_ind: '', claim_type_variation_ind: '', plan_accum_deduct_id: '', new: 1 }, {
-//             keepValues: false,
-//         })
-//     }
-
-
-// }, [props.selected, props.adding]);
 
 
 useEffect(() => {
