@@ -14,6 +14,9 @@ export default function TherapyClass() {
 
     const [selctedNdc, setSelctedNdc] = useState('');
 
+    const [adding, setAdding] = useState(false);
+
+
     const getNDCItems = (ndcid) => {
         // //  console.log(customerid);
         const requestOptions = {
@@ -122,6 +125,43 @@ export default function TherapyClass() {
     }
 
 
+    
+    const AddForm = () => {
+        scollToRef.current.scrollIntoView()
+    }
+
+    useEffect(() => {
+        if (selctedNdc) {
+            setAdding(false);
+
+        } else {
+            setAdding(true);
+            setSelctedNdc(false);
+        }
+
+        document.title = 'Benefit Code | ProHealthi';
+
+    }, [selctedNdc, adding]);
+
+
+   
+
+
+
+    useEffect(() => {
+        if (selctedNdc) {
+            setAdding(false);
+
+        } else {
+            setAdding(true);
+            setSelctedNdc(false);
+        }
+
+        document.title = 'Benefit Code | ProHealthi';
+
+    }, [selctedNdc, adding]);
+
+
 
     useEffect(() => { }, [ndcData, ndcClass, selctedNdc]);
 
@@ -152,7 +192,7 @@ export default function TherapyClass() {
             <ShowNDCList ndcListData={ndcData} ndcClassData={ndcClass} getNDCItem={getNDCItems} getNDCItemDetails={getNDCItemDetails} selctedNdc={selctedNdc} />
 
             <div ref={scollToRef}>
-                <AddNcdList selectedNdc={selctedNdc} />
+                <AddNcdList  selectedNdc={selctedNdc} selected={selctedNdc} adding={adding} />
             </div>
 
 
@@ -230,7 +270,7 @@ function ShowNDCList(props) {
                             <h5>Therapy Class Exception List</h5>
                         </div>
                         <div className="col-md-4 mb-3 text-end">
-                            <button className="btn btn-sm btn-warning" id="show" onClick={e => handleShow()}><i className="fa plus-circle"></i> Add Therapy Class List</button>
+                        <button className="btn btn-sm btn-warning" id="show" onClick={e => AddForm()}><i className="fa plus-circle"></i> Add NDC List</button>
                         </div>
                         <div className="col-md-4">
                             <div className="card mt-3 mb-3">
@@ -264,7 +304,6 @@ function ShowNDCList(props) {
                                                     <th>Effective Date</th>
                                                     <th>New Drug Status</th>
                                                     <th>Process Rule</th>
-                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -327,7 +366,6 @@ function AddNcdList(props) {
 
     useEffect(() => { setSelctedNdc(props.selectedNdc) }, [props.selectedNdc, selctedNdc]);
     // //  console.log(selctedNdc);
-    useEffect(() => { reset(selctedNdc) }, [selctedNdc]);
 
 
 
@@ -394,8 +432,33 @@ function AddNcdList(props) {
     
     }
     const onSubmit = (e) => {
-        e.preventDefault();
+
+            e.preventDefault();
     }
+
+
+    useEffect(() => {
+
+
+        if (props.adding) {
+            reset({ ther_class_exception_list: '', therapy_class: '', new: 1 }, {
+                keepValues: false,
+            })
+        } else {
+            reset(props.selected);
+        }
+    
+        if (!props.selected) {
+            reset({ accum_bene_strategy_name: '',accum_bene_strategy_id:'', description: '',pharm_type_variation_ind:'',network_part_variation_ind:'',claim_type_variation_ind:'',plan_accum_deduct_id:'', new: 1 }, {
+                keepValues: false,
+            })
+        }
+    
+    
+    }, [props.selected, props.adding]);
+    
+    
+    useEffect(() => { reset(props.selected) }, [props.selected]);
 
 
     return (
