@@ -7,6 +7,7 @@ import { Button, Col, Row } from 'react-bootstrap';
 import { objToQueryString } from '../../../../hooks/healper';
 import Select from 'react-select';
 import SelectSearch from 'react-select-search';
+import 'react-select-search/style.css'
 
 
 
@@ -375,10 +376,14 @@ export function Identification(props) {
                 console.log(data.data);
                 setStates(data.data);
 
+                resolve(states.map(({ country_code, strDrink }) => ({ value: country_code, name: strDrink })))
+
+
                 // props.onChange(data);
 
                 // this.setState({ postId: data.id })
             })
+
             .catch(error => {
                 // this.setState({ errorMessage: error.toString() });
                 console.error('There was an error!', error);
@@ -423,18 +428,31 @@ export function Identification(props) {
     ];
 
 
-    const [states, setStates] = useState([]);
+    const [states, setStates] = useState();
 
     // const [countries, setCountries] = useState();
     
-    const [selectedOption, setSelectedOption] = useState(null);
+    const [selectedOption, setSelectedOption] = useState();
 
 
     const onStateChange = (e) => {
         getStates();
     }
 
+    // const options = [
+    //     {name: 'Swedish', value: 'sv'},
+    //     {name: 'English', value: 'en'},
+       
+    // ];
 
+    useEffect(()=>{
+        getStates();
+        
+
+    })
+
+
+    
 
 
     return (
@@ -516,6 +534,9 @@ export function Identification(props) {
                                                 onChange={setSelectedOption}
                                                 options={countries}
                                             />
+
+{/* <SelectSearch options={states} search={true}  value="sv" name="language" placeholder="Choose your language" /> */}
+
 
                                             {errors.country?.type === 'required' && <p role="alert" className="notvalid">Country is  required</p>}
 
@@ -1846,9 +1867,9 @@ export function Eligibility(props) {
                             <div className="col-md-4 mb-2">
                                 {/* column not found in db */}
                                 <small>Eligibility Change Log Indicator</small>
-                                <select className="form-select" {...register("eligibility_change_log_indicator", {
+                                <select className="form-select" {...register("member_change_log_opt", {
                                     required: true,
-                                })} name="eligibility_change_log_indicator">
+                                })} name="member_change_log_opt">
                                     <option value="">--Select--</option>
                                     <option value="1">Not Specified</option>
                                     <option value="2">Member Record changes will NOT be logged </option>
@@ -1900,22 +1921,22 @@ export function Indicators(props) {
                             </div>
                             <div className="col-md-6 mb-2">
                                 <small>Secondary Coverage indicator</small>
-                                <select className="form-select" {...register("Secondary_Coverage_indicator", {
+                                <select className="form-select" {...register("other_cov_proc_flag", {
                                     required: true,
-                                })} name="Secondary_Coverage_indicator">
+                                })} name="other_cov_proc_flag">
                                     <option value="">--Select--</option>
                                     <option value="1">Not applicable</option>
                                     <option value="2">Reject transactions</option>
                                     <option value="3">pay and report transactions</option>
                                 </select>
-                                {errors.Secondary_Coverage_indicator?.type === 'required' && <p role="alert" className="notvalid">Secondary Coverage indicator is  required</p>}
+                                {errors.other_cov_proc_flag?.type === 'required' && <p role="alert" className="notvalid">Secondary Coverage indicator is  required</p>}
 
                             </div>
                             <div className="col-md-6 mb-2">
                                 <small>Accumulated Benefits Indicator</small>
-                                <select className="form-select" {...register("Accumulated_Benefits_Indicator", {
+                                <select className="form-select" {...register("accum_bene_fam_sum_ind", {
                                     required: true,
-                                })} name="Accumulated_Benefits_Indicator">
+                                })} name="accum_bene_fam_sum_ind">
                                     <option value="">--Select--</option>
                                     <option value="1">Not Specified</option>
                                     <option value="2">Family Accumulation By Patient PIN Number </option>
@@ -1923,7 +1944,7 @@ export function Indicators(props) {
                                 </select>
 
                                 <p className="input-hint">Family Accumulation By Member ID</p>
-                                {errors.Accumulated_Benefits_Indicator?.type === 'required' && <p role="alert" className="notvalid">Accumulated Benefits Indicator is  required</p>}
+                                {errors.accum_bene_fam_sum_ind?.type === 'required' && <p role="alert" className="notvalid">Accumulated Benefits Indicator is  required</p>}
 
                             </div>
 
@@ -1955,7 +1976,7 @@ export function Indicators(props) {
                                     <option value="2">option 2</option>
                                     <option value="3">option 3</option>
                                 </select>
-                                {errors.max_no_of_days?.type === 'required' && <p role="alert" className="notvalid">Maximum Number Of Days That An Interim Member Will Be field is  required</p>}
+                                {errors.max_days_interim_elig?.type === 'required' && <p role="alert" className="notvalid">Maximum Number Of Days That An Interim Member Will Be field is  required</p>}
 
                             </div>
 
@@ -1967,11 +1988,11 @@ export function Indicators(props) {
                             <div className="col-md-12 mb-1">
                                 <div className="form-group">
                                     {/* DB COLUMN NOT FOUND */}
-                                    <input type="checkbox" name="Bypass_Member_Eligibility" {...register("Bypass_Member_Eligibility", {
+                                    <input type="checkbox" name="elig_date_edit_ovr_flag" {...register("elig_date_edit_ovr_flag", {
                                         required: true,
                                     })} id="html" className="d-none" />
                                     <label for="html">Bypass Member Eligibility Date Edits Against Customer Effective Dates</label>
-                                    {errors.Bypass_Member_Eligibility?.type === 'required' && <p role="alert" className="notvalid">Bypass Member Eligibility Date Edits Against Customer Effective Dates is   required</p>}
+                                    {errors.elig_date_edit_ovr_flag?.type === 'required' && <p role="alert" className="notvalid">Bypass Member Eligibility Date Edits Against Customer Effective Dates is   required</p>}
 
                                 </div>
                             </div>
@@ -2041,15 +2062,15 @@ export function Indicators(props) {
                                         required: true,
                                     })} id="" placeholder="" required="" /> */}
 
-                                    <select className="form-select" {...register("tax_status", {
+                                    <select className="form-select" {...register("non_profit_tax_exempt_flag", {
                                         required: true,
-                                    })} name="tax_status">
+                                    })} name="non_profit_tax_exempt_flag">
                                         <option value="">--Select--</option>
                                         <option value="1">Not Specified </option>
                                         <option value="2">Taxable</option>
                                         <option value="3">Tax Exempt</option>
                                     </select>
-                                    {errors.tax_status?.type === 'required' && <p role="alert" className="notvalid">Tax status field is    required</p>}
+                                    {errors.non_profit_tax_exempt_flag?.type === 'required' && <p role="alert" className="notvalid">Tax status field is    required</p>}
 
                                 </div>
                             </div>

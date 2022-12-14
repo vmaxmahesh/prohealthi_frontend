@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Button } from 'react-bootstrap';
 import { render } from 'react-dom';
 import { useForm } from 'react-hook-form';
 import { Link, Outlet, useLocation, useOutletContext } from 'react-router-dom';
@@ -239,7 +240,6 @@ function ShowNDCList(props) {
                                                 <tr>
                                                     <th>Exception ID</th>
                                                     <th>Exception Name</th>
-                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -284,10 +284,11 @@ function ShowNDCList(props) {
 function NdcRow(props) {
     return (
         <>
-            <tr>
-                <td>{props.ndcRow.ther_class_exception_list}</td>
+            <tr className={(props.selected && props.ndcRow.ther_class_exception_list == props.selected.ther_class_exception_list ? ' tblactiverow ' : '')}
+
+                onClick={() => props.getNDCItem(props.ndcRow.ther_class_exception_list)}
+            >                <td>{props.ndcRow.ther_class_exception_list}</td>
                 <td>{props.ndcRow.exception_name}</td>
-                <td><button className="btn btn-sm btn-info" id="" onClick={() => props.getNDCItem(props.ndcRow.ther_class_exception_list)}><i className="fa fa-eye"></i> View</button></td>
             </tr>
         </>
     )
@@ -296,13 +297,17 @@ function NdcRow(props) {
 function NdcClassRow(props) {
     return (
         <>
-            <tr>
+
+            <tr className={(props.selected && props.ndcRow.ther_class_exception_list == props.selected.ther_class_exception_list ? ' tblactiverow ' : '')}
+
+                onClick={() => props.getNDCItemDetails(props.ndcClassRow.therapy_class)}
+            >
                 <td>{props.ndcClassRow.ther_class_exception_list}</td>
                 <td>{props.ndcClassRow.therapy_class}</td>
                 <td>{props.ndcClassRow.effective_date}</td>
                 <td>{props.ndcClassRow.new_drug_status}</td>
                 <td>{props.ndcClassRow.process_rule}</td>
-                <td><button className="btn btn-sm btn-info" id="" onClick={() => props.getNDCItemDetails(props.ndcClassRow.therapy_class)}><i className="fa fa-eye"></i> View</button></td>
+                {/* <td><button className="btn btn-sm btn-info" id="" onClick={() => props.getNDCItemDetails(props.ndcClassRow.therapy_class)}><i className="fa fa-eye"></i> View</button></td> */}
             </tr>
         </>
     )
@@ -322,17 +327,506 @@ function AddNcdList(props) {
     return (
         <>
             <div className="data">
-                <div className="nav nav-tabs" id="nav-tab" role="tablist">
+                <form>
 
-                    <Link to="process-rule" className={'nav-link' + (currentpath == 'process-rule' ? ' active' : '')}>Process Rules</Link>
-                    <Link to="rx-limitation-pricing" className={'nav-link' + (currentpath == 'rx-limitation-pricing' ? ' active' : '')}>Rx Limitations/Pricing</Link>
-                    <Link to="validation-override" className={'nav-link' + (currentpath == 'validation-override' ? ' active' : '')}>Validations/Override</Link>
 
-                </div>
-                <div className="tab-content" id="nav-tabContent">
-                    <Outlet context={[selctedNdc, setSelctedNdc]} />
+                    <div className="nav nav-tabs" id="nav-tab" role="tablist">
 
-                </div>
+                        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#Rules" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Process Rules</button>
+                        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#Pricing" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Rx Limitations/Pricing</button>
+                        <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#Override" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Validations/Override</button>
+
+                    </div>
+
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="Rules" role="tabpanel" aria-labelledby="nav-home-tab">
+                            <div class="card mt-3 mb-3">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h5 class="mb-2">Information</h5>
+                                            <div class="row mb-2">
+                                                <div class="col-md-12">
+                                                    <div class="form-group mb-2">
+                                                        <small>ID</small>
+                                                        <input type="text" class="form-control" name="" id="" placeholder="Enter ID" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group mb-2">
+                                                        <small>Name</small>
+                                                        <input type="text" class="form-control" name="" id="" placeholder="Name" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group mb-2">
+                                                        <small>NDC</small>
+                                                        <input type="text" class="form-control" name="" id="" placeholder="NDC" />
+                                                        <a href=""><span class="fa fa-search form-icon"></span></a>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group mb-2">
+                                                        <small>Termination Date</small>
+                                                        <input type="date" class="form-control" name="" id="" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group mb-2">
+                                                        <small>Effective Date</small>
+                                                        <input type="date" class="form-control" name="" id="" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <h5 class="mb-1">Process Rules</h5>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group mb-2">
+                                                        <small>New Drug Status</small>
+                                                        <select class="form-select">
+                                                            <option value="">Select</option>
+                                                            <option value="">Approved</option>
+                                                            <option value="">Non Fourmulary</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group mb-2">
+                                                        <small>Rule</small>
+                                                        <select class="form-select">
+                                                            <option value="">Select</option>
+                                                            <option value="">R - Reject if status indicator</option>
+                                                            <option value="">L - Limitations are Exceeded</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 mb-4">
+                                                    <div class="form-group">
+                                                        <input type="checkbox" id="user" class="d-none" />
+                                                        <label for="user">User will Exit will not be Invoked for this Section</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <h5 class="mb-1">Product Exception</h5>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group mb-2">
+                                                        <small>Preferred NDC</small>
+                                                        <input type="text" class="form-control" name="" id="" placeholder="NDC" />
+                                                        <a href=""><span class="fa fa-search form-icon"></span></a>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group mb-2">
+                                                        <small>Conversion NDC</small>
+                                                        <input type="text" class="form-control" name="" id="" placeholder="NDC" />
+                                                        <a href=""><span class="fa fa-search form-icon"></span></a>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <h5 class="mb-1">User Message</h5>
+                                        </div>
+
+                                        <div class="col-md-12 mb-2">
+                                            <div class="form-group">
+                                                <small>Message</small>
+                                                <textarea class="form-control" rows="3"></textarea>
+                                                <p class="input-hint">Message Returned to the Provider</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-2">
+                                            <div class="form-group">
+                                                <small>Stop Date</small>
+                                                <input type="date" name="" id="" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mt-4 mb-4">
+                                            <div class="form-group">
+                                                <input type="checkbox" id="message" class="d-none" />
+                                                <label for="message">Message sent only when Transation is Rejected</label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="tab-pane fade" id="Pricing" role="tabpanel" aria-labelledby="nav-profile-tab">
+                            <div class="card mt-3 mb-3">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="row mb-2">
+                                                <div class="col-md-12">
+                                                    <h5 class="mb-2">Rx Limitations</h5>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <div class="form-group">
+                                                        <small>Rx Quantity</small>
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <input type="text" name="" id="" placeholder="Minimum" class="form-control" />
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input type="text" name="" id="" placeholder="Maximum" class="form-control" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <small>Rxs/Patient</small>
+                                                    <input type="text" name="" id="" placeholder="Max" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-md-8">
+                                                    <div class="form-group">
+                                                        <small>Amount Due</small>
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <input type="text" name="" id="" placeholder="Minimum" class="form-control" />
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input type="text" name="" id="" placeholder="Maximum" class="form-control" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <small>Accum. Ben./Patient</small>
+                                                    <input type="text" name="" id="" placeholder="Max" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-md-8">
+                                                    <div class="form-group">
+                                                        <small>Day Supply</small>
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <input type="text" name="" id="" placeholder="Minimum" class="form-control" />
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input type="text" name="" id="" placeholder="Maximum" class="form-control" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <small>Retail Fills</small>
+                                                    <input type="text" name="" id="" placeholder="Max" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-md-8">
+                                                    <div class="form-group">
+                                                        <small>Ctl Days Supply</small>
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <input type="text" name="" id="" placeholder="Minimum" class="form-control" />
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input type="text" name="" id="" placeholder="Maximum" class="form-control" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <small>Quantity/Fill</small>
+                                                    <input type="text" name="" id="" placeholder="Max" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-md-4">
+                                                    <small>Days Fill</small>
+                                                    <input type="text" name="" id="" placeholder="Max" class="form-control" />
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <small>Daily Dose</small>
+                                                    <input type="text" name="" id="" placeholder="Max" class="form-control" />
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <small>Starter Dose Days</small>
+                                                    <input type="text" name="" id="" placeholder="Max" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-md-8">
+                                                    <small>Days Until. Covg Effective</small>
+                                                    <input type="text" name="" id="" placeholder="Max" class="form-control" />
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <small>Star Dose Bypass Days</small>
+                                                    <input type="text" name="" id="" placeholder="Max" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-md-8">
+                                                    <small>Acute Dosing Days</small>
+                                                    <input type="text" name="" id="" placeholder="Max" class="form-control" />
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <small>Star Dose Maint. by Days</small>
+                                                    <input type="text" name="" id="" placeholder="Max" class="form-control" />
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row mb-2">
+                                                <div class="col-md-8">
+                                                    <div class="form-group">
+                                                        <small>Age</small>
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <input type="text" name="" id="" placeholder="Minimum" class="form-control" />
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input type="text" name="" id="" placeholder="Maximum" class="form-control" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <small>Maint. Daily Dose</small>
+                                                    <input type="text" name="" id="" placeholder="Max" class="form-control" />
+                                                </div>
+
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-md-8 mb-2">
+                                                    <div class="form-group mt-4">
+                                                        <input type="checkbox" id="Return2" class="d-none" />
+                                                        <label for="Return2">Merge Plan Rx Limitation</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 mb-2">
+                                                    <small>Quantity Over Time </small>
+                                                    <input type="text" name="" id="" placeholder="Max" class="form-control" />
+                                                </div>
+                                                <div class="col-md-8 mb-2">
+                                                </div>
+                                                <div class="col-md-4 mb-2">
+                                                    <small>Days Over Time </small>
+                                                    <input type="text" name="" id="" placeholder="Max" class="form-control" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h5 class="mb-2">Mail Service Limitation</h5>
+                                            <div class="row mb-2">
+                                                <div class="col-md-12 mb-2">
+                                                    <div class="form-group">
+                                                        <small>Daily Supply</small>
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <input type="text" class="form-control" placeholder="" name="" id="" />
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input type="text" class="form-control" placeholder="" name="" id="" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 mb-2">
+                                                    <div class="form-group">
+                                                        <small>Mail Service Fills</small>
+                                                        <input type="text" class="form-control" name="" id="" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <h5 class="mb-2">Member Rigistration</h5>
+
+                                            <div class="col-md-12 mb-2">
+                                                <div class="form-group">
+                                                    <small>Valid Relationship</small>
+                                                    <select class="form-select">
+                                                        <option value="">Select</option>
+                                                        <option value=""></option>
+                                                        <option value=""></option>
+                                                        <option value=""></option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 mb-3">
+                                                <div class="form-group">
+                                                    <small>Gender Restrictions - (Not Covered)</small>
+                                                    <div class="row">
+                                                        <div class="col-md-4 mt-2">
+                                                            <div class="form-group">
+                                                                <input type="checkbox" id="male" class="d-none" />
+                                                                <label for="male"> Male</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4 mt-2">
+                                                            <div class="form-group">
+                                                                <input type="checkbox" id="female" class="d-none" />
+                                                                <label for="female"> Female</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4 mt-2">
+                                                            <div class="form-group">
+                                                                <input type="checkbox" id="none" class="d-none" />
+                                                                <label for="none"> None</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <h5 class="mb-2">Pricing Overrides</h5>
+                                            <div class="col-md-12 mb-2">
+                                                <div class="form-group">
+                                                    <small>Alt Price Schedule</small>
+                                                    <input type="text" class="form-control" name="" id="" />
+                                                    <a href=""><span class="fa fa-search form-icon"></span></a>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 mb-2">
+                                                <div class="form-group">
+                                                    <small>Alt Copay Schedule</small>
+                                                    <input type="text" class="form-control" name="" id="" />
+                                                    <a href=""><span class="fa fa-search form-icon"></span></a>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 mb-2">
+                                                <div class="form-group">
+                                                    <small>Brand Copay Amount</small>
+                                                    <input type="text" class="form-control" name="" id="" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 mb-2">
+                                                <div class="form-group">
+                                                    <small>Generic Copay Amount</small>
+                                                    <input type="text" class="form-control" name="" id="" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 mb-2">
+                                                <div class="form-group">
+                                                    <small>Max Allowable Amount</small>
+                                                    <input type="text" class="form-control" name="" id="" />
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="tab-pane fade" id="Override" role="tabpanel" aria-labelledby="nav-contact-tab">
+                            <div class="card mt-3 mb-3">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h5 class="mb-2">Validations</h5>
+                                        </div>
+                                        <div class="col-md-3 mb-2">
+                                            <small>Provider</small>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="" id="" required="" />
+                                                <a href=""><span class="fa fa-search form-icon"></span></a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 mb-2">
+                                            <small>Prescriber</small>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="" id="" required="" />
+                                                <a href=""><span class="fa fa-search form-icon"></span></a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 mb-2">
+                                            <small>Specilty</small>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="" id="" required="" />
+                                                <a href=""><span class="fa fa-search form-icon"></span></a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 mb-2">
+                                            <small>Diagnosis</small>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="" id="" required="" />
+                                                <a href=""><span class="fa fa-search form-icon"></span></a>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix mb-2"></div>
+
+
+                                        <div class="col-md-12 mb-1">
+                                            <h5 class="mb-2">Processing Overrides</h5>
+                                        </div>
+                                        <div class="col-md-4 mb-2">
+                                            <small>Generic Indicator</small>
+                                            <select class="form-select">
+                                                <option value="">Select</option>
+                                                <option value=""></option>
+                                                <option value=""></option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4 mb-2">
+                                            <small>Denial Override Code</small>
+                                            <input type="text" class="form-control" name="" id="" />
+                                        </div>
+                                        <div class="col-md-4 mb-2">
+                                            <small>Denial Override Code</small>
+                                            <input type="text" class="form-control" name="" id="" placeholder="Not Allowed" readonly />
+                                        </div>
+
+                                        <div class="clearfix mb-2"></div>
+
+                                        <div class="col-md-12 mb-1">
+                                            <h5 class="mb-2">Include/Exclude</h5>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="form-group">
+                                                <input type="checkbox" id="one" class="d-none" />
+                                                <label for="one">Exclude Single Source Brand Drugs</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="form-group">
+                                                <input type="checkbox" id="two" class="d-none" />
+                                                <label for="two">Exclude Multi-Source Brand Drugs</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="form-group">
+                                                <input type="checkbox" id="three" class="d-none" />
+                                                <label for="three">Exclued Original with Generic Drugs</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="form-group">
+                                                <input type="checkbox" id="four" class="d-none" />
+                                                <label for="four">Exclued Generic Drugs</label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+
+                </form>
+                <Button type='submit' variant="primary">{props.adding ? ' Add' : 'Update'}</Button>
+
+
             </div>
         </>
     )

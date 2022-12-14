@@ -98,10 +98,10 @@ function TraditionalNetworks(props) {
                 if (!response.ok) {
                     // get error message from body or default to response status
                     const error = (data && data.message) || response.status;
-                    setCustomer([]);
+                    SetTraditionalNetwork([]);
                     return Promise.reject(error);
                 } else {
-                    console.log(data.data);
+                    // console.log(data.data);
                     SetTraditionalNetwork(data.data);
 
                     // scollToRef.current.scrollIntoView()
@@ -438,7 +438,7 @@ function TraditionalNetworkRow(props) {
 
 function TraditionalNetworkResults(props) {
 
-    console.log(props.typedata);
+    // console.log(props.typedata);
     var myData = [];
     for (let index = 0; index < props.typedata.length; index++) {
         myData.push(<TraditionalNetworkRow datar={props.typedata[index]}
@@ -715,19 +715,33 @@ export function Network(props) {
 export function Providers(props) {
 
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit,reset, formState: { errors } } = useForm();
 
     const [networkData, setNetworkData] = useState([]);
 
+
+    const [traditionalnetwork, SetTraditionalNetwork] = useOutletContext();
+
+
+    useEffect(() => { reset(traditionalnetwork) }, [traditionalnetwork]);
+    
+
     useEffect(() => {
+        setNetworkData([traditionalnetwork])
+        // console.log([traditionalnetwork])
     }, [networkData]);
 
     const onSubmit = data => {
 
-        setNetworkData([data]);
-        console.log(data);
+        setNetworkData();
+        // console.log(data);
 
+
+        
     }
+
+    useEffect(() => { reset(networkData) }, [networkData]);
+
 
     const clearForm = () => {
         document.getElementById("providersform").reset();
@@ -748,7 +762,7 @@ export function Providers(props) {
                             <div className="col-md-6">
                                 <div className="form-group mb-3">
                                     <small>Provider ID</small>
-                                    <input type="text" className="form-control" name="provider_id" {...register('provider_id', {
+                                    <input type="text" className="form-control" name="pharmacy_nabp" {...register('pharmacy_nabp', {
                                         required: true,
                                     })} placeholder="Enter Customer ID" id="" required="" />
 
@@ -898,10 +912,13 @@ function ProvidersRow(props) {
 
     return (
         <>
-            <tr>
-                <td>{props.datar.provider_id}</td>
-                <td>{props.datar.price_schedule}</td>
-                <td>{props.datar.participation_denied}</td>
+            <tr className={(props.selected && props.ndcRow.pricing_strategy_id == props.selected.pricing_strategy_id ? ' tblactiverow ' : '')}
+
+onClick={() => props.getNDCItem(props.ndcRow.pricing_strategy_id)}
+>
+                <td>{props.datar.pharmacy_nabp}</td>
+                <td>{props.datar.price_schedule_ovrd}</td>
+                <td>{props.datar.participation_ovrd}</td>
                 <td>{props.datar.effective_date}</td>
                 <td>{props.datar.termination_date}</td>
                 <td><button onClick={deleteRow} value={props.datar.provider_id} className="btn btn-sm btn-warning"><i className="fa fa-trash-alt"></i></button></td>

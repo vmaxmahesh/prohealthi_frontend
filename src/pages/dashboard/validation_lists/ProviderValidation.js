@@ -190,12 +190,12 @@ function NdcRow(props) {
 
     return (
         <>
-            <tr className={(props.selected && props.ndcRow.prov_type_list_id == props.selected.prov_type_list_id ? ' tblactiverow ' : '')}
+            <tr className={(props.selected && props.ndcRow.pharmacy_list == props.selected.pharmacy_list ? ' tblactiverow ' : '')}
 
-                onClick={() => props.getNDCItem(props.ndcRow.prov_type_list_id)}
+                onClick={() => props.getNDCItem(props.ndcRow.pharmacy_list)}
             >
-                <td>{props.ndcRow.prov_type_list_id}</td>
-                <td >{props.ndcRow.description}</td>
+                <td>{props.ndcRow.pharmacy_list}</td>
+                <td >{props.ndcRow.pharmacy_name}</td>
 
                 {/* <td><button className="btn btn-sm btn-info" id="" ><i className="fa fa-eye"></i> View</button></td> */}
             </tr>
@@ -213,12 +213,16 @@ function NdcClassRow(props) {
     return (
         <>
             <tr
-                className={(props.selected && props.ndcClassRow.prov_type_list_id == props.selected.prov_type_list_id ? ' tblactiverow ' : '')}
-                onClick={() => props.getNDCItemDetails(props.ndcClassRow.prov_type_list_id)}
+                className={(props.selected && props.ndcClassRow.pharmacy_nabp == props.selected.pharmacy_nabp ? ' tblactiverow ' : '')}
+                onClick={() => props.getNDCItemDetails(props.ndcClassRow.pharmacy_nabp)}
 
             >
-                <td>{props.ndcClassRow.prov_type_list_id}</td>
-                <td>{props.ndcClassRow.diagnosis_list}</td>
+                <td>{props.ndcClassRow.pharmacy_nabp}</td>
+                <td>{props.ndcClassRow.pharmacy_status}</td>
+                <td>{props.ndcClassRow.pharmacy_name}</td>
+
+
+                
               
                 {/* <td><button className="btn btn-sm btn-info" id="" ><i className="fa fa-eye"></i> View</button></td> */}
             </tr>
@@ -334,7 +338,7 @@ function ProviderList(props)
                                                 <tr>
                                                     <th>Provider ID</th>
                                                     <th>Provider Status</th>
-                                                    <th>Provider Validation Status</th>
+                                                    <th>Provider Name</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -375,28 +379,30 @@ function ProviderValidationForm(props)
                             <div className="col-md-3 mb-3">
                                 <div className="form-group">
                                     <small>ID</small>
-                                    <input type="text" className="form-control" name="prov_type_list_id" {...register('prov_type_list_id')} id="" placeholder="" required />
+                                    <input type="text" className="form-control" name="pharmacy_nabp" {...register('pharmacy_nabp')} id="" placeholder="" required />
                                 </div>
                             </div>
                             <div className="col-md-3 mb-3">
                                 <div className="form-group">
                                     <small>Name</small>
-                                    <input type="text" className="form-control" name="description"  {...register('description')} id="" placeholder="" required />
+                                    <input type="text" className="form-control" name="pharmacy_name"  {...register('pharmacy_name')} id="" placeholder="" required />
                                 </div>
                             </div>
                             <div className="col-md-3 mb-3">
                                 <div className="form-group">
                                     <small>Store Number</small>
-                                    <input type="text" className="form-control" name="" id="" placeholder="" required />
+                                    <input type="text" className="form-control" name="store_number" {...register('store_number')} id="" placeholder="" required />
                                 </div>
                             </div>
                             <div className="col-md-3 mb-3">
                                 <div className="form-group">
                                     <small>City</small>
-                                    <select className="form-select">
+                                    <select className="form-select" name="city" {...register('city')}>
                                         <option value="">Select City</option>
-                                        <option value=""></option>
-                                        <option value=""></option>
+                                        <option value="1">Runaway Bay</option>
+                                        <option value="2">Kingston 20</option>
+                                        <option value="3">Portmore</option>
+                                        <option value="4">Junction</option>
                                     </select>
                                 </div>
                             </div>
@@ -404,16 +410,16 @@ function ProviderValidationForm(props)
                                 <div className="form-group">
                                     <small>State</small>
                                     <select className="form-select">
-                                        <option value="">Select State</option>
-                                        <option value=""></option>
-                                        <option value=""></option>
+                                        <option value="" name="state" {...register('state')}>Select State</option>
+                                        <option value="1">Andhra pradesh</option>
+                                        <option value="2">Telengana</option>
                                     </select>
                                 </div>
                             </div>
                             <div className="col-md-3 mb-3">
                                 <div className="form-group">
                                     <small>County</small>
-                                    <select className="form-select">
+                                    <select className="form-select" name="country" {...register('country')}>
                                         <option value="">Select County</option>
                                         <option value=""></option>
                                         <option value=""></option>
@@ -422,14 +428,14 @@ function ProviderValidationForm(props)
                             </div>
                             <div className="col-md-3 mb-3">
                                 <div className="form-group">
-                                    <small>ZIP</small>
-                                    <input type="text" className="form-control" name="" id="" placeholder="" required />
+                                    <small>ZIP</small> 
+                                    <input type="text" className="form-control" name="zip_code" {...register('zip_code')} id="" placeholder="" required />
                                 </div>
                             </div>
                             <div className="col-md-3 mb-3">
                                 <div className="form-group">
                                     <small>Area Code</small>
-                                    <input type="text" className="form-control" name="" id="" placeholder="" required />
+                                    <input type="text" className="form-control" name="zip_plus_2" {...register('zip_plus_2')} id="" placeholder="" required />
                                 </div>
                             </div>
 
