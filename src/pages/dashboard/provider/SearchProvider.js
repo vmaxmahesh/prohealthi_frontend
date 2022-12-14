@@ -25,12 +25,6 @@ function SearchProvider() {
 
     const [selctedNdc, setSelctedNdc] = useState('');
 
-    const fillProviderData = (e) => {
-        // API
-        // var staticProviderType =;
-        var arr = [
-            { id: '123', name: 'Mahesh', storenumber: '101', chain: 'Hyderabad' },
-            { id: '1234', name: 'Mahesh', storenumber: '101', chain: 'Hyderabad' },
 
     useEffect(() => { reset(provider) }, [provider]);
 
