@@ -27,7 +27,7 @@ import ServiceType from './pages/dashboard/code/ServiceType';
 import ProviderType from './pages/dashboard/code/ProviderType';
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-import PriceSchedule, { BrandItemGeneric, GetGenericItem } from './pages/dashboard/third party pricing/PriceSchedule';
+import PriceSchedule, { BrandItem, BrandItemGeneric, GetGenericItem } from './pages/dashboard/third party pricing/PriceSchedule';
 import MacList from './pages/dashboard/third party pricing/MacList';
 import TaxSchedule from './pages/dashboard/third party pricing/TaxSchedule';
 import CopayStepSchedule from './pages/dashboard/third party pricing/CopayStepSchedule';
@@ -113,44 +113,44 @@ function App() {
   return (
 
     <>
-     
-        <Routes>
-          <Route exact path="/">
-            {/* <Home /> */}
-          </Route>
 
-          {/* <ProtectedRoute> */}
-          <Route path="/dashboard" element={<Dashboard />}>
-            {/* <Route index element={<Navigate to="d" replace />} />
+      <Routes>
+        <Route exact path="/">
+          {/* <Home /> */}
+        </Route>
+
+        {/* <ProtectedRoute> */}
+        <Route path="/dashboard" element={<Dashboard />}>
+          {/* <Route index element={<Navigate to="d" replace />} />
 
           <Route path='d' element={<Dashboardpage />} /> */}
-            <Route path='user/client' element={<Client />} >
-              <Route index element={<Navigate to="identification" replace />} />
-              <Route path='identification' element={<Ci />} />
-              <Route path='strategy' element={<CS />} />
-              <Route path='eligibility' element={<Ce />} />
-              <Route path='indicators' element={<Cin />} />
-            </Route>
+          <Route path='user/client' element={<Client />} >
+            <Route index element={<Navigate to="identification" replace />} />
+            <Route path='identification' element={<Ci />} />
+            <Route path='strategy' element={<CS />} />
+            <Route path='eligibility' element={<Ce />} />
+            <Route path='indicators' element={<Cin />} />
+          </Route>
 
-            <Route path='user/client-group' element={<Clientgroup />} >
-              <Route index element={<Navigate to="identification" replace />} />
-              <Route path='identification' element={<Cgi />} />
-              <Route path='strategy' element={<CGStrategy />} />
-              <Route path='eligibility' element={<CGEligibility />} />
-              <Route path='indicators' element={<CGIndicators />} />
-              <Route path='charges' element={<CGCharges />} />
-            </Route>
+          <Route path='user/client-group' element={<Clientgroup />} >
+            <Route index element={<Navigate to="identification" replace />} />
+            <Route path='identification' element={<Cgi />} />
+            <Route path='strategy' element={<CGStrategy />} />
+            <Route path='eligibility' element={<CGEligibility />} />
+            <Route path='indicators' element={<CGIndicators />} />
+            <Route path='charges' element={<CGCharges />} />
+          </Route>
 
-            <Route path='user/customer' element={<Customer />} >
-              <Route index element={<Navigate to="identification" replace />} />
-              <Route path='identification' element={<Identification />} />
-              <Route path='strategy' element={<Strategy />} />
-              <Route path='eligibility' element={<Eligibility />} />
-              <Route path='indicators' element={<Indicators />} />
-              <Route path='exceptions' element={<Exceptions />} />
-            </Route>
+          <Route path='user/customer' element={<Customer />} >
+            <Route index element={<Navigate to="identification" replace />} />
+            <Route path='identification' element={<Identification />} />
+            <Route path='strategy' element={<Strategy />} />
+            <Route path='eligibility' element={<Eligibility />} />
+            <Route path='indicators' element={<Indicators />} />
+            <Route path='exceptions' element={<Exceptions />} />
+          </Route>
 
-            {/* <Route path="member" element={<Member />}>
+          {/* <Route path="member" element={<Member />}>
             <Route index element={<Navigate to="member" replace />} />
             <Route path='member' element={<MemberForm />} />
             <Route path='overrides' element={<Overrides />} />
@@ -177,447 +177,447 @@ function App() {
             <Route path='notes' element={<PANotes />} />
           </Route> */}
 
-            {/* </Route> */}
+          {/* </Route> */}
 
-            <Route path='user/client-group' element={<Clientgroup />} >
-              <Route index element={<Navigate to="identification" replace />} />
-              <Route path='identification' element={<Cgi />} />
-              <Route path='strategy' element={<CGStrategy />} />
-              <Route path='eligibility' element={<CGEligibility />} />
-              <Route path='indicators' element={<CGIndicators />} />
-              <Route path='charges' element={<CGCharges />} />
-            </Route>
+          <Route path='user/client-group' element={<Clientgroup />} >
+            <Route index element={<Navigate to="identification" replace />} />
+            <Route path='identification' element={<Cgi />} />
+            <Route path='strategy' element={<CGStrategy />} />
+            <Route path='eligibility' element={<CGEligibility />} />
+            <Route path='indicators' element={<CGIndicators />} />
+            <Route path='charges' element={<CGCharges />} />
+          </Route>
 
-            <Route path='user/customer' element={<Customer />} >
-              <Route index element={<Navigate to="identification" replace />} />
-              <Route path='identification' element={<Identification />} />
-              <Route path='strategy' element={<Strategy />} />
-              <Route path='eligibility' element={<Eligibility />} />
-              <Route path='indicators' element={<Indicators />} />
-              <Route path='exceptions' element={<Exceptions />} />
-            </Route>
+          <Route path='user/customer' element={<Customer />} >
+            <Route index element={<Navigate to="identification" replace />} />
+            <Route path='identification' element={<Identification />} />
+            <Route path='strategy' element={<Strategy />} />
+            <Route path='eligibility' element={<Eligibility />} />
+            <Route path='indicators' element={<Indicators />} />
+            <Route path='exceptions' element={<Exceptions />} />
+          </Route>
 
-            <Route path="member" element={<Member />}>
-              <Route index element={<Navigate to="member" replace />} />
-              <Route path='member' element={<MemberForm />} />
-              <Route path='overrides' element={<Overrides />} />
-              <Route path='coverage' element={<Coverage />} />
-              <Route path='coverage-history' element={<CoverageHistory />} />
-              <Route path='health-conditions' element={<Health />} />
-              <Route path='notes' element={<Notes />} />
-              <Route path='claim-History' element={<ClaimHistory />} />
-              <Route path='authorizations' element={<PriorAuthorisation />} />
-              <Route path='provider' element={<ProviderSearch />} />
-              <Route path='change' element={<ChnageLog />} />
-            </Route>
+          <Route path="member" element={<Member />}>
+            <Route index element={<Navigate to="member" replace />} />
+            <Route path='member' element={<MemberForm />} />
+            <Route path='overrides' element={<Overrides />} />
+            <Route path='coverage' element={<Coverage />} />
+            <Route path='coverage-history' element={<CoverageHistory />} />
+            <Route path='health-conditions' element={<Health />} />
+            <Route path='notes' element={<Notes />} />
+            <Route path='claim-History' element={<ClaimHistory />} />
+            <Route path='authorizations' element={<PriorAuthorisation />} />
+            <Route path='provider' element={<ProviderSearch />} />
+            <Route path='change' element={<ChnageLog />} />
+          </Route>
 
-            <Route path="membership" element={<Membership />}>
-              <Route index element={<Navigate to="search-by-id" replace />} />
-              <Route path='search-by-id' element={<SearchById />} />
-              <Route path='search-by-name' element={<SearchByName />} />
-            </Route>
+          <Route path="membership" element={<Membership />}>
+            <Route index element={<Navigate to="search-by-id" replace />} />
+            <Route path='search-by-id' element={<SearchById />} />
+            <Route path='search-by-name' element={<SearchByName />} />
+          </Route>
 
-            <Route path="plan-authorisations" element={<PlanAuthorisation />}>
-              <Route index element={<Navigate to="authorization" replace />} />
-              <Route path='authorization' element={<Authorisation />} />
-              <Route path='pricing' element={<Pricing />} />
-              <Route path='notes' element={<PANotes />} />
-            </Route>
-
-
-            <Route path="plan-validations" element={<PlanValidation />}>
-
-            </Route>
-
-            <Route path="code/benefits" element={<Benefits />}>
-
-            </Route>
-
-            <Route path="code/procedure" element={<Procedure />}>
-
-            </Route>
-
-            <Route path="code/diagnosis" element={<Diagnosis />}>
-
-            </Route>
-
-            <Route path="code/reason" element={<Reason />}>
-
-            </Route>
-
-            <Route path="code/cause-of-loss" element={<CauseOfLoss />}>
-            </Route>
-
-            <Route path="code/service-modifiers" element={<ServiceModifiers />}>
-            </Route>
-
-            <Route path="code/service-type" element={<ServiceType />}>
-            </Route>
-
-            <Route path="code/provider-type" element={<ProviderType />}>
-            </Route>
+          <Route path="plan-authorisations" element={<PlanAuthorisation />}>
+            <Route index element={<Navigate to="authorization" replace />} />
+            <Route path='authorization' element={<Authorisation />} />
+            <Route path='pricing' element={<Pricing />} />
+            <Route path='notes' element={<PANotes />} />
+          </Route>
 
 
-            <Route path='searchprovider' element={<SearchProvider />}>
-              <Route index element={<Navigate to="provider" replace />} />
+          <Route path="plan-validations" element={<PlanValidation />}>
 
-              <Route path='provider' element={<Provider />} />
-              <Route path='effectivedates' element={<Effectivedates />} />
-              <Route path='pharmistsystem' element={<PharmistSystem />} />
+          </Route>
 
-              <Route path='networkparticipation' element={<NetworkParticipation />} />
+          <Route path="code/benefits" element={<Benefits />}>
 
+          </Route>
 
-            </Route>
+          <Route path="code/procedure" element={<Procedure />}>
 
-            <Route path='provider/superprovider' element={<SuperProvider />}>
+          </Route>
 
+          <Route path="code/diagnosis" element={<Diagnosis />}>
 
-            </Route>
+          </Route>
 
+          <Route path="code/reason" element={<Reason />}>
 
-            <Route path='provider/traditionalnetworks' element={<TraditionalNetworks />}>
-              <Route index element={<Navigate to="network" replace />} />
+          </Route>
 
-              <Route path='network' element={<Network />} />
-              <Route path='providers' element={<Providers />} />
-            </Route>
+          <Route path="code/cause-of-loss" element={<CauseOfLoss />}>
+          </Route>
 
+          <Route path="code/service-modifiers" element={<ServiceModifiers />}>
+          </Route>
 
+          <Route path="code/service-type" element={<ServiceType />}>
+          </Route>
 
-            <Route path='provider/flexiblenetworks' element={<FlexibleNetworks />}>
-              <Route index element={<Navigate to="network" replace />} />
-              <Route path='network' element={<Network />} />
-              <Route path='rules' element={<Rules />} />
-
-            </Route>
-
-            <Route path='provider/prioritizenetworks' element={<PrioritizeNetwork />}>
-
-            </Route>
+          <Route path="code/provider-type" element={<ProviderType />}>
+          </Route>
 
 
-            <Route path='prescriber/' element={<Prescriber />}>
+          <Route path='searchprovider' element={<SearchProvider />}>
+            <Route index element={<Navigate to="provider" replace />} />
 
-            </Route>
+            <Route path='provider' element={<Provider />} />
+            <Route path='effectivedates' element={<Effectivedates />} />
+            <Route path='pharmistsystem' element={<PharmistSystem />} />
 
-
-            <Route path='provider/superprovider' element={<SuperProvider />}></Route>
-
-            <Route path='provider/prioritize-networks' element={<PrioritizeNetwork />}></Route>
-
-            {/* codes routes start  */}
-
-            <Route path="code/benefits" element={<Benifits />}>
+            <Route path='networkparticipation' element={<NetworkParticipation />} />
 
 
-            </Route>
+          </Route>
 
-            <Route path="code/procedure" element={<Procedure />}>
+          <Route path='provider/superprovider' element={<SuperProvider />}>
 
-            </Route>
 
-            <Route path="code/diagnosis" element={<Diagnosis />}>
+          </Route>
 
-            </Route>
 
-            <Route path="code/reason" element={<Reason />}>
+          <Route path='provider/traditionalnetworks' element={<TraditionalNetworks />}>
+            <Route index element={<Navigate to="network" replace />} />
 
-            </Route>
+            <Route path='network' element={<Network />} />
+            <Route path='providers' element={<Providers />} />
+          </Route>
 
-            <Route path="code/cause-of-loss" element={<CauseOfLoss />}>
-            </Route>
 
-            <Route path="code/service-modifiers" element={<ServiceModifiers />}>
-            </Route>
 
-            <Route path="code/service-type" element={<ServiceType />}>
-            </Route>
+          <Route path='provider/flexiblenetworks' element={<FlexibleNetworks />}>
+            <Route index element={<Navigate to="network" replace />} />
+            <Route path='network' element={<Network />} />
+            <Route path='rules' element={<Rules />} />
 
-            <Route path="code/provider-type" element={<ProviderType />}>
-            </Route>
+          </Route>
 
-            {/* codes routes ends  */}
+          <Route path='provider/prioritizenetworks' element={<PrioritizeNetwork />}>
 
-            {/* third party pricing started  */}
+          </Route>
 
-            {/* third party pricing started  */}
-            {/* <Route path="third-party-pricing/price-schedule" element={<PriceSchedule />}>
+
+          <Route path='prescriber/' element={<Prescriber />}>
+
+          </Route>
+
+
+          <Route path='provider/superprovider' element={<SuperProvider />}></Route>
+
+          <Route path='provider/prioritize-networks' element={<PrioritizeNetwork />}></Route>
+
+          {/* codes routes start  */}
+
+          <Route path="code/benefits" element={<Benifits />}>
+
+
+          </Route>
+
+          <Route path="code/procedure" element={<Procedure />}>
+
+          </Route>
+
+          <Route path="code/diagnosis" element={<Diagnosis />}>
+
+          </Route>
+
+          <Route path="code/reason" element={<Reason />}>
+
+          </Route>
+
+          <Route path="code/cause-of-loss" element={<CauseOfLoss />}>
+          </Route>
+
+          <Route path="code/service-modifiers" element={<ServiceModifiers />}>
+          </Route>
+
+          <Route path="code/service-type" element={<ServiceType />}>
+          </Route>
+
+          <Route path="code/provider-type" element={<ProviderType />}>
+          </Route>
+
+          {/* codes routes ends  */}
+
+          {/* third party pricing started  */}
+
+          {/* third party pricing started  */}
+          <Route path="third-party-pricing/price-schedule" element={<PriceSchedule />}>
             <Route index element={<Navigate to="brand-item" replace />} />
             <Route index path="brand-item" element={<BrandItem />} />
             <Route path="brand-item-generic" element={<BrandItemGeneric />} />
             <Route path="generic-item" element={<GetGenericItem />} />
           </Route>
 
-          <Route path="third-party-pricing/copay-schedule" element={<CopaySchedule />}>
+          {/*  <Route path="third-party-pricing/copay-schedule" element={<CopaySchedule />}>
             <Route index element={<Navigate to="brand-item" replace />} />
             <Route path="brand-item" element={<NonGeneric />} />
             <Route path="brand-item-generic" element={<Generic />} />
             <Route path="generic-item" element={<GenericItem />} />
           </Route> */}
 
-            <Route path="third-party-pricing/price-schedule" element={<PriceSchedule />}>
-            </Route>
+          {/* <Route path="third-party-pricing/price-schedule" element={<PriceSchedule />}>
+            </Route> */}
 
-            <Route path="third-party-pricing/copay-schedule" element={<CopaySchedule />}>
-              <Route index element={<Navigate to="brand-item" replace />} />
-              <Route index path="brand-item" element={<NonGeneric />} />
-              <Route path="brand-item-generic" element={<BrandItemGeneric />} />
-              <Route path="generic-item" element={<GetGenericItem />} />
-            </Route>
+          <Route path="third-party-pricing/copay-schedule" element={<CopaySchedule />}>
+            <Route index element={<Navigate to="brand-item" replace />} />
+            <Route index path="brand-item" element={<NonGeneric />} />
+            <Route path="brand-item-generic" element={<BrandItemGeneric />} />
+            <Route path="generic-item" element={<GetGenericItem />} />
+          </Route>
 
-            <Route path="third-party-pricing/copay-step-schedule" element={<CopayStepSchedule />}>
+          <Route path="third-party-pricing/copay-step-schedule" element={<CopayStepSchedule />}>
 
-            </Route>
+          </Route>
 
-            <Route path="third-party-pricing/MAC-list" element={<MacList />}>
-            </Route>
+          <Route path="third-party-pricing/MAC-list" element={<MacList />}>
+          </Route>
 
-            <Route path="third-party-pricing/procedure-UCR-list" element={<ProcedureUCRList />}>
-            </Route>
+          <Route path="third-party-pricing/procedure-UCR-list" element={<ProcedureUCRList />}>
+          </Route>
 
-            <Route path="third-party-pricing/tax-schedule" element={<TaxSchedule />}>
-            </Route>
+          <Route path="third-party-pricing/tax-schedule" element={<TaxSchedule />}>
+          </Route>
 
-            <Route path="third-party-pricing/RAV-list" element={<RVAList />}>
-            </Route>
+          <Route path="third-party-pricing/RAV-list" element={<RVAList />}>
+          </Route>
 
-            {/* third party pricing ends  */}
+          {/* third party pricing ends  */}
 
-            {/* exception list route starts  */}
+          {/* exception list route starts  */}
 
-            <Route path="exception-list/ndc" element={<NDC />}>
-              <Route index element={<Navigate to="process-rule" replace />} />
-              <Route path='process-rule' element={<ProcessRule />} />
-              <Route path='rx-limitation-pricing' element={<RXLimitationPricing />} />
-              <Route path='validation-override' element={<ValidationsOverride />} />
-            </Route>
+          <Route path="exception-list/ndc" element={<NDC />}>
+            <Route index element={<Navigate to="process-rule" replace />} />
+            <Route path='process-rule' element={<ProcessRule />} />
+            <Route path='rx-limitation-pricing' element={<RXLimitationPricing />} />
+            <Route path='validation-override' element={<ValidationsOverride />} />
+          </Route>
 
-            <Route path="exception-list/gpi" element={<GPI />}>
-              <Route index element={<Navigate to="process-rule" replace />} />
-              <Route path='process-rule' element={<GPIProcessRule />} />
-              <Route path='rx-limitation-pricing' element={<GPIRXLimitationPricing />} />
-              <Route path='validation-override' element={<GPIValidationsOverride />} />
-            </Route>
+          <Route path="exception-list/gpi" element={<GPI />}>
+            <Route index element={<Navigate to="process-rule" replace />} />
+            <Route path='process-rule' element={<GPIProcessRule />} />
+            <Route path='rx-limitation-pricing' element={<GPIRXLimitationPricing />} />
+            <Route path='validation-override' element={<GPIValidationsOverride />} />
+          </Route>
 
 
 
-            <Route path="exception-list/therapy-class" element={<TherapyClass />}>
-              <Route index element={<Navigate to="process-rule" replace />} />
-              <Route path='process-rule' element={<TCProcessRule />} />
-              <Route path='rx-limitation-pricing' element={<TCRXLimitationPricing />} />
-              <Route path='validation-override' element={<TCValidationsOverride />} />
-            </Route>
+          <Route path="exception-list/therapy-class" element={<TherapyClass />}>
+            <Route index element={<Navigate to="process-rule" replace />} />
+            <Route path='process-rule' element={<TCProcessRule />} />
+            <Route path='rx-limitation-pricing' element={<TCRXLimitationPricing />} />
+            <Route path='validation-override' element={<TCValidationsOverride />} />
+          </Route>
 
-            <Route path="exception-list/drug-classification" element={<DrugClassification />}>
-            </Route>
+          <Route path="exception-list/drug-classification" element={<DrugClassification />}>
+          </Route>
 
-            <Route path="exception-list/procedure" element={<ExceptionProcedure />}>
-            </Route>
+          <Route path="exception-list/procedure" element={<ExceptionProcedure />}>
+          </Route>
 
-            <Route path="exception-list/reason" element={<ExceptionReason />}>
-            </Route>
+          <Route path="exception-list/reason" element={<ExceptionReason />}>
+          </Route>
 
-            <Route path="exception-list/benefit-list" element={<BenefitList />}>
-            </Route>
+          <Route path="exception-list/benefit-list" element={<BenefitList />}>
+          </Route>
 
-            <Route path="exception-list/benefit-derivation" element={<BenefitDerivation />}>
-            </Route>
+          <Route path="exception-list/benefit-derivation" element={<BenefitDerivation />}>
+          </Route>
 
 
-            {/* exception list route ends  */}
+          {/* exception list route ends  */}
 
-            <Route path="code/benefits" element={<Benifits />}>
+          <Route path="code/benefits" element={<Benifits />}>
 
-            </Route>
+          </Route>
 
-            <Route path="code/procedure" element={<Procedure />}>
+          <Route path="code/procedure" element={<Procedure />}>
 
-            </Route>
+          </Route>
 
-            <Route path="code/diagnosis" element={<Diagnosis />}>
+          <Route path="code/diagnosis" element={<Diagnosis />}>
 
-            </Route>
+          </Route>
 
-            <Route path="code/reason" element={<Reason />}>
+          <Route path="code/reason" element={<Reason />}>
 
-            </Route>
+          </Route>
 
-            <Route path="code/cause-of-loss" element={<CauseOfLoss />}>
-            </Route>
+          <Route path="code/cause-of-loss" element={<CauseOfLoss />}>
+          </Route>
 
-            <Route path="code/service-modifiers" element={<ServiceModifiers />}>
-            </Route>
+          <Route path="code/service-modifiers" element={<ServiceModifiers />}>
+          </Route>
 
-            <Route path="code/service-type" element={<ServiceType />}>
-            </Route>
+          <Route path="code/service-type" element={<ServiceType />}>
+          </Route>
 
-            <Route path="code/provider-type" element={<ProviderType />}>
-            </Route>
+          <Route path="code/provider-type" element={<ProviderType />}>
+          </Route>
 
 
 
-            {/* validation list route starts  */}
-
-
-
-            <Route path="validation-lists/diagnosis" element={<DiagnosisValidation />}>
-            </Route>
-            <Route path="validation-lists/speciality" element={<SpecialityValidation />}>
-            </Route>
-
-            <Route path="validation-lists/eligibility" element={<EligibilityValidation />}>
-            </Route>
-
-            <Route path="validation-lists/provider" element={<ProviderValidation />}>
-            </Route>
+          {/* validation list route starts  */}
+
+
+
+          <Route path="validation-lists/diagnosis" element={<DiagnosisValidation />}>
+          </Route>
+          <Route path="validation-lists/speciality" element={<SpecialityValidation />}>
+          </Route>
+
+          <Route path="validation-lists/eligibility" element={<EligibilityValidation />}>
+          </Route>
+
+          <Route path="validation-lists/provider" element={<ProviderValidation />}>
+          </Route>
 
-            <Route path="validation-lists/prescriber" element={<PrescriberValidation />}>
-            </Route>
-
-            <Route path="validation-lists/diagnosis-prioritization" element={<DiagnosisPrioritization />}>
-            </Route>
-
-            {/* validation list route ends  */}
-
-            {/* Accumulated Benefit Route Starts  */}
-
-            <Route path="accumulated-benefits/all" element={<AccumulatedBenefits />}>
-              <Route index element={<Navigate to="exclusion-limitation" replace />} />
-              <Route path="exclusion-limitation" element={<ExclusionLimitation />} />
-              <Route path="deductible" element={<Deductible />} />
-            </Route>
+          <Route path="validation-lists/prescriber" element={<PrescriberValidation />}>
+          </Route>
+
+          <Route path="validation-lists/diagnosis-prioritization" element={<DiagnosisPrioritization />}>
+          </Route>
+
+          {/* validation list route ends  */}
+
+          {/* Accumulated Benefit Route Starts  */}
+
+          <Route path="accumulated-benefits/all" element={<AccumulatedBenefits />}>
+            <Route index element={<Navigate to="exclusion-limitation" replace />} />
+            <Route path="exclusion-limitation" element={<ExclusionLimitation />} />
+            <Route path="deductible" element={<Deductible />} />
+          </Route>
 
-            <Route path="accumulated-benefits/gpi-exclusion" element={<GPIExclusion />}>
-            </Route>
+          <Route path="accumulated-benefits/gpi-exclusion" element={<GPIExclusion />}>
+          </Route>
 
-            <Route path="accumulated-benefits/ndc-exclusion" element={<NDCExclusion />}>
-            </Route>
-
-            <Route path="accumulated-benefits/major-medical-maximums" element={<MajorMedicalMaximums />}>
-            </Route>
-            {/* Accumulated Benefit Route Ends  */}
+          <Route path="accumulated-benefits/ndc-exclusion" element={<NDCExclusion />}>
+          </Route>
+
+          <Route path="accumulated-benefits/major-medical-maximums" element={<MajorMedicalMaximums />}>
+          </Route>
+          {/* Accumulated Benefit Route Ends  */}
 
-            {/* Drug Information Route starts */}
-            <Route path="drug-information/drug-database" element={<DrugDatabase />}>
-              <Route index element={<Navigate to="general" replace />} />
-              <Route path='general' element={<General />} />
-              <Route path='id-codes' element={<IDCodes />} />
-              <Route path='distribution' element={<Distribution />} />
-              <Route path='pricing' element={<DrugInformationPricing />} />
-            </Route>
+          {/* Drug Information Route starts */}
+          <Route path="drug-information/drug-database" element={<DrugDatabase />}>
+            <Route index element={<Navigate to="general" replace />} />
+            <Route path='general' element={<General />} />
+            <Route path='id-codes' element={<IDCodes />} />
+            <Route path='distribution' element={<Distribution />} />
+            <Route path='pricing' element={<DrugInformationPricing />} />
+          </Route>
 
-            <Route path='drug-information/ndc-gpi-cross-reference' element={<NDCCrossReference />}>
-            </Route>
-            {/* Drug information route ends */}
+          <Route path='drug-information/ndc-gpi-cross-reference' element={<NDCCrossReference />}>
+          </Route>
+          {/* Drug information route ends */}
 
-            {/* strategies route started */}
-            <Route path="strategies/pricing-startegy" element={<PricingStrategies />} />
-            <Route path="strategies/copay-strategy" element={<CopayStrategy />} />
-            <Route path="strategies/accumulated-benefits-strategy" element={<AccumulatedBenefitStrategy />} />
-            {/* strategies route ends  */}
+          {/* strategies route started */}
+          <Route path="strategies/pricing-startegy" element={<PricingStrategies />} />
+          <Route path="strategies/copay-strategy" element={<CopayStrategy />} />
+          <Route path="strategies/accumulated-benefits-strategy" element={<AccumulatedBenefitStrategy />} />
+          {/* strategies route ends  */}
 
-            {/* plan design route starts  */}
-            <Route path="plan-design/plan-association" element={<PlanAssociation />} />
-            <Route path="plan-design/plan-edit" element={<PlanEdit />} >
-              <Route index element={<Navigate to="plan-formulary" replace />} />
-              <Route path="plan-formulary" element={<PlanFormulary />} />
-              <Route path="rx-limitations" element={<RxLimitations />} />
-              <Route path="date-limitations" element={<DateLimitations />} />
-              <Route path="refill-limitations" element={<RefillLimitations />} />
-              <Route path="notes" element={<PlanEditNotes />} />
-            </Route>
-            {/* plan design route ends  */}
+          {/* plan design route starts  */}
+          <Route path="plan-design/plan-association" element={<PlanAssociation />} />
+          <Route path="plan-design/plan-edit" element={<PlanEdit />} >
+            <Route index element={<Navigate to="plan-formulary" replace />} />
+            <Route path="plan-formulary" element={<PlanFormulary />} />
+            <Route path="rx-limitations" element={<RxLimitations />} />
+            <Route path="date-limitations" element={<DateLimitations />} />
+            <Route path="refill-limitations" element={<RefillLimitations />} />
+            <Route path="notes" element={<PlanEditNotes />} />
+          </Route>
+          {/* plan design route ends  */}
 
-            {/* Prescriber route starts  */}
-            <Route path="prescriber-data/prescriber" element={<Prescriber />}></Route>
-            {/* Prescriber route ends  */}
+          {/* Prescriber route starts  */}
+          <Route path="prescriber-data/prescriber" element={<Prescriber />}></Route>
+          {/* Prescriber route ends  */}
 
-            {/* Membership route starts  */}
-            <Route path="membership/member" element={<MembersData />}>
-              <Route index element={<Navigate to="member" />}></Route>
-              <Route path="member" element={<MemberTab />} />
-              <Route path="overrides" element={<OverridesTab />} />
-              <Route path="coverage-history" element={<CoverageHistoryTab />} />
-              <Route path="health-conditions" element={<HealthConditionsTab />} />
-              <Route path="notes" element={<NotesTab />} />
-              <Route path="claim-history" element={<ClaimHistoryTab />} />
-              <Route path="prior-authorization" element={<PriorAuthorizationTab />} />
-              <Route path="provider-search" element={<ProviderSearchTab />} />
-              <Route path="change-log" element={<ChangeLogTab />} />
-            </Route>
+          {/* Membership route starts  */}
+          <Route path="membership/member" element={<MembersData />}>
+            <Route index element={<Navigate to="member" />}></Route>
+            <Route path="member" element={<MemberTab />} />
+            <Route path="overrides" element={<OverridesTab />} />
+            <Route path="coverage-history" element={<CoverageHistoryTab />} />
+            <Route path="health-conditions" element={<HealthConditionsTab />} />
+            <Route path="notes" element={<NotesTab />} />
+            <Route path="claim-history" element={<ClaimHistoryTab />} />
+            <Route path="prior-authorization" element={<PriorAuthorizationTab />} />
+            <Route path="provider-search" element={<ProviderSearchTab />} />
+            <Route path="change-log" element={<ChangeLogTab />} />
+          </Route>
 
-            <Route path='membership/prior-authorization' element={<PriorAuthorization />}>
-              <Route index element={<Navigate to="authorization" />}></Route>
-              <Route path='authorization' element={<Authorization />} />
-              <Route path='pricing' element={<PriorPricing />} />
-              <Route path='notes' element={<PriorNotes />} />
-            </Route>
+          <Route path='membership/prior-authorization' element={<PriorAuthorization />}>
+            <Route index element={<Navigate to="authorization" />}></Route>
+            <Route path='authorization' element={<Authorization />} />
+            <Route path='pricing' element={<PriorPricing />} />
+            <Route path='notes' element={<PriorNotes />} />
+          </Route>
 
-            <Route path='membership/plan-validations' element={<PlanValidations />}>
-            </Route>
+          <Route path='membership/plan-validations' element={<PlanValidations />}>
+          </Route>
 
 
-            <Route path='provider' element={<SearchProvider />}>
-              <Route index element={<Navigate to="provider" replace />} />
+          <Route path='provider' element={<SearchProvider />}>
+            <Route index element={<Navigate to="provider" replace />} />
 
-              <Route path='provider' element={<Provider />} />
-              <Route path='effectivedates' element={<Effectivedates />} />
-              <Route path='pharmistsystem' element={<PharmistSystem />} />
+            <Route path='provider' element={<Provider />} />
+            <Route path='effectivedates' element={<Effectivedates />} />
+            <Route path='pharmistsystem' element={<PharmistSystem />} />
 
-              <Route path='networkparticipation' element={<NetworkParticipation />} />
-            </Route>
+            <Route path='networkparticipation' element={<NetworkParticipation />} />
+          </Route>
 
-            <Route path='provider/superprovider' element={<SuperProvider />} />
+          <Route path='provider/superprovider' element={<SuperProvider />} />
 
 
-            <Route path='provider/traditionalnetworks' element={<TraditionalNetworks />}>
-              <Route index element={<Navigate to="network" replace />} />
-              <Route path='network' element={<Network />} />
-              <Route path='providers' element={<Providers />} />
-            </Route>
+          <Route path='provider/traditionalnetworks' element={<TraditionalNetworks />}>
+            <Route index element={<Navigate to="network" replace />} />
+            <Route path='network' element={<Network />} />
+            <Route path='providers' element={<Providers />} />
+          </Route>
 
-            <Route path='provider/flexiblenetworks' element={<FlexibleNetworks />}>
-              <Route index element={<Navigate to="network" replace />} />
-              <Route path='network' element={<Network />} />
-              <Route path='rules' element={<Rules />} />
-            </Route>
+          <Route path='provider/flexiblenetworks' element={<FlexibleNetworks />}>
+            <Route index element={<Navigate to="network" replace />} />
+            <Route path='network' element={<Network />} />
+            <Route path='rules' element={<Rules />} />
+          </Route>
 
-            <Route path='provider/prioritizenetworks' element={<PrioritizeNetwork />}>
+          <Route path='provider/prioritizenetworks' element={<PrioritizeNetwork />}>
 
-            </Route>
+          </Route>
 
-            {/* membership route ends  */}
+          {/* membership route ends  */}
 
-            {/* administrator route starts  */}
-            <Route path='administrator/user-definition' element={<UserDefinition />}>
-              <Route index element={<Navigate to="definition" />} />
-              <Route path='definition' element={<UDefinitionTab />} />
+          {/* administrator route starts  */}
+          <Route path='administrator/user-definition' element={<UserDefinition />}>
+            <Route index element={<Navigate to="definition" />} />
+            <Route path='definition' element={<UDefinitionTab />} />
 
-              <Route path='data-access' element={<DataAccessTab />} />
-              <Route path='group' element={<GroupForm />} />
+            <Route path='data-access' element={<DataAccessTab />} />
+            <Route path='group' element={<GroupForm />} />
 
-            </Route>
+          </Route>
 
-            <Route path='administrator/verify-drug-coverage' element={<VerifyDrugCoverage />}>
-              <Route path='member' element={<VDCMember />} />
-              <Route path='group' element={<Group />} />
-              <Route path='plan' element={<Plan />} />
-            </Route>
-            <Route path='administrator/zip-codes' element={<Zipcodes />}>
+          <Route path='administrator/verify-drug-coverage' element={<VerifyDrugCoverage />}>
+            <Route path='member' element={<VDCMember />} />
+            <Route path='group' element={<Group />} />
+            <Route path='plan' element={<Plan />} />
+          </Route>
+          <Route path='administrator/zip-codes' element={<Zipcodes />}>
 
-            </Route>
+          </Route>
 
 
-            {/* <Route path='administrator/' element={< />}> </Route> */}
-            <Route path='administrator/system-parameter' element={<SystemParameter />}>
-              <Route path='parameters-maintanace' element={<ParametersMaintanace />} />
-              <Route path='systemlimit-eligibility' element={<PSParmeters />} />
-            </Route>
+          {/* <Route path='administrator/' element={< />}> </Route> */}
+          <Route path='administrator/system-parameter' element={<SystemParameter />}>
+            <Route path='parameters-maintanace' element={<ParametersMaintanace />} />
+            <Route path='systemlimit-eligibility' element={<PSParmeters />} />
+          </Route>
 
-            <Route path='administrator/search-audit-trail' element={<SearchAudit />}>
+          <Route path='administrator/search-audit-trail' element={<SearchAudit />}>
 
-            </Route>
+          </Route>
 
 
 
@@ -862,7 +862,7 @@ function App() {
           </Route>
 
           <Route path='administrator/verify-drug-coverage' element={<VerifyDrugCoverage />}>
-          <Route index element={<Navigate to="member" replace />} />
+            <Route index element={<Navigate to="member" replace />} />
             <Route path='member' element={<VDCMember />} />
             <Route path='group' element={<Group />} />
             <Route path='plan' element={<Plan />} />
@@ -874,13 +874,13 @@ function App() {
 
           {/* <Route path='administrator/' element={< />}> </Route> */}
           <Route path='administrator/system-parameter' element={<SystemParameter />}>
-          <Route index element={<Navigate to="parameters-maintanace" replace />} />
+            <Route index element={<Navigate to="parameters-maintanace" replace />} />
             <Route path='parameters-maintanace' element={<ParametersMaintanace />} />
             <Route path='systemlimit-eligibility' element={<PSParmeters />} />
           </Route>
 
           <Route path='administrator/claims-history-search' element={<ClaimsHistorySearch />}>
-          <Route index element={<Navigate to="general-history" replace />} />
+            <Route index element={<Navigate to="general-history" replace />} />
             <Route path='general-history' element={<ClaimHistoryGeneral />} />
             <Route path='optional-history' element={<ClaimHistoryOptional />} />
           </Route>

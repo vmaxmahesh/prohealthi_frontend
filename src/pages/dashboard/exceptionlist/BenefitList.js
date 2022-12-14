@@ -112,9 +112,6 @@ export default function BenefitList() {
                 console.error('There was an error!', error);
             });
     }
-
-
-
     useEffect(() => {
         document.title = 'Benifit List | ProHealthi';
      }, [ndcData, ndcClass, selctedNdc]);

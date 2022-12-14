@@ -2,19 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { Form } from 'react-bootstrap';
 
 export default function CopayStepSchedule() {
 
     const [copayStepData, setCopayStepData] = useState([]);
-    const [type, setType] = useState([]);
+
     const [formData, setFormData] = useState([]);
+    const [type, setType] = useState(false);
+    const [adding, setAdding] = useState(false);
+
     const selectType = (e) => {
-        setType(e);
+        setType(e.target.value);
         const requestOptions = {
             method: 'GET',
             headers: { 'content-type': 'application/json' }
         }
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/third-party-pricing/copay-step-schedule/get?search=${e}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/third-party-pricing/copay-step-schedule/get?search=${e.target.value}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
@@ -36,8 +40,15 @@ export default function CopayStepSchedule() {
 
     const showData = (data) => {
         setFormData(data);
+        setAdding(false);
     }
-    useEffect(() => { }, [copayStepData, formData]);
+
+    const clearForm = (e) => {
+        setFormData(false);
+        setAdding(true);
+        reset();
+    }
+    useEffect(() => { }, [copayStepData, formData, type, adding]);
     return (
         <>
             <div className='dashboard-content clearfix'>
@@ -74,7 +85,7 @@ export default function CopayStepSchedule() {
                                     <div className=""><span>Schedule Type:</span></div>
                                     <div className="col-md-6">
                                         <div className="form-check">
-                                            <input className="form-check-input" type="radio" onClick={e => selectType("days_supply")} name="flexRadioDefault" id="flexRadioDefault1" />
+                                            <input className="form-check-input" type="radio" onClick={selectType} value="days_supply" name='flexRadioDefault' id="flexRadioDefault1" />
                                             <label className="form-check-label" htmlFor="flexRadioDefault1">
                                                 Days Supply
                                             </label>
@@ -82,7 +93,7 @@ export default function CopayStepSchedule() {
                                     </div>
                                     <div className="col-md-6 ">
                                         <div className="form-check">
-                                            <input className="form-check-input" onClick={e => selectType("max_cost")} type="radio" name="flexRadioDefault" id="flexRadioDefault2" />
+                                            <input className="form-check-input" onClick={selectType} type="radio" name='flexRadioDefault' value="max_cost" id="flexRadioDefault2" />
                                             <label className="form-check-label" htmlFor="flexRadioDefault2">
                                                 Max Cost
                                             </label>
@@ -100,7 +111,7 @@ export default function CopayStepSchedule() {
                         <GetStepScheduleTable copayStepData={copayStepData} dataType={type} showData={showData} />
                     </div>
                     <div className="col-md-8">
-                        <DataForm formData={formData} dataType={type} />
+                        <DataForm formData={formData} dataType={type} clearForm={clearForm} adding={adding} />
                     </div>
                 </div>
 
@@ -130,7 +141,7 @@ function GetStepScheduleTable(props) {
                     <table className="table  table-bordered">
                         <thead className='stickt-thead'>
                             <tr>
-                                <th>{String(type).replace("_", " ").toUpperCase()}
+                                <th>{type != '' ? String(type).replace("_", " ").toUpperCase() : "Days Supply/Max Cost"}
                                 </th>
                                 <th>Description</th>
                             </tr>
@@ -159,86 +170,147 @@ function CopayStepRow(props) {
 }
 
 function DataForm(props) {
-    const { register, handleSubmit, reset, watch, formState: { error } } = useForm();
-    useEffect(() => { reset(props.formData) }, [props.formData]);
+    const { register, handleSubmit, reset, watch, formState: { errors } } = useForm();
+
+    const submitForm = (fdata) => {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(fdata)
+        }
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/third-party-pricing/copay-step-schedule/submit`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    // const error = (data && data.message) || response.status;
+                    // return Promise.reject(error);
+                    toast.error("There was an error!", {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                } else {
+                toast.success(data.message, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+
+    }
+
+    useEffect(() => {
+        if (props.adding) {
+            reset({
+                copay_list: '', copay_amount: '', copay_percentage: '', days_supply: '', max_cost: '', new: 1, max_cost: ''
+            },
+                { keepValues: false, });
+        }
+        reset(props.formData)
+    }, [props.formData]);
+
     return (
         <>
             <div className="card mt-3 mb-3">
                 <div className="card-body">
-                    <div className="row mb-2">
-                        <div className="col-md-4 mb-3">
-                            <div className="form-group">
-                                <small>Copay List</small>
-                                <input type="text" className="form-control" placeholder="Surgical" {...register("copay_list", { required: true })} autoComplete="off" />
+                    <form onSubmit={handleSubmit(submitForm)}>
+                        <div className="row mb-2">
+                            <div className="col-md-4 mb-3">
+                                <div className="form-group">
+                                    <small>Copay List</small>
+                                    <input type="text" className="form-control" {...register("copay_list", { required: true })} autoComplete="off"
+                                        disabled={props.adding ? false : true} />
+                                    {errors.copay_list && <span><p className='notvalid'>This field is required</p></span>}
+                                </div>
+                            </div>
+                            <div className="col-md-8 mb-3">
+                                <div className="form-group">
+                                    <small>Copay Description</small>
+                                    <textarea rows="1" cols="2" className="form-control"  ></textarea>
+                                </div>
+                            </div>
+                            {/* {/* <div className="col-md-12">
+                                <div className=""><span>Schedule Type:</span></div>
+                                <div className="form-check">
+                                    <input className="form-check-input" type="radio"
+                                        {...register("step_schedule_indicator", { required: true })} disabled={props.adding ? false : true} value="d" />
+                                    <label className="form-check-label" htmlFor="flexRadioDefault1" >
+                                        Days Supply
+                                    </label>
+                                </div>
+                            </div> 
+                            <div className="col-md-6 ">
+                                <div className="form-check">
+                                    <input className="form-check-input" type="radio"
+                                        {...register("step_schedule_indicator", { required: true })} disabled={props.adding ? false : true} value="m" />
+                                    <label className="form-check-label" htmlFor="flexRadioDefault1">
+                                        Max Cost
+                                    </label>
+                                </div>
+                            </div> */}
+                            {errors.step_schedule_indicator && <span><p className='notvalid'>This field is required</p></span>}
+                        </div>
+                        <div className="row mb-2 ">
+                            <div className="col-md-3 mb-3">
+                                <div className="form-group">
+                                    <small>{props.dataType ? props.dataType : "Days Supply/Max Cost"}</small>
+                                    {props.dataType == 'days_supply' ?
+                                        <input type="text" className="form-control"  {...register("days_supply", { required: true })} autoComplete="off" />
+                                        : <input type="text" className="form-control"  {...register("cost_max", { required: true })} autoComplete="off" />}
+                                </div>
+                                {errors.days_supply || errors.cost_max && <span><p className='notvalid'>This field is required</p></span>}
+                            </div>
+                            <div className="col-md-3 mb-3">
+                                <div className="form-group">
+                                    <small>$</small>
+                                    <input type="text" className="form-control" {...register("copay_amount", { required: true, pattern: '[0-9]' })} autoComplete="off" />
+                                    {errors.copay_amount && <span><p className='notvalid'>This field is required</p></span>}
+                                </div>
+                            </div>
+                            <div className="col-md-3 mb-3">
+                                <div className="form-group">
+                                    <small>%</small>
+                                    <input type="text" className="form-control" {...register("copay_percentage", { required: true })} autoComplete="off" />
+                                    {errors.copay_percentage && <span><p className='notvalid'>This field is required</p></span>}
+                                </div>
+                            </div>
+                            <div className="col-md-3 ">
+                                <div className="col-md-12 mb-3">
+                                    <div className="form-group">
+                                        {/* <button type='submit' className='btn btn-primary' disabled={props.adding ? false : true}>{props.adding ? 'Add' : 'Update'} Item</button> */}
+                                        <button type='submit' className='btn btn-primary' >{props.adding ? 'Add' : 'Update'} Item</button>
+                                    </div>
+                                </div>
+                                <div className="col-md-12 mb-3">
+                                    <div className="form-group">
+                                        <button type='button' className='btn btn-danger' disabled={props.adding ? true : false}>Remove Item</button>
+                                    </div>
+                                </div>
+                                <div className="col-md-12 mb-3">
+                                    <div className="form-group">
+                                        <button type='button' onClick={e => props.clearForm(e)} className='btn btn-info'>{props.adding ? "Clear" : "Add"} Item</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div className="col-md-8 mb-3">
-                            <div className="form-group">
-                                <small>Copay Description</small>
-                                <textarea rows="1" cols="2" className="form-control" {...register("copay_list", { required: true })} placeholder="Surgical Test"></textarea>
-                            </div>
-                        </div>
-                        <div className="col-md-12">
-                            <div className=""><span>Schedule Type:</span></div>
-                            <div className="form-check">
-
-                                {/* console.log() */}
-                                <input className="form-check-input" type="radio" checked={props.formData.days_supply != '0'} />
-                                <label className="form-check-label" htmlFor="flexRadioDefault1" >
-                                    Days Supply
-                                </label>
-                            </div>
-                        </div>
-                        <div className="col-md-6 ">
-                            <div className="form-check">
-                                <input className="form-check-input" type="radio" checked={props.formData.cost_max != '0'}
-                                // {...props.formData.cost_max == '0' ? '' : defaultChecked } 
-                                />
-                                <label className="form-check-label" htmlFor="flexRadioDefault1">
-                                    Max Cost
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row mb-2 ">
-                        <div className="col-md-3 mb-3">
-                            <div className="form-group">
-                                <small>{props.dataType}</small>
-                                {props.dataType == 'days_supply' ?
-                                    <input type="text" className="form-control"  {...register("days_supply", { required: true })} autoComplete="off" />
-                                    : <input type="text" className="form-control"  {...register("cost_max", { required: true })} autoComplete="off" />}
+                    </form>
 
 
-                            </div>
-                        </div>
-                        <div className="col-md-3 mb-3">
-                            <div className="form-group">
-                                <small>$</small>
-                                <input type="text" className="form-control" placeholder="0" {...register("copay_amount", { required: true })} autoComplete="off" />
-
-                            </div>
-                        </div>
-                        <div className="col-md-3 mb-3">
-                            <div className="form-group">
-                                <small>%</small>
-                                <input type="text" className="form-control" placeholder="83" {...register("copay_percentage", { required: true })} autoComplete="off" />
-
-                            </div>
-                        </div>
-
-                        <div className="col-md-3 mb-3">
-                            <div className="form-group">
-                                <button className='btn btn-primary'>Add</button>
-                            </div>
-                        </div>
-
-                        {/* <div className="col-md-3 mb-3">
-                            <button className='btn btn-primary'>Add</button>
-                        </div> */}
-                    </div>
-
-
-                    <div className="row mb-2 ">
+                    {/* <div className="row mb-2 ">
                         <div className="col-md-9 mb-3">
                             <table className="table  table-bordered">
                                 <thead>
@@ -263,13 +335,13 @@ function DataForm(props) {
                             </table>
                         </div>
 
-                        <div className="col-md-3 mb-3">
+                        {/* <div className="col-md-3 mb-3">
                             <button className='btn btn-danger'>Delete</button>
-                        </div>
-                    </div>
-
+                        </div> 
+                    </div> */}
                 </div>
             </div >
+
         </>
     );
 }

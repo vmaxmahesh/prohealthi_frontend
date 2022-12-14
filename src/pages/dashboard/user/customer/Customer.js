@@ -114,7 +114,7 @@ function Customer() {
                 <div className="col-md-6 mb-3">
                     <div className="breadcrum ">
                         <ul>
-                             <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li> 
+                             <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li>
                         </ul>
                     </div>
                 </div>
@@ -283,7 +283,7 @@ export function Identification(props) {
     const Cstates = [
         { label: "AD", value: 1 },
         { label: "KG", value: 2 },
-        
+
     ];
 
 
@@ -292,15 +292,7 @@ export function Identification(props) {
         setCountry(e.target.value);
         getCountries();
     }
-
-
-
-
-
-
     const navigate = useNavigate();
-
-
     function StartDateChange(e) {
 
         setStartDate(e.target.value);
@@ -424,37 +416,20 @@ export function Identification(props) {
     useEffect(() => { reset(customer) }, [customer]);
     const countries = [
         { value: 'Jamica', label: 'Jamaica' },
-        
+        { value: 'Jamica2', label: 'Jamaica2' },
     ];
 
 
     const [states, setStates] = useState();
 
     // const [countries, setCountries] = useState();
-    
+
     const [selectedOption, setSelectedOption] = useState();
 
 
     const onStateChange = (e) => {
         getStates();
     }
-
-    // const options = [
-    //     {name: 'Swedish', value: 'sv'},
-    //     {name: 'English', value: 'en'},
-       
-    // ];
-
-    useEffect(()=>{
-        getStates();
-        
-
-    })
-
-
-    
-
-
     return (
         <>
 
@@ -524,7 +499,6 @@ export function Identification(props) {
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Country</small>
-                                               
 
                                             <Select   {...register("country", {
                                                 required: true,
@@ -548,7 +522,8 @@ export function Identification(props) {
                                             <Select {...register("city", {
                                                 required: true,
 
-                                            })} onClick={onStateChange}  name="city" className="form-select"  defaultValue={{ label: "AD", value: 1 }}          options={Cstates}
+                                            })} onClick={onStateChange}  name="city" className="form-select"  defaultValue={{ label: "AD", value: 1 }}
+                                                      options={Cstates}
                                             />
 
                                                 {/* {states.map(option => (
@@ -842,7 +817,7 @@ useEffect(()=>{
         mode: "onBlur",
     });
 
-    
+
     const tiersMove = () => {
         var val1 = new Date(document.getElementById("tier_1").value);
         var val2 = new Date(document.getElementById("tier_2").value);
@@ -1214,7 +1189,7 @@ const [selectedOption, setSelectedOption] = useState(null);
                         <div className="row align-items-center">
                             <div className="col-md-3 align-items-center">
                                 <p className="mt-2">Coverage
-                                
+
                                  Effective Date:</p>
 
                             </div>
@@ -1345,7 +1320,7 @@ const [selectedOption, setSelectedOption] = useState(null);
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group mb-3">
-                                    <small>Provider Options</small> 
+                                    <small>Provider Options</small>
                                     {/* Column not there in customer table */}
                                     <select className="form-select" {...register("pharmacy_exceptions_flag", {
                                         // required: true
@@ -1367,19 +1342,19 @@ const [selectedOption, setSelectedOption] = useState(null);
                                         required: true,
                                     })} name="super_rx_network_id" id="" /> */}
                                     {/* <a href="" data-bs-toggle="modal" data-bs-target="#supernetwork"><span className="fa fa-search form-icon"></span></a> */}
-                                    <Select    
+                                    <Select
  options={superoptions}   name="super_rx_network_id" value={value}  {...register('super_rx_network_id')}  onChange={(e) => mahesh(e)}  />
-                               
 
 
-                               
-
-                               
-
-                                
 
 
-                                   
+
+
+
+
+
+
+
 
 
                                     {errors.super_rx_network_id?.type === 'required' && <p role="alert" className="notvalid">Super Provider Networks field is   required</p>}
@@ -1552,7 +1527,7 @@ const [selectedOption, setSelectedOption] = useState(null);
 
                             </div>
 
-                          
+
                         </div>
                     </div>
                 </div>

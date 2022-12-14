@@ -76,26 +76,19 @@ export default function Benefits() {
     const updateSelected = (data) => {
         setBenifitData(data);
     }
-
     const AddForm = () => {
         setBenifitData(false);
         setAdding(true);
         reset();
-
     }
-
-
     useEffect(() => {
         if (benifitsData) {
             setAdding(false);
-
         } else {
             setAdding(true);
             setBenifitData(false);
         }
-
         document.title = 'Benefit Code | ProHealthi';
-
     }, [benifitsData, adding]);
 
     return (
@@ -176,9 +169,6 @@ function List(props) {
     for (let i = 0; i < props.benifitsList.length; i++) {
         benifitList.push(<BenefitRow benifitRowData={props.benifitsList[i]} selected={props.selected} getCode={props.getCode} />);
     }
-
-
-
     return (
         <>
             <div className="card mt-3 mb-3 data">

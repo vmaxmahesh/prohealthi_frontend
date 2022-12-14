@@ -14,6 +14,7 @@ root.render(
 
     <BrowserRouter>
       <AuthProvider>
+      {/* <StateMachineProvider> */}
         <UnAuthRoutes />
 
         <App />
