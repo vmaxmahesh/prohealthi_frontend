@@ -110,14 +110,20 @@ export default function Dashboard() {
                                 <Link to="/dashboard/provider/prioritize-networks" className={'dashboard-nav-dropdown-item' + (currentpath == 'prioritize-networks' ? ' active' : '')}>Prioritize Network</Link>
 
 
+
+                                <Link to="/dashboard/user/provider/prioritizenetworks" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>PrioritizeNetworks</Link>
+                                {/* <a href="#" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}> Projections</a> */}
                             </div>
                         </div>
 
                         <div className={'dashboard-nav-dropdown' + (['subpath', 'subpath2'].includes(currentpath) ? ' show' : '')}>
-                            <a href="#!" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
-                                <i className="fa-solid fa-prescription"></i> Prescriber Data </a>
+                            <Link to="/dashboard/presciberdata"  className="dashboard-nav-item dashboard-nav-dropdown-toggle">
+                                <i className="fa-solid fa-prescription"></i> Prescriber Data </Link>
                             <div className='dashboard-nav-dropdown-menu'>
                                 <Link to="/dashboard/prescriber-data/prescriber" className={'dashboard-nav-dropdown-item' + (currentpath == 'prescriber' ? ' active' : '')}>Prescriber</Link>
+                                <Link to="/dashboard/presciberdata" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Presciber</Link>
+
+
                             </div>
                         </div>
 
@@ -260,7 +266,7 @@ export default function Dashboard() {
                             <div className="col-md-6 mb-3">
                                 <div className="breadcrum ">
                                     <ul>
-                                         <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li> 
+                                         <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li>
                                     </ul>
                                 </div>
                             </div>

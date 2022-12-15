@@ -239,6 +239,8 @@ function SearchProvider() {
                     </div>
 
 
+
+
                     <div className="nav nav-tabs col-md-12" id="nav-tab" role="tablist">
                         <Link to="provider" className={'nav-link' + (currentpath == 'provider' ? ' active' : '')}>Provider</Link>
                         <Link to="effectivedates" className={'nav-link' + (currentpath == 'effectivedates' ? ' active' : '')}>Effective Dates</Link>

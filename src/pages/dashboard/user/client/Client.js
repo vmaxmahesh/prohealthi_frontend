@@ -133,7 +133,7 @@ export default function Client() {
                 <div className="col-md-6 mb-3">
                     <div className="breadcrum ">
                         <ul>
-                             <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li> 
+                             <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li>
                         </ul>
                     </div>
                 </div>
@@ -184,7 +184,7 @@ export default function Client() {
                                     {/* <button  type="submit"  >show table</button> */}
 
 
-                                    {/* 
+                                    {/*
                                 </div>
                             </div> */}
                                 </div>
@@ -1529,6 +1529,8 @@ export function Coverage(params) {
 
 export function Identification(params) {
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
+ export function Identification(params) {
+    const { register, handleSubmit, formState: { errors } } = useForm();
     const [client, setClient] = useOutletContext();
 
 

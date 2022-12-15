@@ -8,16 +8,18 @@ import Clientgroup, { Charges as CGCharges, Identification as Cgi, Eligibility a
 import Customer, { Eligibility, Exceptions, Identification, Indicators, Strategy } from './pages/dashboard/user/customer/Customer';
 import Client, { Eligibility as Ce, Identification as Ci, Indicators as Cin, Coverage as CS } from './pages/dashboard/user/client/Client';
 import Member, { ChnageLog, ClaimHistory, Coverage, CoverageHistory, Health, MemberForm, Notes, Overrides, PriorAuthorisation, ProviderSearch } from './pages/dashboard/members/Member';
-import MajorMedicalMaximums from './pages/dashboard/accumulated_benefits/MajorMedicalMaximums'
-import SearchProvider, { Provider, Effectivedates, PharmistSystem, NetworkParticipation } from './pages/dashboard/provider/SearchProvider';
-import TraditionalNetworks, { Network, Providers } from './pages/dashboard/provider/TraditionalNetworks';
-import FlexibleNetworks, { Rules } from './pages/dashboard/provider/FlexibleNetworks';
-import PrioritizeNetwork from './pages/dashboard/provider/PrioritizeNetwork';
+
+import SearchProvider, { Provider,Effectivedates,PharmistSystem,NetworkParticipation } from './pages/dashboard/user/provider/SearchProvider';
+
+import TraditionalNetworks,{Network,Providers} from './pages/dashboard/user/provider/TraditionalNetworks';
+
+import FlexibleNetworks,{Rules} from './pages/dashboard/user/provider/FlexibleNetworks';
+
 import Membership, { SearchById, SearchByName } from './pages/dashboard/members/Membership';
 import PlanAuthorisation, { Authorisation, PANotes, Pricing } from './pages/dashboard/members/PlanAuthorisation';
 import PlanValidation from './pages/dashboard/members/PlanValidation';
 import useToken from './hooks/useToken';
-import Benifits from './pages/dashboard/code/Benefits';
+import Benifits from './pages/dashboard/code/Benifits';
 import Procedure from './pages/dashboard/code/Procedure';
 import Diagnosis from './pages/dashboard/code/Diagnosis';
 import Reason from './pages/dashboard/code/Reason';
@@ -27,56 +29,8 @@ import ServiceType from './pages/dashboard/code/ServiceType';
 import ProviderType from './pages/dashboard/code/ProviderType';
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-import PriceSchedule, { BrandItem, BrandItemGeneric, GetGenericItem } from './pages/dashboard/third party pricing/PriceSchedule';
-import MacList from './pages/dashboard/third party pricing/MacList';
-import TaxSchedule from './pages/dashboard/third party pricing/TaxSchedule';
-import CopayStepSchedule from './pages/dashboard/third party pricing/CopayStepSchedule';
-import CopaySchedule, { NonGeneric } from './pages/dashboard/third party pricing/CopaySchedule';
-import ProcedureUCRList from './pages/dashboard/third party pricing/ProcedureUCRList';
-import RVAList from './pages/dashboard/third party pricing/RVAList';
-import NDC, { ProcessRule, RXLimitationPricing, ValidationsOverride } from './pages/dashboard/exceptionlist/ndc';
-import GPI, { GPIProcessRule, GPIRXLimitationPricing, GPIValidationsOverride } from './pages/dashboard/exceptionlist/gpi';
-import TherapyClass, { TCProcessRule, TCRXLimitationPricing, TCValidationsOverride } from './pages/dashboard/exceptionlist/TherapyClass';
-import DrugClassification from './pages/dashboard/exceptionlist/DrugClassification';
-import ExceptionProcedure from './pages/dashboard/exceptionlist/ExceptionProcedure';
-import ExceptionReason from './pages/dashboard/exceptionlist/ExceptionReason';
-import BenefitList from './pages/dashboard/exceptionlist/BenefitList';
-import BenefitDerivation from './pages/dashboard/exceptionlist/BenefitDerivation';
-import Benefits from './pages/dashboard/code/Benefits';
-import DiagnosisValidation from './pages/dashboard/validation_lists/DiagnosisValidation';
-import SpecialityValidation from './pages/dashboard/validation_lists/SpecialityValidation';
-import EligibilityValidation from './pages/dashboard/validation_lists/EligibilityValidation';
-import ProviderValidation from './pages/dashboard/validation_lists/ProviderValidation';
-import PrescriberValidation from './pages/dashboard/validation_lists/PrescriberValidation';
-import DiagnosisPrioritization from './pages/dashboard/validation_lists/DiagnosisPrioritization';
-import AccumulatedBenefits, { ExclusionLimitation, Deductible } from './pages/dashboard/accumulated_benefits/AccumulatedBenefits';
-import GPIExclusion from './pages/dashboard/accumulated_benefits/GPIExclusion';
-import NDCExclusion from './pages/dashboard/accumulated_benefits/NDCExclusion';
-import DrugDatabase, { Distribution, General, IDCodes, Pricing as DrugInformationPricing } from './pages/dashboard/drug_information/DrugDatabase';
-import NDCCrossReference from './pages/dashboard/drug_information/NDCCrossReference';
-import PricingStrategies from './pages/dashboard/strategies/PricingStrategies';
-import CopayStrategy from './pages/dashboard/strategies/CopayStrategy';
-import AccumulatedBenefitStrategy from './pages/dashboard/strategies/AccumulatedBenefitStrategy';
-import PlanAssociation from './pages/dashboard/plan_design/PlanAssociation';
-import PlanEdit, { DateLimitations, PlanEditNotes, PlanFormulary, RefillLimitations, RxLimitations } from './pages/dashboard/plan_design/PlanEdit';
-import SuperProvider from './pages/dashboard/provider/SuperProvider';
-// import PrioritizeNetwork from './pages/dashboard/provider/PrioritizeNetworks';
-import Prescriber from './pages/dashboard/prescriber/Prescriber';
-import ProviderTypeValidation from './pages/dashboard/exceptionlist/ProviderTypeValidation';
-import ProcedureCode from './pages/dashboard/exceptionlist/ProcedureCode';
-import SuperBenefitList from './pages/dashboard/exceptionlist/SuperBenefitList';
-import MembersData, { ChangeLogTab, ClaimHistoryTab, CoverageHistoryTab, HealthConditionsTab, MemberTab, NotesTab, OverridesTab, PriorAuthorizationTab, ProviderSearchTab } from './pages/dashboard/membership/MembersData';
-import PriorAuthorization, { Authorization, PriorNotes, PriorPricing } from './pages/dashboard/membership/PriorAuthorization';
-import PlanValidations from './pages/dashboard/membership/PlanValidation';
-import { ProtectedRoute } from './hooks/ProtectedRoute';
-import UserDefinition, { DataAccessTab, GroupForm, UDefinitionTab, UserDF } from './pages/dashboard/administrator/UserDefinition';
-import VerifyDrugCoverage, { Group, Plan, Member as VDCMember } from './pages/dashboard/administrator/VerifyDrugCoverage';
-import Zipcodes from './pages/dashboard/administrator/Zipcodes';
-import SystemParameter, { ParametersMaintanace, SystemlimitsEligibility as PSParmeters } from './pages/dashboard/administrator/SystemParameters';
-import SearchAudit from './pages/dashboard/administrator/Searchaudittrail';
-import { AuthProvider } from './hooks/AuthProvider';
-import Audittrail from './pages/dashboard/administrator/Audittrailmaintainance';
-import ClaimsHistorySearch, { General as ClaimHistoryGeneral, Optional as ClaimHistoryOptional } from './pages/dashboard/administrator/ClaimsHistorySearch';
+
+
 
 function setToken(userToken) {
   sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -223,6 +177,7 @@ function App() {
             <Route path='pricing' element={<Pricing />} />
             <Route path='notes' element={<PANotes />} />
           </Route>
+
 
 
           <Route path="plan-validations" element={<PlanValidation />}>
@@ -686,36 +641,33 @@ function App() {
           <Route path="exception-list/benefit-derivation" element={<BenefitDerivation />}>
           </Route>
 
-
-          {/* exception list route ends  */}
-
           <Route path="code/benefits" element={<Benifits />}>
 
-          </Route>
+            </Route>
 
-          <Route path="code/procedure" element={<Procedure />}>
+            <Route path="code/procedure" element={<Procedure />}>
 
-          </Route>
+            </Route>
 
-          <Route path="code/diagnosis" element={<Diagnosis />}>
+            <Route path="code/diagnosis" element={<Diagnosis />}>
 
-          </Route>
+            </Route>
 
-          <Route path="code/reason" element={<Reason />}>
+            <Route path="code/reason" element={<Reason />}>
 
-          </Route>
+            </Route>
 
-          <Route path="code/cause-of-loss" element={<CauseOfLoss />}>
-          </Route>
+            <Route path="code/cause-of-loss" element={<CauseOfLoss />}>
+            </Route>
 
-          <Route path="code/service-modifiers" element={<ServiceModifiers />}>
-          </Route>
+            <Route path="code/service-modifiers" element={<ServiceModifiers />}>
+            </Route>
 
-          <Route path="code/service-type" element={<ServiceType />}>
-          </Route>
+            <Route path="code/service-type" element={<ServiceType />}>
+            </Route>
 
-          <Route path="code/provider-type" element={<ProviderType />}>
-          </Route>
+            <Route path="code/provider-type" element={<ProviderType />}>
+            </Route>
 
 
 
@@ -907,12 +859,12 @@ export function Loading(props) {
   return (
     <>
       <svg
-        style={{ margin: 'auto', background: 'rgb(255, 255, 255)', display: 'block', shapRendering: 'auto', animationPlayState: 'running', animationDelay: '0s' }}
+        style={{margin: 'auto', background: 'rgb(255, 255, 255)', display: 'block', shapRendering: 'auto', animationPlayState: 'running', animationDelay: '0s'}}
         width="200px" height="200px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
         <path fill="none" stroke="#e90c59" stroke-width="8" stroke-dasharray="42.76482137044271 42.76482137044271"
           d="M24.3 30C11.4 30 5 43.3 5 50s6.4 20 19.3 20c19.3 0 32.1-40 51.4-40 C88.6 30 95 43.3 95 50s-6.4 20-19.3 20C56.4 70 43.6 30 24.3 30z"
           stroke-linecap="round"
-          style={{ transform: 'scale(0.8)', transformOrigin: '50px 50px', animationPlayState: 'running', animationDelay: '0s' }}>
+          style={{transform: 'scale(0.8)', transformOrigin: '50px 50px',  animationPlayState: 'running', animationDelay: '0s'}}>
           <animate attributeName="stroke-dashoffset" repeatCount="indefinite" dur="1s" keyTimes="0;1"
             values="0;256.58892822265625" style="animation-play-state: running; animation-delay: 0s;"></animate>
         </path>
