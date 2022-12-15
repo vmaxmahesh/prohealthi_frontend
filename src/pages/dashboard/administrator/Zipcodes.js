@@ -1,16 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useForm } from 'react-hook-form';
 import Footer from '../../../shared/Footer';
+import AsyncSelect from 'react-select/async';
 
 
 
 
 function Zipcodes() {
+
+
+
     const scollToRef = useRef();
 
     const [zipCodeData, setZipCodeData] = useState([]);
 
-    const [selectedZipCode,setSelectedZipCode] = useState('');
+    const [selectedZipCode, setSelectedZipCode] = useState('');
+    const [adding, setAdding] = useState(false);
 
     const searchZipCode = (fdata) => {
         const requestOptions = {
@@ -70,6 +75,7 @@ function Zipcodes() {
                 } else {
                     // console.log(data.data);
                     setSelectedZipCode(data.data);
+                    setAdding(true);
 
                     scollToRef.current.scrollIntoView()
                 }
@@ -83,7 +89,11 @@ function Zipcodes() {
             });
     }
 
-
+    const clearForm = (e) => {
+        setAdding(false);
+        setSelectedZipCode([]);
+        document.getElementById('zipCodeForm').reset();
+    }
 
     return (
         <>
@@ -110,7 +120,7 @@ function Zipcodes() {
             <SearchZipCodes searchZipCode={searchZipCode} />
             <Ziptable zipCodeList={zipCodeData} getZipCode={getZipCodes} selectedZipCode={selectedZipCode} />
             <div ref={scollToRef}>
-                <Zipform selectedZipCodeValue={selectedZipCode} />
+                <Zipform selectedZipCodeValue={selectedZipCode} clearForm={clearForm} adding={adding} />
                 </div>
             <Footer />
         </>
@@ -201,61 +211,194 @@ function Zipform(props) {
 
     const { register, reset, handleSubmit, watch, formState: { errors } } = useForm();
     useEffect(() => { reset(props.selectedZipCodeValue) }, [props.selectedZipCodeValue]);
-    // console.log(props.selectedZipCodeValue,'l');
+
+// for state-----------
+    const [inputStateValue, setStateValue] = useState('');
+    const [selectedStateValue, setSelectedStateValue] = useState(null);
+
+    // States - handle input change event
+  const handleInputStateChange = value => {
+    setStateValue(value);
+    };
+
+     //States - handle selection
+  const handleStateChange = value => {
+    setSelectedStateValue(value);
+  }
+
+//States -   load options using API call
+    const loadStateOptions = (inputStateValue) => {
+        console.log(inputStateValue);
+        return new Promise((resolve, reject) => {
+
+
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/state/search/${inputStateValue}`)
+                .then((response) => response.json())
+                .then(({ data }) => {
+                    resolve(
+                        data.map(({ state_code }) => ({
+                            value: state_code,
+                            label: state_code,
+                        })),
+                    );
+                    // console.log(data);
+                });
+        });
+    };
+
+
+//for country -----------
+    const [inputValue, setValue] = useState('');
+    const [selectedValue, setSelectedValue] = useState(null);
+
+
+    // handle input change event
+  const handleInputChange = value => {
+    setValue(value);
+    };
+
+     // handle selection
+  const handleChange = value => {
+    setSelectedValue(value);
+  }
+
+//   load options using API call
+
+    const loadOptions = (inputValue) => {
+        return new Promise((resolve, reject) => {
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/countries/search/${inputValue}`)
+                .then((response) => response.json())
+                .then(({ data }) => {
+                    resolve(
+                        data.map(({ country_code,description }) => ({
+                            value: country_code,
+                            label: description,
+                        })),
+                    );
+                    // console.log(data);
+                });
+        });
+    };
+
+
+    // form  submit add zip codes
+    const addUser = (userFormData) => {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify(userFormData)
+        }
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/administrator/user-defination/submit`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                console.log(data.data);
+                if (!response.ok) {
+                    toast.error("There was an error !", {
+                        position: 'top-right',
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        pauseOnHover: true,
+                        closeOnClick: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                } else {
+                    toast.success(data.message, {
+                        position: 'top-right',
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        pauseOnHover: true,
+                        closeOnClick: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+    }
+
+
 
     return (
         <>
-            <div className="card mt-3 mb-3">
-                <div className="card-body">
-                <div className="row">
-                    <div className="col-md-12">
-                        <h5 className="mb-2">Zip Code</h5>
-                    </div>
-                    <div className="col-md-3 mb-3">
-                        <div className="form-group">
-                            <small>Zip Code</small>
-                            <input type="text" className="form-control" name="zip_code"  {...register('zip_code')} id="zip_code" placeholder=""  required />
+            <form id='zipCodeForm' name='zipCodeForm' onSubmit={handleSubmit(addUser)}>
+                <div className="card mt-3 mb-3">
+                    <div className="card-body">
+                    <div className="row">
+                        <div className="col-md-12">
+                            <h5 className="mb-2">Zip Code</h5>
                         </div>
-                    </div>
-                    <div className="col-md-3 mb-3">
-                        <div className="form-group">
-                            <small>City</small>
-                                <input type="text" className="form-control" name="city" id="city" {...register('city')} placeholder="" required />
+                        <div className="col-md-3 mb-3">
+                            <div className="form-group">
+                                <small>Zip Code</small>
+                                <input type="text" className="form-control" name="zip_code"  {...register('zip_code',{required: true })} id="zip_code" placeholder=""  required />
+                            </div>
+                        </div>
+                        <div className="col-md-3 mb-3">
+                            <div className="form-group">
+                                <small>City</small>
+                                    <input type="text" className="form-control" name="city" id="city" {...register('city',{required: true })} placeholder="" required />
 
+                            </div>
                         </div>
-                    </div>
-                    <div className="col-md-3 mb-3">
-                        <div className="form-group">
-                            <small>State / Country</small>
-                            <div className="row">
-                                <div className="col-md-6">
-                                    <select className="form-select">
-                                        <option>1</option>
-                                        <option>2</option>
-                                    </select>
-                                </div>
-                                <div className="col-md-6">
-                                    <select className="form-select">
-                                        <option>1</option>
-                                        <option>2</option>
-                                    </select>
+                        <div className="col-md-3 mb-3">
+                            <div className="form-group">
+
+                                <div className="row">
+                                        <div className="col-md-6">
+                                        <small>State</small>
+
+      <AsyncSelect
+        cacheOptions
+        defaultOptions
+        value={selectedStateValue}
+        getOptionLabel={e => e.value}
+        getOptionValue={e => e.value}
+        loadOptions={loadStateOptions}
+        onInputChange={handleInputStateChange}
+        onChange={handleStateChange}
+                                    />
+
+                                    </div>
+                                        <div className="col-md-6">
+                                        <small>Country</small>
+                                        <AsyncSelect
+        cacheOptions
+        defaultOptions
+        value={selectedValue}
+        getOptionLabel={e => e.label}
+        getOptionValue={e => e.value}
+        loadOptions={loadOptions}
+        onInputChange={handleInputChange}
+        onChange={handleChange}
+                                    />
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="col-md-3 mb-3">
-                        <div className="form-group">
-                            <small>Country</small>
-                            <input type="text" className="form-control" name="" id="" placeholder="" required />
+                        <div className="col-md-3 mb-3">
+                            <div className="form-group">
+                                <small>County</small>
+                                <input type="text" {...register('county',{required: true })} className="form-control" name="" id="" placeholder="" required />
+                            </div>
+                        </div>
                         </div>
                     </div>
-                    </div>
-                </div>
 
-            </div>
-            <div className="col-md-1 float-end">
-                        <button type="submit" className="btn btn-theme pt-2 pb-2">submit</button>
-            </div>
+                </div>
+                <div className="col-md-12 text-end">
+                <button type='button' onClick={e => props.clearForm(e)} className='btn btn-outline btn-sm'>{props.adding ? "Clear" : "Add"} Item</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button type="submit"  className="btn btn-theme pt-2 pb-2">{props.adding ? 'Update' : 'Add'}</button>
+
+                </div>
+                <div className="form-group">
+
+                </div>
+            </form>
+
 
         </>
     )
