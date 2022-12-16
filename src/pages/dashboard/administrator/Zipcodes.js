@@ -1,7 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import Footer from '../../../shared/Footer';
 import AsyncSelect from 'react-select/async';
+import { toast } from "react-toastify";
+import { useAuth } from "../../../hooks/AuthProvider";
+
 
 
 
@@ -209,12 +212,15 @@ function Ziptable(props) {
 
 function Zipform(props) {
 
-    const { register, reset, handleSubmit, watch, formState: { errors } } = useForm();
+    const { register, reset, handleSubmit, control , formState: { errorss } } = useForm();
     useEffect(() => { reset(props.selectedZipCodeValue) }, [props.selectedZipCodeValue]);
 
+    const { user } = useAuth();
+
+    // console.log(props.selectedZipCodeValue.state);
 // for state-----------
     const [inputStateValue, setStateValue] = useState('');
-    const [selectedStateValue, setSelectedStateValue] = useState(null);
+    const [selectedStateValue, setSelectedStateValue] = useState(props.selectedZipCodeValue.state);
 
     // States - handle input change event
   const handleInputStateChange = value => {
@@ -236,9 +242,9 @@ function Zipform(props) {
                 .then((response) => response.json())
                 .then(({ data }) => {
                     resolve(
-                        data.map(({ state_code }) => ({
+                        data.map(({ state_code,description }) => ({
                             value: state_code,
-                            label: state_code,
+                            label: description,
                         })),
                     );
                     // console.log(data);
@@ -246,11 +252,10 @@ function Zipform(props) {
         });
     };
 
-
+    // console.log(props.selectedZipCodeValue.country_code,'ssss');
 //for country -----------
     const [inputValue, setValue] = useState('');
-    const [selectedValue, setSelectedValue] = useState(null);
-
+    const [selectedValue, setSelectedValue] = useState(props.selectedZipCodeValue.country_code);
 
     // handle input change event
   const handleInputChange = value => {
@@ -258,7 +263,7 @@ function Zipform(props) {
     };
 
      // handle selection
-  const handleChange = value => {
+    const handleChange = value => {
     setSelectedValue(value);
   }
 
@@ -272,7 +277,7 @@ function Zipform(props) {
                     resolve(
                         data.map(({ country_code,description }) => ({
                             value: country_code,
-                            label: description,
+                            label: country_code,
                         })),
                     );
                     // console.log(data);
@@ -280,19 +285,37 @@ function Zipform(props) {
         });
     };
 
+    useEffect(() => {
+
+        if (props.adding) {
+            reset({ zip_code: '',county:'',  new: 1 }, {
+                keepValues: false,
+            })
+        } else {
+            reset(props.selected);
+        }
+
+        if (!props.selected) {
+            reset({ zip_code: '',county:'', new: 1 }, {
+                keepValues: false,
+            })
+        }
+
+    }, [props.selected, props.adding]);
+
 
     // form  submit add zip codes
-    const addUser = (userFormData) => {
+    const addZipCode = (userFormData) => {
         const requestOptions = {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
             body: JSON.stringify(userFormData)
         }
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/administrator/user-defination/submit`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/administrator/zipcode/submit`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
-                console.log(data.data);
+                // console.log(data.data);
                 if (!response.ok) {
                     toast.error("There was an error !", {
                         position: 'top-right',
@@ -319,12 +342,13 @@ function Zipform(props) {
                 console.error('There was an error!', error);
             });
     }
+    // const onSubmit = (data) => console.log(data);
 
 
 
     return (
         <>
-            <form id='zipCodeForm' name='zipCodeForm' onSubmit={handleSubmit(addUser)}>
+            <form id='zipCodeForm' name='zipCodeForm' onSubmit={handleSubmit(addZipCode)}>
                 <div className="card mt-3 mb-3">
                     <div className="card-body">
                     <div className="row">
@@ -334,7 +358,8 @@ function Zipform(props) {
                         <div className="col-md-3 mb-3">
                             <div className="form-group">
                                 <small>Zip Code</small>
-                                <input type="text" className="form-control" name="zip_code"  {...register('zip_code',{required: true })} id="zip_code" placeholder=""  required />
+                                    <input type="text" className="form-control" name="zip_code"  {...register('zip_code', { required: true })} id="zip_code" placeholder="" required />
+                                    <input type="hidden" className="form-control" name="user_name" {...register('user_name')} value={user.name} />
                             </div>
                         </div>
                         <div className="col-md-3 mb-3">
@@ -350,31 +375,46 @@ function Zipform(props) {
                                 <div className="row">
                                         <div className="col-md-6">
                                         <small>State</small>
-
-      <AsyncSelect
-        cacheOptions
-        defaultOptions
-        value={selectedStateValue}
-        getOptionLabel={e => e.value}
-        getOptionValue={e => e.value}
-        loadOptions={loadStateOptions}
-        onInputChange={handleInputStateChange}
-        onChange={handleStateChange}
-                                    />
+                                        <Controller  name="state_code"
+                                                control={control}
+                                                // rules={{ required: false }}
+                                                render={({ field }) => (
+                                            <AsyncSelect
+                                                cacheOptions
+                                                defaultOptions
+                                                {...field}
+                                                isClearable
+                                                // value={selectedStateValue}
+                                                // inputValue={props.selectedZipCodeValue.state_code}
+                                                // getOptionLabel={e => e.label}
+                                                // getOptionValue={e => e.value}
+                                                loadOptions={loadStateOptions}
+                                                onInputChange={handleInputStateChange}
+                                                // onChange={handleStateChange}
+                                                    />
+                                                    )} />
 
                                     </div>
                                         <div className="col-md-6">
-                                        <small>Country</small>
-                                        <AsyncSelect
-        cacheOptions
-        defaultOptions
-        value={selectedValue}
-        getOptionLabel={e => e.label}
-        getOptionValue={e => e.value}
-        loadOptions={loadOptions}
-        onInputChange={handleInputChange}
-        onChange={handleChange}
-                                    />
+                                            <small>Country</small>
+                                            <Controller  name="country_code"
+                                                control={control}
+                                                // rules={{ required: false }}
+                                                render={({ field }) => (
+                                                    <AsyncSelect
+                                                cacheOptions
+                                                defaultOptions
+                                                {...field}
+                                                // value={selectedValue}
+                                                // getOptionLabel={e => e.label}
+                                                // getOptionValue={e => e.value}
+                                                loadOptions={loadOptions}
+                                                onInputChange={handleInputChange}
+                                                // onChange={handleChange}
+                                                isClearable
+                                                                            />
+                                                 )} />
+
                                     </div>
                                 </div>
                             </div>
@@ -382,7 +422,7 @@ function Zipform(props) {
                         <div className="col-md-3 mb-3">
                             <div className="form-group">
                                 <small>County</small>
-                                <input type="text" {...register('county',{required: true })} className="form-control" name="" id="" placeholder="" required />
+                                <input type="text" {...register('county' )} className="form-control" name="county" id="county" placeholder="County" required />
                             </div>
                         </div>
                         </div>
