@@ -34,7 +34,7 @@ export default function Dashboard() {
                                 {/* <a href="/dashboard/exception-list/reason" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Reason</a> */}
                                 <Link to="/dashboard/exception-list/benefit-list" className={'dashboard-nav-dropdown-item' + (currentpath == 'benefit-list' ? ' active' : '')}>Benefit List</Link>
                                 <Link to="/dashboard/exception-list/benefit-derivation" className={'dashboard-nav-dropdown-item' + (currentpath == 'benefit-derivation' ? ' active' : '')}>Benefit Derivation</Link>
-                                <a href="/dashboard/exception-list/provider-type-validation" className={'dashboard-nav-dropdown-item' + (currentpath == 'provider-type-validation' ? ' active' : '')}>Provider Type Validation</a>
+                                <Link to="/dashboard/exception-list/provider-type-validation" className={'dashboard-nav-dropdown-item' + (currentpath == 'provider-type-validation' ? ' active' : '')}>Provider Type Validation</Link>
                                 <Link to="/dashboard/exception-list/procedure-code-list" className={'dashboard-nav-dropdown-item' + (currentpath == 'procedure-code-list' ? ' active' : '')}>Procedure Code List</Link>
                                 <Link to="/dashboard/exception-list/super-benefit-list" className={'dashboard-nav-dropdown-item' + (currentpath == 'super-benefit-list' ? ' active' : '')}>Super Benefit List</Link>
                             </div>

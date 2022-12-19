@@ -65,6 +65,7 @@ import SuperProvider from './pages/dashboard/provider/SuperProvider';
 // import PrioritizeNetwork from './pages/dashboard/provider/PrioritizeNetworks';
 import Prescriber from './pages/dashboard/prescriber/Prescriber';
 import ProviderTypeValidation from './pages/dashboard/exceptionlist/ProviderTypeValidation';
+
 import ProcedureCode from './pages/dashboard/exceptionlist/ProcedureCode';
 import SuperBenefitList from './pages/dashboard/exceptionlist/SuperBenefitList';
 import MembersData, { ChangeLogTab, ClaimHistoryTab, CoverageHistoryTab, HealthConditionsTab, MemberTab, NotesTab, OverridesTab, PriorAuthorizationTab, ProviderSearchTab } from './pages/dashboard/membership/MembersData';
@@ -397,6 +398,15 @@ function App() {
             <Route path='rx-limitation-pricing' element={<GPIRXLimitationPricing />} />
             <Route path='validation-override' element={<GPIValidationsOverride />} />
           </Route>
+
+
+          <Route path="exception-list/provider-type-validation" element={<ProviderTypeValidation />}>
+            <Route index element={<Navigate to="process-rule" replace />} />
+            <Route path='process-rule' element={<GPIProcessRule />} />
+            <Route path='rx-limitation-pricing' element={<GPIRXLimitationPricing />} />
+            <Route path='validation-override' element={<GPIValidationsOverride />} />
+          </Route>
+
 
 
 
