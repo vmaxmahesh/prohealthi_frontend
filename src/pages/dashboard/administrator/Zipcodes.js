@@ -306,10 +306,13 @@ function Zipform(props) {
 
     // form  submit add zip codes
     const addZipCode = (userFormData) => {
+        var CryptoJS = require("crypto-js");
+
         const requestOptions = {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
             body: JSON.stringify(userFormData)
+            // body: CryptoJS.AES.encrypt(JSON.stringify(userFormData), 'my-secret-key@123').toString()
         }
         fetch(process.env.REACT_APP_API_BASEURL + `/api/administrator/zipcode/submit`, requestOptions)
             .then(async response => {
@@ -343,8 +346,6 @@ function Zipform(props) {
             });
     }
     // const onSubmit = (data) => console.log(data);
-
-
 
     return (
         <>
