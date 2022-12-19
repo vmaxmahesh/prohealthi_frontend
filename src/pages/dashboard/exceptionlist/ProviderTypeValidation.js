@@ -175,9 +175,8 @@ export default function ProviderTypeValidation() {
 
 
                     <div className="col-md-3 ms-auto text-end">
-                    <button className="btn  btn-info btn-sm" onClick={e => AddForm()}>
-                    Accumulated Benefit Strategy <i className="fa fa-plus-circle"></i></button>
-            </div>
+                    <button className="btn  btn-info btn-sm" onClick={e => AddForm()}> Provider Type Validation<i className="fa fa-plus-circle"></i></button>
+                    </div>
 
 
                     <SearchProviderValidation searchProviderTypeValid={searchProviderTypeValid} />
@@ -364,7 +363,7 @@ function ProviderTypeForm(props) {
 
     }, [props.selected, props.adding]);
 
-    useEffect(() => { reset(props.selected) }, [props.selected]);
+
 
 
     const addCode = (data) => {
@@ -401,7 +400,6 @@ function ProviderTypeForm(props) {
                         const error = (data && data.message) || response.status;
                         return Promise.reject(error);
                     } else {
-                        // reset(selctedNdc);
                         // setSelctedNdc([]);
                         console.log(data);
                         var msg = props.adding ? 'Added Successfully...!' : 'Updated Successfully..'
@@ -415,7 +413,11 @@ function ProviderTypeForm(props) {
                             progress: undefined,
     
                         });
+                        reset(props.selected);
+
                     }
+
+                    
     
     
                     if (response === '200') {
@@ -432,6 +434,9 @@ function ProviderTypeForm(props) {
     const onSubmit = (e) => {
         e.preventDefault();
     }
+
+    useEffect(() => { reset(props.selected) }, [props.selected]);
+
 
        return (
         <>
