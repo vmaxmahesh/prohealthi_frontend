@@ -20,9 +20,9 @@ function SearchAudit() {
                         <ul>
                             <li><a href="">Home</a></li>
                             <li><i className="fas fa-angle-right"></i></li>
-                            <li><a href="">Membership Data</a></li>
+                            <li><a href="">Administrator</a></li>
                             <li><i className="fas fa-angle-right"></i></li>
-                            <li><a href="">Zip Codes</a></li>
+                            <li><a href="">Audit Trial</a></li>
                         </ul>
                     </div>
                 </div>

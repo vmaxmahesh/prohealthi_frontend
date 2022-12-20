@@ -611,6 +611,7 @@ function App() {
 
           {/* <Route path='administrator/' element={< />}> </Route> */}
           <Route path='administrator/system-parameter' element={<SystemParameter />}>
+            <Route index element={<Navigate to="parameters-maintanace" replace/>} />
             <Route path='parameters-maintanace' element={<ParametersMaintanace />} />
             <Route path='systemlimit-eligibility' element={<PSParmeters />} />
           </Route>
