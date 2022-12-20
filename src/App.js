@@ -401,10 +401,13 @@ function App() {
 
 
           <Route path="exception-list/provider-type-validation" element={<ProviderTypeValidation />}>
-            <Route index element={<Navigate to="process-rule" replace />} />
-            <Route path='process-rule' element={<GPIProcessRule />} />
-            <Route path='rx-limitation-pricing' element={<GPIRXLimitationPricing />} />
-            <Route path='validation-override' element={<GPIValidationsOverride />} />
+            
+          </Route>
+
+
+
+          <Route path="exception-list/procedure-code-list" element={<ProcedureCode />}>
+            
           </Route>
 
 
