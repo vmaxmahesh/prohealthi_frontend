@@ -8,6 +8,7 @@ import { Form, useOutletContext } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import { Card, Col, Row } from 'react-bootstrap';
+import { PuffLoader} from "react-spinners";
 
 
 export default function Benefits() {
@@ -21,9 +22,12 @@ export default function Benefits() {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const [loading, setloading] = useState();
 
 
     const onSearching = (fdata) => {
+
+        setloading(true);
 
         const requestOptions = {
             method: 'GET',
@@ -31,20 +35,21 @@ export default function Benefits() {
             headers: { 'Content-Type': 'application/json' },
             // body: encodeURIComponent(data)
         };
-        console.log(fdata.target.value); 
+        // console.log(fdata.target.value);
 
         if (process.env.REACT_APP_API_BASEURL != 'NOT') {
             fetch(process.env.REACT_APP_API_BASEURL + `/api/codes/benefits?search=${fdata.target.value}`, requestOptions)
                 .then(async response => {
                     const isJson = response.headers.get('content-type')?.includes('application/json');
-                    const data = isJson && await response.json(); 
-                   
+                    const data = isJson && await response.json();
+
                     // check for error response
                     if (!response.ok) {
                         // get error message from body or default to response status
                         const error = (data && data.message) || response.status;
                         return Promise.reject(error);
                     } else {
+                        setloading(false);
                         setBenifitList(data.data);
 
                         toast.success(response.message, {
@@ -142,7 +147,7 @@ export default function Benefits() {
                 <Row>
                     <Col md="4" lg="4">
                         <Card>
-                            <List benifitsList={benifitsList} getCode={getCode} selected={benifitsData} />
+                            <List loading={ loading } benifitsList={benifitsList} getCode={getCode} selected={benifitsData} />
                         </Card>
                     </Col>
                     <Col md="8" lg="8">
@@ -165,6 +170,25 @@ export default function Benefits() {
 
 function List(props) {
 
+    const LoadingSpinner = props => {
+        return (
+            <div
+      style={{
+       width: "100%",
+       height: "100",
+       display: "flex",
+       justifyContent: "center",
+       alignItems: "center"
+     }}
+            >
+                <PuffLoader
+  color="#59d8f1" />
+                </div>
+
+
+  );
+ }
+
     const benifitList = [];
     for (let i = 0; i < props.benifitsList.length; i++) {
         benifitList.push(<BenefitRow benifitRowData={props.benifitsList[i]} selected={props.selected} getCode={props.getCode} />);
@@ -184,7 +208,8 @@ function List(props) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {benifitList}
+                                        {props.loading ?<LoadingSpinner />:benifitList}
+
                                     </tbody>
                                 </table>
                             </div>
@@ -225,7 +250,7 @@ function AddBenefit(props) {
             body: JSON.stringify(data)
 
         };
-        // console.log(watch(data)); 
+        // console.log(watch(data));
         if (process.env.REACT_APP_API_BASEURL == 'NOT') {
             toast.success('Added Successfully...!', {
                 position: "top-right",
