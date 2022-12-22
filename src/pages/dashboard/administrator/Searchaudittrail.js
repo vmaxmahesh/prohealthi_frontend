@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form } from "react-bootstrap";
+import { Form, Row } from "react-bootstrap";
 import { Controller, useForm } from "react-hook-form";
 import { json, Link, Outlet, useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import SelectSearch, { useSelect } from 'react-select-search';
@@ -12,6 +12,27 @@ import AsyncSelect from 'react-select/async';
 
 </style>
 function SearchAudit() {
+    const [searchResult, setSearchResult] = useState(false);
+
+    const submitSearchForm = (toSearch) => {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify(toSearch)
+        }
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/administrator/search-audit-trial/search-user-log`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                setSearchResult(data.data);
+            })
+    }
+    const [formDetails, setFormDetails] = useState(false);
+    const showDetails = (formDetails) => {
+        setFormDetails(formDetails);
+    }
+
+    useEffect(() => { }, [searchResult]);
     return (
         <>
             <div className="row">
@@ -37,8 +58,24 @@ function SearchAudit() {
 
             <div className="card mt-3 mb-3">
                 <div className="card-body">
-                    <SearchAuditform />
+                    <SearchAuditform submitSearchForm={submitSearchForm} />
                     {/* <SearchAudittable searchResult={searchResult}/> */}
+                </div>
+            </div>
+            <div className="card mt-3 mb-3">
+                <div className="card-body">
+                    <SearchAudittable searchResult={searchResult} showDetails={showDetails}/>
+                </div>
+            </div>
+            <div className="card mt-3 mb-3">
+                <div className="card-body">
+                    <AuditForm formDetails={formDetails}/>
+                </div>
+            </div>
+
+            <div className="card mt-3 mb-3">
+                <div className="card-body">
+                    <AuditBottomTable />
                 </div>
             </div>
         </>
@@ -47,7 +84,7 @@ function SearchAudit() {
 
 
 
-export function SearchAuditform(props) {
+function SearchAuditform(props) {
 
     const { register, handleSubmit, control, watch, reset, field, formState: { errors } } = useForm();
 
@@ -61,7 +98,6 @@ export function SearchAuditform(props) {
     const [selectedRecordValue, setSelectedRecordValue] = useState(null);
 
     const [searchResult, setSearchResult] = useState(false);
-
 
     // handle input change event
     const handleInputChange = value => {
@@ -141,24 +177,24 @@ export function SearchAuditform(props) {
     }
 
     //Submit Search Form
-    const submitSearchForm = (toSearch) => {
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify(toSearch)
-        }
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/administrator/search-audit-trial/search-user-log`, requestOptions)
-            .then(async response => {
-                const isJson = response.headers.get('content-type')?.includes('application/json');
-                const data = isJson && await response.json();
-                setSearchResult(data.data);
-            })
-    }
+    // const submitSearchForm = (toSearch) => {
+    //     const requestOptions = {
+    //         method: 'POST',
+    //         headers: { 'content-type': 'application/json' },
+    //         body: JSON.stringify(toSearch)
+    //     }
+    //     fetch(process.env.REACT_APP_API_BASEURL + `/api/administrator/search-audit-trial/search-user-log`, requestOptions)
+    //         .then(async response => {
+    //             const isJson = response.headers.get('content-type')?.includes('application/json');
+    //             const data = isJson && await response.json();
+    //             setSearchResult(data.data);
+    //         })
+    // }
 
     useEffect(() => { }, [searchResult]);
     return (
         <>
-            <form onSubmit={handleSubmit(submitSearchForm)}>
+            <form onSubmit={handleSubmit(props.submitSearchForm)}>
                 <div className="row">
 
                     <div className="col-md-12 mb-2">
@@ -286,7 +322,12 @@ export function SearchAuditform(props) {
 
                 </div>
             </form>
-            <SearchAudittable searchResult={searchResult} />
+            {/* <SearchAudittable searchResult={searchResult} /> */}
+
+            {/* <AuditForm />
+
+            <AuditBottomTable /> */}
+
         </>
 
     );
@@ -295,8 +336,10 @@ export function SearchAuditform(props) {
 
 export function SearchAudittable(props) {
     const searchArray = [];
+    const { register, handleSubmit, reset, watch, formState: { errors } } = useForm();
+
     for (let i = 0; i < props.searchResult.length; i++) {
-        searchArray.push(<SearchRow searchRow={props.searchResult[i]} />)
+        searchArray.push(<SearchRow searchRow={props.searchResult[i]} showDetails={props.showDetails} />)
     }
     return (
         <>
@@ -327,7 +370,7 @@ export function SearchAudittable(props) {
 function SearchRow(props) {
     return (
         <>
-            <tr>
+            <tr onClick={e => props.showDetails(props.searchRow)}>
                 <td>{props.searchRow.date_created}</td>
                 <td>{props.searchRow.time_created}</td>
                 <td>{props.searchRow.user_id}</td>
@@ -337,5 +380,99 @@ function SearchRow(props) {
         </>
     )
 }
+
+function AuditForm(props) {
+    const {register, handleSubmit, watch, reset, formState} = useForm(false);
+
+    const auditFormSubmit = (auditFormData) => {
+        console.log(auditFormData);
+    }
+
+    useEffect(() => {reset(props.formDetails)}, [props.formDetails]);
+    return (
+        <>
+        <form handleSubmit={auditFormSubmit}>
+            <Row>
+                <div className="col-md-12 mb-2">
+                    <h5>Details</h5>
+                </div>
+
+                <div className="col-md-4 mb-3">
+                    <div className="form-group">
+                        <small>Application</small>
+                        <input type="text" className="form-control" {...register("application")} />
+                    </div>
+                </div>
+                <div className="col-md-4 mb-3">
+                    <div className="form-group">
+                        <small>User ID</small>
+                        <input type="text" className="form-control" {...register("user_id")} />
+                    </div>
+                </div>
+                <div className="col-md-4 mb-3">
+                    <div className="form-group">
+                        <small>Table Name</small>
+                        <input type="text" className="form-control" {...register("table_name")} />
+                    </div>
+                </div>
+                <div className="col-md-4 mb-3">
+                    <div className="form-group">
+                        <small>Action</small>
+                        <input type="text" className="form-control" {...register("record_action")} />
+                    </div>
+                </div>
+                <div className="col-md-4 mb-3">
+                    <div className="form-group">
+                        <small>Date</small>
+                        <input type="date" className="form-control" {...register("date_created")} />
+                    </div>
+                </div>
+                <div className="col-md-4 mb-3">
+                    <div className="form-group">
+                        <small>Time</small>
+                        <input type="time" className="form-control" {...register("time_created")} />
+                    </div>
+                </div>
+
+
+                <div className="col-md-6 ms-auto text-end mb-3 mt-3">
+                    <a href="" className="btn btn-secondary">Cancel</a>&nbsp;&nbsp;
+                    <a href="" className="btn btn-danger">Select</a>&nbsp;&nbsp;
+                    <a href="" className="btn btn-warning ">Clear</a>&nbsp;&nbsp;
+                    <button href="provider-search.html" className="btn btn-info">Search</button>
+                </div>
+            </Row>
+            </form>
+        </>
+
+    );
+}
+
+export function AuditBottomTable(props) {
+    return (
+        <>
+            <div className="col-md-12 mb-3">
+                <table className="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Old Record</th>
+                            <th>Field Name</th>
+                            <th>New Record</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </>
+
+    );
+}
+
 
 export default SearchAudit;

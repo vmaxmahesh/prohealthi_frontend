@@ -56,8 +56,8 @@ function ClaimsHistorySearch() {
             <div className="card mt-3 mb-3">
                 <div className="card-body">
 
-                    <General />
-                    <Optional />
+                    {/* <General />
+                    <Optional /> */}
                 </div>
             </div>
 
