@@ -188,16 +188,14 @@ export default function Dashboard() {
                             <div className='dashboard-nav-dropdown-menu'>
                                 <Link to="/dashboard/administrator/user-definition" className={'dashboard-nav-dropdown-item' + (currentpath == 'user-definition' ? ' active' : '')}>User Definition</Link>
                                 <Link to="/dashboard/administrator/verify-drug-coverage" className={'dashboard-nav-dropdown-item' + (currentpath == 'verify-drug-coverage' ? ' active' : '')}>Verify Drug Coverage</Link>
-                                <Link to="/dashboard/administrator/search-audit-trail" className={'dashboard-nav-dropdown-item' + (currentpath == 'search-audit-trail' ? ' active' : '')}>Search Audit Trail</Link>
+                                <Link to="/dashboard/administrator/search-audit-trail" className={'dashboard-nav-dropdown-item' + (currentpath == 'search-audit-trail' ? ' active' : '')}>Audit Trail Maintanance</Link>
                                 <Link to="/dashboard/administrator/system-parameter" className={'dashboard-nav-dropdown-item' + (currentpath == 'system-parameter' ? ' active' : '')}>System Parameters</Link>
                                 <Link to="/dashboard/administrator/zip-codes" className={'dashboard-nav-dropdown-item' + (currentpath == 'zip-codes' ? ' active' : '')}>Zip Codes</Link>
-                                <Link to="/dashboard/administrator/audit-trail-maintanance" className={'dashboard-nav-dropdown-item' + (currentpath == 'audit-trail-maintanace' ? ' active' : '')}>Audit Trail Maintanance</Link>
+                                {/* <Link to="/dashboard/administrator/audit-trail-maintanance" className={'dashboard-nav-dropdown-item' + (currentpath == 'audit-trail-maintanace' ? ' active' : '')}>Audit Trail Maintanance</Link> */}
                                 <Link to="/dashboard/administrator/claims-history-search" className={'dashboard-nav-dropdown-item' + (currentpath == 'claims-history-search' ? ' active' : '')}>Claim History Search</Link>
 
                             </div>
                         </div>
-
-
                         <div className="nav-item-divider"></div>
                         <a href="#" className="dashboard-nav-item"><i className="fas fa-sign-out-alt"></i> Logout </a>
                     </nav>

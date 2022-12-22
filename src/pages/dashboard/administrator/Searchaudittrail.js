@@ -6,6 +6,10 @@ import SelectSearch, { useSelect } from 'react-select-search';
 import { toast } from "react-toastify";
 import 'react-select-search/style.css';
 import AsyncSelect from 'react-select/async';
+import { PuffLoader } from "react-spinners";
+
+
+
 
 
 <style>
@@ -14,7 +18,10 @@ import AsyncSelect from 'react-select/async';
 function SearchAudit() {
     const [searchResult, setSearchResult] = useState(false);
 
+    const [loading, setloading] = useState(false);
+
     const submitSearchForm = (toSearch) => {
+        setloading(true);
         const requestOptions = {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
@@ -24,7 +31,8 @@ function SearchAudit() {
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
-                setSearchResult(data.data);
+                setSearchResult(data.data);   
+                setloading(false);
             })
     }
     const [formDetails, setFormDetails] = useState(false);
@@ -64,12 +72,12 @@ function SearchAudit() {
             </div>
             <div className="card mt-3 mb-3">
                 <div className="card-body">
-                    <SearchAudittable searchResult={searchResult} showDetails={showDetails}/>
+                    <SearchAudittable searchResult={searchResult} showDetails={showDetails} loading={loading}/>
                 </div>
             </div>
             <div className="card mt-3 mb-3">
                 <div className="card-body">
-                    <AuditForm formDetails={formDetails}/>
+                    <AuditForm formDetails={formDetails} />
                 </div>
             </div>
 
@@ -336,11 +344,29 @@ function SearchAuditform(props) {
 
 export function SearchAudittable(props) {
     const searchArray = [];
+    const LoadingSpinner = props => {
+        return (
+            <div
+                style={{
+                    width: "100%",
+                    height: "100",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center"
+                }}
+            >
+                <PuffLoader
+                    color="#59d8f1" />
+            </div>
+
+        );
+    }
     const { register, handleSubmit, reset, watch, formState: { errors } } = useForm();
 
     for (let i = 0; i < props.searchResult.length; i++) {
         searchArray.push(<SearchRow searchRow={props.searchResult[i]} showDetails={props.showDetails} />)
     }
+    
     return (
         <>
             <div className="col-md-12">
@@ -356,7 +382,8 @@ export function SearchAudittable(props) {
                             </tr>
                         </thead>
                         <tbody>
-                            {searchArray}
+                            {/* {searchArray} */}
+                            {props.loading ? <LoadingSpinner /> : searchArray}
                         </tbody>
                     </table>
                 </div>
@@ -382,66 +409,66 @@ function SearchRow(props) {
 }
 
 function AuditForm(props) {
-    const {register, handleSubmit, watch, reset, formState} = useForm(false);
+    const { register, handleSubmit, watch, reset, formState } = useForm(false);
 
     const auditFormSubmit = (auditFormData) => {
         console.log(auditFormData);
     }
 
-    useEffect(() => {reset(props.formDetails)}, [props.formDetails]);
+    useEffect(() => { reset(props.formDetails) }, [props.formDetails]);
     return (
         <>
-        <form handleSubmit={auditFormSubmit}>
-            <Row>
-                <div className="col-md-12 mb-2">
-                    <h5>Details</h5>
-                </div>
+            <form handleSubmit={auditFormSubmit}>
+                <Row>
+                    <div className="col-md-12 mb-2">
+                        <h5>Details</h5>
+                    </div>
 
-                <div className="col-md-4 mb-3">
-                    <div className="form-group">
-                        <small>Application</small>
-                        <input type="text" className="form-control" {...register("application")} />
+                    <div className="col-md-4 mb-3">
+                        <div className="form-group">
+                            <small>Application</small>
+                            <input type="text" className="form-control" {...register("application")} />
+                        </div>
                     </div>
-                </div>
-                <div className="col-md-4 mb-3">
-                    <div className="form-group">
-                        <small>User ID</small>
-                        <input type="text" className="form-control" {...register("user_id")} />
+                    <div className="col-md-4 mb-3">
+                        <div className="form-group">
+                            <small>User ID</small>
+                            <input type="text" className="form-control" {...register("user_id")} />
+                        </div>
                     </div>
-                </div>
-                <div className="col-md-4 mb-3">
-                    <div className="form-group">
-                        <small>Table Name</small>
-                        <input type="text" className="form-control" {...register("table_name")} />
+                    <div className="col-md-4 mb-3">
+                        <div className="form-group">
+                            <small>Table Name</small>
+                            <input type="text" className="form-control" {...register("table_name")} />
+                        </div>
                     </div>
-                </div>
-                <div className="col-md-4 mb-3">
-                    <div className="form-group">
-                        <small>Action</small>
-                        <input type="text" className="form-control" {...register("record_action")} />
+                    <div className="col-md-4 mb-3">
+                        <div className="form-group">
+                            <small>Action</small>
+                            <input type="text" className="form-control" {...register("record_action")} />
+                        </div>
                     </div>
-                </div>
-                <div className="col-md-4 mb-3">
-                    <div className="form-group">
-                        <small>Date</small>
-                        <input type="date" className="form-control" {...register("date_created")} />
+                    <div className="col-md-4 mb-3">
+                        <div className="form-group">
+                            <small>Date</small>
+                            <input type="date" className="form-control" {...register("date_created")} />
+                        </div>
                     </div>
-                </div>
-                <div className="col-md-4 mb-3">
-                    <div className="form-group">
-                        <small>Time</small>
-                        <input type="time" className="form-control" {...register("time_created")} />
+                    <div className="col-md-4 mb-3">
+                        <div className="form-group">
+                            <small>Time</small>
+                            <input type="time" className="form-control" {...register("time_created")} />
+                        </div>
                     </div>
-                </div>
 
 
-                <div className="col-md-6 ms-auto text-end mb-3 mt-3">
-                    <a href="" className="btn btn-secondary">Cancel</a>&nbsp;&nbsp;
-                    <a href="" className="btn btn-danger">Select</a>&nbsp;&nbsp;
-                    <a href="" className="btn btn-warning ">Clear</a>&nbsp;&nbsp;
-                    <button href="provider-search.html" className="btn btn-info">Search</button>
-                </div>
-            </Row>
+                    <div className="col-md-6 ms-auto text-end mb-3 mt-3">
+                        <a href="" className="btn btn-secondary">Cancel</a>&nbsp;&nbsp;
+                        <a href="" className="btn btn-danger">Select</a>&nbsp;&nbsp;
+                        <a href="" className="btn btn-warning ">Clear</a>&nbsp;&nbsp;
+                        <button href="provider-search.html" className="btn btn-info">Search</button>
+                    </div>
+                </Row>
             </form>
         </>
 
