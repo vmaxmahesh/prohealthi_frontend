@@ -1,5 +1,8 @@
 import React from 'react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { Link, Outlet, useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 function ClaimsHistorySearch() {
     const location = useLocation();
@@ -29,35 +32,22 @@ function ClaimsHistorySearch() {
             </div>
             <div>
                 <div className="nav nav-tabs" id="nav-tab" role="tablist">
-                    {/* <button className="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#Rules" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Member</button>
-                    <button className="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#Pricing" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Group</button>
-                    <button className="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#Override" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Plan</button>
-                     */}
-
                     <Link to="general-history" className={'nav-link' + (currentpath == 'general-history' ? ' active' : '')}>General</Link>
                     <Link to="optional-history" className={'nav-link' + (currentpath == 'optional-history' ? ' active' : '')}>Optional Criteria</Link>
-
                 </div>
                 <div className="tab-content" id="nav-tabContent">
                     <div className='card'>
                         <div className='card-body'>
-
-
                             <Outlet />
-
-
-
                         </div>
                     </div>
                 </div>
             </div>
-
-
             <div className="card mt-3 mb-3">
                 <div className="card-body">
-
                     {/* <General />
                     <Optional /> */}
+                    {/* <GeneralTable /> */}
                 </div>
             </div>
 
@@ -66,91 +56,167 @@ function ClaimsHistorySearch() {
 }
 
 export function General(props) {
+    const { register, handleSubmit, reset, watch, formState: { errors } } = useForm();
+    const searchSubmit = (searchFormData) => {
+        console.log(searchFormData);
+
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify(searchFormData)
+        }
+
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/administrator/claim-history/search`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                console.log(data.data);
+                toast.success(response.message, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+    }
     return (
         <>
+
             <div className="col-md-12 mb-2">
                 <h5>Criteria</h5>
             </div>
-            <form>
+            <form onSubmit={handleSubmit(searchSubmit)}>
                 <div className="row">
                     <div className="col-md-4 mb-3">
                         <div className="form-group">
                             <small>Cardholder ID</small>
-                            <input type="text" className="form-control" />
+                            <input type="text" className="form-control" {...register("cardholder_id")} />
                         </div>
                     </div>
                     <div className="col-md-2 mb-3">
                         <div className="form-group">
                             <small>Person Code</small>
-                            <input type="text" className="form-control" />
+                            <input type="text" className="form-control" {...register("person_code")} />
                         </div>
                     </div>
                     <div className="col-md-3 mb-3">
                         <div className="form-group">
                             <small>Provider ID</small>
-                            <input type="text" className="form-control" />
+                            <input type="text" className="form-control" {...register("provider_id")} />
                         </div>
                     </div>
                     <div className="col-md-3 mb-3">
                         <div className="form-group">
                             <small>Pin</small>
-                            <input type="text" className="form-control" />
+                            <input type="text" className="form-control" {...register("patient_pin_number")} />
                         </div>
                     </div>
+                </div>
+
+
+                <div className="row mb-3">
+                    <div className="col-md-12 mb-2">
+                        <h5>Date Range</h5>
+                    </div>
+                    <div className="col-md-6 mb-2">
+                        <input type="radio" value="date_filled" {...register("date_type")}/> Date of Service from
+                         <input type="date" name="" className="form-control" {...register("from_date")}/>
+                    </div>
+                    <div className="col-md-6 mb-2">
+                        <input type="radio" value="date_submitted" {...register("date_type")}/> Date of Submitted to
+                         <input type="date" name="" className="form-control" {...register("to_date")}/>
+                    </div>
+                </div>
+
+                <div className="row mb-3">
+                    <div className="col-md-8 mb-2">
+                        <h5>View Laminators</h5>
+
+                        <div className="col-md-12 mb-3">
+                            <div className="row mb-2">
+                                <div className="col-md-3 mb-2 mt-2">
+                                    <input type="radio" value="" /> Paid Claims
+                                </div>
+                                <div className="col-md-3 mb-2 mt-2">
+                                    <input type="radio" value="" /> Reversed Claims
+                                </div>
+                                <div className="col-md-3 mb-2 mt-2">
+                                    <input type="radio" value="" /> Rejected Claims
+                                </div>
+                                <div className="col-md-3 mb-2 mt-2">
+                                    <input type="radio" value="" /> All Claims
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-md-4 mb-3">
+                        <div className="form-group">
+                            <p>Sort by</p>
+                            <select className="form-select">
+                                <option value="">Select</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-md-6 ms-auto text-end mb-3 mt-3">
+                    <a href="" className="btn btn-secondary">Cancel</a>&nbsp;&nbsp;
+                    <a href="" className="btn btn-danger">Select</a>&nbsp;&nbsp;
+                    <a href="" className="btn btn-warning ">Clear</a>&nbsp;&nbsp;
+                    <button type='submit' className="btn btn-info">Search</button>
                 </div>
             </form>
 
+            <GeneralTable />
+        </>
+    );
+}
 
-            <div className="row mb-3">
-                <div className="col-md-12 mb-2">
-                    <h5>Date Range</h5>
-                </div>
-                <div className="col-md-6 mb-2">
-                    <input type="radio" value="" /> Date of Service from <input type="date" name="" className="form-control" />
-                </div>
-                <div className="col-md-6 mb-2">
-                    <input type="radio" value="" /> Date of Submitted to <input type="date" name="" className="form-control" />
-                </div>
-            </div>
+function GeneralTable() {
+    return (
+        <>
+            <div className="card mt-3 mb-3">
+                <div className="card-body">
+                    <div className="col-md-12">
+                        <h5 className="mb-2"></h5>
+                    </div>
+                    <div className="row">
+                        <div className="col-md-12">
+                            <div style={{ height: "700px", overflowY: "scroll" }}>
+                                <table className="table  table-bordered">
+                                    <thead className='stickt-thead'>
+                                        <tr>
+                                            <th>Date of SVC</th>
+                                            <th>Provider ID</th>
+                                            <th>Claim Ref#</th>
+                                            <th>RX#</th>
+                                            <th>New Refil</th>
+                                            <th>Procedure Code</th>
+                                            <th>Label Name/ Procedure Description</th>
+                                            <th>Cardholder ID</th>
+                                            <th>Person Code</th>
+                                            <th>Total $</th>
+                                            <th>Status</th>
+                                            <th>Bin #</th>
+                                            <th>Plan ID</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
 
-            <div className="row mb-3">
-                <div className="col-md-8 mb-2">
-                    <h5>View Laminators</h5>
-
-                    <div className="col-md-12 mb-3">
-                        <div className="row mb-2">
-                            <div className="col-md-3 mb-2 mt-2">
-                                <input type="radio" value="" /> Paid Claims
-                            </div>
-                            <div className="col-md-3 mb-2 mt-2">
-                                <input type="radio" value="" /> Reversed Claims
-                            </div>
-                            <div className="col-md-3 mb-2 mt-2">
-                                <input type="radio" value="" /> Rejected Claims
-                            </div>
-                            <div className="col-md-3 mb-2 mt-2">
-                                <input type="radio" value="" /> All Claims
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="col-md-4 mb-3">
-                    <div className="form-group">
-                        <p>Sort by</p>
-                        <select className="form-select">
-                            <option value="">Select</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div className="col-md-6 ms-auto text-end mb-3 mt-3">
-                <a href="" className="btn btn-secondary">Cancel</a>&nbsp;&nbsp;
-                <a href="" className="btn btn-danger">Select</a>&nbsp;&nbsp;
-                <a href="" className="btn btn-warning ">Clear</a>&nbsp;&nbsp;
-                <button href="provider-search.html" className="btn btn-info">Search</button>
             </div>
         </>
-    );
+    )
 }
 
 
