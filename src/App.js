@@ -411,6 +411,11 @@ function App() {
           </Route>
 
 
+          <Route path="exception-list/super-benefit-list" element={<SuperBenefitList />}>
+            
+            </Route>
+
+
 
 
           <Route path="exception-list/therapy-class" element={<TherapyClass />}>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Button } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
@@ -6,12 +7,38 @@ export default function SuperBenefitList() {
     const [superBenefitNames, setSuperBenefitNames] = useState([]);
     const [superBenefitList, setSuperBenefitLists] = useState([]);
     const [superBenefitForm, setSuperBenefitForm] = useState([]);
+
+
+    const [benifitsData, setBenifitData] = useState(false);
+
+
+
+    const [adding, setAdding] = useState();
+
+
+
+    
+
+    useEffect(() => {
+        if (benifitsData) {
+            setAdding(false);
+
+        } else {
+            setAdding(true);
+            setBenifitData(false);
+        }
+
+        document.title = 'Benefit Code | ProHealthi';
+
+    }, [benifitsData, adding]);
+
+
     const searchSBen = (fdata) => {
         const requestOptions = {
             method: 'GET',
             headers: { 'content-type': 'application/json' }
         }
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/super-benefit-list/get?search=${fdata.target.value}`, requestOptions).then(async response => {
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/exception/super-benefit-list/get?search=${fdata.target.value}`, requestOptions).then(async response => {
             const isJson = response.headers.get('content-type')?.includes('application/json');
             const data = isJson && await response.json();
             if (!response.ok) {
@@ -40,7 +67,7 @@ export default function SuperBenefitList() {
                 method: 'GET',
                 headers: { 'content-type': 'application/json' }
             }
-            fetch(process.env.REACT_APP_API_BASEURL + `/api/super-benefit-list/get-super-benefit-code?search=${id.super_benefit_list_id}`, requestOptions).then(async response => {
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/exception/super-benefit-list/get-super-benefit-code?search=${id.super_benefit_list_id}`, requestOptions).then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
                 if (!response.ok) {
@@ -66,9 +93,11 @@ export default function SuperBenefitList() {
 
     const getSBList = (id) => {
         console.log(id);
-        setSuperBenefitForm(id);
+        // setSuperBenefitForm(id);
+        setBenifitData(id);
+
     }
-        useEffect(() => { }, [superBenefitNames, superBenefitList, superBenefitForm]);
+        useEffect(() => { }, [superBenefitNames, superBenefitList, benifitsData]);
         return (
             <>
                 <div className="dashboard-content clearfix">
@@ -108,7 +137,7 @@ export default function SuperBenefitList() {
                                 {/* <h5 className="mb-2">Procedure Code List</h5> */}
                             </div>
                             <div className="row">                                
-                                <SuperBenefitForm  formData={superBenefitForm}/>
+                                <SuperBenefitForm  adding={adding} selected={benifitsData}/>
                             </div>
                         </div>
                     </div>
@@ -222,9 +251,144 @@ export default function SuperBenefitList() {
 
     function SuperBenefitForm(props) {
         const{register, handleSubmit, watch, reset, formState : {error} } = useForm();
-        useEffect(() => { reset(props.formData) }, [props.formData]);
+
+        const [benifitsData, setBenifitData] = useState(false);
+        const [adding, setAdding] = useState();
+
+
+
+        useEffect(() => {
+
+
+            if (props.adding) {
+                reset({ proc_code_list_id: '', procedure_code: '', new: 1 }, {
+                    keepValues: false,
+                })
+            } else {
+                reset(props.selected);
+            }
+    
+            if (!props.selected) {
+                reset({ proc_code_list_id: '',procedure_code: '',pharm_type_variation_ind:'',network_part_variation_ind:'',claim_type_variation_ind:'',plan_accum_deduct_id:'', new: 1 }, {
+                    keepValues: false,
+                })
+            }
+    
+    
+        }, [props.selected, props.adding]);
+
+        useEffect(() => {
+            if (benifitsData) {
+                setAdding(false);
+    
+            } else {
+                setAdding(true);
+                setBenifitData(false);
+            }
+    
+            document.title = 'Benefit Code | ProHealthi';
+    
+        }, [benifitsData, adding]);
+     
+
+        useEffect(() => { reset(props.selected) }, [props.selected]);
+
+
+        const addCode = (data) => {
+            // console.log(selctedNdc);
+            const requestOptions = {
+                method: 'POST',
+                // mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+        
+            };
+            // console.log(watch(data)); 
+            if (process.env.REACT_APP_API_BASEURL == 'NOT') {
+                toast.success('Added Successfully...!', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+        
+                });
+            } else {
+                fetch(process.env.REACT_APP_API_BASEURL + `/api/exception/super-benefit-list/add`, requestOptions)
+                    .then(async response => {
+                        const isJson = response.headers.get('content-type')?.includes('application/json');
+                        const data = isJson && await response.json();
+                        // console.log(response);
+        
+                        // check for error response
+                        if (!response.ok) {
+                            // get error message from body or default to response status
+                            const error = (data && data.message) || response.status;
+                            return Promise.reject(error);
+                        } else {
+                            // setSelctedNdc([]);
+                            console.log(data);
+                            var msg = props.adding ? 'Added Successfully...!' : 'Updated Successfully..'
+                            toast.success(msg, {
+                                position: "top-right",
+                                autoClose: 5000,
+                                hideProgressBar: false,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                progress: undefined,
+        
+                            });
+                            reset(props.selected);
+    
+                        }
+    
+                        
+        
+        
+                        if (response === '200') {
+                            setSelctedNdc([]);
+                        }
+        
+                    })
+                    .catch(error => {
+                        console.error('There was an error!', error);
+                    });
+            }
+        
+        }
+        const onSubmit = (e) => {
+            e.preventDefault();
+        }
+
+
+        useEffect(() => {
+
+
+            if (props.adding) {
+                reset({ prov_type_list_id: '', description: '', new: 1 }, {
+                    keepValues: false,
+                })
+            } else {
+                reset(props.selected);
+            }
+    
+            if (!props.selected) {
+                reset({ prov_type_list_id: '',description: '',pharm_type_variation_ind:'',network_part_variation_ind:'',claim_type_variation_ind:'',plan_accum_deduct_id:'', new: 1 }, {
+                    keepValues: false,
+                })
+            }
+    
+    
+        }, [props.selected, props.adding]);
+
         return (
             <>
+
+            <form onSubmit={handleSubmit(addCode)}>
+
                 <div className="card mt-3 mb-3 data" >
                     <div className="card-body">
                         <div className="row mb-2">
@@ -263,7 +427,9 @@ export default function SuperBenefitList() {
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>Effective Date</small>
-                                    <input type="date" className="form-control"  id="" {...register("effective_date",{required:true})}/>
+                                    <input type="date" className="form-control"  id="" {...register('effective_date',{
+                                        required:true,
+                                    })}/>
                                 </div>
                             </div>
 
@@ -276,6 +442,10 @@ export default function SuperBenefitList() {
                         </div>
                     </div>
                 </div>
+
+                <Button type='submit' variant="primary">{props.adding ? ' Add' : 'Update'}</Button>
+                </form>
+
             </>
         )
     }

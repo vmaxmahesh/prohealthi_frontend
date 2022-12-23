@@ -192,11 +192,9 @@ export default function ProcedureCode() {
                     </div>
                     <SearchProcedureCodes onSearchProcCode={onSearchProcCode} />
 
-                    <div className="col-md-12">
                             {loading ?<LoadingSpinner />:''}
 
-                            </div>
-                            
+
                     <div className="card mt-3 mb-3">
                         <div className="card-body">
 
@@ -421,7 +419,7 @@ function ProcedureCodeForm(props) {
                         return Promise.reject(error);
                     } else {
                         // setSelctedNdc([]);
-                        console.log(data);
+                        // console.log(data);
                         var msg = props.adding ? 'Added Successfully...!' : 'Updated Successfully..'
                         toast.success(msg, {
                             position: "top-right",
