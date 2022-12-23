@@ -111,7 +111,7 @@ function SearchProvider() {
             headers: { 'Content-Type': 'application/json' },
         };
 
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/provider/provider/search?search=${fdata.target.value}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/providerdata/provider/search?search=${fdata.target.value}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
@@ -152,7 +152,7 @@ function SearchProvider() {
         };
         // //  console.log(watch(fdata));
 
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/provider/provider/get/details/${ndcid}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/providerdata/provider/details/${ndcid}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
@@ -342,7 +342,6 @@ function ProviderList(props) {
     // //  console.log(props.selctedNdc);
 
     const getNDCItem = (ndciemid) => {
-        alert(ndciemid);
         props.getNDCItem(ndciemid);
 
 
