@@ -14,9 +14,9 @@ function ClaimsHistorySearch() {
                         <ul>
                             <li><a href="">Home</a></li>
                             <li><i className="fas fa-angle-right"></i></li>
-                            <li><a href="">Membership Data</a></li>
+                            <li><a href="">Administrator</a></li>
                             <li><i className="fas fa-angle-right"></i></li>
-                            <li><a href="">Zip Codes</a></li>
+                            <li><a href="">Claim History Search</a></li>
                         </ul>
                     </div>
                 </div>
@@ -42,12 +42,7 @@ function ClaimsHistorySearch() {
                 <div className="tab-content" id="nav-tabContent">
                     <div className='card'>
                         <div className='card-body'>
-
-
                             <Outlet />
-
-
-
                         </div>
                     </div>
                 </div>
@@ -57,8 +52,8 @@ function ClaimsHistorySearch() {
             <div className="card mt-3 mb-3">
                 <div className="card-body">
 
-                    <General />
-                    <Optional />
+                    {/* <General /> */}
+                    {/* <Optional /> */}
                 </div>
             </div>
 

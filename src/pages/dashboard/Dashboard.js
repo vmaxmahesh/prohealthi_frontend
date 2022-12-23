@@ -89,7 +89,7 @@ export default function Dashboard() {
                             <a href="#!" className="dashboard-nav-item dashboard-nav-dropdown-toggle">
                                 <i className="fa-solid fa-file-alt"></i> Validation Lists </a>
                             <div className='dashboard-nav-dropdown-menu'>
-                                <Link to="/dashboard/validation-lists/diagnosis" className={'dashboard-nav-dropdown-item' + (currentpath == 'diagnosis' ? ' active' : '')}>Diagnosis </Link>
+                                <Link to="/dashboard/validation-lists/diagnosis-validation" className={'dashboard-nav-dropdown-item' + (currentpath == 'diagnosis-validation' ? ' active' : '')}>Diagnosis </Link>
                                 <Link to="/dashboard/validation-lists/speciality" className={'dashboard-nav-dropdown-item' + (currentpath == 'speciality' ? ' active' : '')}>Specialty </Link>
                                 <Link to="/dashboard/validation-lists/eligibility" className={'dashboard-nav-dropdown-item' + (currentpath == 'eligibility' ? ' active' : '')}>Eligibility  </Link>
                                 <Link to="/dashboard/validation-lists/provider" className={'dashboard-nav-dropdown-item' + (currentpath == 'provider' ? ' active' : '')}>Provider </Link>

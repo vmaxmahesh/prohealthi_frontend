@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { render } from 'react-dom';
 import { useForm } from 'react-hook-form';
-import { Link, Outlet, useLocation, useOutletContext } from 'react-router-dom';
+import LoadingSpinner from '../../../loader/loader';
+import EmptyRowComponent from '../../../shared/NoDataFound';
+import Footer from '../../../shared/Footer';
 
 export default function DiagnosisValidation()
 {
@@ -14,14 +15,17 @@ export default function DiagnosisValidation()
     const [ndcClass, setNdClass] = useState([]);
 
     const [selctedNdc, setSelctedNdc] = useState('');
+    const [SelectedDiagnosisList, setSelectedDiagnosisList] = useState('');
+    const [loading, setloading] = useState();
+    const [loader, setloader] = useState();
 
-    const getNDCItems = (ndcid) => {
-        // ndc_exception_list
+    const getDiagnosisLimitation = (diagnosis_list) => {
+        setloader(true);
 
         var test = {};
-        test.ndc_exception_list = ndcid;
-        setSelctedNdc(test);
-
+        test.diagnosis_list = diagnosis_list;
+        setSelectedDiagnosisList(test);
+        // console.log(test.diagnosis_list);
         // //  console.log(customerid);
         const requestOptions = {
             method: 'GET',
@@ -31,11 +35,12 @@ export default function DiagnosisValidation()
         };
         // //  console.log(watch(fdata));
 
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/diagnosis/get/${ndcid}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/diagnosisvalidation/get/${diagnosis_list}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
                 //  console.log(response);
+                // console.log(data.data);
 
                 // check for error response
                 if (!response.ok) {
@@ -45,7 +50,7 @@ export default function DiagnosisValidation()
                     return Promise.reject(error);
                 } else {
                     setNdClass(data.data);
-                    // scollToRef.current.scrollIntoView()
+                    setloader(false);
                 }
 
 
@@ -81,7 +86,6 @@ export default function DiagnosisValidation()
                     return Promise.reject(error);
                 } else {
                     setSelctedNdc(data.data);
-                    console.log(selctedNdc);
                     scollToRef.current.scrollIntoView()
                     return;
                 }
@@ -97,13 +101,13 @@ export default function DiagnosisValidation()
 
 
     const searchException = (fdata) => {
-        
+        setloading(true);
         const requestOptions = {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         };
 
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/diagnosis/search?search=${fdata.target.value}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/diagnosisvalidation/search?search=${fdata.target.value}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
@@ -119,6 +123,7 @@ export default function DiagnosisValidation()
 
                 } else {
                     setNdcData(data.data);
+                    setloading(false);
                     return;
                 }
 
@@ -159,13 +164,13 @@ export default function DiagnosisValidation()
                         </ul>
                     </div>
                 </div>
-            </div> 
+            </div>
 
             <SearchDiagnosis searchException={searchException} />
+            <DiagnosisList diagnosisListData={ndcData} ndcClassData={ndcClass} getDiagnosisLimitationsList={getDiagnosisLimitation} getNDCItemDetails={getNDCItemDetails} selctedNdc={selctedNdc} loading={loading} loader={loader} selected={SelectedDiagnosisList} />
 
-            <DiagnosisList ndcListData={ndcData} ndcClassData={ndcClass} getNDCItem={getNDCItems} getNDCItemDetails={getNDCItemDetails} selctedNdc={selctedNdc} />
-
-            <DiagnosisForm  viewDiagnosisFormdata={selctedNdc} />
+            <DiagnosisForm viewDiagnosisFormdata={selctedNdc} />
+            <Footer />
 
         </>
     )
@@ -174,10 +179,7 @@ export default function DiagnosisValidation()
 function SearchDiagnosis(props)
 {
 
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
-
     const searchException = (fdata) => {
-
         props.searchException(fdata);
     }
     return(
@@ -191,31 +193,30 @@ function SearchDiagnosis(props)
                                 <input type="text"  onKeyUp={(e) => searchException(e)} className="form-control" placeholder='Start typing diagnosis validation ID/name to search'
                                 />
                             </div>
-                        </div>                       
+                        </div>
                     </div>
                 </div>
             </div>
-            {/* <DiagnosisList /> */}
         </>
     )
 }
 
-function NdcRow(props) {
+function DiagnosisExceptionRow(props) {
 
     useEffect(() => {
 
     }, [props.selected]);
 
-
+    console.log(props.selected);
 
     return (
         <>
             <tr className={(props.selected && props.ndcRow.diagnosis_list == props.selected.diagnosis_list ? ' tblactiverow ' : '')}
 
-                onClick={() => props.getNDCItem(props.ndcRow.diagnosis_id)}
+                onClick={() => props.getDiagnosisLimitationsList(props.ndcRow.diagnosis_list)}
             >
-                <td>{props.ndcRow.diagnosis_id}</td>
-                <td >{props.ndcRow.description}</td>
+                <td>{props.ndcRow.diagnosis_list}</td>
+                <td >{props.ndcRow.exception_name}</td>
 
                 {/* <td><button className="btn btn-sm btn-info" id="" ><i className="fa fa-eye"></i> View</button></td> */}
             </tr>
@@ -225,7 +226,6 @@ function NdcRow(props) {
 
 
 function NdcClassRow(props) {
-
     useEffect(() => {
 
     }, [props.selected]);
@@ -237,10 +237,8 @@ function NdcClassRow(props) {
                 onClick={() => props.getNDCItemDetails(props.ndcClassRow.diagnosis_id)}
 
             >
-                <td>{props.ndcClassRow.priority}</td>
+                <td>{props.ndcClassRow.diagnosis_id}</td>
                 <td>{props.ndcClassRow.diagnosis_list}</td>
-              
-                {/* <td><button className="btn btn-sm btn-info" id="" ><i className="fa fa-eye"></i> View</button></td> */}
             </tr>
         </>
     )
@@ -254,20 +252,24 @@ function DiagnosisList(props)
     useEffect(() => { }, [props.selctedNdc]);
     // //  console.log(props.selctedNdc);
 
-    const getNDCItem = (ndciemid) => {
-        props.getNDCItem(ndciemid);
+    const getDiagnosisLimitationsList = (ndciemid) => {
+        props.getDiagnosisLimitationsList(ndciemid);
     }
 
     const getNDCItemDetails = (ndciemid) => {
         props.getNDCItemDetails(ndciemid);
     }
 
-    const ndcListArray = [];
-    for (let i = 0; i < props.ndcListData.length; i++) {
-        ndcListArray.push(<NdcRow ndcRow={props.ndcListData[i]} getNDCItem={getNDCItem} selected={props.selctedNdc} />);
+    const diagnosisListArray = [];
+    if (props.diagnosisListData.length > 0) {
+        for (let i = 0; i < props.diagnosisListData.length; i++) {
+            diagnosisListArray.push(<DiagnosisExceptionRow ndcRow={props.diagnosisListData[i]} getDiagnosisLimitationsList={getDiagnosisLimitationsList} selected={props.selected} />);
+        }
+    } else {
+        diagnosisListArray.push(<EmptyRowComponent colspan='2'/>)
     }
 
-    const ndcClassArray = [];
+const ndcClassArray = [];
     for (let j = 0; j < props.ndcClassData.length; j++) {
         ndcClassArray.push(<NdcClassRow ndcClassRow={props.ndcClassData[j]} getNDCItemDetails={getNDCItemDetails} selected={props.selctedNdc} />);
     }
@@ -299,7 +301,7 @@ function DiagnosisList(props)
                                             </thead>
 
                                             <tbody>
-                                                {ndcListArray}
+                                                {props.loading?<LoadingSpinner/>:diagnosisListArray}
                                             </tbody>
 
                                         </table>
@@ -320,7 +322,7 @@ function DiagnosisList(props)
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {ndcClassArray}
+                                                {props.loader?<LoadingSpinner/>: ndcClassArray}
                                             </tbody>
                                         </table>
                                     </div>
@@ -392,12 +394,12 @@ function DiagnosisForm(props)
                                     </div>
                                 </div>
                                 <hr/>
-                       
+
                             <div className="row mb-2">
                                  <div className="col-md-12">
                                 <h5 className="mb-2">Limitations Lists</h5>
                             </div>
-                                
+
                                 <div className="col-md-4 mb-3">
                                     <div className="form-group">
                                         <small>Effective Date:</small>
@@ -419,7 +421,7 @@ function DiagnosisForm(props)
                                        </div>
                                     </div>
                                 </div>
-                                
+
                                 <div className="col-md-12 text-end">
                                      <button className="btn btn-primary"> Add </button>
                                     <button className="btn btn-warning"> Remove </button>
@@ -427,13 +429,13 @@ function DiagnosisForm(props)
                                 </div>
                        </div>
                        <hr/>
-                       <DiagnosisTable />                  
+                       <DiagnosisTable />
                             </div>
                             </form>
-                           
+
                         </div>
-                    </div>     
-                    
+                    </div>
+
         </>
     )
 }
@@ -469,7 +471,7 @@ function DiagnosisTable()
                                 </tbody>
                             </table>
                             </div>
-     
+
                        </div>
                    </div>
                    </div>

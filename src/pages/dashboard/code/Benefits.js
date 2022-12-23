@@ -8,7 +8,7 @@ import { Form, useOutletContext } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import { Card, Col, Row } from 'react-bootstrap';
-import { PuffLoader} from "react-spinners";
+import LoadingSpinner from '../../../loader/loader';
 
 
 export default function Benefits() {
@@ -169,25 +169,6 @@ export default function Benefits() {
 
 
 function List(props) {
-
-    const LoadingSpinner = props => {
-        return (
-            <div
-      style={{
-       width: "100%",
-       height: "100",
-       display: "flex",
-       justifyContent: "center",
-       alignItems: "center"
-     }}
-            >
-                <PuffLoader
-  color="#59d8f1" />
-                </div>
-
-
-  );
- }
 
     const benifitList = [];
     for (let i = 0; i < props.benifitsList.length; i++) {

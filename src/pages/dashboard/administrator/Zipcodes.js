@@ -4,7 +4,7 @@ import Footer from '../../../shared/Footer';
 import AsyncSelect from 'react-select/async';
 import { toast } from "react-toastify";
 import { useAuth } from "../../../hooks/AuthProvider";
-
+import EmptyRowComponent from "../../../shared/NoDataFound";
 
 
 
@@ -173,7 +173,7 @@ function Ziptable(props) {
         }
     } else {
         //for no data found
-        zipCodeListArray.push(<ZipCodeRowEmptyComp key='zipCodeRowEmpty'/>);
+        zipCodeListArray.push(<EmptyRowComponent colspan='3' key='zipCodeRowEmpty'/>);
     }
 
 
@@ -461,17 +461,6 @@ function ZipCodeRowComp(props) {
                 <td>{props.zipCodeRow.zip_code}</td>
                 <td >{props.zipCodeRow.city}</td>
                 <td >{props.zipCodeRow.state}</td>
-            </tr>
-        </>
-    )
-}
-
-//Empty component no data found
-function ZipCodeRowEmptyComp() {
-    return (
-        <>
-            <tr>
-                <td  colSpan={3} align={'center'}>No Data Found</td>
             </tr>
         </>
     )

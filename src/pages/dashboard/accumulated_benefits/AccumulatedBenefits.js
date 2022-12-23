@@ -8,7 +8,6 @@ import DraggableList from "react-draggable-lists";
 
 export default function AccumulatedBenefits() {
 
-
     const scollToRef = useRef();
     const [customer, setCustomer] = useState([]);
 
@@ -392,9 +391,9 @@ export function ExclusionLimitation(props) {
                                 <small>Grouping Type:</small>
                                 <select className="form-select" name="grouping_type" {...register('grouping_type')}>
                                     <option value="">--select--</option>
-                                    <option value="A">Customer</option>
-                                    <option value="B">Client</option>
-                                    <option value="C">Group</option>
+                                    <option value="C">Customer</option>
+                                    <option value="L">Customer/Client</option>
+                                    <option value="G">Customer/Client/Group</option>
                                 </select>
                             </div>
                         </div>
@@ -403,9 +402,10 @@ export function ExclusionLimitation(props) {
                                 <small>Benefit Grouping Type:</small>
                                 <select className="form-select" name="benefit_grouping_type" {...register('benefit_grouping_type')}>
                                     <option value=''>--select--</option>
-                                    <option value="A">Benefit List ID</option>
-                                    <option value="B">Client</option>
-                                    <option value="C">Group</option>
+                                    <option value="0">Plan Id</option>
+                                    <option value="1">Super Benefit List ID</option>
+                                    <option value="2">Benefit List ID</option>
+                                    <option value="3">Benefit Code</option>
                                 </select>
                             </div>
                         </div>
@@ -416,11 +416,11 @@ export function ExclusionLimitation(props) {
                             </div>
                         </div>
 
-                        <div className="col-md-2 mt-4">
+                        {/* <div className="col-md-2 mt-4">
                             <div className="">
                                 <button type="submit" className="btn m-0 p-2 btn-theme" style={{ width: "100%", fontSize: "12px" }}>Search</button>
                             </div>
-                        </div>
+                        </div> */}
 
 
                         <div class="col-md-12">
@@ -432,7 +432,14 @@ export function ExclusionLimitation(props) {
                                         <small>Period</small>
                                         <select class="form-select" name="deduc_period" {...register('deduc_period')}>
                                             <option value="MN">Montly</option>
+                                            <option value="MR">Montly with Roll</option>
+                                            <option value="QN">Quaterly</option>
+                                            <option value="QR">Quaterly with Roll</option>
+                                            <option value="AN">Annaul</option>
+                                            <option value="AN">Annaul</option>
                                             <option value="LI">Lifetime</option>
+                                            <option value="AP">Annual Based on Period</option>
+                                            <option value="AB">Annual Based on Policy Period</option>
                                         </select>
                                     </div>
                                 </div>
@@ -440,8 +447,19 @@ export function ExclusionLimitation(props) {
                                     <div class="form-group mb-2">
                                         <small>Month to start Deductions: </small>
                                         <select class="form-select" name="deduc_start" {...register('deduc_start')}>
-                                            <option>Annual</option>
-                                            <option></option>
+                                            <option value="0">--select--</option>
+                                            <option value="1">January</option>
+                                            <option value="2">February</option>
+                                            <option value="3">March</option>
+                                            <option value="4">April</option>
+                                            <option value="5">May</option>
+                                            <option value="6">June</option>
+                                            <option value="7">July</option>
+                                            <option value="8">August</option>
+                                            <option value="9">September</option>
+                                            <option value="10">October</option>
+                                            <option value="11">November</option>
+                                            <option value="12">December</option>
                                         </select>
                                     </div>
                                 </div>
@@ -959,9 +977,9 @@ export function Deductible(props) {
                                 <div className="col-md-4 mb-2">
                                     <select className="form-select" name="ind_action_1" {...register('ind_action_1')}>
                                         <option value="R">Reject</option>
-                                        <option value="C">Change the Price sechudule</option>
-                                        <option value="K">Change Copay Sechudule</option>
-                                        <option value="B">Change price and copay sechudule</option>
+                                        <option value="C">Change the Price schedule</option>
+                                        <option value="K">Change Copay schedule</option>
+                                        <option value="B">Change price and copay schedule</option>
                                         <option value="M">Roll To Major Medical</option>
                                         <option value="A">Add Maximum Over Benefit Amount To be Copay</option>
 
@@ -970,9 +988,9 @@ export function Deductible(props) {
                                 <div className="col-md-4">
                                     <select className="form-select" name="family_action_1" {...register('family_action_1')}>
                                         <option value="R">Reject</option>
-                                        <option value="C">Change the Price sechudule</option>
-                                        <option value="K">Change Copay Sechudule</option>
-                                        <option value="B">Change price and copay sechudule</option>
+                                        <option value="C">Change the Price schedule</option>
+                                        <option value="K">Change Copay schedule</option>
+                                        <option value="B">Change price and copay schedule</option>
                                         <option value="M">Roll To Major Medical</option>
                                         <option value="A">Add Maximum Over Benefit Amount To be Copay</option>                                    </select>
                                 </div>
