@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import LoadingSpinner from '../../../loader/loader';
 import EmptyRowComponent from '../../../shared/NoDataFound';
 import Footer from '../../../shared/Footer';
+import AsyncSelect from 'react-select/async';
 
 export default function DiagnosisValidation()
 {
@@ -62,18 +63,18 @@ export default function DiagnosisValidation()
             });
     }
 
-    // getNDCItemList
-    const getNDCItemDetails = (ndcid) => {
-        //  console.log(ndcid);
+ //get diagnosis form data
+    const getPriorityDiagnosisId = (rowData) => {
+        let diagnosis_list = rowData.diagnosis_list;
+        let diagnosis_id = rowData.diagnosis_id;
         const requestOptions = {
             method: 'GET',
             // mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
             // body: encodeURIComponent(data)
         };
-        // //  console.log(watch(fdata));
 
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/diagnosis/details/${ndcid}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/diagnosisvalidation/details/${diagnosis_list}/${diagnosis_id}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
@@ -167,7 +168,7 @@ export default function DiagnosisValidation()
             </div>
 
             <SearchDiagnosis searchException={searchException} />
-            <DiagnosisList diagnosisListData={ndcData} ndcClassData={ndcClass} getDiagnosisLimitationsList={getDiagnosisLimitation} getNDCItemDetails={getNDCItemDetails} selctedNdc={selctedNdc} loading={loading} loader={loader} selected={SelectedDiagnosisList} />
+            <DiagnosisList key='DiagnosisList' diagnosisListData={ndcData} ndcClassData={ndcClass} getDiagnosisLimitationsList={getDiagnosisLimitation} getPriorityDiagnosisId={getPriorityDiagnosisId} selctedNdc={selctedNdc} loading={loading} loader={loader} selected={SelectedDiagnosisList} />
 
             <DiagnosisForm viewDiagnosisFormdata={selctedNdc} />
             <Footer />
@@ -207,7 +208,6 @@ function DiagnosisExceptionRow(props) {
 
     }, [props.selected]);
 
-    console.log(props.selected);
 
     return (
         <>
@@ -225,16 +225,15 @@ function DiagnosisExceptionRow(props) {
 }
 
 
-function NdcClassRow(props) {
+function PriorityDiagnosisRow(props) {
     useEffect(() => {
-
     }, [props.selected]);
 
     return (
         <>
             <tr
                 className={(props.selected && props.ndcClassRow.diagnosis_id == props.selected.diagnosis_id ? ' tblactiverow ' : '')}
-                onClick={() => props.getNDCItemDetails(props.ndcClassRow.diagnosis_id)}
+                onClick={() => props.getPriorityDiagnosisId(props.ndcClassRow)}
 
             >
                 <td>{props.ndcClassRow.diagnosis_id}</td>
@@ -256,8 +255,8 @@ function DiagnosisList(props)
         props.getDiagnosisLimitationsList(ndciemid);
     }
 
-    const getNDCItemDetails = (ndciemid) => {
-        props.getNDCItemDetails(ndciemid);
+    const getPriorityDiagnosisId = (ndciemid) => {
+        props.getPriorityDiagnosisId(ndciemid);
     }
 
     const diagnosisListArray = [];
@@ -269,9 +268,9 @@ function DiagnosisList(props)
         diagnosisListArray.push(<EmptyRowComponent colspan='2'/>)
     }
 
-const ndcClassArray = [];
+const priorityDiagnosisArray = [];
     for (let j = 0; j < props.ndcClassData.length; j++) {
-        ndcClassArray.push(<NdcClassRow ndcClassRow={props.ndcClassData[j]} getNDCItemDetails={getNDCItemDetails} selected={props.selctedNdc} />);
+        priorityDiagnosisArray.push(<PriorityDiagnosisRow ndcClassRow={props.ndcClassData[j]} getPriorityDiagnosisId={getPriorityDiagnosisId} selected={props.selctedNdc} />);
     }
 
     const [ncdListData, setNcdListData] = useState();
@@ -322,7 +321,7 @@ const ndcClassArray = [];
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {props.loader?<LoadingSpinner/>: ndcClassArray}
+                                                {props.loader? <LoadingSpinner/>: priorityDiagnosisArray}
                                             </tbody>
                                         </table>
                                     </div>
@@ -339,12 +338,76 @@ const ndcClassArray = [];
 function DiagnosisForm(props)
 {
 
-    const { register,reset, handleSubmit, watch, formState: { errors } } = useForm();
+    const { register, reset, handleSubmit, control, formState: { errors } } = useForm();
 
-    // const [selctedNdc, setSelctedNdc] = useOutletContext();
+//diagnosis code drop down list
+    const [inputValue, setinputValue] = useState('');
+    const [selectedValue, setselectedValue] = useState('');
+
+    //  handle input change event
+  const handleInputChange = value => {
+    setinputValue(value);
+    };
+
+     // handle selection
+  const handleChange = value => {
+    setselectedValue(value);
+  }
+
+//  load options using API call
+    const loadOptions = (inputValue) => {
+        return new Promise((resolve, reject) => {
+
+
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/diagnosisvalidation/diagnosis-code-list/${inputValue}`)
+                .then((response) => response.json())
+                .then(({ data }) => {
+                    resolve(
+                        data.map(({ diagnosis_id,description }) => ({
+                            value: diagnosis_id,
+                            label: diagnosis_id+' - '+description,
+                        })),
+                    );
+                    // console.log(data);
+                });
+        });
+    };
+
+    // limitations drop down list
+    const [inputLimitationValue, setinputLimitationValue] = useState('');
+    const [selectedLimitationValue, setselectedLimitationValue] = useState('');
+
+    //  handle input change event
+  const handleLimitationInputChange = value => {
+    setinputLimitationValue(value);
+    };
+
+     // handle selection
+  const handleLimitationChange = value => {
+    setselectedLimitationValue(value);
+  }
+
+//  load options using API call
+    const loadLimitationsOptions = (inputLimitationValue) => {
+        return new Promise((resolve, reject) => {
+
+
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/diagnosisvalidation/limitation-code-list/${inputLimitationValue}`)
+                .then((response) => response.json())
+                .then(({ data }) => {
+                    resolve(
+                        data.map(({ limitations_list,limitations_list_name }) => ({
+                            value: limitations_list,
+                            label: limitations_list_name,
+                        })),
+                    );
+                    // console.log(data);
+                });
+        });
+    };
+
 
     useEffect(() => { reset(props.viewDiagnosisFormdata) }, [props.viewDiagnosisFormdata]);
-
     return(
         <>
          <div className="card mt-3 mb-3">
@@ -357,21 +420,40 @@ function DiagnosisForm(props)
                                 <div className="col-md-4 mb-3">
                                     <div className="form-group">
                                         <small> Diagnosis List ID:</small>
-                                       <input type="text" name="diagnosis_id" {...register('diagnosis_id')} placeholder="" className="form-control" />
+                                       <input type="text" name="diagnosis_id" {...register('diagnosis_list')} placeholder="" className="form-control" />
                                     </div>
                                 </div>
                                 <div className="col-md-4 mb-3">
                                     <div className="form-group">
                                         <small> Diagnosis List Name: </small>
-                                    <input type="text" name="diagnosis_list" {...register('diagnosis_list')} placeholder="100PC" className="form-control" />
+                                    <input type="text" name="diagnosis_list" {...register('exception_name')} placeholder="100PC" className="form-control" />
                                     </div>
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group ">
                                          <small> Diagnosis ID: </small>
                                         <div className="searchmodal">
-                                       <input type="text" name="diagnosis_id" {...register('diagnosis_id')} className="form-control" placeholder="" autoComplete="off" />
-                                       <button className="btn-info"><i className="fa-solid fa-magnifying-glass"></i></button>
+                                       {/* <input type="text" name="diagnosis_id" {...register('diagnosis_id')} className="form-control" placeholder="" autoComplete="off" /> */}
+                                       {/* <button className="btn-info"><i className="fa-solid fa-magnifying-glass"></i></button> */}
+
+                                       <Controller  name="diagnosis_id"
+                                                control={control}
+                                                // rules={{ required: false }}
+                                                render={({ field }) => (
+                                            <AsyncSelect
+                                                cacheOptions
+                                                defaultOptions
+                                                {...field}
+                                                isClearable
+                                                // value={selectedStateValue}
+                                                // inputValue={props.selectedZipCodeValue.state_code}
+                                                // getOptionLabel={e => e.label}
+                                                // getOptionValue={e => e.value}
+                                                loadOptions={loadOptions}
+                                                onInputChange={handleInputChange}
+                                                // onChange={handleStateChange}
+                                                    />
+                                                    )} />
                                        </div>
                                     </div>
                                 </div>
@@ -381,16 +463,14 @@ function DiagnosisForm(props)
                                             <select className="form-select" name="diagnosis_status" {...register('diagnosis_status')}>
                                             <option value="">--select--</option>
                                             <option value="A">Approved</option>
+                                            <option value="R">Rejected</option>
                                             </select>
                                     </div>
                                 </div>
                                  <div className="col-md-4 mb-3">
                                     <div className="form-group">
                                         <small>Priority: </small>
-                                            <select className="form-select" name="priority" {...register('priority')}>
-                                                <option>--select--</option>
-                                                <option value="1" >Approved</option>
-                                            </select>
+                                        <input type="text" name="priority" {...register('priority')} className="form-control" placeholder="" autoComplete="off" />
                                     </div>
                                 </div>
                                 <hr/>
@@ -416,8 +496,26 @@ function DiagnosisForm(props)
                                     <div className="form-group">
                                         <small>Limitations List Date:</small>
                                            <div className="searchmodal">
-                                       <input type="text" name="" className="form-control" placeholder="" autoComplete="off" />
-                                       <button className="btn-info"><i className="fa-solid fa-magnifying-glass"></i></button>
+                                       {/* <input type="text" name="" className="form-control" placeholder="" autoComplete="off" />
+                                       <button className="btn-info"><i className="fa-solid fa-magnifying-glass"></i></button> */}
+                                            <Controller  name="limitation_id"
+                                                control={control}
+                                                // rules={{ required: false }}
+                                                render={({ field }) => (
+                                            <AsyncSelect
+                                                cacheOptions
+                                                defaultOptions
+                                                {...field}
+                                                isClearable
+                                                // value={selectedStateValue}
+                                                // inputValue={props.selectedZipCodeValue.state_code}
+                                                // getOptionLabel={e => e.label}
+                                                // getOptionValue={e => e.value}
+                                                loadOptions={loadLimitationsOptions}
+                                                onInputChange={handleLimitationInputChange}
+                                                // onChange={handleStateChange}
+                                                    />
+                                                    )} />
                                        </div>
                                     </div>
                                 </div>
