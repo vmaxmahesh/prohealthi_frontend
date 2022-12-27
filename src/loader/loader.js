@@ -4,17 +4,15 @@ import { PuffLoader } from 'react-spinners';
 export default function LoadingSpinner(props) {
     return (
         <>
-        <div
+        <tr>
+          <td colSpan={props.colSpan}
           style={{
-          width: "100%",
-          height: "100",
-          display: "flex",
-          justifyContent: "center",
           alignItems: "center"
-        }}
-                >
-                <PuffLoader  color="#59d8f1" />
-          </div>
+        }}>
+          <PuffLoader  color="#59d8f1" />
+          </td>
+
+          </tr>
     </>
     )
 

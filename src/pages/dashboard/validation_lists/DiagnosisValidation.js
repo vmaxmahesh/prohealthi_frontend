@@ -4,6 +4,7 @@ import LoadingSpinner from '../../../loader/loader';
 import EmptyRowComponent from '../../../shared/NoDataFound';
 import Footer from '../../../shared/Footer';
 import AsyncSelect from 'react-select/async';
+import { toast } from "react-toastify";
 
 export default function DiagnosisValidation()
 {
@@ -20,6 +21,10 @@ export default function DiagnosisValidation()
     const [loading, setloading] = useState();
     const [loader, setloader] = useState();
 
+    const [priorityDiagnosisFromData, setpriorityDiagnosisFromData] = useState('');
+    const [selectLimitationLists, setSelectLimitationLists] = useState('');
+
+//get priority data here name is different
     const getDiagnosisLimitation = (diagnosis_list) => {
         setloader(true);
 
@@ -63,7 +68,7 @@ export default function DiagnosisValidation()
             });
     }
 
- //get diagnosis form data
+ //get limitation row data here name
     const getPriorityDiagnosisId = (rowData) => {
         let diagnosis_list = rowData.diagnosis_list;
         let diagnosis_id = rowData.diagnosis_id;
@@ -74,7 +79,7 @@ export default function DiagnosisValidation()
             // body: encodeURIComponent(data)
         };
 
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/diagnosisvalidation/details/${diagnosis_list}/${diagnosis_id}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/diagnosisvalidation/diagnosis_limitations/${diagnosis_list}/${diagnosis_id}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
@@ -87,12 +92,8 @@ export default function DiagnosisValidation()
                     return Promise.reject(error);
                 } else {
                     setSelctedNdc(data.data);
+                    setSelectLimitationLists(data.data);
                     scollToRef.current.scrollIntoView()
-                    return;
-                }
-
-
-                if (response === '200') {
                 }
             })
             .catch(error => {
@@ -100,7 +101,13 @@ export default function DiagnosisValidation()
             });
     }
 
+//get diagnosis form data on click here
+    const getpriorityDiagnosisFromData = (formData) => {
+        setpriorityDiagnosisFromData(formData);
+        scollToRef.current.scrollIntoView();
+    }
 
+//search diagnosis code/description data here
     const searchException = (fdata) => {
         setloading(true);
         const requestOptions = {
@@ -112,7 +119,6 @@ export default function DiagnosisValidation()
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
-                //  console.log(response);
                 // console.log(data.data);
 
                 // check for error response
@@ -136,9 +142,6 @@ export default function DiagnosisValidation()
             });
     }
 
-    const AddForm = () => {
-        scollToRef.current.scrollIntoView()
-    }
 
     useEffect(() => { }, [ndcData, ndcClass, selctedNdc]);
 
@@ -167,10 +170,12 @@ export default function DiagnosisValidation()
                 </div>
             </div>
 
-            <SearchDiagnosis searchException={searchException} />
-            <DiagnosisList key='DiagnosisList' diagnosisListData={ndcData} ndcClassData={ndcClass} getDiagnosisLimitationsList={getDiagnosisLimitation} getPriorityDiagnosisId={getPriorityDiagnosisId} selctedNdc={selctedNdc} loading={loading} loader={loader} selected={SelectedDiagnosisList} />
+            <SearchDiagnosis key='SearchDiagnosis' searchException={searchException} />
+            <DiagnosisList key='DiagnosisList' diagnosisListData={ndcData} ndcClassData={ndcClass} getDiagnosisLimitationsList={getDiagnosisLimitation} getPriorityDiagnosisId={getPriorityDiagnosisId} selctedNdc={priorityDiagnosisFromData} loading={loading} loader={loader} selected={SelectedDiagnosisList} getpriorityDiagnosisFromData={getpriorityDiagnosisFromData}  />
 
-            <DiagnosisForm viewDiagnosisFormdata={selctedNdc} />
+            <div ref={scollToRef}>
+                <DiagnosisForm key='DiagnosisForm' viewDiagnosisFormdata={priorityDiagnosisFromData} limitationListData ={selectLimitationLists} />
+            </div>
             <Footer />
 
         </>
@@ -217,8 +222,6 @@ function DiagnosisExceptionRow(props) {
             >
                 <td>{props.ndcRow.diagnosis_list}</td>
                 <td >{props.ndcRow.exception_name}</td>
-
-                {/* <td><button className="btn btn-sm btn-info" id="" ><i className="fa fa-eye"></i> View</button></td> */}
             </tr>
         </>
     )
@@ -233,23 +236,23 @@ function PriorityDiagnosisRow(props) {
         <>
             <tr
                 className={(props.selected && props.ndcClassRow.diagnosis_id == props.selected.diagnosis_id ? ' tblactiverow ' : '')}
-                onClick={() => props.getPriorityDiagnosisId(props.ndcClassRow)}
+                onClick={() => { props.getpriorityDiagnosisFromData(props.ndcClassRow); props.getPriorityDiagnosisId(props.ndcClassRow) }}
 
             >
+                <td>{props.ndcClassRow.priority}</td>
                 <td>{props.ndcClassRow.diagnosis_id}</td>
-                <td>{props.ndcClassRow.diagnosis_list}</td>
             </tr>
         </>
     )
 }
 
+
+
+
 function DiagnosisList(props)
 {
 
-    const scollToRef = useRef();
-
     useEffect(() => { }, [props.selctedNdc]);
-    // //  console.log(props.selctedNdc);
 
     const getDiagnosisLimitationsList = (ndciemid) => {
         props.getDiagnosisLimitationsList(ndciemid);
@@ -262,20 +265,18 @@ function DiagnosisList(props)
     const diagnosisListArray = [];
     if (props.diagnosisListData.length > 0) {
         for (let i = 0; i < props.diagnosisListData.length; i++) {
-            diagnosisListArray.push(<DiagnosisExceptionRow ndcRow={props.diagnosisListData[i]} getDiagnosisLimitationsList={getDiagnosisLimitationsList} selected={props.selected} />);
+            diagnosisListArray.push(<DiagnosisExceptionRow key={'DiagnosisExceptionRow'+i} ndcRow={props.diagnosisListData[i]} getDiagnosisLimitationsList={getDiagnosisLimitationsList} selected={props.selected} />);
         }
     } else {
-        diagnosisListArray.push(<EmptyRowComponent colspan='2'/>)
+        diagnosisListArray.push(<EmptyRowComponent colspan='2' key='EmptyRowComponent'/>)
     }
 
 const priorityDiagnosisArray = [];
     for (let j = 0; j < props.ndcClassData.length; j++) {
-        priorityDiagnosisArray.push(<PriorityDiagnosisRow ndcClassRow={props.ndcClassData[j]} getPriorityDiagnosisId={getPriorityDiagnosisId} selected={props.selctedNdc} />);
+        priorityDiagnosisArray.push(<PriorityDiagnosisRow   ndcClassRow={props.ndcClassData[j]} getPriorityDiagnosisId={getPriorityDiagnosisId} selected={props.selctedNdc} getpriorityDiagnosisFromData={props.getpriorityDiagnosisFromData} />);
     }
 
-    const [ncdListData, setNcdListData] = useState();
-    const [show, setShow] = useState("none");
-    const handleShow = () => setShow("block");
+
     return(
         <>
          <div className="card mt-3 mb-3">
@@ -285,7 +286,6 @@ const priorityDiagnosisArray = [];
                             <h5>Diagnosis Validation List</h5>
                         </div>
                         <div className="col-md-4 mb-3 text-end">
-                            {/* <button className="btn btn-sm btn-warning" id="show" onClick={e => handleShow()}><i className="fa plus-circle"></i> Add NDC List</button> */}
                         </div>
                         <div className="col-md-6">
                             <div className="card mt-3 mb-3">
@@ -300,7 +300,7 @@ const priorityDiagnosisArray = [];
                                             </thead>
 
                                             <tbody>
-                                                {props.loading?<LoadingSpinner/>:diagnosisListArray}
+                                                {props.loading?<LoadingSpinner colSpan='2'/>:diagnosisListArray}
                                             </tbody>
 
                                         </table>
@@ -321,7 +321,7 @@ const priorityDiagnosisArray = [];
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {props.loader? <LoadingSpinner/>: priorityDiagnosisArray}
+                                                {props.loader? <LoadingSpinner colSpan='2'/>: priorityDiagnosisArray}
                                             </tbody>
                                         </table>
                                     </div>
@@ -342,7 +342,8 @@ function DiagnosisForm(props)
 
 //diagnosis code drop down list
     const [inputValue, setinputValue] = useState('');
-    const [selectedValue, setselectedValue] = useState('');
+    const [selectedValue, setselectedValue] = useState(props.viewDiagnosisFormdata.diagnosis_id);
+
 
     //  handle input change event
   const handleInputChange = value => {
@@ -352,6 +353,7 @@ function DiagnosisForm(props)
      // handle selection
   const handleChange = value => {
     setselectedValue(value);
+
   }
 
 //  load options using API call
@@ -407,7 +409,20 @@ function DiagnosisForm(props)
     };
 
 
-    useEffect(() => { reset(props.viewDiagnosisFormdata) }, [props.viewDiagnosisFormdata]);
+    const [limitationFormData, setLimitationFormData] = useState('');
+    const getLimitationsRow = (data) => {
+        setLimitationFormData(data);
+    }
+
+    const clearForm = (e) => {
+        setAdding(false);
+        setLimitationFormData([]);
+        document.getElementById('zipCodeForm').reset();
+    }
+
+
+    useEffect(() => { reset(props.viewDiagnosisFormdata) , reset(limitationFormData) }, [props.viewDiagnosisFormdata,limitationFormData]);
+    // useEffect(() => { reset(limitationFormData) }, [limitationFormData]);
     return(
         <>
          <div className="card mt-3 mb-3">
@@ -420,21 +435,19 @@ function DiagnosisForm(props)
                                 <div className="col-md-4 mb-3">
                                     <div className="form-group">
                                         <small> Diagnosis List ID:</small>
-                                       <input type="text" name="diagnosis_id" {...register('diagnosis_list')} placeholder="" className="form-control" />
+                                       <input type="text" name="diagnosis_list" {...register('diagnosis_list')} placeholder="" className="form-control" />
                                     </div>
                                 </div>
                                 <div className="col-md-4 mb-3">
                                     <div className="form-group">
                                         <small> Diagnosis List Name: </small>
-                                    <input type="text" name="diagnosis_list" {...register('exception_name')} placeholder="100PC" className="form-control" />
+                                    <input type="text" name="exception_name" {...register('exception_name')} placeholder="100PC" className="form-control" />
                                     </div>
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group ">
                                          <small> Diagnosis ID: </small>
                                         <div className="searchmodal">
-                                       {/* <input type="text" name="diagnosis_id" {...register('diagnosis_id')} className="form-control" placeholder="" autoComplete="off" /> */}
-                                       {/* <button className="btn-info"><i className="fa-solid fa-magnifying-glass"></i></button> */}
 
                                        <Controller  name="diagnosis_id"
                                                 control={control}
@@ -445,7 +458,7 @@ function DiagnosisForm(props)
                                                 defaultOptions
                                                 {...field}
                                                 isClearable
-                                                // value={selectedStateValue}
+                                                value={selectedValue}
                                                 // inputValue={props.selectedZipCodeValue.state_code}
                                                 // getOptionLabel={e => e.label}
                                                 // getOptionValue={e => e.value}
@@ -483,21 +496,20 @@ function DiagnosisForm(props)
                                 <div className="col-md-4 mb-3">
                                     <div className="form-group">
                                         <small>Effective Date:</small>
-                                          <input type="date" name="" placeholder="100PC" className="form-control" />
+                                          <input type="text" name="effective_date" {...register('effective_date')} placeholder="Effective Date" className="form-control" />
                                     </div>
                                 </div>
                                  <div className="col-md-4 mb-3">
                                     <div className="form-group">
                                         <small>Termination Date:</small>
-                                          <input type="date" name="" placeholder="100PC" className="form-control" />
+                                          <input type="text" name="termination_date" {...register('termination_date')} placeholder="Termination Date" className="form-control" />
                                     </div>
                                 </div>
                                  <div className="col-md-4 mb-3">
                                     <div className="form-group">
                                         <small>Limitations List Date:</small>
                                            <div className="searchmodal">
-                                       {/* <input type="text" name="" className="form-control" placeholder="" autoComplete="off" />
-                                       <button className="btn-info"><i className="fa-solid fa-magnifying-glass"></i></button> */}
+
                                             <Controller  name="limitation_id"
                                                 control={control}
                                                 // rules={{ required: false }}
@@ -521,13 +533,13 @@ function DiagnosisForm(props)
                                 </div>
 
                                 <div className="col-md-12 text-end">
-                                     <button className="btn btn-primary"> Add </button>
-                                    <button className="btn btn-warning"> Remove </button>
-                                     <button className="btn btn-danger"> Clear </button>
+                                    <button className="btn btn-primary "> { limitationFormData?'Update':'Add'} </button>
+                                    <button className="btn btn-warning" > Remove </button>
+                                     <button type="button" className="btn btn-danger" onClick={e=> clearForm(e)}> Clear </button>
                                 </div>
                        </div>
                        <hr/>
-                       <DiagnosisTable />
+                            <DiagnosisTable key='DiagnosisTable' limitationTbaleData={ props.limitationListData } getLimitationsRow={getLimitationsRow} />
                             </div>
                             </form>
 
@@ -538,8 +550,30 @@ function DiagnosisForm(props)
     )
 }
 
-function DiagnosisTable()
+function LimitationListRow(props) {
+    return (
+        <>
+            <tr className={(props.selected && props.limitationListRows == props.selected.diagnosis_id ? ' tblactiverow ' : '')}
+                onClick={() => props.getLimitationsRow(props.limitationListRows) }>
+                <td>{ props.limitationListRows.effective_date}</td>
+                <td>{ props.limitationListRows.termination_date}</td>
+                <td>{ props.limitationListRows.limitations_list}</td>
+            </tr>
+        </>
+    )
+}
+
+
+function DiagnosisTable(props)
 {
+
+     //limitation array row
+const limitationListArray = [];
+if (props.limitationTbaleData.length > 0) {
+    for (let k = 0; k < props.limitationTbaleData.length; k++){
+        limitationListArray.push(<LimitationListRow limitationListRows={props.limitationTbaleData[k]} getLimitationsRow={props.getLimitationsRow} />);
+    }
+}
     return(
         <>
         <div className="card mt-3 mb-3">
@@ -556,16 +590,7 @@ function DiagnosisTable()
                                     </tr>
                                 </thead>
                                 <tbody>
-                                     <tr>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                    </tr>
-                                     <tr>
-                                         <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                    </tr>
+                                {limitationListArray}
                                 </tbody>
                             </table>
                             </div>

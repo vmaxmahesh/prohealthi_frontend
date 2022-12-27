@@ -124,7 +124,7 @@ function Zipcodes() {
             <Ziptable zipCodeList={zipCodeData} getZipCode={getZipCodes} selectedZipCode={selectedZipCode} />
             <div ref={scollToRef}>
                 <Zipform selectedZipCodeValue={selectedZipCode} clearForm={clearForm} adding={adding} />
-                </div>
+            </div>
             <Footer />
         </>
 
