@@ -280,8 +280,6 @@ function AddBenefit(props) {
     }
 
     useEffect(() => {
-
-
         if (props.adding) {
             reset({ benefit_code: '', description: '', new: 1 }, {
                 keepValues: false,
@@ -289,14 +287,11 @@ function AddBenefit(props) {
         } else {
             reset(props.selected);
         }
-
         if (!props.selected) {
             reset({ benefit_code: '', description: '', new: 1 }, {
                 keepValues: false,
             })
         }
-
-
     }, [props.selected, props.adding]);
 
     return (

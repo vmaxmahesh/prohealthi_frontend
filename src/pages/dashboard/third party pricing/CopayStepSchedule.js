@@ -23,7 +23,7 @@ export default function CopayStepSchedule() {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
                 setCopayStepData(data.data);
-                toast.success(response.message, {
+                toast.success(data.message, {
                     position: "top-right",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -218,7 +218,7 @@ function DataForm(props) {
             reset({
                 copay_list: '', copay_amount: '', copay_percentage: '', days_supply: '', max_cost: '', new: 1, max_cost: ''
             },
-                { keepValues: false, });
+                { keepValues: false,  });
         }
         reset(props.formData)
     }, [props.formData]);
@@ -243,7 +243,26 @@ function DataForm(props) {
                                     <textarea rows="1" cols="2" className="form-control"  ></textarea>
                                 </div>
                             </div>
-                            {/* {/* <div className="col-md-12">
+                            { props.adding ? <><div className="col-md-12">
+                                <div className=""><span>Schedule Type:</span></div>
+                                <div className="form-check">
+                                    <input className="form-check-input" type="radio"
+                                        {...register("step_schedule_indicator", { required: true })} disabled={props.adding ? false : true} value="d" />
+                                    <label className="form-check-label" htmlFor="flexRadioDefault1" >
+                                        Days Supply
+                                    </label>
+                                </div>
+                            </div> 
+                            <div className="col-md-6 ">
+                                <div className="form-check">
+                                    <input className="form-check-input" type="radio"
+                                        {...register("step_schedule_indicator", { required: true })} disabled={props.adding ? false : true} value="m" />
+                                    <label className="form-check-label" htmlFor="flexRadioDefault1">
+                                        Max Cost
+                                    </label>
+                                </div>
+                            </div> </> : ''}
+                             {/* <div className="col-md-12">
                                 <div className=""><span>Schedule Type:</span></div>
                                 <div className="form-check">
                                     <input className="form-check-input" type="radio"
@@ -262,6 +281,7 @@ function DataForm(props) {
                                     </label>
                                 </div>
                             </div> */}
+
                             {errors.step_schedule_indicator && <span><p className='notvalid'>This field is required</p></span>}
                         </div>
                         <div className="row mb-2 ">
