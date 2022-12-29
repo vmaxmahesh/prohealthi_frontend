@@ -23,6 +23,8 @@ function TraditionalNetworks(props) {
     const [customerlist, setCustomerlist] = useState([]);
 
 
+    const [traditionalData, setTraditionalData] = useState(false);
+
 
 
 
@@ -102,7 +104,7 @@ function TraditionalNetworks(props) {
                     setNdClass([]);
                     return Promise.reject(error);
                 } else {
-                    console.log(data.data);
+                    // console.log(data.data);
                     setNdClass(data.data);
 
                     // scollToRef.current.scrollIntoView()
@@ -139,7 +141,7 @@ function TraditionalNetworks(props) {
                     const error = (data && data.message) || response.status;
                     return Promise.reject(error);
                 } else {
-                    setSelctedNdc(data.data);
+                    setTraditionalData(data.data);
                     // scollToRef.current.scrollIntoView()
                     // return;
                 }
@@ -194,8 +196,10 @@ function TraditionalNetworks(props) {
 
                     <TraditionalNetworkList ndcListData={ndcData} ndcClassData={ndcClass}  getNDCItem={getNDCItems}   getNDCItemDetails={getNDCItemDetails} selctedNdc={selctedNdc} />
 
-                    <TraditionalNetworkForm />
+                    <TraditionalNetworkForm selected={traditionalData} />
 
+
+                  
 
                 </div>
 
@@ -461,6 +465,11 @@ function NdcClassRow(props) {
 
 
 function TraditionalNetworkForm(props){
+    const { register, reset, handleSubmit, watch, formState: { errors } } = useForm();
+
+    useEffect(() => { reset(props.selected) }, [props.selected]);
+
+
     return(
         <>
 
@@ -480,13 +489,13 @@ function TraditionalNetworkForm(props){
                                         <div class="col-md-6 mb-3">
                                             <div class="form-group">
                                                 <small>Network ID</small>
-                                                <input type="text" class="form-control" name="" id="" placeholder="" required=""/>
+                                                <input type="text" class="form-control" name="" {...register('network_id')} id="" placeholder="" required=""/>
                                             </div>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <div class="form-group">
                                                 <small>Network Name</small>
-                                                <input type="text" class="form-control" name="" id="" placeholder="" required=""/>
+                                                <input type="text" class="form-control" name="network_name" {...register('network_name')} id="" placeholder="" required=""/>
                                             </div>
                                         </div>
                                         <div class="clearfix mb-1"></div>
@@ -497,8 +506,9 @@ function TraditionalNetworkForm(props){
                                                 </div>
                                                 <div class="col-md-12 mb-3">
                                                     <div class="form-group">
+
                                                         <small>Price Schedule Override</small>
-                                                        <input type="text" class="form-control" name="" id="" placeholder="" required=""/>
+                                                        <input type="text" class="form-control" name="" {...register('price_schedule_ovrd')} id="" placeholder="" required=""/>
                                                         <a href=""><span class="fa fa-search form-icon"></span></a>
                                                     </div>
                                                 </div>
@@ -622,7 +632,7 @@ function TraditionalNetworkForm(props){
                                         <div class="col-md-6">
                                             <div class="form-group mb-3">
                                                 <small>Provider ID</small>
-                                                <input type="text" class="form-control" name="" placeholder="Enter Customer ID" id="" required=""/>
+                                                <input type="text" class="form-control" name="" {...register('pharmacy_nabp')} placeholder="Enter Customer ID" id="" required=""/>
                                                 <a href=""><span class="fa fa-search form-icon"></span></a>
                                             </div>
                                         </div>
@@ -630,7 +640,7 @@ function TraditionalNetworkForm(props){
                                         <div class="col-md-6">
                                             <div class="form-group mb-3">
                                                 <small>Price Schedule</small>
-                                                <input type="text" class="form-control" name="" placeholder="Enter Customer ID" id="" required=""/>
+                                                <input type="text" class="form-control" name=""  id="" required=""/>
                                                 <a href=""><span class="fa fa-search form-icon"></span></a>
                                             </div>
                                         </div>
@@ -727,7 +737,7 @@ function TraditionalNetworkResults(props) {
     // console.log(props.typedata);
     var myData = [];
     for (let index = 0; index < props.typedata.length; index++) {
-        myData.push(<TraditionalNetworkRow datar={props.typedata[index]}
+        myData.push(<TraditionalNetworkRow datar={props.typedata[index]} 
         />);
     }
     const [show, setShow] = useState(false);
@@ -767,10 +777,9 @@ export function Network(props) {
 
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
-    const [traditionalnetwork, SetTraditionalNetwork] = useOutletContext();
 
 
-    useEffect(() => { reset(traditionalnetwork) }, [traditionalnetwork]);
+    // useEffect(() => { reset(traditionalnetwork) }, [traditionalnetwork]);
 
 
     const onsubmit = (data) => {
@@ -778,7 +787,7 @@ export function Network(props) {
         const id = traditionalnetwork;
         id['networkdata'] = data;
         SetTraditionalNetwork(id);
-        console.log(data);
+        // console.log(data);
 
     }
     return (

@@ -58,7 +58,7 @@ function SearchProvider() {
 
             });
         } else {
-            fetch(process.env.REACT_APP_API_BASEURL + `/api/provider/provider/add`, requestOptions)
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/providerdata/provider/add`, requestOptions)
                 .then(async response => {
                     const isJson = response.headers.get('content-type')?.includes('application/json');
                     const data = isJson && await response.json();
