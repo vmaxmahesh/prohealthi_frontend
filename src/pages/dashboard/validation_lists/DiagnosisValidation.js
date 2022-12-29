@@ -5,6 +5,7 @@ import EmptyRowComponent from '../../../shared/NoDataFound';
 import Footer from '../../../shared/Footer';
 import AsyncSelect from 'react-select/async';
 import { toast } from "react-toastify";
+import { useAuth } from '../../../hooks/AuthProvider';
 
 export default function DiagnosisValidation()
 {
@@ -23,29 +24,28 @@ export default function DiagnosisValidation()
 
     const [priorityDiagnosisFromData, setpriorityDiagnosisFromData] = useState('');
     const [selectLimitationLists, setSelectLimitationLists] = useState('');
+    const [adding, setAdding] = useState(false);
 
 //get priority data here name is different
-    const getDiagnosisLimitation = (diagnosis_list) => {
+    const getDiagnosisLimitation = (data) => {
         setloader(true);
 
         var test = {};
-        test.diagnosis_list = diagnosis_list;
+        test.diagnosis_list = data.diagnosis_list;
         setSelectedDiagnosisList(test);
-        // console.log(test.diagnosis_list);
-        // //  console.log(customerid);
+        setpriorityDiagnosisFromData(data);
+        // console.log(data);
         const requestOptions = {
             method: 'GET',
             // mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
             // body: encodeURIComponent(data)
         };
-        // //  console.log(watch(fdata));
 
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/diagnosisvalidation/get/${diagnosis_list}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/diagnosisvalidation/get/${data.diagnosis_list}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
-                //  console.log(response);
                 // console.log(data.data);
 
                 // check for error response
@@ -57,6 +57,7 @@ export default function DiagnosisValidation()
                 } else {
                     setNdClass(data.data);
                     setloader(false);
+                    setAdding(true);
                 }
 
 
@@ -174,7 +175,7 @@ export default function DiagnosisValidation()
             <DiagnosisList key='DiagnosisList' diagnosisListData={ndcData} ndcClassData={ndcClass} getDiagnosisLimitationsList={getDiagnosisLimitation} getPriorityDiagnosisId={getPriorityDiagnosisId} selctedNdc={priorityDiagnosisFromData} loading={loading} loader={loader} selected={SelectedDiagnosisList} getpriorityDiagnosisFromData={getpriorityDiagnosisFromData}  />
 
             <div ref={scollToRef}>
-                <DiagnosisForm key='DiagnosisForm' viewDiagnosisFormdata={priorityDiagnosisFromData} limitationListData ={selectLimitationLists} />
+                <DiagnosisForm key='DiagnosisForm' viewDiagnosisFormdata={priorityDiagnosisFromData} limitationListData={selectLimitationLists} adding={adding} />
             </div>
             <Footer />
 
@@ -218,7 +219,7 @@ function DiagnosisExceptionRow(props) {
         <>
             <tr className={(props.selected && props.ndcRow.diagnosis_list == props.selected.diagnosis_list ? ' tblactiverow ' : '')}
 
-                onClick={() => props.getDiagnosisLimitationsList(props.ndcRow.diagnosis_list)}
+                onClick={() => props.getDiagnosisLimitationsList(props.ndcRow)}
             >
                 <td>{props.ndcRow.diagnosis_list}</td>
                 <td >{props.ndcRow.exception_name}</td>
@@ -420,6 +421,64 @@ function DiagnosisForm(props)
         document.getElementById('zipCodeForm').reset();
     }
 
+    const { user } = useAuth();
+
+
+    useEffect(() => {
+        if (props.adding) {
+            reset({ diagnosis_list: '', exception_name: '',diagnosis_id:'',priority:'',diagnosis_status:'', new: 1 }, {
+                    keepValues:false,
+                })
+        } else {
+
+            reset(props.viewDiagnosisFormdata);
+        }
+
+        if (!props.viewDiagnosisFormdata) {
+            reset({ diagnosis_list: '',exception_name:'',diagnosis_id:'',priority:'',diagnosis_status:'', new: 1 }, {
+                keepValues: false,
+            })
+        }
+    },[props.viewDiagnosisFormdata, props.adding]);
+
+    const addDiagnosisData = (DiagnosisFormData) => {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body : JSON.stringify(DiagnosisFormData)
+        }
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/diagnosisvalidation/submit-diagnosis-form`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('Content-Type')?.includes('application/json');
+                const data = isJson && await response.json();
+                // console.log(response);
+                if (!response.ok) {
+                    toast.error("There was an error !", {
+                        position: 'top-right',
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        pauseOnHover: true,
+                        closeOnClick: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                } else {
+                    toast.success(data.message, {
+                        position: 'top-right',
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        pauseOnHover: true,
+                        closeOnClick: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('There was an error !', error);
+            });
+        }
+
 
     useEffect(() => { reset(props.viewDiagnosisFormdata) , reset(limitationFormData) }, [props.viewDiagnosisFormdata,limitationFormData]);
     // useEffect(() => { reset(limitationFormData) }, [limitationFormData]);
@@ -430,18 +489,22 @@ function DiagnosisForm(props)
                         <div className="col-md-12">
                                 <h5 className="mb-2">Diagnosis Validations</h5>
                             </div>
-                            <form>
-                            <div className="row mb-2">
+
+                    <div className="row mb-2">
+                    <form id='diagnisisIdForm' name='diagnisisIdForm' onSubmit={handleSubmit(addDiagnosisData)}>
                                 <div className="col-md-4 mb-3">
                                     <div className="form-group">
                                         <small> Diagnosis List ID:</small>
-                                       <input type="text" name="diagnosis_list" {...register('diagnosis_list')} placeholder="" className="form-control" />
+                                    <input  type="text" name="diagnosis_list" {...register('diagnosis_list',{required:true})}  placeholder="" className="form-control" readonly={props.viewDiagnosisFormdata?'true':'false'} />
+                                    <input type="hidden" className="form-control" name="user_name" {...register('user_name')} value={user.name} />
+                                    {errors.diagnosis_list && <span><p className="notvalid">This field is required!</p></span>}
                                     </div>
                                 </div>
                                 <div className="col-md-4 mb-3">
                                     <div className="form-group">
                                         <small> Diagnosis List Name: </small>
-                                    <input type="text" name="exception_name" {...register('exception_name')} placeholder="100PC" className="form-control" />
+                                    <input type="text" name="exception_name" {...register('exception_name', {required:true})} placeholder="Diagnosis List Name" className="form-control" />
+                                    {errors.exception_name && <span><p className="notvalid">This field is required!</p></span>}
                                     </div>
                                 </div>
                                 <div className="col-md-4">
@@ -480,14 +543,21 @@ function DiagnosisForm(props)
                                             </select>
                                     </div>
                                 </div>
-                                 <div className="col-md-4 mb-3">
+                                <div className="col-md-4 mb-3">
                                     <div className="form-group">
                                         <small>Priority: </small>
-                                        <input type="text" name="priority" {...register('priority')} className="form-control" placeholder="" autoComplete="off" />
+                                    <input type="text" name="priority" {...register('priority' )} className="form-control" placeholder="" autoComplete="off" />
+                                    {errors.priority && <span><p className="notvalid">This field is required!</p></span>}
                                     </div>
+                            </div>
+                            <div class="col-md-12 text-end mt-3 mb-3" >
+                                <button type="submit" className="btn btn-primary "> {props.viewDiagnosisFormdata ? 'Update' : 'Add'} </button>
+                                    <button type="button" className="btn btn-warning" > Remove </button>
+                                <button type="button" className="btn btn-danger" onClick={e => clearForm(e)}> Clear </button>
                                 </div>
-                                <hr/>
-
+                            </form>
+                    <hr/>
+                    <form>
                             <div className="row mb-2">
                                  <div className="col-md-12">
                                 <h5 className="mb-2">Limitations Lists</h5>
@@ -533,15 +603,16 @@ function DiagnosisForm(props)
                                 </div>
 
                                 <div className="col-md-12 text-end">
-                                    <button className="btn btn-primary "> { limitationFormData?'Update':'Add'} </button>
-                                    <button className="btn btn-warning" > Remove </button>
+                                    <button type="button" className="btn btn-primary "> { limitationFormData ?'Update':'Add'} </button>
+                                    <button type="button" className="btn btn-warning" > Remove </button>
                                      <button type="button" className="btn btn-danger" onClick={e=> clearForm(e)}> Clear </button>
                                 </div>
-                       </div>
+                        </div>
+                        </form>
                        <hr/>
                             <DiagnosisTable key='DiagnosisTable' limitationTbaleData={ props.limitationListData } getLimitationsRow={getLimitationsRow} />
-                            </div>
-                            </form>
+                        </div>
+
 
                         </div>
                     </div>

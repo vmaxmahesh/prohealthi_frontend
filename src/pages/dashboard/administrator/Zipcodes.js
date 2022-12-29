@@ -234,7 +234,7 @@ function Zipform(props) {
 
 //States -   load options using API call
     const loadStateOptions = (inputStateValue) => {
-        console.log(inputStateValue);
+        // console.log(inputStateValue);
         return new Promise((resolve, reject) => {
 
 
