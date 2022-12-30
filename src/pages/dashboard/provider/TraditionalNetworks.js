@@ -5,13 +5,17 @@ import Footer from '../../../shared/Footer';
 import { ToastContainer, toast } from 'react-toastify';
 import { Alert } from 'react-bootstrap';
 import { Button, Col, Row } from 'react-bootstrap';
+import { Controller } from 'react-hook-form';
+import AsyncSelect from 'react-select/async';
+
+
 
 
 
 function TraditionalNetworks(props) {
     const location = useLocation();
     const currentpath = location.pathname.split('/').pop();
-    const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
+    const { register, handleSubmit, watch, reset,control, formState: { errors } } = useForm();
 
 
     const [provider, setProvider] = useState([]);
@@ -465,9 +469,67 @@ function NdcClassRow(props) {
 
 
 function TraditionalNetworkForm(props){
-    const { register, reset, handleSubmit, watch, formState: { errors } } = useForm();
+    const { register, reset, handleSubmit, watch,control, formState: { errors } } = useForm();
 
     useEffect(() => { reset(props.selected) }, [props.selected]);
+
+
+    const [PriceScheduleInput, setPriceScheduleInput] = useState('');
+
+
+
+    const handlePriceScheduleInput = (pharm_input) => {
+// console.log(pharm_input)  
+      setPriceScheduleInput(pharm_input);
+      console.log(PriceScheduleInput)
+    }
+
+
+    const loadPriceScheduleOptions = (pharm_input) => {
+        return new Promise((resolve, reject) => {
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/third-party-pricing/price-schedule/search?search=${pharm_input}`)
+                .then(response => response.json())
+                .then(({ data }) => {
+                    resolve(
+                        data.map(({ price_schedule }) => ({
+                            price_value: price_schedule,
+                            price_label: price_schedule
+                        }))
+                    )
+                })
+        })
+    }
+
+    const loadGpiList = (pharm_input) => {
+        return new Promise((resolve, reject) => {
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/exception/gpi/search?search=${pharm_input}`)
+                .then(response => response.json())
+                .then(({ data }) => {
+                    resolve(
+                        data.map(({ exception_name }) => ({
+                            gpi_value: exception_name,
+                            gpi_label: exception_name
+                        }))
+                    )
+                })
+        })
+    }
+
+
+    const loadProviderId = (pharm_input) => {
+        return new Promise((resolve, reject) => {
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/codes/provider/id/search?search=${pharm_input}`)
+                .then(response => response.json())
+                .then(({ data }) => {
+                    resolve(
+                        data.map(({ pharmacy_nabp }) => ({
+                            provider_id_value: pharmacy_nabp,
+                            provider_id_label: pharmacy_nabp
+                        }))
+                    )
+                })
+        })
+    }
 
 
     return(
@@ -478,6 +540,7 @@ function TraditionalNetworkForm(props){
                         <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#Network" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Network</button>
                         <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#Providers" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Providers</button>
                     </div>
+
                     <div class="tab-content" id="nav-tabContent">
                         <div class="tab-pane fade show active" id="Network" role="tabpanel" aria-labelledby="nav-home-tab">
                             <div class="card mt-3 mb-3">
@@ -508,9 +571,22 @@ function TraditionalNetworkForm(props){
                                                     <div class="form-group">
 
                                                         <small>Price Schedule Override</small>
-                                                        <input type="text" class="form-control" name="" {...register('price_schedule_ovrd')} id="" placeholder="" required=""/>
-                                                        <a href=""><span class="fa fa-search form-icon"></span></a>
-                                                    </div>
+                                                        <Controller name="price_schdule"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <AsyncSelect
+                                                        {...field}
+                                                        cacheOptions
+                                                        defaultOptions
+                                                        // value={selectedValue}
+                                                        getOptionLabel={e => e.price_label}
+                                                        getOptionValue={e => e.price_value}
+                                                        loadOptions={loadPriceScheduleOptions}
+                                                        onInputChange={handlePriceScheduleInput}
+                                                        // onChange={handleChange}
+                                                        placeholder="Price Schedule"
+                                                    />
+                                                )} />                                                    </div>
                                                 </div>
                                                 <div class="col-md-12">
                                                     <h5 class="mb-2">Communication Charges</h5>
@@ -533,8 +609,24 @@ function TraditionalNetworkForm(props){
                                                 <div class="col-md-6 mb-3">
                                                     <div class="form-group">
                                                         <small>By GPI List</small>
-                                                        <input type="text" class="form-control" name="" id="" placeholder="" required=""/>
-                                                        <a href=""><span class="fa fa-search form-icon"></span></a>
+
+                                                        <Controller name="price_schdule"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <AsyncSelect
+                                                        {...field}
+                                                        cacheOptions
+                                                        defaultOptions
+                                                        // value={selectedValue}
+                                                        getOptionLabel={e => e.gpi_label}
+                                                        getOptionValue={e => e.gpi_value}
+                                                        
+                                                        loadOptions={loadGpiList}
+                                                        onInputChange={handlePriceScheduleInput}
+                                                        // onChange={handleChange}
+                                                        placeholder="Gpi List"
+                                                    />
+                                                )} />   
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6 mb-3">
@@ -632,16 +724,46 @@ function TraditionalNetworkForm(props){
                                         <div class="col-md-6">
                                             <div class="form-group mb-3">
                                                 <small>Provider ID</small>
-                                                <input type="text" class="form-control" name="" {...register('pharmacy_nabp')} placeholder="Enter Customer ID" id="" required=""/>
-                                                <a href=""><span class="fa fa-search form-icon"></span></a>
+
+                                                <Controller name="price_schdule"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <AsyncSelect
+                                                        {...field}
+                                                        cacheOptions
+                                                        defaultOptions
+                                                        // value={selectedValue}
+                                                        getOptionLabel={e => e.provider_id_label}
+                                                        getOptionValue={e => e.provider_id_value}
+                                                        loadOptions={loadProviderId}
+                                                        onInputChange={handlePriceScheduleInput}
+                                                        // onChange={handleChange}
+                                                        placeholder="Provider Id"
+                                                    />
+                                                )} />
                                             </div>
                                         </div>
 
                                         <div class="col-md-6">
                                             <div class="form-group mb-3">
                                                 <small>Price Schedule</small>
-                                                <input type="text" class="form-control" name=""  id="" required=""/>
-                                                <a href=""><span class="fa fa-search form-icon"></span></a>
+                                               
+                                                <Controller name="price_schdule"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <AsyncSelect
+                                                        {...field}
+                                                        cacheOptions
+                                                        defaultOptions
+                                                        // value={selectedValue}
+                                                        getOptionLabel={e => e.price_label}
+                                                        getOptionValue={e => e.price_value}
+                                                        loadOptions={loadPriceScheduleOptions}
+                                                        onInputChange={handlePriceScheduleInput}
+                                                        // onChange={handleChange}
+                                                        placeholder="Price Schedule"
+                                                    />
+                                                )} />
                                             </div>
                                         </div>
 
@@ -649,7 +771,7 @@ function TraditionalNetworkForm(props){
                                             <div class="form-group mb-3 mt-4">
                                                 <small>&nbsp;</small>
                                                 <input type="checkbox" id="male" class="d-none"/>
-                                                <label for="male">Parcipation Denied</label>
+                                                <label  for="male">Parcipation Denied</label>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -679,6 +801,7 @@ function TraditionalNetworkForm(props){
                            
                         </div>
                     </div>
+
                     <Button type='submit' variant="primary">{props.adding ? ' Add' : 'Update'}</Button>
 
                 </div>
@@ -832,7 +955,22 @@ export function Network(props) {
                                                 <input type="text" className="form-control" name="pricing_schedule_override" {...register('pricing_schedule_override', {
                                                     required: true,
                                                 })} id="" placeholder="" required="" />
-                                                <a href=""><span className="fa fa-search form-icon"></span></a>
+                                                  <Controller name="price_schdule"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <AsyncSelect
+                                                        {...field}
+                                                        cacheOptions
+                                                        defaultOptions
+                                                        // value={selectedValue}
+                                                        getOptionLabel={e => e.price_label}
+                                                        getOptionValue={e => e.price_value}
+                                                        loadOptions={loadPriceScheduleOptions}
+                                                        onInputChange={handlePriceScheduleInput}
+                                                        // onChange={handleChange}
+                                                        placeholder="Price Schedule"
+                                                    />
+                                                )} />
                                                 {errors.pricing_schedule_override?.type === 'required' && <p role="alert" className="notvalid">Price Schedule Override is  required</p>}
 
                                             </div>
