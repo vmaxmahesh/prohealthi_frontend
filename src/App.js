@@ -12,7 +12,7 @@ import Member, { ChnageLog, ClaimHistory, Coverage, CoverageHistory, Health, Mem
 import MajorMedicalMaximums from './pages/dashboard/accumulated_benefits/MajorMedicalMaximums'
 
 import SearchProvider, { Provider, Effectivedates, PharmistSystem, NetworkParticipation } from './pages/dashboard/provider/SearchProvider';
-import TraditionalNetworks, { Network, Providers } from './pages/dashboard/provider/TraditionalNetworks';
+import TraditionalNetworks from './pages/dashboard/provider/TraditionalNetworks';
 import FlexibleNetworks, { Rules } from './pages/dashboard/provider/FlexibleNetworks';
 import PrioritizeNetwork from './pages/dashboard/provider/PrioritizeNetwork';
 import Membership, { SearchById, SearchByName } from './pages/dashboard/members/Membership';
@@ -276,20 +276,20 @@ function App() {
 
 
           <Route path='provider/traditionalnetworks' element={<TraditionalNetworks />}>
-            <Route index element={<Navigate to="network" replace />} />
+            {/* <Route index element={<Navigate to="network" replace />} />
 
             <Route path='network' element={<Network />} />
-            <Route path='providers' element={<Providers />} />
+            <Route path='providers' element={<Providers />} /> */}
           </Route>
 
 
 
-          <Route path='provider/flexiblenetworks' element={<FlexibleNetworks />}>
+          {/* <Route path='provider/flexiblenetworks' element={<FlexibleNetworks />}>
             <Route index element={<Navigate to="network" replace />} />
             <Route path='network' element={<Network />} />
             <Route path='rules' element={<Rules />} />
 
-          </Route>
+          </Route> */}
 
           <Route path='provider/prioritizenetworks' element={<PrioritizeNetwork />}>
 
@@ -588,15 +588,15 @@ function App() {
 
 
           <Route path='provider/traditionalnetworks' element={<TraditionalNetworks />}>
-            <Route index element={<Navigate to="network" replace />} />
+            {/* <Route index element={<Navigate to="network" replace />} />
             <Route path='network' element={<Network />} />
-            <Route path='providers' element={<Providers />} />
+            <Route path='providers' element={<Providers />} /> */}
           </Route>
 
           <Route path='provider/flexiblenetworks' element={<FlexibleNetworks />}>
-            <Route index element={<Navigate to="network" replace />} />
+            {/* <Route index element={<Navigate to="network" replace />} />
             <Route path='network' element={<Network />} />
-            <Route path='rules' element={<Rules />} />
+            <Route path='rules' element={<Rules />} /> */}
           </Route>
 
           <Route path='provider/prioritizenetworks' element={<PrioritizeNetwork />}>

@@ -16,6 +16,7 @@ function FlexibleNetworks(props) {
     const [ProviderData, setProviderdata] = useState([]);
     const [customerlist, setCustomerlist] = useState([]);
 
+    const [traditionalnetwork, SetTraditionalNetwork] = useState([]);
 
 
     const [tableData, settableData] = useState([]);
