@@ -277,13 +277,13 @@ function TraditionalNetworkList(props) {
 
     const ndcListArray = [];
     for (let i = 0; i < props.ndcListData.length; i++) {
-        ndcListArray.push(<NdcRow ndcRow={props.ndcListData[i]} getNDCItem={getNDCItem} selected={props.selctedNdc} />);
+        ndcListArray.push(<TraditionalNdcRow ndcRow={props.ndcListData[i]} getNDCItem={getNDCItem} selected={props.selctedNdc} />);
     }
 
 
     const ndcClassArray = [];
     for (let j = 0; j < props.ndcClassData.length; j++) {
-        ndcClassArray.push(<NdcClassRow ndcClassRow={props.ndcClassData[j]} getNDCItemDetails={getNDCItemDetails} selected={props.selctedNdc} />);
+        ndcClassArray.push(<TraditionalNdcClassRow ndcClassRow={props.ndcClassData[j]} getNDCItemDetails={getNDCItemDetails} selected={props.selctedNdc} />);
     }
 
 
@@ -382,7 +382,7 @@ function NoReacords(params) {
 }
 
 
-function NdcRow(props) {
+function TraditionalNdcRow(props) {
 
     useEffect(() => {
 
@@ -407,7 +407,7 @@ function NdcRow(props) {
 }
 
 
-function NdcClassRow(props) {
+function TraditionalNdcClassRow(props) {
 
     useEffect(() => {
 
