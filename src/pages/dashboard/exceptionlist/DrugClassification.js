@@ -1,11 +1,173 @@
-import React from 'react';
-import { useEffect } from 'react';
-import { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Tab, Tabs } from 'react-bootstrap';
 
 export default function DrugClassification()
 {
+
+
+
+    const { register, reset, handleSubmit, watch, formState: { errors } } = useForm();
+
+    const scollToRef = useRef();
+
+
+    const [ndcData, setNdcData] = useState([]);
+    const [ndcClass, setNdClass] = useState([]);
+
+    const [selctedNdc, setSelctedNdc] = useState('');
+
+    const [benifitsData, setBenifitData] = useState(false);
+    const [adding, setAdding] = useState(false);
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+    
+
+    const searchException = (fdata) => {
+
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        };
+
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/exception/drugcalss/search?search=${fdata.target.value}`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                //  console.log(response);
+                console.log(data.data);
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    setNdcData([]);
+                    return Promise.reject(error);
+
+                } else {
+                    setNdcData(data.data);
+                    return;
+                }
+
+
+
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+    }
+
+
+    const getNDCItems = (ndcid) => {
+        // ndc_exception_list
+
+        var test = {};
+        test.ndc_exception_list = ndcid;
+        setSelctedNdc(test);
+
+        // //  console.log(customerid);
+        const requestOptions = {
+            method: 'GET',
+            // mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            // body: encodeURIComponent(data)
+        };
+        // //  console.log(watch(fdata));
+
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/accumulated/get/${ndcid}`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                 console.log(response);
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    setNdClass([]);
+                    return Promise.reject(error);
+                } else {
+                    console 
+                    setNdClass(data.data);
+                    // scollToRef.current.scrollIntoView()
+                }
+
+
+                if (response === '200') {
+                }
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+    }
+
+
+
+    const AddForm = () => {
+        setBenifitData(false);
+        setAdding(true);
+
+        
+
+    }
+
+     
+
+
+    const getNDCItemDetails = (ndcid) => {
+        console.log(ndcid);
+        const requestOptions = {
+            method: 'GET',
+            // mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            // body: encodeURIComponent(data)
+        };
+        // //  console.log(watch(fdata));
+
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/accumulated/details/${ndcid}`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                //  console.log(response);
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    return Promise.reject(error);
+                } else {
+                    setBenifitData(data.data);
+                    // console.log(selctedNdc);
+                    // scollToRef.current.scrollIntoView()
+                    return;
+                }
+
+
+                if (response === '200') {
+
+                }
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+    }
+
+    useEffect(() => {
+        if (benifitsData) {
+            setAdding(false);
+
+        } else {
+            setAdding(true);
+            setBenifitData(false);
+        }
+
+        document.title = 'Benefit Code | ProHealthi';
+
+    }, [benifitsData, adding]);
+
+
+    
     return(
         <>
         <div  className="row">
@@ -28,16 +190,38 @@ export default function DrugClassification()
                         </div>
                     </div>
                 </div>
-            <SearchDrugClassification />
+
+
+            <SearchDrugClassification searchException={searchException} />
+
+
+
+            <DrugClassificationList drugList={ndcData} drugClass={ndcClass} getNDCItem={getNDCItems} getNDCItemDetails={getNDCItemDetails} selctedNdc={selctedNdc} />
+
+
+
+
+            {/* <DrugClassificationList /> */}
+
         </>
     )
 }
 
-function SearchDrugClassification()
+function SearchDrugClassification(props)
 {
     const{register, handleSubmit, watch, formState : {errors}} = useForm();
     const[drugClassificationList, setdrugClassificationList] = useState('');
     const[drugClassificationClass, setdrugClassificationClass] = useState('');
+
+
+
+    const searchException = (fdata) => {
+        // alert(fdata);
+
+        props.searchException(fdata);
+    }
+
+
     const showSearchResult = (e) => {
         var arr = [
             {drug_classification_id : '5621', name : 'drug clssification one'},
@@ -61,39 +245,60 @@ function SearchDrugClassification()
         <div className="card mt-3 mb-3">
                 <div className="card-body">                    
                         <div className="row mb-2">
-                            <div className="col-md-4 mb-3">
+                            <div className="col-md-12 mb-3">
                                 <div className="form-group">
                                     <small>ID</small>
-                                <input type="text" className="form-control" placeholder='Enter drug classification ID to search' {...register("drug_classification_id",{required:true})}/>
+                                <input type="text" className="form-control" onKeyUp={(e) => searchException(e)} placeholder='Enter drug classification ID to search' {...register("drug_classification_id",{required:true})}/>
                                 {errors.drug_classification_id && <span><p className='notvalid'>This field is required</p></span>}
                                 </div>
                             </div>
-                            <div className="col-md-2 mb-2">
-                                    <div className="form-group">
-                                        <small>&nbsp;</small><br/>
-                                        <button type="submit" className="btn m-0 p-2 btn-theme" style={{width: "100%", fontSize: "12px"}} onClick={e => showSearchResult()}>Search</button>
-                                    </div>
-                                </div>
+                            
                         </div>
                     </div>
         </div>
         </form>
-        <DrugClassificationList drugList={drugClassificationList} drugClass={drugClassificationClass} />
         </>
     )
 }
 
 function DrugClassificationList(props)
 {
+
+
+
+
+
+    const getNDCItem = (ndciemid) => {
+        alert(ndciemid);
+        props.getNDCItem(ndciemid);
+    }
+
+    const getNDCItemDetails = (ndciemid) => {
+        props.getNDCItemDetails(ndciemid);
+    }
     const drugArray = [];
     for(let i=0; i<props.drugList.length; i++)
     {
-        drugArray.push(<DrugRow drugListRow={props.drugList[i]} />);
+        drugArray.push(<DrugRow drugListRow={props.drugList[i]} getNDCItem={getNDCItem} />);
     }
     const drugClassArray = [];
     for (let j = 0; j < props.drugClass.length; j++) {
         drugClassArray.push(<DrugClassRow drugClassRow={props.drugClass[j]} />);
     }
+
+
+
+    // const ndcListArray = [];
+    // for (let i = 0; i < props.ndcListData.length; i++) {
+    //     ndcListArray.push(<NdcRow ndcRow={props.ndcListData[i]} getNDCItem={getNDCItem} selected={props.selctedNdc} />);
+    // }
+
+    // const ndcClassArray = [];
+    // for (let j = 0; j < props.ndcClassData.length; j++) {
+    //     ndcClassArray.push(<NdcClassRow ndcClassRow={props.ndcClassData[j]} getNDCItemDetails={getNDCItemDetails} selected={props.selctedNdc} />);
+    // }
+
+
     return(
         <>
         <div className="card mt-3 mb-3">
@@ -106,39 +311,44 @@ function DrugClassificationList(props)
                                 {/* <button className="btn btn-sm btn-warning" id="show" onClick={e => handleShow()}><i className="fa plus-circle"></i> Add GPI List</button> */}
                             </div>
                             <div className="col-md-4">
-                                <table className="table table-striped table-bordered">
-                                    <thead>
-                                        <tr>
+                            <div className="card mt-3 mb-3">
+                                <div className="card-body">
+                                    <table className="table table-striped table-bordered">
+                                        <thead>
+                                            <tr>
                                             <th>ID</th>
                                             <th>Name</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
                                         {drugArray}
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
+                        </div>
+
                             <div className="col-md-8">
                             <div className="card mt-3 mb-3">
                                 <div className="card-body">
                                     <table className="table table-striped table-bordered">
                                         <thead>
                                             <tr>
+                                            
                                                 <th>Class</th>
                                                 <th>eff. Date</th>
                                                 <th>New process status</th>
                                                 <th>Process rule</th>
-                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {drugClassArray}
+                                        {drugClassArray}
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -151,10 +361,11 @@ function DrugRow(props)
 {
     return(
         <>
-        <tr>
-            <td>{props.drugListRow.therapy_id}</td>
-            <td>{props.drugListRow.name}</td>
-            <td><button className="btn btn-sm btn-info" id=""><i className="fa fa-eye"></i> View</button></td>
+ <tr className={(props.selected && props.drugListRow.accum_bene_strategy_id == props.selected.accum_bene_strategy_id ? ' tblactiverow ' : '')}
+
+onClick={() => props.getNDCItem(props.drugListRow.drug_catgy_exception_list)}
+>            <td>{props.drugListRow.drug_catgy_exception_list}</td>
+            <td>{props.drugListRow.drug_catgy_exception_name}</td>
         </tr>
         </>
     )

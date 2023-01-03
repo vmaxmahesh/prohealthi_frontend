@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { Button } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
+import { PuffLoader} from "react-spinners";
+
+
 
 export default function ProcedureCode() {
 
@@ -8,20 +12,58 @@ export default function ProcedureCode() {
     const [procCodeData, setProcCodeData] = useState(false);
     const [procListData, setProcListData] = useState([]);
 
+
+    const [benifitsData, setBenifitData] = useState(false);
+
+
+
+    const [adding, setAdding] = useState();
+    const [loading, setloading] = useState(false);
+    const [loadingg, setloadingg] = useState(false);
+
+
+    const AddForm = () => {
+        setBenifitData(false);
+        setAdding(true);
+
+        
+
+    }
+
+
+    useEffect(() => {
+        if (benifitsData) {
+            setAdding(false);
+
+        } else {
+            setAdding(true);
+            setBenifitData(false);
+        }
+
+        document.title = 'Benefit Code | ProHealthi';
+
+    }, [benifitsData, adding]);
+
+
     const onSearchProcCode = (fdata) => {
         const requestOptions = {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         }
+        setloading(true);
 
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/procedure-code-list/get?search=${fdata.target.value}`, requestOptions).then(async response => {
+
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/exception/procedure-code-list/get?search=${fdata.target.value}`, requestOptions).then(async response => {
             const isJson = response.headers.get('content-type')?.includes('application/json');
             const data = isJson && await response.json();
+
             if (!response.ok) {
                 const error = (data && data.message) || response.status;
                 return Promise.reject(error);
             } else {
                 setProcedureCodeList(data.data);
+                setloading(false);
+
                 toast.success(response.message, {
                     position: "top-right",
                     autoClose: 5000,
@@ -36,10 +78,13 @@ export default function ProcedureCode() {
             .catch(error => {
                 console.error('There was an error!', error);
             });
+            // setloading(false);
+
     }
     
 
-   
+    
+    
     const getSelectedProcCodeData = (id) => {
         //setProcCodeData(id);
         const requestOptions = {
@@ -47,7 +92,9 @@ export default function ProcedureCode() {
             headers: { 'Content-Type': 'application/json' },
         }
 
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/procedure-code-list/get-code-list?search=${id.proc_code_list_id}`, requestOptions).then(async response => {
+        setloading(true);
+
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/exception/procedure-code-list/get-code-list?search=${id.proc_code_list_id}`, requestOptions).then(async response => {
             const isJson = response.headers.get('content-type')?.includes('application/json');
             const data = isJson && await response.json();
             if (!response.ok) {
@@ -55,6 +102,8 @@ export default function ProcedureCode() {
                 return Promise.reject(error);
             } else {
                 setProcListData(data.data);
+                setloading(false);
+
                 toast.success(response.message, {
                     position: "top-right",
                     autoClose: 5000,
@@ -71,11 +120,56 @@ export default function ProcedureCode() {
             });
     }
     const getLinkOnclick = (e) => {
-        setProcCodeData(e);
+        setBenifitData(e);
+        // setloading(true)
+
+
     }
     useEffect(() => { }, [ProcCodeList, procCodeData, procListData]);
+
+
+    const LoadingSpinner = (props) => {
+
+        return (
+
+            <div
+
+      style={{
+
+       width: "100%",
+
+       height: "100",
+
+       display: "flex",
+
+       justifyContent: "center",
+
+       alignItems: "center"
+
+     }}
+
+            >
+
+                <PuffLoader
+
+  color="#59d8f1" />
+
+                </div>
+
+
+
+
+  );
+
+ }
+
+
+    
+
     return (
         <>
+
+
             <div className="dashboard-content clearfix">
                 <div className="row">
                     <div className="col-md-6 mb-3">
@@ -97,15 +191,18 @@ export default function ProcedureCode() {
                         </div>
                     </div>
                     <SearchProcedureCodes onSearchProcCode={onSearchProcCode} />
+
+                            {loading ?<LoadingSpinner />:''}
+
+
                     <div className="card mt-3 mb-3">
                         <div className="card-body">
-                            {/* <div className="col-md-12">
-                                <h5 className="mb-2">Procedure Code List</h5>
-                            </div> */}
+
+                    
                             <div className="row">
-                                <ProcedureCodeName showProcCodeList={ProcCodeList} procCodeData={getSelectedProcCodeData} />
+                                <ProcedureCodeName loading={loading} showProcCodeList={ProcCodeList} procCodeData={getSelectedProcCodeData} />
                                 {/* <ProcedureCodeList showProcCodeList={ProcCodeList} procCodeData={getSelectedProcCodeData} /> */}
-                                <ProcedureCodeList procListData={procListData} showListData={getLinkOnclick}/>
+                                <ProcedureCodeList  loading={loading} procListData={procListData} showListData={getLinkOnclick}/>
                             </div>
                         </div>
                     </div>
@@ -116,7 +213,7 @@ export default function ProcedureCode() {
                                 {/* <h5 className="mb-2">Procedure Code List</h5> */}
                             </div>
                             <div className="row">                                
-                                <ProcedureCodeForm  procCodeData={procCodeData}/>
+                                <ProcedureCodeForm        selected={benifitsData}   adding={adding}  />
                             </div>
                         </div>
                     </div>
@@ -149,6 +246,7 @@ function SearchProcedureCodes(props) {
 
 function ProcedureCodeName(props)
 {
+   
     const pCodeArray = [];
     for (let i = 0; i < props.showProcCodeList.length; i++) {
         pCodeArray.push(<ProcCodeRow rowData={props.showProcCodeList[i]} getDataOnclick={props.procCodeData}/>);
@@ -166,7 +264,9 @@ function ProcedureCodeName(props)
                             </tr>
                         </thead>
                         <tbody>
-                            {pCodeArray}
+
+                          {pCodeArray}
+
                         </tbody>
                     </table>
                 </div>
@@ -209,6 +309,7 @@ function ProcedureCodeList(props) {
     }
     return (
         <>
+
             <div className="col-md-6">
             <h5 className="mb-2">Procedure Code List</h5>
                 <div style={{ height: '400px', overflowY: 'scroll' }}>
@@ -257,13 +358,127 @@ function ProcListRow(props) {
 
 function ProcedureCodeForm(props) {
     const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
-    useEffect(() => { reset(props.procCodeData) }, [props.procCodeData]);
+    // useEffect(() => { reset(props.procCodeData) }, [props.procCodeData]);
     // useEffect(() => { reset(props.procListData) }, [props.procListData]);
+
+
+    
+    useEffect(() => {
+
+
+        if (props.adding) {
+            reset({ proc_code_list_id: '', procedure_code: '', new: 1 }, {
+                keepValues: false,
+            })
+        } else {
+            reset(props.selected);
+        }
+
+        if (!props.selected) {
+            reset({ proc_code_list_id: '',procedure_code: '',pharm_type_variation_ind:'',network_part_variation_ind:'',claim_type_variation_ind:'',plan_accum_deduct_id:'', new: 1 }, {
+                keepValues: false,
+            })
+        }
+
+
+    }, [props.selected, props.adding]);
+
+
+    const addCode = (data) => {
+        // console.log(selctedNdc);
+        const requestOptions = {
+            method: 'POST',
+            // mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+    
+        };
+        // console.log(watch(data)); 
+        if (process.env.REACT_APP_API_BASEURL == 'NOT') {
+            toast.success('Added Successfully...!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+    
+            });
+        } else {
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/exception/procedure-code-list/add`, requestOptions)
+                .then(async response => {
+                    const isJson = response.headers.get('content-type')?.includes('application/json');
+                    const data = isJson && await response.json();
+                    // console.log(response);
+    
+                    // check for error response
+                    if (!response.ok) {
+                        // get error message from body or default to response status
+                        const error = (data && data.message) || response.status;
+                        return Promise.reject(error);
+                    } else {
+                        // setSelctedNdc([]);
+                        // console.log(data);
+                        var msg = props.adding ? 'Added Successfully...!' : 'Updated Successfully..'
+                        toast.success(msg, {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+    
+                        });
+                        reset(props.selected);
+
+                    }
+
+                    
+    
+    
+                    if (response === '200') {
+                        setSelctedNdc([]);
+                    }
+    
+                })
+                .catch(error => {
+                    console.error('There was an error!', error);
+                });
+        }
+    
+    }
+    const onSubmit = (e) => {
+        e.preventDefault();
+    }
+
+
+    useEffect(() => {
+
+
+        if (props.adding) {
+            reset({ prov_type_list_id: '', description: '', new: 1 }, {
+                keepValues: false,
+            })
+        } else {
+            reset(props.selected);
+        }
+
+        if (!props.selected) {
+            reset({ prov_type_list_id: '',description: '',pharm_type_variation_ind:'',network_part_variation_ind:'',claim_type_variation_ind:'',plan_accum_deduct_id:'', new: 1 }, {
+                keepValues: false,
+            })
+        }
+
+
+    }, [props.selected, props.adding]);
+
     return (
         <>
-            {/* <div className="card mt-3 mb-3 data" >
-                <div className="card-body"> */}
-                 <div className="col-md-8 mb-2">
+<form onSubmit={handleSubmit(addCode)}>
+
+            <div className="col-md-8 mb-2">
                  <h5>Procedure Code Form</h5>
                     <div className="row mb-2">
                         <div className="col-md-6 mb-2">  
@@ -303,8 +518,14 @@ function ProcedureCodeForm(props) {
                         </div>
                     </div>
                     </div>
-                {/* </div>
-            </div> */}
+                    {console.log(props.adding)}
+
+                    <Button type='submit' variant="primary">{props.adding ? ' Add' : 'Update'}</Button>
+
+
+            </form>
+                
+              
         </>
     )
 }

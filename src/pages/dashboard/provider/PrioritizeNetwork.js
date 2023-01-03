@@ -3,6 +3,8 @@ import { render } from 'react-dom';
 import { useForm } from 'react-hook-form';
 import { Link, Outlet, useLocation, useOutletContext } from 'react-router-dom';
 import DraggableList from 'react-draggable-lists';
+import { Button } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 
 export default function PrioritizeNetwork()
 {
@@ -12,8 +14,14 @@ export default function PrioritizeNetwork()
     const scollToRef = useRef();
 
 
+
     const [ndcData, setNdcData] = useState([]);
     const [ndcClass, setNdClass] = useState([]);
+
+        const [adding, setAdding] = useState(false);
+
+    const [benifitsData, setBenifitData] = useState(false);
+
 
     const [selctedNdc, setSelctedNdc] = useState('');
 
@@ -52,6 +60,26 @@ export default function PrioritizeNetwork()
     }
 
 
+    const AddForm = () => {
+        setBenifitData(false);
+        setAdding(true);
+
+    }
+
+    useEffect(() => {
+        if (benifitsData) {
+            setAdding(false);
+
+        } else {
+            setAdding(true);
+            setBenifitData(false);
+        }
+
+        document.title = 'Benefit Code | ProHealthi';
+
+    }, [benifitsData, adding]);
+
+
     const getNDCItems = (ndcid) => {
         // ndc_exception_list
 
@@ -75,10 +103,10 @@ export default function PrioritizeNetwork()
                 if (!response.ok) {
                     // get error message from body or default to response status
                     const error = (data && data.message) || response.status;
-                    setSelctedNdc([]);
+                    setBenifitData([]);
                     return Promise.reject(error);
                 } else {
-                    setSelctedNdc(data.data);
+                    setBenifitData(data.data);
                     // scollToRef.current.scrollIntoView()
                 }
 
@@ -112,11 +140,18 @@ export default function PrioritizeNetwork()
                             </ul>
                         </div>
                     </div>
+
+                    
+<div className="col-md-3 ms-auto text-end">
+                    <button className="btn  btn-info btn-sm" onClick={e => AddForm()}>
+                    Prioritize Networks <i className="fa fa-plus-circle"></i></button>
+            </div>
                     <SearchPrioritize searchException={searchException} />
 
-                    <PrioritizeList ndcListData={ndcData} ndcClassData={ndcClass} getNDCItem={getNDCItems} selctedNdc={selctedNdc} />
+                    <PrioritizeList ndcListData={ndcData} ndcClassData={ndcClass} getNDCItem={getNDCItems} selected={benifitsData} selctedNdc={selctedNdc} />
 
 
+                    <PrioritizeForm   adding={adding} selected={benifitsData}   /> 
 
 
                 </div>
@@ -211,7 +246,7 @@ function PrioritizeList(props)
                         <h5 className="mb-2">Prioritize Network List </h5>
                     </div>
                     <div className="row">
-                        <div className="col-md-3">
+                        <div className="col-md-12">
                             <table className="table  table-bordered">
                                 <thead>
                                     <tr>
@@ -226,7 +261,6 @@ function PrioritizeList(props)
                             </table>
                         </div>
                         <div className="col-md-9">
-                        <PrioritizeForm  viewDiagnosisFormdata={props.selctedNdc}/> 
 
                         </div>
                     </div>
@@ -242,10 +276,107 @@ function PrioritizeList(props)
 function PrioritizeForm(props)
 {
 
+
+
     const { register, reset, handleSubmit, watch, formState: { errors } } = useForm();
 
 
-    useEffect(() => { reset(props.viewDiagnosisFormdata) }, [props.viewDiagnosisFormdata]);
+
+    const [benifitsData, setBenifitData] = useState(false);
+
+
+    const addCode = (data) => {
+        // console.log(data);
+        const requestOptions = {
+            method: 'POST',
+            // mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+
+        };
+        // console.log(watch(data)); 
+        if (process.env.REACT_APP_API_BASEURL == 'NOT') {
+            toast.success('Added Successfully...!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+
+            });
+        } else {
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/provider/prioritize/add`, requestOptions)
+                .then(async response => {
+                    const isJson = response.headers.get('content-type')?.includes('application/json');
+                    const data = isJson && await response.json();
+                    // console.log(response);
+
+                    // check for error response
+                    if (!response.ok) {
+                        // get error message from body or default to response status
+                        const error = (data && data.message) || response.status;
+                        return Promise.reject(error);
+                    } else {
+                        reset(data.data);
+                        console.log(data.data);
+                        var msg = props.adding ? 'Added Successfully...!' : 'Updated Successfully..'
+                        toast.success(msg, {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+
+                        });
+                    }
+
+
+                    if (response === '200') {
+                    }
+
+                })
+                .catch(error => {
+                    console.error('There was an error!', error);
+                });
+        }
+
+    }
+    const onSubmit = (e) => {
+        e.preventDefault();
+    }
+
+
+   
+
+
+
+
+
+    // useEffect(() => { reset(props.viewDiagnosisFormdata) }, [props.viewDiagnosisFormdata]);
+
+     useEffect(() => {
+
+
+        if (props.adding) {
+            reset({ super_rx_network_id: '', super_rx_network_id_name: '',effective_date:'', new: 1 }, {
+                keepValues: false,
+            })
+        } else {
+            reset(props.selected);
+        }
+
+        if (!props.selected) {
+            reset({ super_rx_network_id: '',super_rx_network_id_name:'',effective_date:'', description: '',pharm_type_variation_ind:'',network_part_variation_ind:'',claim_type_variation_ind:'',plan_accum_deduct_id:'', new: 1 }, {
+                keepValues: false,
+            })
+        }
+
+
+    }, [props.selected, props.adding]);
 
     const fruits=[];
 
@@ -273,41 +404,46 @@ function PrioritizeForm(props)
     // console.log(props.viewDiagnosisFormdata);
     return(
         <>
-         <div className="data col-md-12" >
+
+
+<form onSubmit={handleSubmit(addCode)} >
+
+        <div className="data col-md-12" >
                     <div className="card mt-3 mb-3">
                         <div className="card-body">
                             <div className="row">
                                 <div className="col-md-12">
-                                    <h5 className="mb-2">Prioritize Networks</h5>
+                                    <h5 className="mb-2">Prioritize Networks  {props.adding ? ' - (Adding)' : '- (' + props.selected.super_rx_network_id + ' )'}</h5>
+
                                 </div>
                                 <div className="col-md-3 mb-3">
                                     <div className="form-group">
                                         <small>Super Network ID</small>
-                                        <input type="text" className="form-control" name="super_rx_network_id" {...register('super_rx_network_id')} id="" placeholder="" required />
+                                        <input type="text" className="form-control" name="super_rx_network_id" {...register('super_rx_network_id')} id="" placeholder="" />
                                     </div>
                                 </div>
                                 <div className="col-md-3 mb-3">
                                     <div className="form-group">
                                         <small>Super Network Name</small>
-                                        <input type="text" className="form-control" name="super_rx_network_id_name" {...register('super_rx_network_id_name')} id="" placeholder="" required />
+                                        <input type="text" className="form-control" name="super_rx_network_id_name" {...register('super_rx_network_id_name')} id="" placeholder="" />
                                     </div>
                                 </div>
                                 <div className="col-md-3 mb-3">
                                     <div className="form-group">
                                         <small>Network ID</small>
-                                        <input type="text" className="form-control" name="" id="" placeholder="" required />
+                                        <input type="text" className="form-control" name="" id="" placeholder=""  />
                                     </div>
                                 </div>
                                 <div className="col-md-3 mb-3">
                                     <div className="form-group">
                                         <small>Effective Date</small>
-                                        <input type="date" className="form-control" name="" id="" placeholder="" required />
+                                        <input type="date" className="form-control" name="effective_date" id="" placeholder=""  />
                                     </div>
                                 </div>
                                 <div className="col-md-3 mb-3">
                                     <div className="form-group">
                                         <small>Priority</small>
-                                        <input type="text" className="form-control" name="" id="" placeholder="" required />
+                                        <input type="text" className="form-control" name="" id="" placeholder=""  />
                                         <a href=""><span className="fa fa-search form-icon"></span></a>
                                     </div>
                                 </div>
@@ -330,16 +466,16 @@ console.log(item.super_rx_network_id)
 
 
 
+
                 )): ''}
-
-{
-
-
-
-}
 
 
             </DraggableList>
+            <Button type='submit' variant="primary">{props.adding ? ' Add' : 'Update'}</Button>
+
+        </form>
+         
+
         </>
     )
 }

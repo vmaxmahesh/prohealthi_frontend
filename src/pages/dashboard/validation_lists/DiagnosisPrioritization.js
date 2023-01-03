@@ -275,9 +275,12 @@ function DiagPrioritizeForm(props) {
 
     // useEffect(() => {  [props.viewDiagnosisFormdata]});
 
-    useEffect(() => { }, [props.viewDiagnosisFormdata]);
+    // useEffect(() => { }, [props.viewDiagnosisFormdata]);
 
-    console.log(props.viewDiagnosisFormdata);
+    useEffect(() => { reset(props.viewDiagnosisFormdata) }, [props.viewDiagnosisFormdata]);
+
+
+    // console.log(props.viewDiagnosisFormdata);
     return (
         <>
             <div className="card mt-3 mb-3">
@@ -293,7 +296,7 @@ function DiagPrioritizeForm(props) {
                         <div className="col-md-6 mb-3">
                             <div className="form-group">
                                 <small>Priotrize Diagnosis List Name</small>
-                                <input type="text" className="form-control" name="description" {...register('description')} id="" placeholder="" required />
+                                <input type="text" className="form-control" name="exception_name" {...register('exception_name')} id="" placeholder="" required />
                             </div>
                         </div>
                         <div className="col-md-6 mb-3">
@@ -320,7 +323,7 @@ function DiagPrioritizeForm(props) {
                     <Row>
                         <Col>
                             {/* <DiagPrioritizeDragable  data={props.viewDiagnosisFormdata} /> */}
-                            <DraggableList width={300} height={50} rowSize={1} className="draggablelist">
+                            {/* <DraggableList width={300} height={50} rowSize={1} className="draggablelist">
                                 {props.viewDiagnosisFormdata ?
                                     props.viewDiagnosisFormdata.map((item, index) => (
                                         // console.log(item.diagnosis_list)
@@ -342,7 +345,7 @@ function DiagPrioritizeForm(props) {
                                     
 
 
-                            </DraggableList>
+                            </DraggableList> */}
                         </Col>
                     </Row>
                 </div>

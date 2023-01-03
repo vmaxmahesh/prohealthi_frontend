@@ -142,9 +142,14 @@ function SearchDrugDatabase(props) {
 
 function DrugDatabaseList(props) {
     const listArray = [];
+    if(props.listData && props.listData.length >0){
+
     for (let i = 0; i < props.listData.length; i++) {
         listArray.push(<DrugRow drugRow={props.listData[i]} getFormData={props.getFormData} formData={props.formData} />);
     }
+}
+
+   
     return (
         <>
             <div className="card mt-3 mb-3 data">

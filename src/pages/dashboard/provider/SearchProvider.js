@@ -1,12 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, Outlet, Route, Routes, useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import Footer from '../../../shared/Footer';
 import { ToastContainer, toast } from 'react-toastify';
+import { Button } from 'react-bootstrap';
 // import Footer from '../../../shared/Footer';
 
 
 function SearchProvider() {
+
+    const { register, handleSubmit,reset, watch, formState: { errors } } = useForm();
+
     const location = useLocation();
     const currentpath = location.pathname.split('/').pop();
 
@@ -15,24 +19,177 @@ function SearchProvider() {
 
 
 
+    const [ndcData, setNdcData] = useState([]);
+    const [ndcClass, setNdClass] = useState([]);
+
+
+    const [selctedNdc, setSelctedNdc] = useState('');
+
+
+    useEffect(() => { reset(provider) }, [provider]);
 
 
 
-    const fillProviderData = (e) => {
-        // API  
-        // var staticProviderType =; 
-        var arr = [
-            { id: '123', name: 'Mahesh', storenumber: '101', chain: 'Hyderabad' },
-            { id: '1234', name: 'Mahesh', storenumber: '101', chain: 'Hyderabad' },
+// const data=provider;
 
-        ];
+    const addCode = (data) => {
 
-        setProviderdata(arr);
+
+
+        
+        console.log(data);
+        const requestOptions = {
+            method: 'POST',
+            // mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(provider)
+
+        };
+        console.log(watch(data)); 
+        if (process.env.REACT_APP_API_BASEURL == 'NOT') {
+            toast.success('Added Successfully...!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+
+            });
+        } else {
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/providerdata/provider/add`, requestOptions)
+                .then(async response => {
+                    const isJson = response.headers.get('content-type')?.includes('application/json');
+                    const data = isJson && await response.json();
+                    // console.log(response);
+
+                    // check for error response
+                    if (!response.ok) {
+                        // get error message from body or default to response status
+                        const error = (data && data.message) || response.status;
+                        return Promise.reject(error);
+                    } else {
+                        reset(data.data);
+                        // console.log(data.data);
+                        var msg = props.adding ? 'Added Successfully...!' : 'Updated Successfully..'
+                        toast.success(msg, {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+
+                        });
+                    }
+
+
+                    if (response === '200') {
+                    }
+
+                })
+                .catch(error => {
+                    console.error('There was an error!', error);
+                });
+        }
+
     }
+    const onSubmit = (e) => {
+        alert()
+        e.preventDefault();
+    }
+
+
+
+
+    const searchException = (fdata) => {
+
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        };
+
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/providerdata/provider/search?search=${fdata.target.value}`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                //  console.log(response);
+                // console.log(data.data);
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    setNdcData([]);
+                    return Promise.reject(error);
+
+                } else {
+                    setNdcData(data.data);
+                    return;
+                }
+
+
+
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+    }
+    const getNDCItems = (ndcid) => {
+        // ndc_exception_list
+        // var test = {};
+        // test.ndc_exception_list = ndcid;
+        // setSelctedNdc(test);
+
+        // //  console.log(customerid);
+        const requestOptions = {
+            method: 'GET',
+            // mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            // body: encodeURIComponent(data)
+        };
+        // //  console.log(watch(fdata));
+
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/providerdata/provider/details/${ndcid}`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                //  console.log(response);
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    setProvider([]);
+                    return Promise.reject(error);
+                } else {
+                    // console.log(data.data);
+                    setProvider(data.data);
+
+                }
+
+
+                if (response === '200') {
+                }
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+    }
+
+
+
+
+
 
 
     useEffect(() => {
     }, [ProviderData]);
+
+
+ 
 
 
 
@@ -60,13 +217,16 @@ function SearchProvider() {
                 <div className="col-md-6 mb-3">
                     <div className="breadcrum ">
                         <ul>
-                             <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li> 
+                            <li className="float-end m-0"><a href="">Page Hint <i className="fa-solid fa-lightbulb"></i></a></li>
                         </ul>
                     </div>
                 </div>
             </div>
-            <SearchProviderId />
-            <ProviderList />
+            <SearchProviderId searchException={searchException} />
+
+            {/* < /> */}
+            <ProviderList ndcListData={ndcData} ndcClassData={ndcClass} getNDCItem={getNDCItems} selctedNdc={selctedNdc} />
+
             <div className="card mt-3 mb-3">
                 <div className="card-body">
 
@@ -74,11 +234,11 @@ function SearchProvider() {
                     {ProviderData.length > 0 ?
                         <Results typedata={ProviderData} />
                         : ''}
-                       
+
                     <div className="row">
                     </div>
 
-                    
+
                     <div className="nav nav-tabs col-md-12" id="nav-tab" role="tablist">
                         <Link to="provider" className={'nav-link' + (currentpath == 'provider' ? ' active' : '')}>Provider</Link>
                         <Link to="effectivedates" className={'nav-link' + (currentpath == 'effectivedates' ? ' active' : '')}>Effective Dates</Link>
@@ -88,67 +248,145 @@ function SearchProvider() {
                     </div>
 
                     <div className="tab-content" id="nav-tabContent">
-                        <Outlet context={[provider, setProvider]} />
+
+                    <form key={1} onSubmit={handleSubmit(addCode)} >
+
+                        <Outlet context={[provider, setProvider]}
+                        
+                        />
+                        <Button type='submit' variant="primary">Update</Button>
+
+                        {/* <Button type='submit' variant="primary">{props.adding ? ' Add' : 'Update'}</Button> */}
+
+
+
+                        </form>
+
+
 
                     </div>
-                    </div>
-                    
                 </div>
-                
+
+            </div>
+
             <Footer />
         </>
     );
 }
 
-function SearchProviderId()
-{
-    return(
+function SearchProviderId(props) {
+
+
+    const { register, handleSubmit, watch, formState: { errors } } = useForm();
+
+    const searchException = (fdata) => {
+
+        props.searchException(fdata);
+    }
+    return (
         <>
-          <div className="card mt-3 mb-3">
-                    <div className="card-body">
-                        <div className="row mb-2">
-                            <div className="col-md-12 mb-3">
-                                <div className="form-group">
-                                    <small>Provider </small>
-                                    <input type="text" className="form-control" placeholder='Start typing provider id/ name/ store no. to search'
-                                    />
-                                </div>
+            <div className="card mt-3 mb-3">
+                <div className="card-body">
+                    <div className="row mb-2">
+                        <div className="col-md-12 mb-3">
+                            <div className="form-group">
+                                <small>Provider </small>
+                                <input type="text" className="form-control" onKeyUp={(e) => searchException(e)} placeholder='Start typing provider id/ name/ store no. to search'
+                                />
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
         </>
     )
 }
 
-function ProviderList()
-{
-    return(
+
+function NdcRow(props) {
+
+    useEffect(() => {
+
+    }, [props.selected]);
+
+
+
+    return (
         <>
-         <div className="card mt-3 mb-3">
+            <tr className={(props.selected && props.ndcRow.pharmacy_nabp == props.selected.pharmacy_nabp ? ' tblactiverow ' : '')}
+
+                onClick={() => props.getNDCItem(props.ndcRow.pharmacy_nabp)}
+            >
+                <td >{props.ndcRow.pharmacy_nabp}</td>
+                <td>{props.ndcRow.pharmacy_name}</td>
+                <td>{props.ndcRow.store_number}</td>
+                <td>{props.ndcRow.pharmacy_chain}</td>
+
+
+
+
+                {/* <td><button className="btn btn-sm btn-info" id="" ><i className="fa fa-eye"></i> View</button></td> */}
+            </tr>
+        </>
+    )
+}
+
+function ProviderList(props) {
+
+    const [selctedNdc, setSelctedNdc] = useState('');
+
+
+    const scollToRef = useRef();
+
+    useEffect(() => { }, [props.selctedNdc]);
+    // //  console.log(props.selctedNdc);
+
+    const getNDCItem = (ndciemid) => {
+        props.getNDCItem(ndciemid);
+
+
+
+    }
+
+
+
+
+    const ndcListArray = [];
+    for (let i = 0; i < props.ndcListData.length; i++) {
+        ndcListArray.push(<NdcRow ndcRow={props.ndcListData[i]} getNDCItem={getNDCItem} selected={props.selctedNdc} />);
+    }
+
+
+    return (
+        <>
+            <div className="card mt-3 mb-3">
                 <div className="card-body">
-                        <div className="col-md-12">
-                            <h5 className="mb-2">Provider List </h5>
-                        </div>
+                    <div className="col-md-12">
+                        <h5 className="mb-2">Provider List </h5>
+                    </div>
                     <div className="row">
-                    <div className="col-md-12">                        
-                        <table className= "table  table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Provider ID</th>
-                                    <th>Name</th>
-                                    <th>Store ID</th>
-                                    <th>Chain</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                               
-                            </tbody>
-                        </table>                        
-                    </div>   
+                        <div className="col-md-12">
+                        <div style={{height:"200px", overflowY:"scroll"}}>
+
+                            <table className="table  table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Provider ID</th>
+                                        <th>Name</th>
+                                        <th>Store ID</th>
+                                        <th>Chain</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {ndcListArray}
+
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-           </div>
-         </div> 
         </>
     )
 }
@@ -225,48 +463,36 @@ function Results(props) {
 export function Provider(props) {
 
 
+    const { register, reset, handleSubmit, watch, formState: { errors } } = useForm();
 
-    const [formData, setFormData] = useState({
-        id: '123',
-        name: 'mahesh',
-        firstName: 'merugu',
-        lastName: 'Mahesh',
-        phone: '8712186367',
-        fax: '7878787',
-        contact: '78878787',
-        edi_address: 'movva krishna dt',
-        aba_routing: 'kosuru road',
-        record_usage: '2',
-        based_id: '676',
-        ncpdp_provider_class: '1',
-        provider_type_id: '2',
-        store_address_1: 'hfhfghf',
-        store_address_2: 'hrftyrhtrtr',
-        city: 'hyderabad',
-        state: '1',
-        country: '1',
-        zip_code: '52135',
-        ext: 'qwrqwerre',
-        region: 'east',
-        district: 'krishna',
-        market: 'kaleswararao',
-        mailing_address_1: 'gfddgdfghfdgf',
-        mailing_address_2: 'fdgsdfgdsfg',
-        mailing_city: 'hyderabad',
-        mailing_chain: 'gfyghfgf',
-        mailing_state: '1',
-        mailing_country: '2',
-        mailing_zip_code: '6786767',
-        mailing_ext: 'ghjghjgjhgjg',
-        mailing_store_no: '78989898',
-        mail_order: 'true',
-        mail_head_office_indicator: true,
-    });
+    const [provider, setProvider] = useOutletContext();
+
+
+    const addCode = (data) => {
+        alert('mahesh');
+       
+
+    }
+
+  const  nameChange=()=>{
+        alert()
+    }
+    const onSubmit = (e) => {
+        e.preventDefault();
+    }
+
+    useEffect(()=>{
+        
+    })
+
+
+    useEffect(() => { reset(provider) }, [provider]);
+
     return (
         <>
             <div className="card mt-3 mb-3">
                 <div className="card-body">
-                    <form method="" action="">
+                <form key={1} onSubmit={handleSubmit(addCode)} >
                         <div className="row mb-4">
                             <div className="col-md-12 mb-2">
                                 <h5>Provider</h5>
@@ -274,73 +500,75 @@ export function Provider(props) {
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>ID</small>
-                                    <input type="text" className="form-control" placeholder="ID" value={formData.id} name="id" id="" required="" />
+                                    <input type="text" className="form-control" placeholder="ID"   name="pharmacy_nabp" {...register('pharmacy_nabp')} id="" required="" />
                                 </div>
                             </div>
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>Name</small>
-                                    <input type="text" className="form-control" placeholder="Name" name="name" value={formData.name} id="" required="" />
+                                    <input type="text" className="form-control" placeholder="Name" onChange={nameChange} name="pharmacy_name"  {...register('pharmacy_name')} id="" required="" />
                                 </div>
                             </div>
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>First Name</small>
-                                    <input type="text" className="form-control" placeholder="First ID" name="firstName" value={formData.firstName} id="" required="" />
+                                    <input type="text" className="form-control" placeholder="First ID" name="provider_first_name"  {...register('provider_first_name')} id="" required="" />
                                 </div>
                             </div>
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>Last Name</small>
-                                    <input type="text" className="form-control" placeholder="Last Name" name="lastName" value={formData.lastName} id="" required="" />
+                                    <input type="text" className="form-control" placeholder="Last Name" name="provider_last_name"  {...register('provider_last_name')} id="" required="" />
                                 </div>
                             </div>
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>Phone</small>
-                                    <input type="text" className="form-control" placeholder="Phone" name="phone" id="" value={formData.phone} required="" />
+                                    <input type="text" className="form-control" placeholder="Phone" name="phone" {...register('phone')} id="" required="" />
                                 </div>
                             </div>
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>Fax</small>
-                                    <input type="text" className="form-control" placeholder="Fax" name="fax" value={formData.fax} id="" required="" />
+                                    <input type="text" className="form-control" placeholder="Fax" name="fax" {...register('fax')} id="" required="" />
                                 </div>
                             </div>
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>Contact</small>
-                                    <input type="text" className="form-control" placeholder="Contact" name="contact" value={formData.contact} id="" required="" />
+                                    <input type="text" className="form-control" placeholder="Contact" name="contact" {...register('contact')} id="" required="" />
                                 </div>
                             </div>
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>EDI Address</small>
-                                    <input type="text" className="form-control" placeholder="Address" name="edi_address" value={formData.edi_address} id="" required="" />
+                                    <input type="text" className="form-control" placeholder="Address" name="edi_address" {...register('edi_address')} id="" required="" />
                                 </div>
                             </div>
 
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>ABA Routing #</small>
-                                    <input type="text" className="form-control" placeholder="Routing Name" name="aba_routing" value={formData.aba_routing} id="" required="" />
+                                    <input type="text" className="form-control" placeholder="Routing Name" name="aba_rtn" {...register('aba_rtn')} id="" required="" />
                                 </div>
                             </div>
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>Record Usage</small>
-                                    <select className="form-select" name="record_usage" value={formData.record_usage}  >
-                                        <option value="">Select Usage</option>
-                                        <option value="1">option1</option>
-                                        <option value="2">option 2</option>
-                                        <option value="3">option 3</option>
+                                    <select className="form-select" name="record_usage"  {...register('record_usage')}  >
+                                        <option value="">--Select Usage--</option>
+                                        <option value="∞">Base NABP</option>
+                                        <option value="1">Base NABP</option>
+
+                                        <option value="2">Medicare ID</option>
+                                        <option value="3">Medical Id Pharmacy</option>
                                     </select>
                                 </div>
                             </div>
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>Based ID</small>
-                                    <input type="text" className="form-control" placeholder="" name="based_id" value={formData.based_id} id="" required="" />
+                                    <input type="text" className="form-control" placeholder="" name="base_pharmacy_nabp"  {...register('base_pharmacy_nabp')} id="" required="" />
                                     <a href=""><span className="fa fa-search form-icon"></span></a>
                                 </div>
                             </div>
@@ -351,7 +579,7 @@ export function Provider(props) {
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>NCPDP Provider Class</small>
-                                    <select className="form-select" name="ncpdp_provider_class" value={formData.ncpdp_provider_class}>
+                                    <select className="form-select" name="pharmacy_class" {...register('pharmacy_class')}>
                                         <option value="">Select Usage</option>
                                         <option value="1">option 1 </option>
                                         <option value="2">option 2</option>
@@ -361,7 +589,7 @@ export function Provider(props) {
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>Provider Type</small>
-                                    <input type="text" className="form-control" placeholder="" name="provider_type_id" value={formData.provider_type_id} id="" required="" />
+                                    <input type="text" className="form-control" placeholder="" name="dispenser_type" {...register('dispenser_type')} id="" required="" />
                                     <a href=""><span className="fa fa-search form-icon"></span></a>
                                 </div>
                             </div>
@@ -375,21 +603,21 @@ export function Provider(props) {
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>Address</small>
-                                    <input type="text" className="form-control" placeholder="Address" name="store_address_1" value={formData.store_address_1} id="" required="" />
+                                    <input type="text" className="form-control" placeholder="Address" name="address_1" {...register('address_1')} id="" required="" />
                                     <a href=""><span className="fa fa-search form-icon"></span></a>
                                 </div>
                             </div>
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>Address Line 2 </small>
-                                    <input type="text" className="form-control" placeholder="Address 2" value={formData.store_address_2} name="store_address_2" id="" required="" />
+                                    <input type="text" className="form-control" placeholder="Address 2" name="address_2"  {...register('address_2')} id="" required="" />
                                 </div>
                             </div>
 
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>City</small>
-                                    <input type="text" className="form-control" placeholder="City" name="city" value={formData.city} id="" required="" />
+                                    <input type="text" className="form-control" placeholder="City" name="city" {...register('city')} id="" required="" />
                                 </div>
                             </div>
 
@@ -398,7 +626,7 @@ export function Provider(props) {
                                     <small>State/Country</small>
                                     <div className="row">
                                         <div className="col-md-6">
-                                            <select className="form-select" name="state" value={formData.state}>
+                                            <select className="form-select" name="state" {...register('state')} >
                                                 <option value="">--select--</option>
                                                 <option value="1">andhra</option>
                                                 <option value="2">telangana</option>
@@ -406,7 +634,7 @@ export function Provider(props) {
                                             </select>
                                         </div>
                                         <div className="col-md-6">
-                                            <select className="form-select" name="country" value={formData.country}>
+                                            <select className="form-select" name="country" {...register('country')} >
                                                 <option value="">--select--</option>
                                                 <option value="1">india</option>
                                                 <option value="">us</option>
@@ -420,11 +648,11 @@ export function Provider(props) {
                                     <small>ZIP Code</small>
                                     <div className="row">
                                         <div className="col-md-8">
-                                            <input type="text" className="form-control" placeholder="ZIP" name="zip_code" value={formData.zip_code} id="" required="" />
+                                            <input type="text" className="form-control" placeholder="ZIP" name="zip_code"  {...register('zip_code')} id="" required="" />
                                         </div>
 
                                         <div className="col-md-4">
-                                            <input type="text" className="form-control" placeholder="Ext" name="ext" value={formData.ext} id="" required="" />
+                                            <input type="text" className="form-control" placeholder="Ext" name="ext" id="" required="" />
                                         </div>
                                     </div>
                                 </div>
@@ -432,19 +660,19 @@ export function Provider(props) {
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>Region</small>
-                                    <input type="text" className="form-control" placeholder="Address" name="region" value={formData.region} id="" required="" />
+                                    <input type="text" className="form-control" placeholder="Address" name="region" {...register('region')} id="" required="" />
                                 </div>
                             </div>
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>District</small>
-                                    <input type="text" className="form-control" placeholder="Address" name="district" value={formData.district} id="" required="" />
+                                    <input type="text" className="form-control" placeholder="Address" name="district" {...register('district')} id="" required="" />
                                 </div>
                             </div>
                             <div className="col-md-3 mb-2">
                                 <div className="form-group">
                                     <small>Market</small>
-                                    <input type="text" className="form-control" placeholder="Address" name="market" value={formData.market} id="" required="" />
+                                    <input type="text" className="form-control" placeholder="Address" name="market"  {...register('market')} id="" required="" />
                                 </div>
                             </div>
 
@@ -459,21 +687,21 @@ export function Provider(props) {
                                     <div className="col-md-4 mb-2">
                                         <div className="form-group">
                                             <small>Address</small>
-                                            <input type="text" className="form-control" placeholder="Address" name="mailing_address_1" value={formData.mailing_address_1} id="" required="" />
+                                            <input type="text" className="form-control" placeholder="Address" name="mailing_address_1" {...register('mailing_address_1')} id="" required="" />
                                             <a href=""><span className="fa fa-search form-icon"></span></a>
                                         </div>
                                     </div>
                                     <div className="col-md-4 mb-2">
                                         <div className="form-group">
                                             <small>Address Line 2 </small>
-                                            <input type="text" className="form-control" placeholder="Address 2" name="mailing_address_2" value={formData.mailing_address_2} id="" required="" />
+                                            <input type="text" className="form-control" placeholder="Address 2" name="mailing_address_2" {...register('mailing_address_2')} id="" required="" />
                                         </div>
                                     </div>
 
                                     <div className="col-md-4 mb-2">
                                         <div className="form-group">
                                             <small>City</small>
-                                            <input type="text" className="form-control" placeholder="City" name="mailing_city" value={formData.mailing_city} id="" required="" />
+                                            <input type="text" className="form-control" placeholder="City" name="mailing_city"  {...register('mailing_city')} id="" required="" />
                                         </div>
                                     </div>
 
@@ -482,7 +710,7 @@ export function Provider(props) {
                                             <small>State/Country</small>
                                             <div className="row">
                                                 <div className="col-md-6">
-                                                    <select className="form-select" name="mailing_state" value={formData.mailing_state}>
+                                                    <select className="form-select" name="mailing_state" {...register('mailing_state')} >
                                                         <option value="">--select--</option>
                                                         <option value="1">andhra</option>
                                                         <option value="2">telangana</option>
@@ -490,7 +718,7 @@ export function Provider(props) {
                                                     </select>
                                                 </div>
                                                 <div className="col-md-6">
-                                                    <select className="form-select" name="mailing_country" value={formData.mailing_country}>
+                                                    <select className="form-select" name="mailing_country" {...register('mailing_country')} >
                                                         <option value="">--select--</option>
                                                         <option value="1">india</option>
                                                         <option value="2">us</option>
@@ -505,10 +733,10 @@ export function Provider(props) {
                                             <small>ZIP Code</small>
                                             <div className="row">
                                                 <div className="col-md-8">
-                                                    <input type="text" className="form-control" placeholder="ZIP" name="mailing_zip_code" value={formData.mailing_zip_code} id="" required="" />
+                                                    <input type="text" className="form-control" placeholder="ZIP" name="mailing_zip_code" {...register('mailing_zip_code')} id="" required="" />
                                                 </div>
                                                 <div className="col-md-4">
-                                                    <input type="text" className="form-control" placeholder="Ext" name="mailing_ext" value={formData.mailing_ext} id="" required="" />
+                                                    <input type="text" className="form-control" placeholder="Ext" name="mailing_ext" id="" required="" />
                                                 </div>
                                             </div>
                                         </div>
@@ -524,24 +752,24 @@ export function Provider(props) {
                                     <div className="col-md-12 mb-2">
                                         <div className="form-group">
                                             <small>Chain</small>
-                                            <input type="text" className="form-control" placeholder="Address" name="mailing_chain" value={formData.mailing_chain} id="" required="" />
+                                            <input type="text" className="form-control" placeholder="Address" name="mailing_chain" id="" required="" />
                                             <a href=""><span className="fa fa-search form-icon"></span></a>
                                         </div>
                                     </div>
                                     <div className="col-md-12 mb-2">
                                         <div className="form-group">
                                             <small>Store No.</small>
-                                            <input type="text" className="form-control" placeholder="Address" name="mailing_store_no" value={formData.mailing_store_no} id="" required="" />
+                                            <input type="text" className="form-control" placeholder="Address" name="mailing_store_no" id="" required="" />
                                         </div>
                                     </div>
                                     <div className="col-md-12 mb-2 pe-0">
                                         <div className="form-group mt-2">
-                                            <input type="checkbox" id="male" name="mail_order" defaultChecked={formData.mail_order} className="d-none" />
+                                            <input type="checkbox" id="male" name="mail_order"  {...register('mail_order')} className="d-none" />
                                             <label for="male">Mail Order</label> &nbsp; &nbsp;
 
                                         </div>
                                         <div className="form-group mb-2">
-                                            <input type="checkbox" name="mail_head_office_indicator" defaultChecked={formData.mail_head_office_indicator} id="female" className="d-none" />
+                                            <input type="checkbox" name="head_office_ind"  {...register('head_office_ind')} id="female" className="d-none" />
                                             <label for="female">Head Office Indicator</label>
                                         </div>
                                     </div>
@@ -550,6 +778,8 @@ export function Provider(props) {
 
 
                         </div>
+
+
                     </form>
 
                 </div>
@@ -565,47 +795,13 @@ export function Provider(props) {
 export function Effectivedates(props) {
 
 
-    const [formData, setFormData] = useState({
-        effective_date_1: "2022-01-10",
-        effective_date_2: '2022-01-10',
-        effective_date_3: '2022-01-10',
+    const { register, reset, handleSubmit, watch, formState: { errors } } = useForm();
+
+    const [provider, setProvider] = useOutletContext();
 
 
-        termination_date_1: '2022-01-10',
-        termination_date_2: '2022-01-10',
-        termination_date_3: '2022-01-10',
+    useEffect(() => { reset(provider) }, [provider]);
 
-
-        tax_information_effective_date_1: '2022-01-10',
-        tax_information_effective_date_2: '2022-01-10',
-        tax_information_effective_date_3: '2022-01-10',
-
-
-        tax_termination_date_1: '2022-01-10',
-        tax_information_termination_date_2: '2022-01-10',
-        tax_termination_date_3: '2022-01-10',
-        schedule_id_1: '42334',
-        schedule_id_2: '234235',
-        provider_status: '1',
-        payment_cycle: '2',
-        individual_store: true,
-        head_office: true,
-        paid: '3453453',
-        rejected: '45345',
-        cash_pricing: '345345345',
-
-
-
-
-
-
-
-
-
-
-
-
-    });
 
     return (
         <>
@@ -621,20 +817,20 @@ export function Effectivedates(props) {
                                 <div className="col-md-4 mb-2">
                                     <div className="from-group">
                                         <small>Effective</small>
-                                        <input type="date" name="effective_date_1" value={formData.effective_date_1} class="form-control" />
+                                        <input type="date" name="effective_date_1" {...register('effective_date_1')} class="form-control" />
                                     </div>
                                 </div>
                                 <div className="col-md-4 mb-2">
                                     <div className="from-group">
                                         <small>Termination</small>
-                                        <input type="date" name="termination_date_1" value={formData.termination_date_1} class="form-control" />
+                                        <input type="date" name="termination_date_1" {...register('termination_date_1')} class="form-control" />
 
                                     </div>
                                 </div>
                                 <div className="col-md-4 mb-2">
                                     <div className="from-group">
                                         <small>Provider Status</small>
-                                        <select className="form-select" name="provider_status" value={formData.provider_status}>
+                                        <select className="form-select" name="provider_status" {...register('pharmacy_status')} >
                                             <option value="">Select Status</option>
                                             <option value="1">option 1</option>
                                             <option value="2">option 2</option>
@@ -644,13 +840,13 @@ export function Effectivedates(props) {
                                 <div className="clearfix"></div>
                                 <div className="col-md-4 mb-2">
                                     <div className="from-group">
-                                        <input type="date" class="form-control" name='effective_date_2' value={formData.effective_date_2} />
+                                        <input type="date" class="form-control" name='effective_date_2' {...register('effective_date_2')} />
 
                                     </div>
                                 </div>
                                 <div className="col-md-4 mb-2">
                                     <div className="from-group">
-                                        <input type="date" name="termination_date_2" value={formData.termination_date_2} class="form-control" />
+                                        <input type="date" name="termination_date_2"    {...register('termination_date_2')} class="form-control" />
 
                                     </div>
                                 </div>
@@ -660,13 +856,13 @@ export function Effectivedates(props) {
                                 <div className="clearfix"></div>
                                 <div className="col-md-4 mb-2">
                                     <div className="from-group">
-                                        <input type="date" name="effective_date_3" value={formData.effective_date_3} class="form-control" />
+                                        <input type="date" name="effective_date_3" {...register('effective_date_3')} class="form-control" />
 
                                     </div>
                                 </div>
                                 <div className="col-md-4 mb-2">
                                     <div className="from-group">
-                                        <input type="date" name="termination_date_3" value={formData.termination_date_3} class="form-control" />
+                                        <input type="date" name="termination_date_3"   {...register('termination_date_3')} class="form-control" />
 
                                     </div>
                                 </div>
@@ -680,40 +876,40 @@ export function Effectivedates(props) {
                                 <div className="col-md-4">
                                     <div className="from-group">
                                         <small>Effective</small>
-                                        <input type="date" name="tax_information_effective_date_1" value={formData.tax_information_effective_date_1} class="form-control" />
+                                        <input type="date" name="tax_effective_date_1"  {...register('tax_effective_date_1')} class="form-control" />
 
                                     </div>
                                 </div>
                                 <div className="col-md-4">
                                     <div className="from-group">
                                         <small>Termination</small>
-                                        <input type="date" name="tax_termination_date_1" value={formData.tax_termination_date_1} class="form-control" />
+                                        <input type="date" name="tax_termination_date_1" {...register('tax_termination_date_1')} class="form-control" />
 
                                     </div>
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group mb-3">
                                         <small>Schedule ID</small>
-                                        <input type="text" className="form-control" name="schedule_id_1" value={formData.schedule_id_1} placeholder="" id="" required="" />
+                                        <input type="text" className="form-control" name="tax_schedule_id_1" {...register('tax_schedule_id_1')} placeholder="" id="" required="" />
                                         <a href=""><span className="fa fa-search form-icon"></span></a>
                                     </div>
                                 </div>
 
                                 <div className="col-md-4">
                                     <div className="from-group">
-                                        <input type="date" name="tax_information_effective_date_2" value={formData.tax_information_effective_date_2} class="form-control" />
+                                        <input type="date" name="tax_effective_date_2"    {...register('tax_effective_date_2')} class="form-control" />
 
                                     </div>
                                 </div>
                                 <div className="col-md-4">
                                     <div className="from-group">
-                                        <input type="date" name="tax_information_termination_date_2" value={formData.tax_information_termination_date_2} class="form-control" />
+                                        <input type="date" name="tax_termination_date_2"  {...register('tax_termination_date_2')} class="form-control" />
 
                                     </div>
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group mb-3">
-                                        <input type="text" className="form-control" name="schedule_id_2" value={formData.schedule_id_2} placeholder="" id="" required="" />
+                                        <input type="text" className="form-control" name="tax_schedule_id_2" {...register('tax_schedule_id_2')} placeholder="" id="" required="" />
                                         <a href=""><span className="fa fa-search form-icon"></span></a>
                                     </div>
                                 </div>
@@ -727,7 +923,7 @@ export function Effectivedates(props) {
                                 <div className="col-md-12 mb-2">
                                     <div className="form-group">
                                         <small>Payment Cycle</small>
-                                        <select className="form-select" name="payment_cycle" value={formData.payment_cycle}>
+                                        <select className="form-select" name="payment_cycle" >
                                             <option value="">Select Effective</option>
                                             <option value="1"> 1</option>
                                             <option value="2"> 2</option>
@@ -747,12 +943,12 @@ export function Effectivedates(props) {
 
                                     <div className="col-md-12 mb-2">
                                         <div className="form-group mt-2">
-                                            <input type="checkbox" id="male" name="individual_store" defaultChecked={formData.individual_store} className="d-none" />
+                                            <input type="checkbox" id="male" name="individual_store" className="d-none" />
                                             <label for="male">Individual Store</label> &nbsp; &nbsp;
 
                                         </div>
                                         <div className="form-group mb-2">
-                                            <input type="checkbox" name="head_office" defaultChecked={formData.head_office} id="female" className="d-none" />
+                                            <input type="checkbox" name="head_office" id="female" className="d-none" />
                                             <label for="female">Head Office</label>
                                         </div>
                                     </div>
@@ -764,13 +960,13 @@ export function Effectivedates(props) {
                                 <div className="col-md-12">
                                     <div className="form-group mb-3">
                                         <small>Paid</small>
-                                        <input type="text" className="form-control" name="paid" placeholder="" value={formData.paid} id="" required="" />
+                                        <input type="text" className="form-control" name="paid" placeholder="" id="" required="" />
                                     </div>
                                 </div>
                                 <div className="col-md-12 mb-3">
                                     <div className="form-group mb-3">
                                         <small>Rejected</small>
-                                        <input type="text" className="form-control" name="rejected" value={formData.rejected} placeholder="" id="" required="" />
+                                        <input type="text" className="form-control" name="rejected" placeholder="" id="" required="" />
                                     </div>
                                 </div>
                                 <div className="col-md-12 mb-2">
@@ -780,7 +976,7 @@ export function Effectivedates(props) {
                                 <div className="col-md-12">
                                     <div className="form-group mb-3">
                                         <small>Senior Citizen Discount Age Threshold</small>
-                                        <input type="text" className="form-control" name="cash_pricing" value={formData.cash_pricing} placeholder="" id="" required="" />
+                                        <input type="text" className="form-control" name="cash_pricing" placeholder="" id="" required="" />
                                     </div>
                                 </div>
 
@@ -807,27 +1003,13 @@ export function PharmistSystem(props) {
 
 
 
-    const [formData, setFormData] = useState({
-        name: 'mahesh',
-        title: 'test title',
-        note: 'dfasdfasdfasdfsdafsdf',
-        transmit_all: true,
-        claims_3rd_party: 'sdfasdfasdfsdf',
-        claims_3rd_party_select: '1',
-        claims_cash: '989898',
-        switch_provider: '1',
-        store_hours: '5',
-        switch_trans_rate: '53453',
-        open24_hours: true,
-        injectable_prov: true,
-        system_version: '15.33',
-        operating_system: '2',
-        modem_type: 'test',
-        modem_speed: '1',
-        terminals: 'hgfghf'
+    const { register, reset, handleSubmit, watch, formState: { errors } } = useForm();
+
+    const [provider, setProvider] = useOutletContext();
 
 
-    });
+    useEffect(() => { reset(provider) }, [provider]);
+
 
 
 
@@ -845,13 +1027,13 @@ export function PharmistSystem(props) {
                                 <div class="col-md-6 mb-2">
                                     <div class="form-group mb-3">
                                         <small>Name</small>
-                                        <input type="text" class="form-control" name="name" value={formData.name} placeholder="" id="" required="" />
+                                        <input type="text" class="form-control" name="name" placeholder="" id="" required="" />
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-2">
                                     <div class="form-group mb-3">
                                         <small>Title</small>
-                                        <input type="text" class="form-control" name="title" value={formData.title} placeholder="" id="" required="" />
+                                        <input type="text" class="form-control" name="title" placeholder="" id="" required="" />
                                     </div>
                                 </div>
 
@@ -862,7 +1044,7 @@ export function PharmistSystem(props) {
                                 </div>
                                 <div class="col-md-12 mb-3">
                                     <div class="form-group mt-2">
-                                        <input type="checkbox" id="Transmit" name="transmit_all" defaultChecked={formData.transmit_all} class="d-none" />
+                                        <input type="checkbox" id="Transmit" name="transmit_all" class="d-none" />
                                         <label for="Transmit">Transmit All Claims</label>
                                     </div>
                                 </div>
@@ -870,13 +1052,13 @@ export function PharmistSystem(props) {
                                 <div class="col-md-6">
                                     <div class="form-group mb-2">
                                         <small>% Claims 3rd Party</small>
-                                        <input type="text" class="form-control" name="claims_3rd_party" value={formData.claims_3rd_party} placeholder="" id="" required="" />
+                                        <input type="text" class="form-control" name="claims_3rd_party" placeholder="" id="" required="" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group mb-2">
                                         <small>&nbsp;</small>
-                                        <select class="form-select" name="claims_3rd_party_select" value={formData.claims_3rd_party_select}>
+                                        <select class="form-select" name="claims_3rd_party_select" >
                                             <option value="">Select</option>
                                             <option value="1">option 1</option>
                                             <option value="2">option 2</option>
@@ -887,13 +1069,13 @@ export function PharmistSystem(props) {
                                 <div class="col-md-6">
                                     <div class="form-group mb-2">
                                         <small>% Claims Cash</small>
-                                        <input type="text" class="form-control" name="claims_cash" value={formData.claims_cash} placeholder="" id="" required="" />
+                                        <input type="text" class="form-control" name="claims_cash" placeholder="" id="" required="" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group mb-2">
                                         <small>Switch Provider</small>
-                                        <select class="form-select" name='switch_provider' value={formData.switch_provider}>
+                                        <select class="form-select" name='switch_provider' >
                                             <option value="">Select Provider</option>
                                             <option value="1">option 1</option>
                                             <option value="2">option 2</option>
@@ -904,13 +1086,13 @@ export function PharmistSystem(props) {
                                 <div class="col-md-6">
                                     <div class="form-group mb-2">
                                         <small>Store Hours</small>
-                                        <input type="text" class="form-control" name="store_hours" value={formData.store_hours} placeholder="" id="" required="" />
+                                        <input type="text" class="form-control" name="store_hours" placeholder="" id="" required="" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group mb-2">
                                         <small>Switch Trans Rate</small>
-                                        <input type="text" class="form-control" name="switch_trans_rate" value={formData.switch_trans_rate} placeholder="" id="" required="" />
+                                        <input type="text" class="form-control" name="switch_trans_rate" placeholder="" id="" required="" />
                                     </div>
                                 </div>
 
@@ -919,12 +1101,12 @@ export function PharmistSystem(props) {
                                 <div className="col-md-12 mb-2">
 
                                     <div className="form-group mt-2">
-                                        <input type="checkbox" id="Open" class="d-none" name="open24_hours" defaultChecked={formData.open24_hours} />
+                                        <input type="checkbox" id="Open" class="d-none" name="open24_hours" />
                                         <label for="Open">Open 24 Hours</label>
 
                                     </div>
                                     <div className="form-group mb-2">
-                                        <input type="checkbox" id="Injectable" name="injectable_prov" defaultChecked={formData.injectable_prov} class="d-none" />
+                                        <input type="checkbox" id="Injectable" name="injectable_prov" class="d-none" />
                                         <label for="Injectable">Injectable Prov</label>
                                     </div>
                                 </div>
@@ -939,14 +1121,14 @@ export function PharmistSystem(props) {
                                 <div class="col-md-6">
                                     <div class="form-group mb-2">
                                         <small>System Version</small>
-                                        <input type="text" class="form-control" name="system_version" value={formData.system_version} placeholder="" id="" required="" />
+                                        <input type="text" class="form-control" name="system_version" placeholder="" id="" required="" />
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-group mb-2">
                                         <small>Operating System</small>
-                                        <select class="form-select" name="operating_system" value={formData.operating_system}>
+                                        <select class="form-select" name="operating_system" >
                                             <option value="">Select System</option>
                                             <option value="1">windows</option>
                                             <option value="2">Linux</option>
@@ -956,13 +1138,13 @@ export function PharmistSystem(props) {
                                 <div class="col-md-6">
                                     <div class="form-group mb-2">
                                         <small>Modem Type</small>
-                                        <input type="text" class="form-control" name="modem_type" value={formData.modem_type} placeholder="" id="" required="" />
+                                        <input type="text" class="form-control" name="modem_type" placeholder="" id="" required="" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group mb-2">
                                         <small>Modem Speed</small>
-                                        <select class="form-select" name="modem_speed" value={formData.modem_speed}>
+                                        <select class="form-select" name="modem_speed" >
                                             <option value="">Select Speed</option>
                                             <option value="1">10</option>
                                             <option value="2">20</option>
@@ -972,7 +1154,7 @@ export function PharmistSystem(props) {
                                 <div class="col-md-6">
                                     <div class="form-group mb-2">
                                         <small>Terminals</small>
-                                        <input type="text" class="form-control" name="terminals" value={formData.terminals} placeholder="" id="" required="" />
+                                        <input type="text" class="form-control" name="terminals" placeholder="" id="" required="" />
                                     </div>
                                 </div>
 
@@ -984,7 +1166,7 @@ export function PharmistSystem(props) {
                                 <h5>Notes</h5>
                             </div>
                             <div class="form-group">
-                                <textarea name="note" value={formData.note} class="form-control" rows="25" style={mystyle} />
+                                <textarea name="note" class="form-control" rows="25" style={mystyle} />
                             </div>
                         </div>
                     </div>
@@ -1000,6 +1182,17 @@ export function PharmistSystem(props) {
 export function NetworkParticipation(props) {
 
 
+    const { register, reset, handleSubmit, watch, formState: { errors } } = useForm();
+
+    const [provider, setProvider] = useOutletContext();
+
+    const [selctedNdc, setSelctedNdc] = useState('');
+
+
+
+    useEffect(() => { reset(provider) }, [provider]);
+
+
 
 
     const {
@@ -1010,54 +1203,204 @@ export function NetworkParticipation(props) {
         mode: "onBlur",
     });
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
-    // const [customer, setCustomer] = useOutletContext();
 
 
-    const [show, setShow] = useState(false);
+    const [formData, setFormData] = useState(false);
     const handleClose = () => setShow(false);
     const traditionalhandleShow = () => setShow(true);
     const [networkData, setNetworkData] = useState([]);
+    const [traditionalData, setTraditionalData] = useState([]);
+
+    const [data, setData] = useState([])
+    const [adding, setAdding] = useState(false);
+    const [show, setShow] = useState(false);
 
     const [flexibleData, setFlexibleData] = useState([]);
+    // useEffect(() => { reset(traditionalData) }, [traditionalData]);
+
+    const [benifitsData, setBenifitData] = useState(false);
 
 
 
-    const fillProviderData = (e) => {
-        // API  
-        // var staticProviderType =; 
-        var arr = [
-            { traditional_id: '123', name: 'Mahesh', priceschedule: '101', denied: 'Hyderabad', effective_date: '2022-08-2022', termination_date: '02-20-2022' },
 
-        ];
+    const AddForm = () => {
+        setBenifitData(false);
+        setAdding(true);
 
-        // setNetworkData(arr);
+
+
     }
 
+    function loadData() {
+
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        };
+
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/provider/traditionalnetwork/all`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                //  console.log(response);
+                // console.log(data.data);
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    setNetworkData([]);
+                    return Promise.reject(error);
+
+                } else {
+                    setNetworkData(data.data);
+                    return;
+                }
+
+
+
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+
+    }
+
+
+
+    const getNDCItem = (rowdata) => {
+        // console.log(rowdata);
+        // setFormData(rowdata);
+        // setBenifitData(true);
+        setSelctedNdc(rowdata);
+
+
+    }
+
+
+
+
+
+
     useEffect(() => {
-    }, [flexibleData]);
+        loadData()
+        reset(formData);
+
+    }, [flexibleData, formData]);
 
     const onSubmit = data => {
 
         setNetworkData([data]);
-        console.log(data);
+        // console.log(data);
 
 
     }
 
-    const onSubmit2 = data => {
+    
 
-        console.log(data);
-        setFlexibleData([data]);
+    const addCode = (data) => {
+        // console.log(data);
+        const requestOptions = {
+            method: 'POST',
+            // mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+
+        };
+        // console.log(watch(data)); 
+        if (process.env.REACT_APP_API_BASEURL == 'NOT') {
+            toast.success('Added Successfully...!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+
+            });
+        } else {
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/provider/traditionalnetwork/add`, requestOptions)
+                .then(async response => {
+                    const isJson = response.headers.get('content-type')?.includes('application/json');
+                    const data = isJson && await response.json();
+                    // console.log(response);
+
+                    // check for error response
+                    if (!response.ok) {
+                        // get error message from body or default to response status
+                        const error = (data && data.message) || response.status;
+                        return Promise.reject(error);
+                    } else {
+                        reset(data.data);
+                        var msg = props.adding ? 'Added Successfully...!' : 'Updated Successfully..'
+                        toast.success(msg, {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+
+                        });
+                    }
 
 
+                    if (response === '200') {
+                    }
 
+                })
+                .catch(error => {
+                    console.error('There was an error!', error);
+                });
+        }
 
+    }
+    const onSubmit3 = (e) => {
+        e.preventDefault();
     }
 
 
 
 
+
+    useEffect(() => {
+
+
+        if (props.adding) {
+            reset({ accum_bene_strategy_name: '', description: '', new: 1 }, {
+                keepValues: false,
+            })
+        } else {
+            reset(props.selected);
+        }
+
+        if (!props.selected) {
+            reset({ accum_bene_strategy_name: '', accum_bene_strategy_id: '', description: '', pharm_type_variation_ind: '', network_part_variation_ind: '', claim_type_variation_ind: '', plan_accum_deduct_id: '', new: 1 }, {
+                keepValues: false,
+            })
+        }
+
+
+    }, [props.selected, props.adding]);
+
+
+    useEffect(() => { reset(props.selected) }, [props.selected]);
+
+
+    useEffect(() => {
+        if (benifitsData) {
+            setAdding(false);
+
+        } else {
+            setAdding(true);
+            setBenifitData(false);
+        }
+
+        document.title = 'Benefit Code | ProHealthi';
+
+    }, [benifitsData, adding]);
 
 
 
@@ -1065,19 +1408,533 @@ export function NetworkParticipation(props) {
         <>
 
 
-            <form key={1} onSubmit={handleSubmit(onSubmit)}>
+            <div className="col-md-3 ms-auto text-end">
+                <button className="btn  btn-info btn-sm" onClick={e => AddForm()}>
+                    Add Traditional Network <i className="fa fa-plus-circle"></i></button>
+            </div>
+
+
+            <TraditionalNetworksForm show={show} adding={adding} handleClose={handleClose} selected={selctedNdc} />
+
+
+            <TraditionalResults getNDCItem={getNDCItem} selected={selctedNdc} typedata={networkData} />
+
+
+            {/* <FlixibleNetworksForm /> */}
+
+            <FlexibleNetworks  />
+
+
+
+
+
+
+        </>
+    )
+}
+
+
+function FlexibleNetworks(props){
+
+    const { register, reset, handleSubmit, watch, formState: { errors } } = useForm();
+    const [formData, setFormData] = useState(false);
+
+
+    const [provider, setProvider] = useOutletContext();
+
+    const [selctedNdc, setSelctedNdc] = useState('');
+
+    const [show, setShow] = useState(false);
+
+    const [adding, setAdding] = useState(false);
+
+    const [flexibleData, setFlexibleData] = useState(false);
+
+
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    // useEffect(() => { reset(provider) }, [provider]);
+
+    const [benifitsData, setBenifitData] = useState(false);
+
+
+
+
+    const AddForm = () => {
+        setBenifitData(false);
+        setAdding(true);
+
+
+
+    }
+
+
+    const addCode = (data) => {
+        // console.log(data);
+        const requestOptions = {
+            method: 'POST',
+            // mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+
+        };
+        // console.log(watch(data)); 
+        if (process.env.REACT_APP_API_BASEURL == 'NOT') {
+            toast.success('Added Successfully...!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+
+            });
+        } else {
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/provider/flexiblenetwork/add`, requestOptions)
+                .then(async response => {
+                    const isJson = response.headers.get('content-type')?.includes('application/json');
+                    const data = isJson && await response.json();
+                    // console.log(response);
+
+                    // check for error response
+                    if (!response.ok) {
+                        // get error message from body or default to response status
+                        const error = (data && data.message) || response.status;
+                        return Promise.reject(error);
+                    } else {
+                        reset(data.data);
+                        console.log(data.data);
+                        var msg = props.adding ? 'Added Successfully...!' : 'Updated Successfully..'
+                        toast.success(msg, {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+
+                        });
+                    }
+
+
+                    if (response === '200') {
+                    }
+
+                })
+                .catch(error => {
+                    console.error('There was an error!', error);
+                });
+        }
+
+    }
+    const onSubmit = (e) => {
+        e.preventDefault();
+    }
+    const getNDCItem = (rowdata) => {
+        // console.log(rowdata);
+        // setFormData(rowdata);
+        setBenifitData(true);
+        setSelctedNdc(rowdata);
+
+
+    }
+
+
+    useEffect(() => {
+        // reset(flexibleData);
+
+        reset(formData);
+
+
+        if(!flexibleData){
+            loadData()
+        }
+
+    },[flexibleData,formData]);
+    console.log(formData);
+
+
+
+    useEffect(() => {
+        if (benifitsData) {
+            setAdding(false);
+
+        } else {
+            setAdding(true);
+            setBenifitData(false);
+        }
+
+        document.title = 'Benefit Code | ProHealthi';
+
+    }, [benifitsData, adding]);
+
+    function loadData() {
+
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        };
+
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/provider/flexiblenetwork/all`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                //  console.log(response);
+                // console.log(data.data);
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    setFlexibleData([]);
+                    return Promise.reject(error);
+
+                } else {
+                    setFlexibleData(data.data);
+                    return;
+                }
+
+
+
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+
+    }
+    return (
+        <>
+
+<div className="col-md-3 ms-auto text-end">
+                <button className="btn  btn-info btn-sm" onClick={e => AddForm()}>
+                    Add Flexible Network <i className="fa fa-plus-circle"></i></button>
+            </div>
+
+<FlixibleNetworksForm  show={show} adding={adding} handleClose={handleClose} selected={selctedNdc} />
+
+
+<FlexibleResults getNDCItem={getNDCItem} typedata={flexibleData}   selected={selctedNdc}/>
+
+
+
+
+
+        
+        
+        </>
+    )
+}
+
+
+
+ function FlixibleNetworksForm(props) {
+
+
+    const { register, reset, handleSubmit, watch, formState: { errors } } = useForm();
+
+
+    const addCode = (data) => {
+        // console.log(data);
+        const requestOptions = {
+            method: 'POST',
+            // mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+
+        };
+        // console.log(watch(data)); 
+        if (process.env.REACT_APP_API_BASEURL == 'NOT') {
+            toast.success('Added Successfully...!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+
+            });
+        } else {
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/provider/flexiblenetwork/add`, requestOptions)
+                .then(async response => {
+                    const isJson = response.headers.get('content-type')?.includes('application/json');
+                    const data = isJson && await response.json();
+                    // console.log(response);
+
+                    // check for error response
+                    if (!response.ok) {
+                        // get error message from body or default to response status
+                        const error = (data && data.message) || response.status;
+                        return Promise.reject(error);
+                    } else {
+                        reset(data.data);
+                        console.log(data.data);
+                        var msg = props.adding ? 'Added Successfully...!' : 'Updated Successfully..'
+                        toast.success(msg, {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+
+                        });
+                    }
+
+
+                    if (response === '200') {
+                    }
+
+                })
+                .catch(error => {
+                    console.error('There was an error!', error);
+                });
+        }
+
+    }
+    const onSubmit = (e) => {
+        e.preventDefault();
+    }
+
+
+    useEffect(() => {
+
+        console.log(props.selected);
+
+        if (props.adding) {
+            reset({ network_id: '', network_name: '', new: 1 }, {
+                keepValues: false,
+            })
+        } else {
+            reset(props.selected);
+        }
+
+        if (!props.selected) {
+            reset({ network_id: '', network_name: '', description: '', pharm_type_variation_ind: '', network_part_variation_ind: '', claim_type_variation_ind: '', plan_accum_deduct_id: '', new: 1 }, {
+                keepValues: false,
+            })
+        }
+
+
+    }, [props.selected, props.adding]);
+
+
+    useEffect(() => { reset(props.selected) }, [props.selected]);
+   
+
+
+
+    return (
+        <>
+
+               <form key={1} onSubmit={handleSubmit(addCode)} >
+                <div class="card-body">
+                    <div class="row">
+
+
+                        <div class="clearfix mb-3"></div>
+
+
+                        <div class="col-md-12 mb-2">
+                            <h5 className="mb-2">Flexible Networks  {props.adding ? ' - (Adding)' : '- (' + props.selected.rx_network_rule_id + ' )'}</h5>
+
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-2">
+                                <small>Flexible Network ID</small>
+                                <input  type="text" class="form-control"   {...register('rx_network_rule_id', {
+                                })} name="rx_network_rule_id" id=""  />
+                                <a href=""><span class="fa fa-search form-icon"></span></a>
+                                {errors.flexible_network_id?.type === 'required' && <p role="alert" className="notvalid">Flexible Network ID is required </p>}
+
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-2">
+                                <small>Network Name</small>
+                                <input type="text" class="form-control" {...register('rx_network_rule_name', {
+
+                                })} name="rx_network_rule_name" id="" required="" />
+                                {errors.rx_network_rule_name?.type === 'required' && <p role="alert" className="notvalid">Network Name is required </p>}
+
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-2">
+                                <small>Price Schedule</small>
+                                <input type="text" class="form-control" {...register('price_schedule_ovrd', {
+
+                                })} name="price_schedule_ovrd" id="" required="" />
+                                <a href=""><span class="fa fa-search form-icon"></span></a>
+                                {errors.flexible_price_schedule?.type === 'required' && <p role="alert" className="notvalid">Price Schedule is required </p>}
+
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-2">
+                                <small>Inclusion By</small>
+                                <input type="text" class="form-control" {...register('inclusion_by', {
+
+                                })} name="inclusion_by" id="" required="" />
+                                {errors.inclusion_by?.type === 'required' && <p role="alert" className="notvalid">Inclusion By is required </p>}
+
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-2">
+                                <small>Exclusion By</small>
+                                <input type="text" class="form-control" name="exclude_rule" {...register('exclude_rule', {
+                                    required: true,
+
+                                })}  id="" required="" />
+                                {errors.exclude_rule?.type === 'required' && <p role="alert" className="notvalid">Exclusion By is required </p>}
+
+                            </div>
+                        </div>
+
+                        
+
+
+
+                        {/* {networkData.length > 0 ? */}
+                        {/* // : ''} */}
+
+
+
+                    </div>
+                    {console.log(props.adding)}
+                    <Button type='submit' variant="primary">{props.adding ? ' Add' : 'Update'}</Button>
+
+                </div>
+
+            </form>
+
+
+
+
+        </>
+    )
+
+}
+
+
+function TraditionalNetworksForm(props) {
+
+    const { register, reset, handleSubmit, watch, formState: { errors } } = useForm();
+
+
+
+
+    const addCode = (data) => {
+        // console.log(data);
+        const requestOptions = {
+            method: 'POST',
+            // mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+
+        };
+        // console.log(watch(data)); 
+        if (process.env.REACT_APP_API_BASEURL == 'NOT') {
+            toast.success('Added Successfully...!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+
+            });
+        } else {
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/provider/traditionalnetwork/add`, requestOptions)
+                .then(async response => {
+                    const isJson = response.headers.get('content-type')?.includes('application/json');
+                    const data = isJson && await response.json();
+                    // console.log(response);
+
+                    // check for error response
+                    if (!response.ok) {
+                        // get error message from body or default to response status
+                        const error = (data && data.message) || response.status;
+                        return Promise.reject(error);
+                    } else {
+                        reset(data.data);
+                        console.log(data.data);
+                        var msg = props.adding ? 'Added Successfully...!' : 'Updated Successfully..'
+                        toast.success(msg, {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+
+                        });
+                    }
+
+
+                    if (response === '200') {
+                    }
+
+                })
+                .catch(error => {
+                    console.error('There was an error!', error);
+                });
+        }
+
+    }
+    const onSubmit = (e) => {
+        e.preventDefault();
+    }
+
+    useEffect(() => {
+
+        // console.log(props.selected);
+
+        if (props.adding) {
+            reset({ rx_network_rule_id: '', rx_network_rule_name: '',price_schedule_ovrd:'', new: 1 }, {
+                keepValues: false,
+            })
+        } else {
+            reset(props.selected);
+        }
+
+        if (!props.selected) {
+            reset({ rx_network_rule_id: '', rx_network_rule_name: '',price_schedule_ovrd:'', description: '', pharm_type_variation_ind: '', network_part_variation_ind: '', claim_type_variation_ind: '', plan_accum_deduct_id: '', new: 1 }, {
+                keepValues: false,
+            })
+        }
+
+
+    }, [props.selected, props.adding]);
+
+
+    useEffect(() => { reset(props.selected) }, [props.selected]);
+    return (
+        <>
+
+            <form key={1} onSubmit={handleSubmit(addCode)} >
+
 
 
                 <div class="card mt-3 mb-3">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12 mb-2">
-                                <h5>Treditional Networks</h5>
+                                <h5 className="mb-2">Traditional Networks  {props.adding ? ' - (Adding)' : '- (' + props.selected.network_id + ' )'}</h5>
+
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group mb-2">
                                     <small>Treditional ID</small>
-                                    <input type="text" class="form-control" name="traditional_id" {...register('traditional_id', {
+                                    <input type="text" class="form-control" name="traditional_id"  {...register('network_id', {
                                         required: true,
                                     })} id="" required="" />
                                     <a href=""><span class="fa fa-search form-icon"></span></a>
@@ -1099,7 +1956,7 @@ export function NetworkParticipation(props) {
                             <div class="col-md-4">
                                 <div class="form-group mb-2">
                                     <small>Price Schedule</small>
-                                    <input type="text" class="form-control" name="price_schedule" {...register('price_schedule', {
+                                    <input type="text" class="form-control" name="price_schedule_ovrd" {...register('price_schedule_ovrd', {
                                         required: true,
                                     })} id="" required="" />
                                     <a href=""><span class="fa fa-search form-icon"></span></a>
@@ -1122,7 +1979,7 @@ export function NetworkParticipation(props) {
                                 <div class="form-group mb-2">
                                     <small>Effective Date</small>
                                     <input type="date" class="form-control" name="effective_date" {...register('effective_date', {
-                                        required: true,
+
                                     })} id="" />
                                     {errors.effective_date?.type === 'required' && <p role="alert" className="notvalid">Effective Date is required </p>}
 
@@ -1132,46 +1989,41 @@ export function NetworkParticipation(props) {
                                 <div class="form-group mb-2">
                                     <small>Termination Date</small>
                                     <input type="date" class="form-control" name="termination_date"  {...register('termination_date', {
-                                        required: true,
                                     })} id="" required="" />
                                     {errors.termination_date?.type === 'required' && <p role="alert" className="notvalid">Termination Date is required </p>}
 
                                 </div>
                             </div>
 
-                            <div class="col-md-12 mt-3 mb-3 text-end">
-                                {/* <button class="btn btn-sm btn-warning">Remove Item</button> &nbsp;&nbsp; */}
-                                <button type="submit" class="btn btn-sm btn-info">Add Item</button>
-                            </div>
+
 
                             {/* <div class="col-md-12">
-                            <table class="table table-striped table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Price Schedule</th>
-                                        <th>Denied</th>
-                                        <th>Effective Date</th>
-                                        <th>Termination Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>GOJ_Pre</td>
-                                        <td>GOJ</td>
-                                        <td>--</td>
-                                        <td>No</td>
-                                        <td>2010-01-01</td>
-                                        <td>9999-12-31</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div> */}
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Price Schedule</th>
+                        <th>Denied</th>
+                        <th>Effective Date</th>
+                        <th>Termination Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>GOJ_Pre</td>
+                        <td>GOJ</td>
+                        <td>--</td>
+                        <td>No</td>
+                        <td>2010-01-01</td>
+                        <td>9999-12-31</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div> */}
 
 
                             {/* {networkData.length > 0 ? */}
-                            <TraditionalResults typedata={networkData} />
                             {/* // : ''} */}
 
 
@@ -1180,94 +2032,13 @@ export function NetworkParticipation(props) {
                 </div>
 
 
+                <Button type='submit' variant="primary">{props.adding ? ' Add' : 'Update'}</Button>
 
 
 
             </form>
 
-            <form key={2} onSubmit={handleSubmit2(onSubmit2)}>
-                <div class="card-body">
-                    <div class="row">
 
-
-                        <div class="clearfix mb-3"></div>
-
-
-                        <div class="col-md-12 mb-2">
-                            <h5>Flexible Networks</h5>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group mb-2">
-                                <small>Flexible Network ID</small>
-                                <input type="text" class="form-control"   {...register2('flexible_network_id', {
-                                    required: true,
-                                })} name="flexible_network_id" id="" />
-                                <a href=""><span class="fa fa-search form-icon"></span></a>
-                                {errors2.flexible_network_id?.type === 'required' && <p role="alert" className="notvalid">Flexible Network ID is required </p>}
-
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group mb-2">
-                                <small>Network Name</small>
-                                <input type="text" class="form-control" {...register2('flexible_network_name', {
-                                    required: true,
-
-                                })} name="flexible_network_name" id="" required="" />
-                                {errors2.flexible_network_name?.type === 'required' && <p role="alert" className="notvalid">Network Name is required </p>}
-
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group mb-2">
-                                <small>Price Schedule</small>
-                                <input type="text" class="form-control" {...register2('flexible_price_schedule', {
-                                    required: true,
-
-                                })} name="flexible_price_schedule" id="" required="" />
-                                <a href=""><span class="fa fa-search form-icon"></span></a>
-                                {errors2.flexible_price_schedule?.type === 'required' && <p role="alert" className="notvalid">Price Schedule is required </p>}
-
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group mb-2">
-                                <small>Inclusion By</small>
-                                <input type="date" class="form-control" {...register2('inclusion_by', {
-                                    required: true,
-
-                                })} name="inclusion_by" id="" required="" />
-                                                                {errors2.inclusion_by?.type === 'required' && <p role="alert" className="notvalid">Inclusion By is required </p>}
-
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group mb-2">
-                                <small>Exclusion By</small>
-                                <input type="date" class="form-control" {...register2('exclusion_by', {
-                                    required: true,
-
-                                })} name="exclusion_by" id="" required="" />
-                                                                {errors2.exclusion_by?.type === 'required' && <p role="alert" className="notvalid">Exclusion By is required </p>}
-
-                            </div>
-                        </div>
-
-                        <div class="col-md-12 mt-3 mb-3 text-end">
-                            <button type="submit" class="btn btn-sm btn-info">add Item</button>
-                        </div>
-
-
-
-                        {/* {networkData.length > 0 ? */}
-                        <FlexibleResults typedata={flexibleData} />
-                        {/* // : ''} */}
-
-
-
-                    </div>
-                </div>
-            </form>
 
 
         </>
@@ -1277,14 +2048,15 @@ export function NetworkParticipation(props) {
 
 
 
+
 function TraditionalResults(props) {
 
-
+    // console.log(props.data)
 
 
     var networkData = [];
     for (let index = 0; index < props.typedata.length; index++) {
-        networkData.push(<TraditionalTypeRow datar={props.typedata[index]}
+        networkData.push(<TraditionalTypeRow getNDCItem={props.getNDCItem} datar={props.typedata[index]}
         />);
     }
 
@@ -1301,6 +2073,8 @@ function TraditionalResults(props) {
                 <div className="card-body">
                     <div className="row">
                         <div className="col-md-12">
+                        <div style={{height:"200px", overflowY:"scroll"}}>
+
                             <table className="table table-striped table-
 bordered">
                                 <thead>
@@ -1319,6 +2093,7 @@ bordered">
 
                                 </tbody>
                             </table>
+                            </div>
                         </div>
                         <div className="col-md-3 ms-auto text-end">
                             {/* <button className="btn  btn-info" data-bs-
@@ -1347,7 +2122,7 @@ function FlexibleResults(props) {
 
     var networkData = [];
     for (let index = 0; index < props.typedata.length; index++) {
-        networkData.push(<FlexibleTypeRow datar={props.typedata[index]}
+        networkData.push(<FlexibleTypeRow getNDCItem={props.getNDCItem}   datar={props.typedata[index]}
         />);
     }
 
@@ -1364,6 +2139,7 @@ function FlexibleResults(props) {
                 <div className="card-body">
                     <div className="row">
                         <div className="col-md-12">
+                            <div style={{height:"200px", overflowY:"scroll"}}>
                             <table className="table table-striped table-
 bordered">
                                 <thead>
@@ -1376,12 +2152,13 @@ bordered">
                                         <th>Exclusion By</th>
                                         <th>Action</th>
                                     </tr>
-                                </thead>
+                                </thead>                                
                                 <tbody>
                                     {networkData}
 
                                 </tbody>
                             </table>
+                            </div>
                         </div>
                         <div className="col-md-3 ms-auto text-end">
                             {/* <button className="btn  btn-info" data-bs-
@@ -1410,6 +2187,10 @@ function TraditionalTypeRow(props) {
     const ischecked = true;
 
 
+
+    const alert = () => {
+        alert(props.datar.network_id)
+    }
     const deleteRow = (e) => {
 
         alert(e.currentTarget.value);
@@ -1418,10 +2199,14 @@ function TraditionalTypeRow(props) {
 
     return (
         <>
-            <tr>
-                <td>{props.datar.traditional_id}</td>
+            <tr className={(props.selected && props.datar.pharmacy_nabp == props.selected.pharmacy_nabp ? ' tblactiverow ' : '')}
+
+                onClick={() => props.getNDCItem(props.datar)}
+            >
+                <td>{props.datar.network_id}</td>
                 <td>{props.datar.network_name}</td>
-                <td>{props.datar.price_schedule}</td>
+                <td>{props.datar.price_schedule_ovrd}</td>
+                {/* <td>{rops.datar.}</td> */}
                 {props.datar.denied == ischecked ? (
                     <td>Yes</td>
                 ) : (
@@ -1455,13 +2240,18 @@ function FlexibleTypeRow(props) {
 
     return (
         <>
-            <tr>
-                <td>{props.datar.flexible_network_id}</td>
-                <td>{props.datar.flexible_network_name}</td>
-                <td>{props.datar.flexible_price_schedule}</td>
+
+                
+            <tr className={(props.selected && props.datar.pharmacy_nabp == props.selected.pharmacy_nabp ? ' tblactiverow ' : '')}
+
+onClick={() => props.getNDCItem(props.datar)}
+>
+                <td>{props.datar.rx_network_rule_id}</td>
+                <td>{props.datar.rx_network_rule_name}</td>
+                <td>{props.datar.price_schedule_ovrd}</td>
 
                 <td>{props.datar.inclusion_by}</td>
-                <td>{props.datar.exclusion_by}</td>
+                <td>{props.datar.exclude_rule}</td>
                 <td><button onClick={flexdeleteRow} value={props.datar.flexible_network_id} className='btn btn-sm btn-warning'><i className='fa fa-trash-alt'></i></button></td>
 
 
