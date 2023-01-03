@@ -18,11 +18,140 @@ function FlexibleNetworks(props) {
 
     const [traditionalnetwork, SetTraditionalNetwork] = useState([]);
 
+    const [flexibleData, setFelxibleData] = useState(false);
 
     const [tableData, settableData] = useState([]);
 
 
     const [Flexiblenetwork, SetFlexibleNetwork] = useState([]);
+
+
+    const [customer, setCustomer] = useState([]);
+
+
+
+
+    const [ndcData, setNdcData] = useState([]);
+    const [ndcClass, setNdClass] = useState([]);
+
+    const [selctedNdc, setSelctedNdc] = useState('');
+
+
+    const searchException = (fdata) => {
+
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        };
+
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/providerdata/flexiblenetwork/search?search=${fdata.target.value}`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                //  console.log(response);
+                // console.log(data.data);
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    setNdcData([]);
+                    return Promise.reject(error);
+
+                } else {
+                    setNdcData(data.data);
+                    return;
+                }
+
+
+
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+    }
+
+
+
+    const getNDCItems = (ndcid) => {
+        // ndc_exception_list
+        var test = {};
+        test.ndc_exception_list = ndcid;
+        setSelctedNdc(test);
+
+        // //  console.log(customerid);
+        const requestOptions = {
+            method: 'GET',
+            // mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            // body: encodeURIComponent(data)
+        };
+        // //  console.log(watch(fdata));
+
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/providerdata/flexiblenetwork/get/${ndcid}`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                //  console.log(response);
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    // setNdClass([]);
+                    return Promise.reject(error);
+                } else {
+                    console.log(data.data);
+                    setNdClass(data.data);
+
+                    // scollToRef.current.scrollIntoView()
+                }
+
+
+                if (response === '200') {
+                }
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+    }
+
+    const getNDCItemDetails = (ndcid) => {
+        console.log(ndcid);
+        const requestOptions = {
+            method: 'GET',
+            // mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            // body: encodeURIComponent(data)
+        };
+        //  console.log(watch(fdata));
+
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/providerdata/flexiblenetwork/details/${ndcid}`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                //  console.log(response);
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    return Promise.reject(error);
+                } else {
+                    setFelxibleData(data.data);
+
+                    // scollToRef.current.scrollIntoView()
+                    // return;
+                }
+
+
+                if (response === '200') {
+                }
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+    }
 
 
 
@@ -86,17 +215,21 @@ function FlexibleNetworks(props) {
 
 
                 <div className="col-md-12 mb-3">
-                    <SearchFlexibleNetwork />
+                    <SearchFlexibleNetwork searchException={searchException}  />
 
-                    <FlexibleNetworkList />
-                    <TraditionalNetworkForm />
+                    <FlexibleNetworkList ndcListData={ndcData} ndcClassData={ndcClass} getNDCItem={getNDCItems} getNDCItemDetails={getNDCItemDetails} selctedNdc={selctedNdc} />
+
+                    {/* <TraditionalNetworkForm  /> */}
+                     <TraditionalNetworkForm formData={flexibleData} selected={flexibleData}  />
+
+
 
                     {/* <SearchTraditionalNetwork searchException={searchException} />
 
 
                     <TraditionalNetworkList ndcListData={ndcData} ndcClassData={ndcClass} getNDCItem={getNDCItems} getNDCItemDetails={getNDCItemDetails} selctedNdc={selctedNdc} />
 
-                    <TraditionalNetworkForm formData={traditionalData} selected={traditionalData} adding={adding} />
+                    // <TraditionalNetworkForm formData={flexibleData} selected={flexibleData} adding={adding} />
 
 
  */}
@@ -114,7 +247,13 @@ function FlexibleNetworks(props) {
     )
 }
 
-function SearchFlexibleNetwork() {
+function SearchFlexibleNetwork(props) {
+
+    const searchException = (fdata) => {
+
+        props.searchException(fdata);
+    }
+
     return (
         <>
             <div className="card mt-3 mb-3">
@@ -123,13 +262,70 @@ function SearchFlexibleNetwork() {
                         <div className="col-md-12 mb-3">
                             <div className="form-group">
                                 <small>Flexible NetWork </small>
-                                <input type="text" className="form-control" placeholder='Start typing flexible network id/ name to search'
+                                <input type="text" onKeyUp={(e) => searchException(e)} className="form-control" placeholder='Start typing flexible network id/ name to search'
+                                
                                 />
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </>
+    )
+}
+
+
+function FlexibleNdcRow(props) {
+
+    useEffect(() => {
+
+    }, [props.selected]);
+
+
+
+    return (
+        <>
+            <tr className={(props.selected && props.ndcRow.rx_network_rule_id == props.selected.rx_network_rule_id ? ' tblactiverow ' : '')}
+
+                onClick={() => props.getNDCItem(props.ndcRow.rx_network_rule_id)}
+            >
+                <td>{props.ndcRow.rx_network_rule_id}</td>
+                <td >{props.ndcRow.rx_network_rule_name}</td>
+
+
+                {/* <td><button className="btn btn-sm btn-info" id="" ><i className="fa fa-eye"></i> View</button></td> */}
+            </tr>
+        </>
+    )
+}
+
+
+function FlexibleNdcClassRow(props) {
+
+    useEffect(() => {
+
+    }, [props.selected]);
+
+    return (
+        <>
+            <tr
+                className={(props.selected && props.flexibleclassrow.pharmacy_nabp == props.selected.pharmacy_nabp ? ' tblactiverow ' : '')}
+                onClick={() => props.getNDCItemDetails(props.flexibleclassrow.rx_network_rule_id)}
+
+            >
+                <td>{props.flexibleclassrow.rx_network_rule_id_number}</td>
+                <td>{props.flexibleclassrow.effective_date}</td>
+                <td>{props.flexibleclassrow.termination_date}</td>
+                <td>{props.flexibleclassrow.pharmacy_chain}</td>
+                <td>{props.flexibleclassrow.price_schedule_ovrd}</td>
+                <td>{props.flexibleclassrow.state}</td>
+                <td>{props.flexibleclassrow.country}</td>
+                <td>{props.flexibleclassrow.zip_code}</td>
+
+
+
+                {/* <td><button className="btn btn-sm btn-info" id="" ><i className="fa fa-eye"></i> View</button></td> */}
+            </tr>
         </>
     )
 }
@@ -150,16 +346,16 @@ function FlexibleNetworkList(props) {
         props.getNDCItemDetails(ndciemid);
     }
 
-    // const ndcListArray = [];
-    // for (let i = 0; i < props.ndcListData.length; i++) {
-    //     ndcListArray.push(<TraditionalNdcRow ndcRow={props.ndcListData[i]} getNDCItem={getNDCItem} selected={props.selctedNdc} />);
-    // }
+    const ndcListArray = [];
+    for (let i = 0; i < props.ndcListData.length; i++) {
+        ndcListArray.push(<FlexibleNdcRow ndcRow={props.ndcListData[i]} getNDCItem={getNDCItem} selected={props.selctedNdc} />);
+    }
 
 
-    // const ndcClassArray = [];
-    // for (let j = 0; j < props.ndcClassData.length; j++) {
-    //     ndcClassArray.push(<TraditionalNdcClassRow ndcClassRow={props.ndcClassData[j]} getNDCItemDetails={getNDCItemDetails} selected={props.selctedNdc} />);
-    // }
+    const ndcClassArray = [];
+    for (let j = 0; j < props.ndcClassData.length; j++) {
+        ndcClassArray.push(<FlexibleNdcClassRow flexibleclassrow={props.ndcClassData[j]} getNDCItemDetails={getNDCItemDetails} selected={props.selctedNdc} />);
+    }
 
 
 
@@ -192,7 +388,7 @@ function FlexibleNetworkList(props) {
                                             </thead>
                                             <tbody>
 
-                                                {/* {ndcListArray} */}
+                                                {ndcListArray}
 
 
                                             </tbody>
@@ -208,16 +404,19 @@ function FlexibleNetworkList(props) {
                                         <table className="table table-striped table-bordered" style={{ position: 'relative' }}>
                                             <thead className='stickt-thead'>
                                                 <tr>
-                                                    <th>ID</th>
-                                                    <th>Name</th>
+                                                    <th>Rule ID</th>
                                                     <th>Effective Date</th>
                                                     <th>Termination Date</th>
+                                                    <th>Chain Id</th>
                                                     <th>Price Schedule </th>
+                                                    <th>State</th>
+                                                    <th>Country</th>
+                                                    <th>Zip Code</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
 
-                                                {/* {ndcClassArray} */}
+                                                {ndcClassArray}
 
 
                                             </tbody>
@@ -954,7 +1153,6 @@ function ProvidersRow(props) {
 
 function TraditionalNetworkForm(props) {
     const { register, reset, handleSubmit, watch, control, formState: { errors } } = useForm();
-    const [traditionalData, setTraditionalData] = useState(false);
 
     useEffect(() => { reset(props.formData) }, [props.formData]);
 
@@ -1152,13 +1350,13 @@ function TraditionalNetworkForm(props) {
                                                 <div class="col-md-6 mb-3">
                                                     <div class="form-group">
                                                         <small>Network ID</small>
-                                                        <input type="text" class="form-control" name="" id="" placeholder="" required="" />
+                                                        <input type="text" class="form-control" {...register('rx_network_rule_id')} name="" id="" placeholder="" required="" />
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                     <div class="form-group">
                                                         <small>Network Name</small>
-                                                        <input type="text" class="form-control" name="" id="" placeholder="" required="" />
+                                                        <input type="text" class="form-control" {...register('rx_network_rule_name')} name="" id="" placeholder="" required="" />
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12">
@@ -1283,157 +1481,128 @@ function TraditionalNetworkForm(props) {
 
                         <div class="tab-pane fade" id="Providers" role="tabpanel" aria-labelledby="nav-profile-tab">
 
-                            <div class="card mt-3 mb-3">
+                        <div class="card mt-3 mb-3">
 
-                                <div className="col-md-12">
-                                    <div className="card-body">
-                                        <div style={{ height: '400px', overflowY: 'scroll' }}>
-                                            <table className="table table-striped table-bordered" style={{ position: 'relative' }}>
-                                                <thead className='stickt-thead'>
-                                                    <tr>
-                                                        <th> ID</th>
-                                                        <th> Name</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
+<div className="col-md-12">
+    <div className="card-body">
+        <div className='row'>
 
-                                                    {/* {ndcListArray} */}
+        <div class="col-md-3">
+                    <div class="form-group mb-3">
+                        <small>Net Rule ID</small>
+                        <input type="text" class="form-control" name="" placeholder="Enter Customer ID" id="" required=""/>
+                        <a href=""><span class="fa fa-search form-icon"></span></a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group mb-3">
+                        <small>Effective Date</small>
+                        <input type="date" class="form-control" name="" placeholder="Enter Customer ID" id="" required=""/>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group mb-3">
+                        <small>Termination Date</small>
+                        <input type="date" class="form-control" name="" placeholder="Enter Customer ID" id="" required=""/>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group mb-3">
+                        <small>Provider Chain</small>
+                        <input type="text" class="form-control" name="" placeholder="Enter Customer ID" id="" required=""/>
+                        <a href=""><span class="fa fa-search form-icon"></span></a>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group mb-3">
+                        <small>State</small>
+                        <select class="form-select">
+                            <option value="">Select State</option>
+                            <option value=""></option>
+                            <option value=""></option>
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group mb-3">
+                        <small>Country</small>
+                        <select class="form-select">
+                            <option value="">Select Country</option>
+                            <option value=""></option>
+                            <option value=""></option>
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group mb-3">
+                        <small>Zip Code</small>
+                        <input type="text" class="form-control" name="" placeholder="Enter Customer ID" id="" required=""/>
+                        <a href=""><span class="fa fa-search form-icon"></span></a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group mb-3">
+                        <small>Area Code</small>
+                        <input type="text" class="form-control" name="" placeholder="Enter Customer ID" id="" required=""/>
+                        <a href=""><span class="fa fa-search form-icon"></span></a>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group mb-3">
+                        <small>Exchange</small>
+                        <input type="text" class="form-control" name="" placeholder="Enter Customer ID" id="" required=""/>
+                        <a href=""><span class="fa fa-search form-icon"></span></a>
+                    </div>
+                </div>
 
 
-                                                </tbody>
-                                            </table>
-                                        </div>
+                <div class="col-md-3">
+                    <div class="form-group mb-3 mt-4">
+                        <small>&nbsp;</small>
+                        <input type="checkbox" id="male" class="d-none"/>
+                        <label for="male">Exclusion</label>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="form-group mb-3">
+                        <small>Price Schedule Override</small>
+                        <input type="text" class="form-control" name="" placeholder="Enter Customer ID" id="" required=""/>
+                        <a href=""><span class="fa fa-search form-icon"></span></a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group mb-3">
+                        <small>Provider Status</small>
+                        <select class="form-select">
+                            <option value="">Select Country</option>
+                            <option value=""></option>
+                            <option value=""></option>
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
 
+        </div>
+    
 
+    </div>
+</div>
+</div>
 
-
-
-                                    </div>
-                                </div>
-
-                            </div>
-
-
-
+                          
 
 
                         </div>
                     </div>
 
 
-                    <div class="card mt-3 mb-3">
-
-                        <div className="col-md-12">
-                            <div className="card-body">
-                                <div className='row'>
-
-                                <div class="col-md-3">
-                                            <div class="form-group mb-3">
-                                                <small>Net Rule ID</small>
-                                                <input type="text" class="form-control" name="" placeholder="Enter Customer ID" id="" required=""/>
-                                                <a href=""><span class="fa fa-search form-icon"></span></a>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group mb-3">
-                                                <small>Effective Date</small>
-                                                <input type="date" class="form-control" name="" placeholder="Enter Customer ID" id="" required=""/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group mb-3">
-                                                <small>Termination Date</small>
-                                                <input type="date" class="form-control" name="" placeholder="Enter Customer ID" id="" required=""/>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-3">
-                                            <div class="form-group mb-3">
-                                                <small>Provider Chain</small>
-                                                <input type="text" class="form-control" name="" placeholder="Enter Customer ID" id="" required=""/>
-                                                <a href=""><span class="fa fa-search form-icon"></span></a>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-3">
-                                            <div class="form-group mb-3">
-                                                <small>State</small>
-                                                <select class="form-select">
-                                                    <option value="">Select State</option>
-                                                    <option value=""></option>
-                                                    <option value=""></option>
-                                                    <option value=""></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group mb-3">
-                                                <small>Country</small>
-                                                <select class="form-select">
-                                                    <option value="">Select Country</option>
-                                                    <option value=""></option>
-                                                    <option value=""></option>
-                                                    <option value=""></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group mb-3">
-                                                <small>Zip Code</small>
-                                                <input type="text" class="form-control" name="" placeholder="Enter Customer ID" id="" required=""/>
-                                                <a href=""><span class="fa fa-search form-icon"></span></a>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group mb-3">
-                                                <small>Area Code</small>
-                                                <input type="text" class="form-control" name="" placeholder="Enter Customer ID" id="" required=""/>
-                                                <a href=""><span class="fa fa-search form-icon"></span></a>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-3">
-                                            <div class="form-group mb-3">
-                                                <small>Exchange</small>
-                                                <input type="text" class="form-control" name="" placeholder="Enter Customer ID" id="" required=""/>
-                                                <a href=""><span class="fa fa-search form-icon"></span></a>
-                                            </div>
-                                        </div>
-
-
-                                        <div class="col-md-3">
-                                            <div class="form-group mb-3 mt-4">
-                                                <small>&nbsp;</small>
-                                                <input type="checkbox" id="male" class="d-none"/>
-                                                <label for="male">Exclusion</label>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="col-md-3">
-                                            <div class="form-group mb-3">
-                                                <small>Price Schedule Override</small>
-                                                <input type="text" class="form-control" name="" placeholder="Enter Customer ID" id="" required=""/>
-                                                <a href=""><span class="fa fa-search form-icon"></span></a>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group mb-3">
-                                                <small>Provider Status</small>
-                                                <select class="form-select">
-                                                    <option value="">Select Country</option>
-                                                    <option value=""></option>
-                                                    <option value=""></option>
-                                                    <option value=""></option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                </div>
-                            
-
-                            </div>
-                        </div>
-                    </div>
+                  
 
                     <Button type='submit' variant="primary">{props.adding ? ' Add' : 'Update'}</Button>
 
