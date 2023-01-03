@@ -26,6 +26,13 @@ export default function DiagnosisValidation()
     const [selectLimitationLists, setSelectLimitationLists] = useState('');
     const [adding, setAdding] = useState(false);
 
+    const clearForm = (e) => {
+        setAdding(false);
+        // setLimitationFormData([]);
+        document.getElementById('diagnisisIdForm').reset();
+    }
+
+
 //get priority data here name is different
     const getDiagnosisLimitation = (data) => {
         setloader(true);
@@ -175,7 +182,7 @@ export default function DiagnosisValidation()
             <DiagnosisList key='DiagnosisList' diagnosisListData={ndcData} ndcClassData={ndcClass} getDiagnosisLimitationsList={getDiagnosisLimitation} getPriorityDiagnosisId={getPriorityDiagnosisId} selctedNdc={priorityDiagnosisFromData} loading={loading} loader={loader} selected={SelectedDiagnosisList} getpriorityDiagnosisFromData={getpriorityDiagnosisFromData}  />
 
             <div ref={scollToRef}>
-                <DiagnosisForm key='DiagnosisForm' viewDiagnosisFormdata={priorityDiagnosisFromData} limitationListData={selectLimitationLists} adding={adding} />
+                <DiagnosisForm key='DiagnosisForm' viewDiagnosisFormdata={priorityDiagnosisFromData} limitationListData={selectLimitationLists} adding={adding} clearForm={clearForm} />
             </div>
             <Footer />
 
@@ -414,32 +421,35 @@ function DiagnosisForm(props)
     const getLimitationsRow = (data) => {
         setLimitationFormData(data);
     }
-
-    const clearForm = (e) => {
-        setAdding(false);
-        setLimitationFormData([]);
-        document.getElementById('zipCodeForm').reset();
-    }
-
     const { user } = useAuth();
 
 
+
     useEffect(() => {
+
         if (props.adding) {
             reset({ diagnosis_list: '', exception_name: '',diagnosis_id:'',priority:'',diagnosis_status:'', new: 1 }, {
                     keepValues:false,
                 })
         } else {
 
-            reset(props.viewDiagnosisFormdata);
+            reset({ diagnosis_list: '', exception_name: '',diagnosis_id:'',priority:'',diagnosis_status:'', new: 1 }, {
+                keepValues:false,
+            })
         }
 
         if (!props.viewDiagnosisFormdata) {
+
             reset({ diagnosis_list: '',exception_name:'',diagnosis_id:'',priority:'',diagnosis_status:'', new: 1 }, {
                 keepValues: false,
             })
         }
-    },[props.viewDiagnosisFormdata, props.adding]);
+    }, [props.viewDiagnosisFormdata, props.adding]);
+
+    useEffect(() => {
+        reset(props.viewDiagnosisFormdata), reset(limitationFormData)
+    }, [props.viewDiagnosisFormdata, limitationFormData]);
+
 
     const addDiagnosisData = (DiagnosisFormData) => {
         const requestOptions = {
@@ -472,7 +482,13 @@ function DiagnosisForm(props)
                         draggable: true,
                         progress: undefined,
                     });
+
                 }
+                reset({ diagnosis_list: '',exception_name:'',diagnosis_id:'',priority:'',diagnosis_status:'' }, {
+                    keepValues: false,
+                });
+
+
             })
             .catch(error => {
                 console.error('There was an error !', error);
@@ -480,7 +496,52 @@ function DiagnosisForm(props)
         }
 
 
-    useEffect(() => { reset(props.viewDiagnosisFormdata) , reset(limitationFormData) }, [props.viewDiagnosisFormdata,limitationFormData]);
+    const addDiagnosisLimitationData = (DiagnosisLimitationFormData) => {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body : JSON.stringify(DiagnosisLimitationFormData)
+        }
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/diagnosisvalidation/submit-diagnosis-limitation-form`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('Content-Type')?.includes('application/json');
+                const data = isJson && await response.json();
+                // console.log(response);
+                if (!response.ok) {
+                    toast.error("There was an error !", {
+                        position: 'top-right',
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        pauseOnHover: true,
+                        closeOnClick: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                } else {
+                    toast.success(data.message, {
+                        position: 'top-right',
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        pauseOnHover: true,
+                        closeOnClick: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+
+                }
+                // reset({ diagnosis_list: '',exception_name:'',diagnosis_id:'',priority:'',diagnosis_status:'' }, {
+                //     keepValues: false,
+                // });
+
+
+            })
+            .catch(error => {
+                console.error('There was an error !', error);
+            });
+        }
+
+
+
     // useEffect(() => { reset(limitationFormData) }, [limitationFormData]);
     return(
         <>
@@ -491,11 +552,13 @@ function DiagnosisForm(props)
                             </div>
 
                     <div className="row mb-2">
-                    <form id='diagnisisIdForm' name='diagnisisIdForm' onSubmit={handleSubmit(addDiagnosisData)}>
+                        <form id='diagnisisIdForm' name='diagnisisIdForm' onSubmit={handleSubmit(addDiagnosisData)}>
+                            {props.viewDiagnosisFormdata.diagnosis_id ? <input type='hidden' {...register('updateForm')} value='update' />:<input type='hidden' {...register('updateForm')} value='update' />}
                                 <div className="col-md-4 mb-3">
                                     <div className="form-group">
-                                        <small> Diagnosis List ID:</small>
-                                    <input  type="text" name="diagnosis_list" {...register('diagnosis_list',{required:true})}  placeholder="" className="form-control" readonly={props.viewDiagnosisFormdata?'true':'false'} />
+                                    <small> Diagnosis List ID:</small>
+                                    {props.viewDiagnosisFormdata?<input type="text" name="diagnosis_list" {...register('diagnosis_list',{required:true})}  placeholder="" className="form-control" readonly='readonly' />:<input  type="text" name="diagnosis_list" {...register('diagnosis_list',{required:true})}  placeholder="" className="form-control" />}
+
                                     <input type="hidden" className="form-control" name="user_name" {...register('user_name')} value={user.name} />
                                     {errors.diagnosis_list && <span><p className="notvalid">This field is required!</p></span>}
                                     </div>
@@ -551,13 +614,14 @@ function DiagnosisForm(props)
                                     </div>
                             </div>
                             <div class="col-md-12 text-end mt-3 mb-3" >
-                                <button type="submit" className="btn btn-primary "> {props.viewDiagnosisFormdata ? 'Update' : 'Add'} </button>
+                                <button type="submit" className="btn btn-primary "> {props.viewDiagnosisFormdata.diagnosis_list ? 'Update' : 'Add'} </button>
                                     <button type="button" className="btn btn-warning" > Remove </button>
-                                <button type="button" className="btn btn-danger" onClick={e => clearForm(e)}> Clear </button>
+                                <button type="button" className="btn btn-danger" onClick={e => props.clearForm(e)}> Clear </button>
                                 </div>
                             </form>
                     <hr/>
-                    <form>
+                        <form id='diagnisisLimitationIdForm' name='diagnisisLimitationIdForm' onSubmit={handleSubmit(addDiagnosisLimitationData)}>
+                        <input type="hidden" className="form-control" name="user_name" {...register('user_name')} value={user.name} />
                             <div className="row mb-2">
                                  <div className="col-md-12">
                                 <h5 className="mb-2">Limitations Lists</h5>
@@ -603,9 +667,9 @@ function DiagnosisForm(props)
                                 </div>
 
                                 <div className="col-md-12 text-end">
-                                    <button type="button" className="btn btn-primary "> { limitationFormData ?'Update':'Add'} </button>
+                                    <button type="submit" className="btn btn-primary "> { limitationFormData ?'Update':'Add'} </button>
                                     <button type="button" className="btn btn-warning" > Remove </button>
-                                     <button type="button" className="btn btn-danger" onClick={e=> clearForm(e)}> Clear </button>
+                                     <button type="button" className="btn btn-danger" onClick={e=> props.clearForm(e)}> Clear </button>
                                 </div>
                         </div>
                         </form>

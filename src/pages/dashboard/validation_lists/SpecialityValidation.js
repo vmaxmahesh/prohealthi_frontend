@@ -2,6 +2,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import { render } from 'react-dom';
 import { useForm } from 'react-hook-form';
 import { Link, Outlet, useLocation, useOutletContext } from 'react-router-dom';
+import LoadingSpinner from '../../../loader/loader';
+import EmptyRowComponent from '../../../shared/NoDataFound';
+import Footer from '../../../shared/Footer';
+import { useAuth } from '../../../hooks/AuthProvider';
+import { toast } from 'react-toastify';
+
 
 export default function SpecialityValidation()
 {
@@ -9,15 +15,19 @@ export default function SpecialityValidation()
     const scollToRef = useRef();
 
 
-    const [ndcData, setNdcData] = useState([]);
-    const [ndcClass, setNdClass] = useState([]);
+    const [specialityValidationLists, setSpecialityValidationLists] = useState([]);
+    const [speciality, setSpeciality] = useState([]);
+    const [selctedSpecialityValidationRow, setSelctedSpecialityValidationRow] = useState('');
+    const [selectedSpecialityId, setSelectedSpecialityId] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [loader, setLoader] = useState(false);
+    const [specialityFormData, setSpecialityFormData] = useState('');
+    const [adding, setAdding] = useState(false);
 
-    const [selctedNdc, setSelctedNdc] = useState('');
 
 
-
-    const searchException = (fdata) => {
-        
+    const searchSpeciality = (fdata) => {
+        setLoading(true);
         const requestOptions = {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
@@ -27,18 +37,18 @@ export default function SpecialityValidation()
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
-                //  console.log(response);
-                // console.log(data.data);
 
                 // check for error response
                 if (!response.ok) {
                     // get error message from body or default to response status
                     const error = (data && data.message) || response.status;
-                    setNdcData([]);
+                    setSpecialityValidationLists([]);
                     return Promise.reject(error);
 
                 } else {
-                    setNdcData(data.data);
+                    setSpecialityValidationLists(data.data);
+                    setSpecialityFormData();
+                    setLoading(false);
                     return;
                 }
 
@@ -49,13 +59,12 @@ export default function SpecialityValidation()
                 console.error('There was an error!', error);
             });
     }
-    const getNDCItems = (ndcid) => {
-        // ndc_exception_list
+    const getSpecialityLists = (specialty_list) => {
+        setLoader(true);
         var test = {};
-        test.ndc_exception_list = ndcid;
-        setSelctedNdc(test);
+        test.specialty_list = specialty_list;
+        setSelctedSpecialityValidationRow(test);
 
-        // //  console.log(customerid);
         const requestOptions = {
             method: 'GET',
             // mode: 'no-cors',
@@ -64,7 +73,7 @@ export default function SpecialityValidation()
         };
         // //  console.log(watch(fdata));
 
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/speciality/get/${ndcid}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/speciality/get/${specialty_list}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
@@ -74,16 +83,14 @@ export default function SpecialityValidation()
                 if (!response.ok) {
                     // get error message from body or default to response status
                     const error = (data && data.message) || response.status;
-                    setNdClass([]);
+                    setSpeciality([]);
                     return Promise.reject(error);
                 } else {
-                    console.log(data.data);
-                    setNdClass(data.data);
+                    setSpeciality(data.data);
+                    setLoader(false);
+                    setSelectedSpecialityId('');
+                    setSpecialityFormData();
                     // scollToRef.current.scrollIntoView()
-                }
-
-
-                if (response === '200') {
                 }
             })
             .catch(error => {
@@ -91,17 +98,22 @@ export default function SpecialityValidation()
             });
     }
 
-    const getNDCItemDetails = (ndcid) => {
-        //  console.log(ndcid);
+    //form data
+    const getSpecialityRow = (data) => {
+        var speciality_id = data.specialty_id;
+        var specialty_list = data.specialty_list;
+        var test = {};
+        test.speciality_id = speciality_id;
+        setSelectedSpecialityId(test);
+
         const requestOptions = {
             method: 'GET',
             // mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
             // body: encodeURIComponent(data)
         };
-        //  console.log(watch(fdata));
 
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/speciality/details/${ndcid}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/speciality/details/${speciality_id}/${specialty_list}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
@@ -113,14 +125,12 @@ export default function SpecialityValidation()
                     const error = (data && data.message) || response.status;
                     return Promise.reject(error);
                 } else {
-                    setSelctedNdc(data.data);
-                    // scollToRef.current.scrollIntoView()
-                    // return;
+                    setSpecialityFormData(data.data);
+                    setAdding(true);
+                    scollToRef.current.scrollIntoView();
                 }
 
 
-                if (response === '200') {
-                }
             })
             .catch(error => {
                 console.error('There was an error!', error);
@@ -148,13 +158,15 @@ export default function SpecialityValidation()
                         </ul>
                     </div>
                 </div>
-            </div> 
-            <SearchSpeciality searchException={searchException} />
+            </div>
+            <SearchSpeciality searchSpeciality={searchSpeciality} />
 
 
-            <SpecialityList ndcListData={ndcData} ndcClassData={ndcClass} getNDCItem={getNDCItems} getNDCItemDetails={getNDCItemDetails} selctedNdc={selctedNdc} />
+            <SpecialityList loader={loader} loading={loading} specialityValidationListsData={specialityValidationLists} specialityListsData={speciality} getSpecialityList={getSpecialityLists} getSpecialityRow={getSpecialityRow} selctedSpecialityValidationRow={selctedSpecialityValidationRow} selectedSpecialityId={ selectedSpecialityId}  />
+            <div ref={scollToRef}>
+                <SpecialityForm viewSpecialityFormData={specialityFormData} adding={adding } />
+            </div>
 
-<SpecialityForm  viewDiagnosisFormdata={selctedNdc} />
 
         </>
     )
@@ -163,12 +175,9 @@ export default function SpecialityValidation()
 function SearchSpeciality(props)
 {
 
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
+    const searchSpeciality = (fdata) => {
 
-
-    const searchException = (fdata) => {
-
-        props.searchException(fdata);
+        props.searchSpeciality(fdata);
     }
     return(
         <>
@@ -178,10 +187,10 @@ function SearchSpeciality(props)
                         <div className="col-md-12 mb-3">
                             <div className="form-group">
                                 <small>Speciality Validation ID/Name</small>
-                                <input type="text"  onKeyUp={(e) => searchException(e)} className="form-control" placeholder='Start typing speciality validation ID/name to search'
+                                <input type="text"  onKeyUp={(e) => searchSpeciality(e)} className="form-control" placeholder='Start typing speciality validation ID/name to search'
                                 />
                             </div>
-                        </div>                       
+                        </div>
                     </div>
                 </div>
             </div>
@@ -193,31 +202,23 @@ function SearchSpeciality(props)
 
 
 
-function NdcRow(props) {
-
-    useEffect(() => {
-
-    }, [props.selected]);
-
-
+function SpecialityValidationRow(props) {
 
     return (
         <>
-            <tr className={(props.selected && props.ndcRow.specialty_list == props.selected.specialty_list ? ' tblactiverow ' : '')}
+            <tr className={(props.selected && props.specialityValidationRow.specialty_list == props.selected.specialty_list ? ' tblactiverow ' : '')}
 
-                onClick={() => props.getNDCItem(props.ndcRow.specialty_id)}
+                onClick={() => props.getSpecialityList(props.specialityValidationRow.specialty_list)}
             >
-                <td>{props.ndcRow.specialty_id}</td>
-                <td >{props.ndcRow.exception_name}</td>
-
-                {/* <td><button className="btn btn-sm btn-info" id="" ><i className="fa fa-eye"></i> View</button></td> */}
+                <td>{props.specialityValidationRow.specialty_list}</td>
+                <td >{props.specialityValidationRow.exception_name}</td>
             </tr>
         </>
     )
 }
 
 
-function NdcClassRow(props) {
+function SpecialityDataRow(props) {
 
     useEffect(() => {
 
@@ -226,14 +227,12 @@ function NdcClassRow(props) {
     return (
         <>
             <tr
-                className={(props.selected && props.ndcClassRow.specialty_id == props.selected.specialty_id ? ' tblactiverow ' : '')}
-                onClick={() => props.getNDCItemDetails(props.ndcClassRow.specialty_id)}
+                className={(props.selected && props.specialityDataRow.specialty_id == props.selected.speciality_id ? ' tblactiverow ' : '')}
+                onClick={() => props.getSpecialityRow(props.specialityDataRow)}
 
             >
-                <td>{props.ndcClassRow.specialty_id}</td>
-                <td>{props.ndcClassRow.specialty_status}</td>
-              
-                {/* <td><button className="btn btn-sm btn-info" id="" ><i className="fa fa-eye"></i> View</button></td> */}
+                <td>{props.specialityDataRow.specialty_id}</td>
+                <td>{props.specialityDataRow.specialty_status}</td>
             </tr>
         </>
     )
@@ -245,31 +244,41 @@ function SpecialityList(props) {
     const scollToRef = useRef();
 
     useEffect(() => { }, [props.selctedNdc]);
-    // //  console.log(props.selctedNdc);
 
-    const getNDCItem = (ndciemid) => {
-        props.getNDCItem(ndciemid);
+    const getSpecialityList = (speciality_id) => {
+        props.getSpecialityList(speciality_id);
     }
 
-    const getNDCItemDetails = (ndciemid) => {
-        props.getNDCItemDetails(ndciemid);
+    const getSpecialityRow = (specility_id) => {
+        props.getSpecialityRow(specility_id);
     }
 
-    const ndcListArray = [];
-    for (let i = 0; i < props.ndcListData.length; i++) {
-        ndcListArray.push(<NdcRow ndcRow={props.ndcListData[i]} getNDCItem={getNDCItem} selected={props.selctedNdc} />);
+    //speciality Validation list rows
+    const specialityValidationListsArray = [];
+    if(props.specialityValidationListsData.length>0){
+        for (let i = 0; i < props.specialityValidationListsData.length; i++) {
+            specialityValidationListsArray.push(<SpecialityValidationRow specialityValidationRow={props.specialityValidationListsData[i]} getSpecialityList={getSpecialityList} selected={props.selctedSpecialityValidationRow} />);
+        }
+    }else{
+        specialityValidationListsArray.push(<EmptyRowComponent colSpan='2'/>)
     }
 
-    const ndcClassArray = [];
-    for (let j = 0; j < props.ndcClassData.length; j++) {
-        ndcClassArray.push(<NdcClassRow ndcClassRow={props.ndcClassData[j]} getNDCItemDetails={getNDCItemDetails} selected={props.selctedNdc} />);
+    //speciality list rows
+    const specialityDataArray = [];
+    if (props.specialityListsData.length > 0) {
+        for (let j = 0; j < props.specialityListsData.length; j++) {
+            specialityDataArray.push(<SpecialityDataRow specialityDataRow={props.specialityListsData[j]} getSpecialityRow={getSpecialityRow} selected={props.selectedSpecialityId} />);
+        }
+    } else {
+        specialityDataArray.push(<EmptyRowComponent colSpan='2'/>)
     }
 
-    const [ncdListData, setNcdListData] = useState();
-    const [show, setShow] = useState("none");
-    const handleShow = () => setShow("block");
 
-    return (  
+    // const [ncdListData, setNcdListData] = useState();
+    // const [show, setShow] = useState("none");
+    // const handleShow = () => setShow("block");
+
+    return (
         <>
           <div className="card mt-3 mb-3">
                 <div className="card-body">
@@ -278,7 +287,6 @@ function SpecialityList(props) {
                             <h5>Speciality Validation List</h5>
                         </div>
                         <div className="col-md-4 mb-3 text-end">
-                            {/* <button className="btn btn-sm btn-warning" id="show" onClick={e => handleShow()}><i className="fa plus-circle"></i> Add NDC List</button> */}
                         </div>
                         <div className="col-md-6">
                             <div className="card mt-3 mb-3">
@@ -293,7 +301,7 @@ function SpecialityList(props) {
                                             </thead>
                                             <tbody>
 
-                                            {ndcListArray}
+                                            {props.loading?<LoadingSpinner colSpan='2'/>:specialityValidationListsArray}
 
                                             </tbody>
                                         </table>
@@ -314,7 +322,7 @@ function SpecialityList(props) {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                            {ndcClassArray}
+                                            {props.loader?<LoadingSpinner colSpan='2'/>:specialityDataArray}
                                             </tbody>
                                         </table>
                                     </div>
@@ -324,23 +332,75 @@ function SpecialityList(props) {
                     </div>
                 </div>
             </div>
-            {/* <SpecialityForm /> */}
-        </>
+         </>
     );
 }
 
 function SpecialityForm(props) {
 
+    const { register, reset, handleSubmit, formState: { errors } } = useForm();
+    const { user } = useAuth();
 
-    const { register,reset, handleSubmit, watch, formState: { errors } } = useForm();
+    const addSpecialityFormData = (specialityFormData) => {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'content-Type': 'application/json' },
+            body: JSON.stringify(specialityFormData)
+        }
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/speciality/submit-speciality-form`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('Content-Type')?.includes('application/json');
+                const data = isJson && await response.json();
+                if (!response.ok) {
+                    toast.error("There was an error !", {
+                        position: 'top-right',
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        pauseOnHover: true,
+                        closeOnClick: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                }else {
+                    toast.success(data.message, {
+                        position: 'top-right',
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        pauseOnHover: true,
+                        closeOnClick: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
 
-    // const [selctedNdc, setSelctedNdc] = useOutletContext();
+                }
+            })
+            .catch(error => {
+                console.error('There was an error !', error);
+            });
+    }
 
-    useEffect(() => { reset(props.viewDiagnosisFormdata) }, [props.viewDiagnosisFormdata]);
-    return (  
+    useEffect(() => {
+        if (props.adding) {
+            reset({ specialty_list: '', exception_name: '', specialty_id: '', specialty_status: '', new: 1 }, {
+                keepValues: false,
+            });
+        } else {
+            reset(props.viewSpecialityFormData);
+        }
+        if (!props.viewSpecialityFormData) {
+            reset({ specialty_list: '', exception_name: '', specialty_id: '', specialty_status: '', new: 1 }, {
+                keepValues: false,
+            });
+        }
+    },[props.viewSpecialityFormData, props.adding])
+
+    useEffect(() => { reset(props.viewSpecialityFormData) }, [props.viewSpecialityFormData]);
+    return (
         <>
-         <div className="card mt-3 mb-3">
-                    <div className="card-body">
+            <div className="card mt-3 mb-3">
+                <form id="specialityForm" name="specialityForm" onSubmit={handleSubmit(addSpecialityFormData)}>
+                    <input type="hidden" name="user_name" value={user.name} {...register('user_name')} />
+                <div className="card-body">
                         <div className="col-md-12">
                                 <h5 className="mb-2">Specialty Validations</h5>
                             </div>
@@ -348,37 +408,47 @@ function SpecialityForm(props) {
                                 <div className="col-md-4 mb-3">
                                     <div className="form-group">
                                         <small> Specialty List ID: </small>
-                                       <input type="text" name="specialty_list" {...register('specialty_list')} placeholder="" className="form-control" />
+                                    <input type="text" name="specialty_list" {...register('specialty_list', { required: true})} placeholder="Specialty List ID" className="form-control" />
+                                    {errors.specialty_list && <span><p className="notvalid">This field is required!</p></span>}
                                     </div>
                                 </div>
                                 <div className="col-md-4 mb-3">
                                     <div className="form-group">
                                         <small> Specialty List Name: </small>
-                                    <input type="text" name="exception_name" {...register('exception_name')} placeholder="100PC" className="form-control" />
+                                    <input type="text" name="exception_name" {...register('exception_name',{required:true})} placeholder="Specialty List Name" className="form-control" />
+                                    {errors.exception_name && <span><p className="notvalid">This field is required!</p></span>}
                                     </div>
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group ">
                                          <small> Specialty ID: </small>
                                         <div className="searchmodal">
-                                       <input type="text" name="specialty_id" {...register('specialty_id')} className="form-control" placeholder="" autoComplete="off" />
-                                       <button className="btn-info"><i className="fa-solid fa-magnifying-glass"></i></button>
+                                        <input type="text" name="specialty_id" {...register('specialty_id' ,{required:true })} className="form-control" placeholder="Specialty ID" autoComplete="off" />
+                                        {errors.specialty_id && <span><p className="notvalid">This field is required!</p></span>}
                                        </div>
                                     </div>
                                 </div>
                                  <div className="col-md-4 mb-3">
                                     <div className="form-group">
                                         <small> Specialty Status: </small>
-                                            <select className="form-select" name="specialty_status" {...register('specialty_status')}>
+                                            <select className="form-select" name="specialty_status" {...register('specialty_status', {required:true})}>
                                                 <option value="">--select--</option>
                                                 <option value="A">Approved</option>
-                                            </select>
+                                                <option value="R">Rejected</option>
+                                    </select>
+                                    {errors.specialty_status && <span><p className="notvalid">This field is required!</p></span>}
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                    </div>
+                    <div className="col-md-12 text-end">
+                        <button type="submit" className="btn btn-primary ">{ props.viewSpecialityFormData ?'Update':'Add' } </button>
+                                    {/* <button type="button" className="btn btn-warning" > Remove </button> */}
+                                     <button type="button" className="btn btn-danger"> Clear </button>
+                                </div>
+                </form>
+
                     </div>
         </>
     );
 }
-

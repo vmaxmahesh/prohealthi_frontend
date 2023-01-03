@@ -5,7 +5,7 @@ export default function EmptyRowComponent(props) {
     return (
         <>
             <tr>
-                <td  colSpan={props.colspan} align={'center'}>No Data Found</td>
+                <td  colSpan={props.colSpan} align={'center'}>No Data Found</td>
             </tr>
         </>
     )
