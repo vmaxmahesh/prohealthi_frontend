@@ -5,6 +5,9 @@ import { Link, Outlet, Route, Routes, useLocation, useNavigate, useOutletContext
 import { ToastContainer, toast } from 'react-toastify';
 import { Alert, Row, Col, Button } from 'react-bootstrap';
 import Footer from '../../../shared/Footer';
+import { Controller } from 'react-hook-form';
+import AsyncSelect from 'react-select/async';
+
 
 
 function FlexibleNetworks(props) {
@@ -215,12 +218,12 @@ function FlexibleNetworks(props) {
 
 
                 <div className="col-md-12 mb-3">
-                    <SearchFlexibleNetwork searchException={searchException}  />
+                    <SearchFlexibleNetwork searchException={searchException} />
 
                     <FlexibleNetworkList ndcListData={ndcData} ndcClassData={ndcClass} getNDCItem={getNDCItems} getNDCItemDetails={getNDCItemDetails} selctedNdc={selctedNdc} />
 
                     {/* <TraditionalNetworkForm  /> */}
-                     <TraditionalNetworkForm formData={flexibleData} selected={flexibleData}  />
+                    <TraditionalNetworkForm formData={flexibleData} selected={flexibleData} />
 
 
 
@@ -263,7 +266,7 @@ function SearchFlexibleNetwork(props) {
                             <div className="form-group">
                                 <small>Flexible NetWork </small>
                                 <input type="text" onKeyUp={(e) => searchException(e)} className="form-control" placeholder='Start typing flexible network id/ name to search'
-                                
+
                                 />
                             </div>
                         </div>
@@ -667,8 +670,24 @@ export function Networks(props) {
                                     <div class="col-md-12 mb-3">
                                         <div class="form-group">
                                             <small>Price Schedule Override</small>
-                                            <input type="text" class="form-control" name="" id="" placeholder="" required="" />
-                                            <a href=""><span class="fa fa-search form-icon"></span></a>
+                                            <Controller name="price_schdule"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <AsyncSelect
+                                                        {...field}
+                                                        cacheOptions
+                                                        defaultOptions
+                                                        // value={selectedValue}
+                                                        getOptionLabel={e => e.price_label}
+                                                        getOptionValue={e => e.price_value}
+                                                        loadOptions={loadPriceScheduleOptions}
+                                                        onInputChange={handlePriceScheduleInput}
+                                                        // onChange={handleChange}
+                                                        placeholder="Price Schedule 2"
+                                                        value={{ price_label: props.formData.price_schedule_ovrd, price_value: props.formData.price_schedule_ovrd }}
+
+                                                    />
+                                                )} />
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -992,12 +1011,26 @@ export function Rules(props) {
                             <div class="col-md-3">
                                 <div class="form-group mb-3">
                                     <small>Price Schedule Override</small>
-                                    <input type="text" class="form-control" name="price_schedule_override" {...register('price_schedule_override', {
-                                        required: true,
-                                    })} placeholder="Enter Customer ID" id="" required="" />
+                                    <Controller name="price_schdule"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <AsyncSelect
+                                                {...field}
+                                                cacheOptions
+                                                defaultOptions
+                                                // value={selectedValue}
+                                                getOptionLabel={e => e.price_label}
+                                                getOptionValue={e => e.price_value}
+                                                loadOptions={loadPriceScheduleOptions}
+                                                onInputChange={handlePriceScheduleInput}
+                                                // onChange={handleChange}
+                                                placeholder="Price Schedule 2"
+                                                value={{ price_label: props.formData.price_schedule_ovrd, price_value: props.formData.price_schedule_ovrd }}
+
+                                            />
+                                        )} />
                                     {errors.price_schedule_override?.type === 'required' && <p role="alert" className="notvalid"> Price Schedule Override is  required</p>}
 
-                                    <a href=""><span class="fa fa-search form-icon"></span></a>
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -1196,6 +1229,21 @@ function TraditionalNetworkForm(props) {
         })
     }
 
+    const loadRuleIdOptions = (pharm_input) => {
+        return new Promise((resolve, reject) => {
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/third-party-pricing/price-schedule/search?search=${pharm_input}`)
+                .then(response => response.json())
+                .then(({ data }) => {
+                    resolve(
+                        data.map(({ price_schedule }) => ({
+                            price_value: price_schedule,
+                            price_label: price_schedule
+                        }))
+                    )
+                })
+        })
+    }
+
     const loadGpiList = (pharm_input) => {
         return new Promise((resolve, reject) => {
             fetch(process.env.REACT_APP_API_BASEURL + `/api/exception/gpi/search?search=${pharm_input}`)
@@ -1365,8 +1413,24 @@ function TraditionalNetworkForm(props) {
                                                 <div class="col-md-12 mb-3">
                                                     <div class="form-group">
                                                         <small>Price Schedule Override</small>
-                                                        <input type="text" class="form-control" name="" id="" placeholder="" required="" />
-                                                        <a href=""><span class="fa fa-search form-icon"></span></a>
+                                                        <Controller name="price_schdule"
+                                                            control={control}
+                                                            render={({ field }) => (
+                                                                <AsyncSelect
+                                                                    {...field}
+                                                                    cacheOptions
+                                                                    defaultOptions
+                                                                    // value={selectedValue}
+                                                                    getOptionLabel={e => e.price_label}
+                                                                    getOptionValue={e => e.price_value}
+                                                                    loadOptions={loadPriceScheduleOptions}
+                                                                    onInputChange={handlePriceScheduleInput}
+                                                                    // onChange={handleChange}
+                                                                    placeholder="Price Schedule 2"
+                                                                    value={{ price_label: props.formData.price_schedule_ovrd, price_value: props.formData.price_schedule_ovrd }}
+
+                                                                />
+                                                            )} />
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12">
@@ -1375,15 +1439,47 @@ function TraditionalNetworkForm(props) {
                                                 <div class="col-md-6 mb-3">
                                                     <div class="form-group">
                                                         <small>By GPI List</small>
-                                                        <input type="text" class="form-control" name="" id="" placeholder="" required="" />
-                                                        <a href=""><span class="fa fa-search form-icon"></span></a>
+                                                        <Controller name="gpi_list"
+                                                            control={control}
+                                                            render={({ field }) => (
+                                                                <AsyncSelect
+                                                                    {...field}
+                                                                    cacheOptions
+                                                                    defaultOptions
+                                                                    getOptionLabel={e => e.gpi_label}
+                                                                    getOptionValue={e => e.gpi_value}
+
+                                                                    loadOptions={loadGpiList}
+                                                                    onInputChange={handlePriceScheduleInput}
+                                                                    // onChange={handleChange}
+                                                                    placeholder="Gpi List"
+                                                                    value={{ gpi_label: props.formData.gpi_exception_list_ovrd, gpi_value: props.formData.gpi_exception_list_ovrd }}
+
+                                                                />
+                                                            )} />
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                     <div class="form-group">
-                                                        <small>By BDC List</small>
-                                                        <input type="text" class="form-control" name="" id="" placeholder="" required="" />
-                                                        <a href=""><span class="fa fa-search form-icon"></span></a>
+                                                        <small>By NDC List</small>
+                                                        <Controller name="ndc_list"
+                                                            control={control}
+                                                            render={({ field }) => (
+                                                                <AsyncSelect
+                                                                    {...field}
+                                                                    cacheOptions
+                                                                    defaultOptions
+                                                                    // value={selectedValue}
+                                                                    getOptionLabel={e => e.ndc_label}
+                                                                    getOptionValue={e => e.ndc_value}
+
+                                                                    loadOptions={loadNDCList}
+                                                                    onInputChange={handleNdcInput}
+                                                                    placeholder="NDC List"
+                                                                    value={{ ndc_label: props.formData.gpi_exception_list_ovrd, ndc_value: props.formData.gpi_exception_list_ovrd }}
+
+                                                                />
+                                                            )} />
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12">
@@ -1481,128 +1577,159 @@ function TraditionalNetworkForm(props) {
 
                         <div class="tab-pane fade" id="Providers" role="tabpanel" aria-labelledby="nav-profile-tab">
 
-                        <div class="card mt-3 mb-3">
+                            <div class="card mt-3 mb-3">
 
-<div className="col-md-12">
-    <div className="card-body">
-        <div className='row'>
+                                <div className="col-md-12">
+                                    <div className="card-body">
+                                        <div className='row'>
 
-        <div class="col-md-3">
-                    <div class="form-group mb-3">
-                        <small>Net Rule ID</small>
-                        <input type="text" class="form-control" name="" placeholder="Enter Customer ID" id="" required=""/>
-                        <a href=""><span class="fa fa-search form-icon"></span></a>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group mb-3">
-                        <small>Effective Date</small>
-                        <input type="date" class="form-control" name="" placeholder="Enter Customer ID" id="" required=""/>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group mb-3">
-                        <small>Termination Date</small>
-                        <input type="date" class="form-control" name="" placeholder="Enter Customer ID" id="" required=""/>
-                    </div>
-                </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group mb-3">
+                                                    <small>Net Rule ID</small>
+                                                    <Controller name="rule_id"
+                                                        control={control}
+                                                        render={({ field }) => (
+                                                            <AsyncSelect
+                                                                {...field}
+                                                                cacheOptions
+                                                                defaultOptions
+                                                                // value={selectedValue}
+                                                                getOptionLabel={e => e.price_label}
+                                                                getOptionValue={e => e.price_value}
+                                                                loadOptions={loadPriceScheduleOptions}
+                                                                onInputChange={handlePriceScheduleInput}
+                                                                // onChange={handleChange}
+                                                                placeholder="Price Schedule 2"
+                                                                value={{ price_label: props.formData.price_schedule_ovrd, price_value: props.formData.price_schedule_ovrd }}
 
-                <div class="col-md-3">
-                    <div class="form-group mb-3">
-                        <small>Provider Chain</small>
-                        <input type="text" class="form-control" name="" placeholder="Enter Customer ID" id="" required=""/>
-                        <a href=""><span class="fa fa-search form-icon"></span></a>
-                    </div>
-                </div>
+                                                            />
+                                                        )} />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group mb-3">
+                                                    <small>Effective Date</small>
+                                                    <input type="date" class="form-control" name="" placeholder="Enter Customer ID" id="" required="" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group mb-3">
+                                                    <small>Termination Date</small>
+                                                    <input type="date" class="form-control" name="" placeholder="Enter Customer ID" id="" required="" />
+                                                </div>
+                                            </div>
 
-                <div class="col-md-3">
-                    <div class="form-group mb-3">
-                        <small>State</small>
-                        <select class="form-select">
-                            <option value="">Select State</option>
-                            <option value=""></option>
-                            <option value=""></option>
-                            <option value=""></option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group mb-3">
-                        <small>Country</small>
-                        <select class="form-select">
-                            <option value="">Select Country</option>
-                            <option value=""></option>
-                            <option value=""></option>
-                            <option value=""></option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group mb-3">
-                        <small>Zip Code</small>
-                        <input type="text" class="form-control" name="" placeholder="Enter Customer ID" id="" required=""/>
-                        <a href=""><span class="fa fa-search form-icon"></span></a>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group mb-3">
-                        <small>Area Code</small>
-                        <input type="text" class="form-control" name="" placeholder="Enter Customer ID" id="" required=""/>
-                        <a href=""><span class="fa fa-search form-icon"></span></a>
-                    </div>
-                </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group mb-3">
+                                                    <small>Provider Chain</small>
+                                                    <input type="text" class="form-control" name="" placeholder="Enter Customer ID" id="" required="" />
+                                                    <a href=""><span class="fa fa-search form-icon"></span></a>
+                                                </div>
+                                            </div>
 
-                <div class="col-md-3">
-                    <div class="form-group mb-3">
-                        <small>Exchange</small>
-                        <input type="text" class="form-control" name="" placeholder="Enter Customer ID" id="" required=""/>
-                        <a href=""><span class="fa fa-search form-icon"></span></a>
-                    </div>
-                </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group mb-3">
+                                                    <small>State</small>
+                                                    <select class="form-select">
+                                                        <option value="">Select State</option>
+                                                        <option value=""></option>
+                                                        <option value=""></option>
+                                                        <option value=""></option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group mb-3">
+                                                    <small>Country</small>
+                                                    <select class="form-select">
+                                                        <option value="">Select Country</option>
+                                                        <option value=""></option>
+                                                        <option value=""></option>
+                                                        <option value=""></option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group mb-3">
+                                                    <small>Zip Code</small>
+                                                    <input type="text" class="form-control" name="" placeholder="Enter Customer ID" id="" required="" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group mb-3">
+                                                    <small>Area Code</small>
+                                                    <input type="text" class="form-control" name="" placeholder="Enter Customer ID" id="" required="" />
+                                                    <a href=""><span class="fa fa-search form-icon"></span></a>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="form-group mb-3">
+                                                    <small>Exchange</small>
+                                                    <input type="text" class="form-control" name="" placeholder="Enter Customer ID" id="" required="" />
+                                                    <a href=""><span class="fa fa-search form-icon"></span></a>
+                                                </div>
+                                            </div>
 
 
-                <div class="col-md-3">
-                    <div class="form-group mb-3 mt-4">
-                        <small>&nbsp;</small>
-                        <input type="checkbox" id="male" class="d-none"/>
-                        <label for="male">Exclusion</label>
-                    </div>
-                </div>
-                
-                <div class="col-md-3">
-                    <div class="form-group mb-3">
-                        <small>Price Schedule Override</small>
-                        <input type="text" class="form-control" name="" placeholder="Enter Customer ID" id="" required=""/>
-                        <a href=""><span class="fa fa-search form-icon"></span></a>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group mb-3">
-                        <small>Provider Status</small>
-                        <select class="form-select">
-                            <option value="">Select Country</option>
-                            <option value=""></option>
-                            <option value=""></option>
-                            <option value=""></option>
-                        </select>
-                    </div>
-                </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group mb-3 mt-4">
+                                                    <small>&nbsp;</small>
+                                                    <input type="checkbox" id="male" class="d-none" />
+                                                    <label for="male">Exclusion</label>
+                                                </div>
+                                            </div>
 
-        </div>
-    
+                                            <div class="col-md-3">
+                                                <div class="form-group mb-3">
+                                                    <small>Price Schedule Override</small>
+                                                    <Controller name="price_schdule"
+                                                        control={control}
+                                                        render={({ field }) => (
+                                                            <AsyncSelect
+                                                                {...field}
+                                                                cacheOptions
+                                                                defaultOptions
+                                                                // value={selectedValue}
+                                                                getOptionLabel={e => e.price_label}
+                                                                getOptionValue={e => e.price_value}
+                                                                loadOptions={loadPriceScheduleOptions}
+                                                                onInputChange={handlePriceScheduleInput}
+                                                                // onChange={handleChange}
+                                                                placeholder="Price Schedule 2"
+                                                                value={{ price_label: props.formData.price_schedule_ovrd, price_value: props.formData.price_schedule_ovrd }}
 
-    </div>
-</div>
-</div>
+                                                            />
+                                                        )} />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group mb-3">
+                                                    <small>Provider Status</small>
+                                                    <select class="form-select">
+                                                        <option value="">Select Country</option>
+                                                        <option value=""></option>
+                                                        <option value=""></option>
+                                                        <option value=""></option>
+                                                    </select>
+                                                </div>
+                                            </div>
 
-                          
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+
 
 
                         </div>
                     </div>
 
 
-                  
+
 
                     <Button type='submit' variant="primary">{props.adding ? ' Add' : 'Update'}</Button>
 
