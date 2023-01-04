@@ -14,6 +14,8 @@ function FlexibleNetworks(props) {
     const location = useLocation();
     const currentpath = location.pathname.split('/').pop();
     const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
+    const [adding, setAdding] = useState(false);
+
 
     const [provider, setProvider] = useState([]);
     const [ProviderData, setProviderdata] = useState([]);
@@ -161,25 +163,23 @@ function FlexibleNetworks(props) {
 
 
 
-
-
-
-
-    const fillProviderData = (e) => {
-        // API  
-        // var staticProviderType =; 
-        var arr = [
-            { id: '123', name: 'Mahesh', storenumber: '101', chain: 'Hyderabad' },
-            { id: '1234', name: 'Mahesh', storenumber: '101', chain: 'Hyderabad' },
-
-        ];
-
-        setProviderdata(arr);
-    }
-
     useEffect(() => {
-        // fillProviderData();
-    }, [ProviderData]);
+        if (flexibleData) {
+            setAdding(false);
+
+        } else {
+            setAdding(true);
+            SetTraditionalNetwork(false);
+        }
+
+        document.title = 'Benefit Code | ProHealthi';
+
+    }, [flexibleData, adding]);
+
+
+
+
+
 
 
 
@@ -223,7 +223,7 @@ function FlexibleNetworks(props) {
                     <FlexibleNetworkList ndcListData={ndcData} ndcClassData={ndcClass} getNDCItem={getNDCItems} getNDCItemDetails={getNDCItemDetails} selctedNdc={selctedNdc} />
 
                     {/* <TraditionalNetworkForm  /> */}
-                    <TraditionalNetworkForm formData={flexibleData} selected={flexibleData} />
+                    <TraditionalNetworkForm formData={flexibleData} selected={flexibleData} adding={adding}  />
 
 
 
@@ -1231,13 +1231,46 @@ function TraditionalNetworkForm(props) {
 
     const loadRuleIdOptions = (pharm_input) => {
         return new Promise((resolve, reject) => {
-            fetch(process.env.REACT_APP_API_BASEURL + `/api/third-party-pricing/price-schedule/search?search=${pharm_input}`)
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/providerdata/ruleid/search?search=${pharm_input}`)
                 .then(response => response.json())
                 .then(({ data }) => {
                     resolve(
-                        data.map(({ price_schedule }) => ({
-                            price_value: price_schedule,
-                            price_label: price_schedule
+                        data.map(({ rx_network_rule_id_number }) => ({
+                            rule_value: rx_network_rule_id_number,
+                            rule_label: rx_network_rule_id_number
+                        }))
+                    )
+                })
+        })
+    }
+
+    const loadStates = (pharm_input) => {
+        return new Promise((resolve, reject) => {
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/state/search?search=${pharm_input}`)
+                .then(response => response.json())
+                .then(({ data }) => {
+                    resolve(
+                        data.map(({ state_code }) => ({
+                            state_label: state_code,
+                            state_value: state_code
+
+                        }))
+                    )
+                })
+        })
+    }
+
+
+    const loadCountries = (pharm_input) => {
+        return new Promise((resolve, reject) => {
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/countries/search?search=${pharm_input}`)
+                .then(response => response.json())
+                .then(({ data }) => {
+                    resolve(
+                        data.map(({ country_code }) => ({
+                            country_label: country_code,
+                            country_value: country_code
+
                         }))
                     )
                 })
@@ -1313,7 +1346,7 @@ function TraditionalNetworkForm(props) {
 
             });
         } else {
-            fetch(process.env.REACT_APP_API_BASEURL + `/api/providerdata/traditionalnetwork/add`, requestOptions)
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/providerdata/flexiblenetwork/add`, requestOptions)
                 .then(async response => {
                     const isJson = response.headers.get('content-type')?.includes('application/json');
                     const data = isJson && await response.json();
@@ -1359,7 +1392,7 @@ function TraditionalNetworkForm(props) {
 
 
         if (props.adding) {
-            reset({ accum_bene_strategy_name: '', description: '', new: 1 }, {
+            reset({ rx_network_rule_id: '', rx_network_rule_name: '', new: 1 }, {
                 keepValues: false,
             })
         } else {
@@ -1367,7 +1400,7 @@ function TraditionalNetworkForm(props) {
         }
 
         if (!props.selected) {
-            reset({ accum_bene_strategy_name: '', accum_bene_strategy_id: '', description: '', pharm_type_variation_ind: '', network_part_variation_ind: '', claim_type_variation_ind: '', plan_accum_deduct_id: '', new: 1 }, {
+            reset({ rx_network_rule_id: '', rx_network_rule_name: '', description: '', pharm_type_variation_ind: '', network_part_variation_ind: '', claim_type_variation_ind: '', plan_accum_deduct_id: '', new: 1 }, {
                 keepValues: false,
             })
         }
@@ -1398,13 +1431,13 @@ function TraditionalNetworkForm(props) {
                                                 <div class="col-md-6 mb-3">
                                                     <div class="form-group">
                                                         <small>Network ID</small>
-                                                        <input type="text" class="form-control" {...register('rx_network_rule_id')} name="" id="" placeholder="" required="" />
+                                                        <input type="text" class="form-control"  name="rx_network_rule_id" {...register('rx_network_rule_id')}  id="" placeholder="" required="" />
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                     <div class="form-group">
                                                         <small>Network Name</small>
-                                                        <input type="text" class="form-control" {...register('rx_network_rule_name')} name="" id="" placeholder="" required="" />
+                                                        <input type="text" class="form-control" {...register('rx_network_rule_name')} name="rx_network_rule_name" id="" placeholder="" required="" />
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12">
@@ -1594,13 +1627,13 @@ function TraditionalNetworkForm(props) {
                                                                 cacheOptions
                                                                 defaultOptions
                                                                 // value={selectedValue}
-                                                                getOptionLabel={e => e.price_label}
-                                                                getOptionValue={e => e.price_value}
-                                                                loadOptions={loadPriceScheduleOptions}
-                                                                onInputChange={handlePriceScheduleInput}
+                                                                getOptionLabel={e => e.rule_label}
+                                                                getOptionValue={e => e.rule_value}
+                                                                loadOptions={loadRuleIdOptions}
+                                                                // onInputChange={handlePriceScheduleInput}
                                                                 // onChange={handleChange}
-                                                                placeholder="Price Schedule 2"
-                                                                value={{ price_label: props.formData.price_schedule_ovrd, price_value: props.formData.price_schedule_ovrd }}
+                                                                placeholder="Rule Id "
+                                                                value={{ rule_label: props.formData.rx_network_rule_id_number, rule_value: props.formData.rx_network_rule_id_number }}
 
                                                             />
                                                         )} />
@@ -1630,44 +1663,66 @@ function TraditionalNetworkForm(props) {
                                             <div class="col-md-3">
                                                 <div class="form-group mb-3">
                                                     <small>State</small>
-                                                    <select class="form-select">
-                                                        <option value="">Select State</option>
-                                                        <option value=""></option>
-                                                        <option value=""></option>
-                                                        <option value=""></option>
-                                                    </select>
+                                                    <Controller name="rule_id"
+                                                        control={control}
+                                                        render={({ field }) => (
+                                                            <AsyncSelect
+                                                                {...field}
+                                                                cacheOptions
+                                                                defaultOptions
+                                                                // value={selectedValue}
+                                                                getOptionLabel={e => e.state_label}
+                                                                getOptionValue={e => e.state_value}
+                                                                loadOptions={loadStates}
+                                                                // onInputChange={handlePriceScheduleInput}
+                                                                // onChange={handleChange}
+                                                                placeholder="Rule Id "
+                                                                value={{ state_label: props.formData.state_code, state_value: props.formData.state_code }}
+
+                                                            />
+                                                        )} />
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="form-group mb-3">
                                                     <small>Country</small>
-                                                    <select class="form-select">
-                                                        <option value="">Select Country</option>
-                                                        <option value=""></option>
-                                                        <option value=""></option>
-                                                        <option value=""></option>
-                                                    </select>
+                                                    <Controller name="rule_id"
+                                                        control={control}
+                                                        render={({ field }) => (
+                                                            <AsyncSelect
+                                                                {...field}
+                                                                cacheOptions
+                                                                defaultOptions
+                                                                // value={selectedValue}
+                                                                getOptionLabel={e => e.country_label}
+                                                                getOptionValue={e => e.country_value}
+                                                                loadOptions={loadCountries}
+                                                                // onInputChange={handlePriceScheduleInput}
+                                                                // onChange={handleChange}
+                                                                placeholder="Rule Id "
+                                                                value={{ country_label: props.formData.country_code, country_value: props.formData.country_code }}
+
+                                                            />
+                                                        )} />
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="form-group mb-3">
                                                     <small>Zip Code</small>
-                                                    <input type="text" class="form-control" name="" placeholder="Enter Customer ID" id="" required="" />
+                                                    <input type="text" class="form-control" name="" {...register('zip_code')} id="" required="" />
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="form-group mb-3">
                                                     <small>Area Code</small>
-                                                    <input type="text" class="form-control" name="" placeholder="Enter Customer ID" id="" required="" />
-                                                    <a href=""><span class="fa fa-search form-icon"></span></a>
+                                                    <input type="text" class="form-control" name="" {...register('area_code')} id="" required="" />
                                                 </div>
                                             </div>
 
                                             <div class="col-md-3">
                                                 <div class="form-group mb-3">
                                                     <small>Exchange</small>
-                                                    <input type="text" class="form-control" name="" placeholder="Enter Customer ID" id="" required="" />
-                                                    <a href=""><span class="fa fa-search form-icon"></span></a>
+                                                    <input type="text" class="form-control" name="" {...register('exchange_code')}  id="" required="" />
                                                 </div>
                                             </div>
 
@@ -1675,7 +1730,7 @@ function TraditionalNetworkForm(props) {
                                             <div class="col-md-3">
                                                 <div class="form-group mb-3 mt-4">
                                                     <small>&nbsp;</small>
-                                                    <input type="checkbox" id="male" class="d-none" />
+                                                    <input type="checkbox" id="male" {...register('exclude_rule')} class="d-none" />
                                                     <label for="male">Exclusion</label>
                                                 </div>
                                             </div>
@@ -1706,11 +1761,10 @@ function TraditionalNetworkForm(props) {
                                             <div class="col-md-3">
                                                 <div class="form-group mb-3">
                                                     <small>Provider Status</small>
-                                                    <select class="form-select">
-                                                        <option value="">Select Country</option>
-                                                        <option value=""></option>
-                                                        <option value=""></option>
-                                                        <option value=""></option>
+                                                    <select class="form-select" name="pharmacy_status" {...register('pharmacy_status')}>
+                                                        <option value="">--select--</option>
+                                                        <option value="0">No</option>
+                                                        <option value="1">Yes</option>
                                                     </select>
                                                 </div>
                                             </div>
