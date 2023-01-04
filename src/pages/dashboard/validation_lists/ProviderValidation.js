@@ -1,41 +1,45 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { render } from 'react-dom';
 import { useForm } from 'react-hook-form';
-import { Link, Outlet, useLocation, useOutletContext } from 'react-router-dom';
+
+import LoadingSpinner from '../../../loader/loader';
+import EmptyRowComponent from '../../../shared/NoDataFound';
+import Footer from '../../../shared/Footer';
+import { useAuth } from '../../../hooks/AuthProvider';
+import { toast } from 'react-toastify';
 
 
 export default function ProviderValidation()
 {
 
-
-
     const scollToRef = useRef();
+    const [providerValidationsData, setProviderValidationsData] = useState([]);
+    const [providerData, setProviderData] = useState([]);
+    const [selctedProviderRow, setSelctedProviderRow] = useState('');
+    const [providerFormData, setProviderFormData] = useState([]);
+    const [selectProviderListRow, setSelectProviderListRow] = useState('');
+    const [loading,setLoading] = useState(false);
+    const [loader, setLoader] = useState(false);
+    const [adding, setAdding] = useState(false);
+
+    const clearForm = (e) => {
+        setAdding(true);
+    }
 
 
-    const [ndcData, setNdcData] = useState([]);
-    const [ndcClass, setNdClass] = useState([]);
-
-    const [selctedNdc, setSelctedNdc] = useState('');
-
-
-
-    const getNDCItems = (ndcid) => {
-        // ndc_exception_list
-
+    const getProviderLists = (provider_list) => {
+        setLoader(true)
         var test = {};
-        test.ndc_exception_list = ndcid;
-        setSelctedNdc(test);
-
-        // //  console.log(customerid);
+        test.provider_list = provider_list;
+        setSelctedProviderRow(test);
         const requestOptions = {
             method: 'GET',
             // mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
             // body: encodeURIComponent(data)
         };
-        // //  console.log(watch(fdata));
 
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/provider/get/${ndcid}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/provider/get/${provider_list}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
@@ -45,16 +49,13 @@ export default function ProviderValidation()
                 if (!response.ok) {
                     // get error message from body or default to response status
                     const error = (data && data.message) || response.status;
-                    setNdClass([]);
+                    setProviderData([]);
                     return Promise.reject(error);
                 } else {
-                    setNdClass(data.data);
-                    // scollToRef.current.scrollIntoView()
+                    setProviderData(data.data);
+                    setLoader(false);
                 }
 
-
-                if (response === '200') {
-                }
             })
             .catch(error => {
                 console.error('There was an error!', error);
@@ -62,21 +63,25 @@ export default function ProviderValidation()
     }
 
 
-    const getNDCItemDetails = (ndcid) => {
-         console.log(ndcid);
+    const getProviderListDetails = (data) => {
+        var provider_list = data.pharmacy_list;
+        var provider_nabp = data.pharmacy_nabp;
+
+        var test = {};
+        test.pharmacy_nabp = provider_nabp;
+        setSelectProviderListRow(test);
+
         const requestOptions = {
             method: 'GET',
             // mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
             // body: encodeURIComponent(data)
         };
-        // //  console.log(watch(fdata));
 
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/provider/details/${ndcid}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/provider/details/${provider_list}/${provider_nabp}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
-                //  console.log(response);
 
                 // check for error response
                 if (!response.ok) {
@@ -84,15 +89,10 @@ export default function ProviderValidation()
                     const error = (data && data.message) || response.status;
                     return Promise.reject(error);
                 } else {
-                    setSelctedNdc(data.data);
-                    console.log(selctedNdc);
+                    setProviderFormData(data.data);
                     scollToRef.current.scrollIntoView()
                     return;
                 }
-
-
-                if (response === '200') {
-                }
             })
             .catch(error => {
                 console.error('There was an error!', error);
@@ -100,13 +100,8 @@ export default function ProviderValidation()
     }
 
 
-
-
-
-
-
-
-    const searchException = (fdata) => {
+    const searchProvider = (fdata) => {
+        setLoading(true);
 
         const requestOptions = {
             method: 'GET',
@@ -117,22 +112,19 @@ export default function ProviderValidation()
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
-                //  console.log(response);
-                console.log(data.data);
 
                 // check for error response
                 if (!response.ok) {
                     // get error message from body or default to response status
                     const error = (data && data.message) || response.status;
-                    setNdcData([]);
+                    setProviderValidationsData([]);
                     return Promise.reject(error);
 
                 } else {
-                    setNdcData(data.data);
+                    setProviderValidationsData(data.data);
+                    setLoading(false);
                     return;
                 }
-
-
 
             })
             .catch(error => {
@@ -163,13 +155,12 @@ export default function ProviderValidation()
             </div>
 
 
-            <SearchProviderValidation searchException={searchException} />
-
-
-            <ProviderList ndcListData={ndcData} ndcClassData={ndcClass} getNDCItem={getNDCItems} getNDCItemDetails={getNDCItemDetails} selctedNdc={selctedNdc} />
-
-
-            <ProviderValidationForm  viewDiagnosisFormdata={selctedNdc} />
+            <SearchProviderValidation searchProvider={searchProvider} />
+            <ProviderList key='proivder_list' providerValidationListData={providerValidationsData} providerData={providerData} getProviderList={getProviderLists} getProviderListDetails={getProviderListDetails} selctedProviderRow={selctedProviderRow} loading={loading} loader={loader} selectProviderListRow={selectProviderListRow} />
+            <div ref={scollToRef}>
+            <ProviderValidationForm viewProviderFormData={providerFormData} clearForm={clearForm} />
+            </div>
+            <Footer/>
 
 
         </>
@@ -177,72 +168,47 @@ export default function ProviderValidation()
 }
 
 
-
-
-
-function NdcRow(props) {
-
-    useEffect(() => {
-    
-    }, [props.selected]);
-
-
+function ProviderValidationRow(props) {
+    useEffect(() => {}, [props.selected]);
 
     return (
         <>
-            <tr className={(props.selected && props.ndcRow.pharmacy_list == props.selected.pharmacy_list ? ' tblactiverow ' : '')}
+            <tr className={(props.selected && props.providerValidationRow.pharmacy_list == props.selected.provider_list ? ' tblactiverow ' : '')}
 
-                onClick={() => props.getNDCItem(props.ndcRow.pharmacy_list)}
+                onClick={() => props.getProviderList(props.providerValidationRow.pharmacy_list)}
             >
-                <td>{props.ndcRow.pharmacy_list}</td>
-                <td >{props.ndcRow.pharmacy_name}</td>
-
-                {/* <td><button className="btn btn-sm btn-info" id="" ><i className="fa fa-eye"></i> View</button></td> */}
+                <td>{props.providerValidationRow.pharmacy_list}</td>
+                <td >{props.providerValidationRow.exception_name}</td>
             </tr>
         </>
     )
 }
 
 
-function NdcClassRow(props) {
-
-    useEffect(() => {
-
-    }, [props.selected]);
+function ProviderRows(props) {
+    useEffect(() => { }, [props.selected]);
 
     return (
         <>
             <tr
-                className={(props.selected && props.ndcClassRow.pharmacy_nabp == props.selected.pharmacy_nabp ? ' tblactiverow ' : '')}
-                onClick={() => props.getNDCItemDetails(props.ndcClassRow.pharmacy_nabp)}
+                className={(props.selected && props.providerRow.pharmacy_nabp == props.selected.pharmacy_nabp ? ' tblactiverow ' : '')}
+                onClick={() => props.getProviderListDetails(props.providerRow)}
 
             >
-                <td>{props.ndcClassRow.pharmacy_nabp}</td>
-                <td>{props.ndcClassRow.pharmacy_status}</td>
-                <td>{props.ndcClassRow.pharmacy_name}</td>
-
-
-                
-              
-                {/* <td><button className="btn btn-sm btn-info" id="" ><i className="fa fa-eye"></i> View</button></td> */}
+                <td>{props.providerRow.pharmacy_nabp}</td>
+                <td>{props.providerRow.pharmacy_status=='A'?'Approved':'Rejected'}</td>
+                <td>{props.providerRow.pharmacy_name}</td>
             </tr>
         </>
     )
 }
 
-
-
-
-
-
 function SearchProviderValidation(props)
 {
 
-    
-    const searchException = (fdata) => {
-        // alert(fdata);
 
-        props.searchException(fdata);
+    const searchProvider = (fdata) => {
+        props.searchProvider(fdata);
     }
     return(
         <>
@@ -252,14 +218,13 @@ function SearchProviderValidation(props)
                         <div className="col-md-12 mb-3">
                             <div className="form-group">
                                 <small>Provider Validation ID/Name</small>
-                                <input type="text" onKeyUp={(e) => searchException(e)}   className="form-control" placeholder='Start typing provider validation ID/name to search'
+                                <input type="text" onKeyUp={(e) => searchProvider(e)}   className="form-control" placeholder='Start typing provider validation ID/name to search'
                                 />
                             </div>
-                        </div>                       
+                        </div>
                     </div>
                 </div>
             </div>
-            {/* <ProviderList /> */}
         </>
     )
 }
@@ -270,32 +235,35 @@ function ProviderList(props)
 
     const scollToRef = useRef();
 
-    useEffect(() => { }, [props.selctedNdc]);
-    // //  console.log(props.selctedNdc);
+    useEffect(() => { }, [props.selctedProviderRow]);
 
-    const getNDCItem = (ndciemid) => {
-        // alert(ndciemid);
-        props.getNDCItem(ndciemid);
+    const getProviderList = (provider_list) => {
+        props.getProviderList(provider_list);
     }
 
-    const getNDCItemDetails = (ndciemid) => {
-        props.getNDCItemDetails(ndciemid);
+    const getProviderListDetails = (data) => {
+        props.getProviderListDetails(data);
+    }
+
+//Provider Validation List
+    const providerValidationListArray = [];
+    if (props.providerValidationListData.length > 0) {
+        for (let i = 0; i < props.providerValidationListData.length; i++) {
+            providerValidationListArray.push(<ProviderValidationRow key={'provider_validation_row'+ [i]} providerValidationRow={props.providerValidationListData[i]} getProviderList={getProviderList} selected={props.selctedProviderRow} />);
+        }
+    } else {
+        providerValidationListArray.push(<EmptyRowComponent colSpan='2'/>);
     }
 
 
-    const ndcListArray = [];
-    for (let i = 0; i < props.ndcListData.length; i++) {
-        ndcListArray.push(<NdcRow ndcRow={props.ndcListData[i]} getNDCItem={getNDCItem} selected={props.selctedNdc} />);
+    const providerListArray = [];
+    if (props.providerData.length > 0) {
+        for (let j = 0; j < props.providerData.length; j++) {
+            providerListArray.push(<ProviderRows key={'provider_row'+ [j]} providerRow ={props.providerData[j]} getProviderListDetails={getProviderListDetails}  selected={props.selectProviderListRow} />);
+        }
+    } else {
+        providerListArray.push(<EmptyRowComponent colSpan='3'/>)
     }
-
-    const ndcClassArray = [];
-    for (let j = 0; j < props.ndcClassData.length; j++) {
-        ndcClassArray.push(<NdcClassRow ndcClassRow={props.ndcClassData[j]} getNDCItemDetails={getNDCItemDetails} selected={props.selctedNdc} />);
-    }
-
-    const [ncdListData, setNcdListData] = useState();
-    const [show, setShow] = useState("none");
-    const handleShow = () => setShow("block");
 
 
     return(
@@ -307,7 +275,6 @@ function ProviderList(props)
                             <h5>Provider Validation List</h5>
                         </div>
                         <div className="col-md-4 mb-3 text-end">
-                            {/* <button className="btn btn-sm btn-warning" id="show" onClick={e => handleShow()}><i className="fa plus-circle"></i> Add NDC List</button> */}
                         </div>
                         <div className="col-md-6">
                             <div className="card mt-3 mb-3">
@@ -321,7 +288,7 @@ function ProviderList(props)
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                            {ndcListArray}
+                                            {props.loading?<LoadingSpinner colSpan='2'/>: providerValidationListArray}
                                             </tbody>
                                         </table>
                                     </div>
@@ -343,7 +310,7 @@ function ProviderList(props)
                                             </thead>
                                             <tbody>
 
-                                            {ndcClassArray}
+                                            {props.loader?<LoadingSpinner colSpan='3'/>:providerListArray}
 
                                             </tbody>
                                         </table>
@@ -354,7 +321,6 @@ function ProviderList(props)
                     </div>
                 </div>
             </div>
-            {/* <ProviderValidationForm /> */}
         </>
     )
 }
@@ -362,95 +328,91 @@ function ProviderList(props)
 function ProviderValidationForm(props)
 {
 
-    const { register,reset, handleSubmit, watch, formState: { errors } } = useForm();
+    const { register,reset, handleSubmit, formState: { errors } } = useForm();
 
+    useEffect(() => { reset(props.viewProviderFormData) }, [props.viewProviderFormData]);
 
-    useEffect(() => { reset(props.viewDiagnosisFormdata) }, [props.viewDiagnosisFormdata]);
+    const addProviderFormData = (formData) => {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        }
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/provider/submit-provider-form`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('Content-Type')?.includes('application/json');
+                const data = isJson && await response.json();
+                if (!response.ok) {
+                    toast.error("There was an error !", {
+                        position: 'top-right',
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        pauseOnHover: true,
+                        closeOnClick: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                }else {
+                    toast.success(data.message, {
+                        position: 'top-right',
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        pauseOnHover: true,
+                        closeOnClick: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+
+                }
+            })
+            .catch(error => {
+                console.error('There was an error !', error);
+            });
+    }
 
     return(
         <>
         <div className="card mt-3 mb-3">
                     <div className="card-body">
-
-                        <div className="row">
-                            <div className="col-md-12">
-                                <h5 className="mb-2">Criteria</h5>
+                        <form id="providerForm" name="providerForm" onSubmit={handleSubmit(addProviderFormData)}>
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <h5 className="mb-2">Provider</h5>
+                                </div>
+                                <div className="col-md-3 mb-3">
+                                    <div className="form-group">
+                                        <small>Provider List ID</small>
+                                        <input type="text" className="form-control" name="pharmacy_list" {...register('pharmacy_list')} id="pharmacy_list" placeholder="Provider List ID" />
+                                    </div>
+                                </div>
+                                <div className="col-md-3 mb-3">
+                                    <div className="form-group">
+                                        <small>Provider List Names</small>
+                                        <input type="text" className="form-control" name="exception_name"  {...register('exception_name')} id="" placeholder="" required />
+                                    </div>
+                                </div>
+                                <div className="col-md-3 mb-3">
+                                    <div className="form-group">
+                                        <small>Provider ID</small>
+                                        <input type="text" className="form-control" name="pharmacy_nabp" {...register('pharmacy_nabp')} id="" placeholder="" required />
+                                    </div>
                             </div>
                             <div className="col-md-3 mb-3">
-                                <div className="form-group">
-                                    <small>ID</small>
-                                    <input type="text" className="form-control" name="pharmacy_nabp" {...register('pharmacy_nabp')} id="" placeholder="" required />
-                                </div>
+                                    <div className="form-group">
+                                        <small>Provider Status</small>
+                                        <select className="form-select" name="pharmacy_status" {...register('pharmacy_status', {required:true})}>
+                                                    <option value="">--select--</option>
+                                                    <option value="A">Approved</option>
+                                                    <option value="R">Rejected</option>
+                                        </select>
+                                    </div>
                             </div>
-                            <div className="col-md-3 mb-3">
-                                <div className="form-group">
-                                    <small>Name</small>
-                                    <input type="text" className="form-control" name="pharmacy_name"  {...register('pharmacy_name')} id="" placeholder="" required />
-                                </div>
+                            <div className="col-md-12 text-end">
+                            <button type="submit" className="btn btn-primary ">Add </button>&nbsp;&nbsp;&nbsp;
+                            <button onClick={e=>props.clearForm(e)} type="button" className="btn btn-danger"> Clear </button>
+                                    </div>
                             </div>
-                            <div className="col-md-3 mb-3">
-                                <div className="form-group">
-                                    <small>Store Number</small>
-                                    <input type="text" className="form-control" name="store_number" {...register('store_number')} id="" placeholder="" required />
-                                </div>
-                            </div>
-                            <div className="col-md-3 mb-3">
-                                <div className="form-group">
-                                    <small>City</small>
-                                    <select className="form-select" name="city" {...register('city')}>
-                                        <option value="">Select City</option>
-                                        <option value="1">Runaway Bay</option>
-                                        <option value="2">Kingston 20</option>
-                                        <option value="3">Portmore</option>
-                                        <option value="4">Junction</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div className="col-md-3 mb-3">
-                                <div className="form-group">
-                                    <small>State</small>
-                                    <select className="form-select">
-                                        <option value="" name="state" {...register('state')}>Select State</option>
-                                        <option value="1">Andhra pradesh</option>
-                                        <option value="2">Telengana</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div className="col-md-3 mb-3">
-                                <div className="form-group">
-                                    <small>County</small>
-                                    <select className="form-select" name="country" {...register('country')}>
-                                        <option value="">Select County</option>
-                                        <option value=""></option>
-                                        <option value=""></option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div className="col-md-3 mb-3">
-                                <div className="form-group">
-                                    <small>ZIP</small> 
-                                    <input type="text" className="form-control" name="zip_code" {...register('zip_code')} id="" placeholder="" required />
-                                </div>
-                            </div>
-                            <div className="col-md-3 mb-3">
-                                <div className="form-group">
-                                    <small>Area Code</small>
-                                    <input type="text" className="form-control" name="zip_plus_2" {...register('zip_plus_2')} id="" placeholder="" required />
-                                </div>
-                            </div>
-
-                            {/* <div className="col-md-6 ms-auto text-end mb-3">
-                                <a href="" className="btn btn-secondary">Cancel</a>&nbsp;&nbsp;
-                                <a href="" className="btn btn-danger">Select</a>&nbsp;&nbsp;
-                                <a href="" className="btn btn-warning ">Clear</a>&nbsp;&nbsp;
-                                <a href="provider-search.html" className="btn btn-info">Search</a>
-                            </div> */}
-                        </div>
-
-
-                        
-
-
+                        </form>
                     </div>
                 </div>
         </>

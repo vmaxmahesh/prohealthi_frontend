@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { render } from 'react-dom';
 import { useForm } from 'react-hook-form';
-import { Link, Outlet, useLocation, useOutletContext } from 'react-router-dom';
 import LoadingSpinner from '../../../loader/loader';
 import EmptyRowComponent from '../../../shared/NoDataFound';
 import Footer from '../../../shared/Footer';
@@ -24,7 +23,13 @@ export default function SpecialityValidation()
     const [specialityFormData, setSpecialityFormData] = useState('');
     const [adding, setAdding] = useState(false);
 
+    const clearForm = (e) => {
+        setAdding(false);
+        setSpecialityFormData('');
+        setSelectedSpecialityId('');
+        document.getElementById('specialityForm').reset();
 
+    }
 
     const searchSpeciality = (fdata) => {
         setLoading(true);
@@ -164,8 +169,9 @@ export default function SpecialityValidation()
 
             <SpecialityList loader={loader} loading={loading} specialityValidationListsData={specialityValidationLists} specialityListsData={speciality} getSpecialityList={getSpecialityLists} getSpecialityRow={getSpecialityRow} selctedSpecialityValidationRow={selctedSpecialityValidationRow} selectedSpecialityId={ selectedSpecialityId}  />
             <div ref={scollToRef}>
-                <SpecialityForm viewSpecialityFormData={specialityFormData} adding={adding } />
+                <SpecialityForm viewSpecialityFormData={specialityFormData} adding={adding } clearForm={clearForm} />
             </div>
+            <Footer/>
 
 
         </>
@@ -272,11 +278,6 @@ function SpecialityList(props) {
     } else {
         specialityDataArray.push(<EmptyRowComponent colSpan='2'/>)
     }
-
-
-    // const [ncdListData, setNcdListData] = useState();
-    // const [show, setShow] = useState("none");
-    // const handleShow = () => setShow("block");
 
     return (
         <>
@@ -443,8 +444,7 @@ function SpecialityForm(props) {
                     </div>
                     <div className="col-md-12 text-end">
                         <button type="submit" className="btn btn-primary ">{ props.viewSpecialityFormData ?'Update':'Add' } </button>
-                                    {/* <button type="button" className="btn btn-warning" > Remove </button> */}
-                                     <button type="button" className="btn btn-danger"> Clear </button>
+                                     <button onClick={e=>props.clearForm(e)} type="button" className="btn btn-danger"> Clear </button>
                                 </div>
                 </form>
 

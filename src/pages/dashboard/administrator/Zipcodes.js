@@ -16,7 +16,6 @@ function Zipcodes() {
     const scollToRef = useRef();
 
     const [zipCodeData, setZipCodeData] = useState([]);
-
     const [selectedZipCode, setSelectedZipCode] = useState('');
     const [adding, setAdding] = useState(false);
 
@@ -83,9 +82,6 @@ function Zipcodes() {
                     scollToRef.current.scrollIntoView()
                 }
 
-
-                if (response === '200') {
-                }
             })
             .catch(error => {
                 console.error('There was an error!', error);
