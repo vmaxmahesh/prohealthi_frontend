@@ -195,6 +195,10 @@ function CustomerForm(props) {
 
     useEffect(() => { reset(props.formData) }, [props.formData]);
 
+
+      const [selectedValue, setSelectedValue] = useState('none');
+
+
     const [startDate, setStartDate] = useState(new Date());
     const [afterDate, setAfterDate] = useState(new Date());
 
@@ -213,6 +217,112 @@ function CustomerForm(props) {
         setAfterDate(today);
 
     }
+
+
+    const loadStates = (pharm_input) => {
+        return new Promise((resolve, reject) => {
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/state/search?search=${pharm_input}`)
+                .then(response => response.json())
+                .then(({ data }) => {
+                    resolve(
+                        data.map(({ state_code }) => ({
+                            state_label: state_code,
+                            state_value: state_code
+
+                        }))
+                    )
+                })
+        })
+    }
+
+
+
+    const loadCountries = (pharm_input) => {
+        return new Promise((resolve, reject) => {
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/countries/search?search=${pharm_input}`)
+                .then(response => response.json())
+                .then(({ data }) => {
+                    resolve(
+                        data.map(({ country_code }) => ({
+                            country_label: country_code,
+                            country_value: country_code
+
+                        }))
+                    )
+                })
+        })
+    }
+
+
+    const loadPlanIDS = (pharm_input) => {
+        return new Promise((resolve, reject) => {
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/planid/search?search=${pharm_input}`)
+                .then(response => response.json())
+                .then(({ data }) => {
+                    resolve(
+                        data.map(({ plan_id }) => ({
+                            plan_id_label: plan_id,
+                            plan_id_value: plan_id
+
+                        }))
+                    )
+                })
+        })
+    }
+
+
+    const loadSuperProviderNetworksOptions = (pharm_input) => {
+        return new Promise((resolve, reject) => {
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/providerdata/supernetwork/search?search=${pharm_input}`)
+                .then(response => response.json())
+                .then(({ data }) => {
+                    resolve(
+                        data.map(({ super_rx_network_id }) => ({
+                            super_label: super_rx_network_id,
+                            super_value: super_rx_network_id
+
+                        }))
+                    )
+                })
+        })
+    }
+
+
+    
+    const loadEligibilityValidationIds = (pharm_input) => {
+        return new Promise((resolve, reject) => {
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/eligibility/search?search=${pharm_input}`)
+                .then(response => response.json())
+                .then(({ data }) => {
+                    resolve(
+                        data.map(({ elig_validation_id }) => ({
+                            elig_label: elig_validation_id,
+                            elig_value: elig_validation_id
+
+                        }))
+                    )
+                })
+        })
+    }
+
+    const loadRvaListIds = (pharm_input) => {
+        return new Promise((resolve, reject) => {
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/third-party-pricing/rva-list/search?search=${pharm_input}`)
+                .then(response => response.json())
+                .then(({ data }) => {
+                    resolve(
+                        data.map(({ rva_list_id }) => ({
+                            rva_label: rva_list_id,
+                            rva_value: rva_list_id
+
+                        }))
+                    )
+                })
+        })
+    }
+
+
+
 
     return (
         <>
@@ -297,9 +407,25 @@ function CustomerForm(props) {
                                             <small>Country</small>
 
 
+                                            <Controller name="rule_id"
+                                                        control={control}
+                                                        render={({ field }) => (
+                                                            <AsyncSelect
+                                                                {...field}
+                                                                cacheOptions
+                                                                defaultOptions
+                                                                // value={selectedValue}
+                                                                getOptionLabel={e => e.country_label}
+                                                                getOptionValue={e => e.country_value}
+                                                                loadOptions={loadCountries}
+                                                                // onInputChange={handlePriceScheduleInput}
+                                                                // onChange={handleChange}
+                                                                placeholder="Rule Id "
+                                                                value={{ country_label: props.formData.country_code, country_value: props.formData.country_code }}
+
+                                                            />
+                                                        )} />
                                           
-                                          
-                                            {/* <SelectSearch options={states} search={true}  value="sv" name="language" placeholder="Choose your language" /> */}
 
 
                                             {errors.country?.type === 'required' && <p role="alert" className="notvalid">Country is  required</p>}
@@ -310,12 +436,24 @@ function CustomerForm(props) {
                                         <div className="form-group mb-2">
                                             <small>City / State</small>
                                           
-                                            {/* {states.map(option => (
-                                                    <option key={option.state_code} value={option.state_code}>
-                                                        {option.state_code} --{option.description}
-                                                    </option>
-                                                ))} */}
-                                            {/* </select> */}
+                                            <Controller name="rule_id"
+                                                        control={control}
+                                                        render={({ field }) => (
+                                                            <AsyncSelect
+                                                                {...field}
+                                                                cacheOptions
+                                                                defaultOptions
+                                                                // value={selectedValue}
+                                                                getOptionLabel={e => e.state_label}
+                                                                getOptionValue={e => e.state_value}
+                                                                loadOptions={loadStates}
+                                                                // onInputChange={handlePriceScheduleInput}
+                                                                // onChange={handleChange}
+                                                                placeholder="Rule Id "
+                                                                value={{ state_label: props.formData.state_code, state_value: props.formData.state_code }}
+
+                                                            />
+                                                        )} />
 
                                             {errors.city?.type === 'required' && <p role="alert" className="notvalid">City is  required</p>}
 
@@ -619,11 +757,31 @@ function CustomerForm(props) {
                                         <div className="form-group mb-3">
                                             <small>&nbsp;</small>
 
-                                            <input type="text" {...register("plan_id_1", {
+                                            {/* <input type="text" {...register("plan_id_1", {
                                                 // required: true,
                                                 pattern: /^(0|[1-9][0-9]*)$/,
                                             })} className="form-control" name="plan_id_1" id="" />
-                                            <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal"><span className="fa fa-search form-icon"></span></a>
+                                            <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal"><span className="fa fa-search form-icon"></span></a> */}
+
+
+                                            <Controller name="plan_id_1"
+                                                        control={control}
+                                                        render={({ field }) => (
+                                                            <AsyncSelect
+                                                                {...field}
+                                                                cacheOptions
+                                                                defaultOptions
+                                                                // value={selectedValue}
+                                                                getOptionLabel={e => e.plan_id_label}
+                                                                getOptionValue={e => e.plan_id_value}
+                                                                loadOptions={loadPlanIDS}
+                                                                // onInputChange={handlePriceScheduleInput}
+                                                                // onChange={handleChange}
+                                                                placeholder="Plan Id "
+                                                                // value={{ plan_id_label: props.formData.plan_id, plan_id_value: props.formData.country_code }}
+
+                                                            />
+                                                        )} />
 
                                             {/* <a className="btn  btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                 Add Benifit Code <i className="fa fa-search form-icon"></i></a> */}
@@ -640,13 +798,24 @@ function CustomerForm(props) {
                                         <div className="form-group mb-3">
                                             <div className="form-group mb-3">
                                                 <small>&nbsp;</small>
-                                                <input type="text" {...register("plan_id_2", {
-                                                    // required: true,
-                                                    pattern: /^(0|[1-9][0-9]*)$/,
+                                                <Controller name="plan_id_1"
+                                                        control={control}
+                                                        render={({ field }) => (
+                                                            <AsyncSelect
+                                                                {...field}
+                                                                cacheOptions
+                                                                defaultOptions
+                                                                // value={selectedValue}
+                                                                getOptionLabel={e => e.plan_id_label}
+                                                                getOptionValue={e => e.plan_id_value}
+                                                                loadOptions={loadPlanIDS}
+                                                                // onInputChange={handlePriceScheduleInput}
+                                                                // onChange={handleChange}
+                                                                placeholder="Plan Id "
+                                                                // value={{ plan_id_label: props.formData.plan_id, plan_id_value: props.formData.country_code }}
 
-
-                                                })} className="form-control" name="plan_id_2" id="" />
-                                                <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal"><span className="fa fa-search form-icon"></span></a>
+                                                            />
+                                                        )} />
                                                 {errors.plan_id_2?.type === 'required' && <p role="alert" className="notvalid">Plan id is  required</p>}
                                                 {errors.plan_id_2?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
                                             </div>
@@ -657,11 +826,24 @@ function CustomerForm(props) {
                                             <div className="form-group mb-3">
                                                 <small>&nbsp;</small>
 
-                                                <input type="text" {...register("plan_id_3", {
-                                                    // required: true,
-                                                    pattern: /^(0|[1-9][0-9]*)$/,
-                                                })} className="form-control" name="plan_id_3" id="" />
-                                                <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal"><span className="fa fa-search form-icon"></span></a>
+                                                <Controller name="plan_id_1"
+                                                        control={control}
+                                                        render={({ field }) => (
+                                                            <AsyncSelect
+                                                                {...field}
+                                                                cacheOptions
+                                                                defaultOptions
+                                                                // value={selectedValue}
+                                                                getOptionLabel={e => e.plan_id_label}
+                                                                getOptionValue={e => e.plan_id_value}
+                                                                loadOptions={loadPlanIDS}
+                                                                // onInputChange={handlePriceScheduleInput}
+                                                                // onChange={handleChange}
+                                                                placeholder="Plan Id "
+                                                                // value={{ plan_id_label: props.formData.plan_id, plan_id_value: props.formData.country_code }}
+
+                                                            />
+                                                        )} />
                                                 {errors.plan_id_3?.type === 'required' && <p role="alert" className="notvalid">Plan id is  required</p>}
                                                 {errors.plan_id_3?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
                                             </div>
@@ -724,13 +906,24 @@ function CustomerForm(props) {
                                     <div className="col-md-6">
                                         <div className="form-group mb-3">
                                             <small>Super Provider Networks</small>
-                                            {/* <input type="text" className="form-control" {...register("super_rx_network_id", {
-                                        required: true,
-                                    })} name="super_rx_network_id" id="" /> */}
-                                            {/* <a href="" data-bs-toggle="modal" data-bs-target="#supernetwork"><span className="fa fa-search form-icon"></span></a> */}
-                                            <Select
-                                                name="super_rx_network_id"  {...register('super_rx_network_id')} onChange={(e) => mahesh(e)} />
+                                            <Controller name="rule_id"
+                                                        control={control}
+                                                        render={({ field }) => (
+                                                            <AsyncSelect
+                                                                {...field}
+                                                                cacheOptions
+                                                                defaultOptions
+                                                                // value={selectedValue}
+                                                                getOptionLabel={e => e.super_label}
+                                                                getOptionValue={e => e.super_value}
+                                                                loadOptions={loadSuperProviderNetworksOptions}
+                                                                // onInputChange={handlePriceScheduleInput}
+                                                                // onChange={handleChange}
+                                                                placeholder="Rule Id "
+                                                                // value={{ country_label: props.formData.country_code, country_value: props.formData.country_code }}
 
+                                                            />
+                                                        )} />
                                             {errors.super_rx_network_id?.type === 'required' && <p role="alert" className="notvalid">Super Provider Networks field is   required</p>}
 
                                         </div>
@@ -920,13 +1113,26 @@ function CustomerForm(props) {
                                     <div className="col-md-4 mb-2">
                                         <small>Eligibility Validation List ID</small>
                                         <div className="form-group mb-3">
-                                            <input type="text" className="form-control"  {...register("elig_validation_id", {
-                                                required: true,
-                                                pattern: /^(0|[1-9][0-9]*)$/,
 
-                                            })} name="elig_validation_id" id="" required="" />
+                                        <Controller name="rule_id"
+                                                        control={control}
+                                                        render={({ field }) => (
+                                                            <AsyncSelect
+                                                                {...field}
+                                                                cacheOptions
+                                                                defaultOptions
+                                                                // value={selectedValue}
+                                                                getOptionLabel={e => e.elig_label}
+                                                                getOptionValue={e => e.elig_value}
+                                                                loadOptions={loadEligibilityValidationIds}
+                                                                // onInputChange={handlePriceScheduleInput}
+                                                                // onChange={handleChange}
+                                                                placeholder="Eligibility Validation Id "
+                                                                // value={{ elig_label: props.formData.elig_validation_id, elig_value: props.formData.elig_validation_id }}
 
-                                            <a href="" data-bs-toggle="modal" data-bs-target="#eligibilityidModal"><span className="fa fa-search form-icon"></span></a>
+                                                            />
+                                                        )} />
+                                          
 
                                         </div>
                                         {errors.eligibility_validation_list?.type === 'required' && <p role="alert" className="notvalid">Eligibility Validation List ID is  required</p>}
@@ -1215,9 +1421,24 @@ function CustomerForm(props) {
                             <div className="col-md-6 mb-2">
                                 <small>RVA List ID</small>
                                 <div className="form-group mb-3">
-                                    <input type="text" className="form-control" name="rva_list_id" {...register('rva_list_id', {
-                                        required: true,
-                                    })} id="" required="" />
+                                <Controller name="rule_id"
+                                                        control={control}
+                                                        render={({ field }) => (
+                                                            <AsyncSelect
+                                                                {...field}
+                                                                cacheOptions
+                                                                defaultOptions
+                                                                // value={selectedValue}
+                                                                getOptionLabel={e => e.rva_label}
+                                                                getOptionValue={e => e.rva_value}
+                                                                loadOptions={loadRvaListIds}
+                                                                // onInputChange={handlePriceScheduleInput}
+                                                                // onChange={handleChange}
+                                                                placeholder="Rva List Id "
+                                                                // value={{ elig_label: props.formData.elig_validation_id, elig_value: props.formData.elig_validation_id }}
+
+                                                            />
+                                                        )} />
 
                                     <a href="" data-bs-toggle="modal" data-bs-target="#rvalistidModal"><span className="fa fa-search form-icon"></span></a>
 
