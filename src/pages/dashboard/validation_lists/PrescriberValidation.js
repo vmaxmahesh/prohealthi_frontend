@@ -1,16 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { render } from 'react-dom';
 import { useForm } from 'react-hook-form';
-import { Link, Outlet, useLocation, useOutletContext } from 'react-router-dom';
+import AsyncSelect from 'react-select';
 
 export default function PrescriberValidation()
 {
-
-
-
     const scollToRef = useRef();
-
-
     const [ndcData, setNdcData] = useState([]);
     const [ndcClass, setNdClass] = useState([]);
 
@@ -153,7 +147,7 @@ export default function PrescriberValidation()
                         </ul>
                     </div>
                 </div>
-            </div> 
+            </div>
             <SearchPrescriber searchException={searchException} />
 
 
@@ -184,7 +178,7 @@ function SearchPrescriber(props)
                                 <input type="text"  onKeyUp={(e) => searchException(e)}   className="form-control" placeholder='Start typing presciber validation ID/name to search'
                                 />
                             </div>
-                        </div>                       
+                        </div>
                     </div>
                 </div>
             </div>
@@ -292,7 +286,7 @@ function PrescriberList(props)
 function NdcRow(props) {
 
     useEffect(() => {
-    
+
     }, [props.selected]);
 
 
@@ -331,8 +325,8 @@ function NdcClassRow(props) {
                 <td>{props.ndcClassRow.physician_first_name}    {props.ndcClassRow.physician_last_name}</td>
 
 
-                
-              
+
+
                 {/* <td><button className="btn btn-sm btn-info" id="" ><i className="fa fa-eye"></i> View</button></td> */}
             </tr>
         </>
@@ -344,8 +338,29 @@ function PrescriberForm(props)
 
     const { register,reset, handleSubmit, watch, formState: { errors } } = useForm();
 
-
     useEffect(() => { reset(props.viewDiagnosisFormdata) }, [props.viewDiagnosisFormdata]);
+    //fetch prescriber data
+const [prescriberId, setPrescriberId] = useState([]);
+
+const fetchClientId = () => {
+    fetch(process.env.REACT_APP_API_BASEURL +`/api/validationlist/prescriber/prescriber-list-drop-down`)
+    .then((res) => res.json())
+    .then((prescriberId) => {
+      const prescriberIdList = prescriberId.data.map((item) => ({
+        label: item.physician_id +' - '+ item.physician_last_name,
+        value: item.physician_id
+      }));
+      setPrescriberId(prescriberIdList);
+    });
+}
+
+const [prescriberData, setPrescriberData] = useState([]);
+
+useEffect(() => {
+    fetchClientId();
+},[])
+
+
     return(
         <>
          <div className="card mt-3 mb-3">
@@ -367,9 +382,15 @@ function PrescriberForm(props)
                             <div className="col-md-3 mb-3">
                                 <div className="form-group ">
                                          <small> Prescriber ID </small>
-                                        <div className="searchmodal">
-                                       <input type="text" name="physician_id" {...register('physician_id')} className="form-control" placeholder="" />
-                                       <button className="btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal"><i className="fa-solid fa-magnifying-glass"></i></button>
+                                <div className="searchmodal">
+                                <AsyncSelect
+                                    placeholder= "Select Prescriber ID"
+                                    options={prescriberId}
+                                    noOptionsMessage={() => "Prescriber ID/Name Not Matched"}
+                                    name="client_id"
+                                    value={prescriberData}
+                                    onChange={(e) => setPrescriberData(e)}
+                                />
                                        </div>
                                     </div>
                             </div>
