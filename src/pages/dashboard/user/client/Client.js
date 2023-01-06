@@ -5,6 +5,7 @@ import Footer from '../../../../shared/Footer';
 import { ToastContainer, toast } from 'react-toastify';
 import { objToQueryString } from '../../../../hooks/healper';
 import { Button, Col, Row } from 'react-bootstrap';
+import AsyncSelect from 'react-select';
 
 import Select from 'react-select';
 
@@ -32,7 +33,6 @@ export default function Client() {
 
 
     const showidentificationform = () => {
-
 
         setidentificationCount(1);
 
@@ -1552,6 +1552,70 @@ export function Identification(params) {
 
 
 
+    // API Calling for country input
+
+    const [countryList, setcountryList] = useState([]);
+
+    const [countryId, setcountryId] = useState([]);
+
+    const fetchCountryName = () => {
+        fetch(process.env.REACT_APP_API_BASEURL +`/api/user-data/client/get-country`)
+        .then((res) => res.json())  
+        .then((countryId) => {
+          const countryIdList = countryId.data.map((item) => ({  
+            label: item.code +' - '+ item.name,    
+            value: item.code    
+          }));
+          setcountryId(countryIdList);
+        });
+    }
+        useEffect(() => {
+            fetchCountryName();
+        },[])
+
+   // API Calling for City input
+   const [cityList, setcityList] = useState([]);
+
+   const [cityId, setcityId] = useState([]);
+
+   const fetchCityName = () => {
+       fetch(process.env.REACT_APP_API_BASEURL +`/api/user-data/client/get-city`)
+       .then((res) => res.json())  
+       .then((cityId) => {
+         const cityIdList = cityId.data.map((item) => ({  
+           label: item.code +' - '+ item.name,    
+           value: item.code    
+         }));
+         setcityId(cityIdList);
+       });
+   }
+       useEffect(() => {
+           fetchCityName();
+       },[])
+
+
+       // API Calling for Policy Annual Month
+   const [monthList, setmonthList] = useState([]);
+
+   const [monthId, setmonthId] = useState([]);
+
+   const fetchMonthName = () => {
+       fetch(process.env.REACT_APP_API_BASEURL +`/api/user-data/client/get-policy-annual-month`)
+       .then((res) => res.json())  
+       .then((monthId) => {
+         const monthIdList = monthId.data.map((item) => ({  
+           label: item.code +' - '+ item.name,    
+           value: item.code    
+         }));
+         setmonthId(monthIdList);
+       });
+   }
+       useEffect(() => {
+           fetchMonthName();
+       },[])
+
+
+
 
 
 
@@ -1620,33 +1684,39 @@ export function Identification(params) {
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>City / State</small>
-                                            <select className="form-select" name="city" {...register('city', {
-                                                required: true,
-                                            })}>
-                                                <option value="">Select City</option>
-                                                <option value="1">Hyderabad</option>
-                                                <option value="2">Banglore</option>
-                                                <option value="3">Vijayawada</option>
-                                            </select>
+
+                                            <AsyncSelect
+                                        placeholder= "Select City / State"
+                                        options={cityId}
+                                        noOptionsMessage={() => "City / State Name Not Matched"}
+                                        name="city_name"
+                                        value={cityList}
+                                        onChange={(e) => setcityList(e)}
+                                    />
                                             {errors.city?.type === 'required' && <p role="alert" className="notvalid"> City  is  required</p>}
 
                                         </div>
                                     </div>
+
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Country</small>
 
-                                            <select className="form-select" name="country" {...register('country', {
-                                                required: true,
-                                            })}>
-                                                <option value="">Select Country</option>
-                                                <option value="1">india</option>
-                                                <option value="2">united states</option>
-                                            </select>
+                                        <AsyncSelect
+                                        placeholder= "Select Country"
+                                        options={countryId}
+                                        noOptionsMessage={() => "Country / Name Not Matched"}
+                                        name="country_name"
+                                        value={countryList}
+                                        onChange={(e) => setcountryList(e)}
+                                    />
                                             {errors.country?.type === 'required' && <p role="alert" className="notvalid"> Country  is  required</p>}
 
                                         </div>
                                     </div>
+
+
+
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>ZIP Code</small>
@@ -1703,16 +1773,6 @@ export function Identification(params) {
 
                                         </div>
                                     </div>
-                                    {/* <div className="col-md-6">
-                                        <div className="form-group mb-2">
-                                            <small>Test</small>
-                                            <input type="text" className="form-control" name="test" {...register('test', {
-                                                required: true,
-                                            })} id="" placeholder="Test" />
-                                            {errors.test?.type === 'required' && <p role="alert" className="notvalid">  Test field  is  required</p>}
-
-                                        </div>
-                                    </div> */}
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Type</small>
@@ -1751,24 +1811,14 @@ export function Identification(params) {
                                     <div className="col-md-6">
                                         <div className="form-group mb-2">
                                             <small>Policy Ann. Month</small>
-                                            <select {...register("policy_anniv_month", {
-                                                required: true,
-                                            })} name="policy_anniv_month" className="form-select">
-
-                                                <option value="">--Select--</option>
-                                                <option value="1">January</option>
-                                                <option value="2">February</option>
-                                                <option value="3">March</option>
-                                                <option value="4">April</option>
-                                                <option value="5">May</option>
-                                                <option value="6">June</option>
-                                                <option value="7">July</option>
-                                                <option value="8">August</option>
-                                                <option value="9">September</option>
-                                                <option value="10">October</option>
-                                                <option value="11">November</option>
-                                                <option value="12">December</option>
-                                            </select>
+                                            <AsyncSelect
+                                        placeholder= "Select Annual Month"
+                                        options={monthId}
+                                        noOptionsMessage={() => "Annual Month Not Matched"}
+                                        name="month_name"
+                                        value={monthList}
+                                        onChange={(e) => setmonthList(e)}
+                                      />
                                             {errors.policy_anniv_month?.type === 'required' && <p role="alert" className="notvalid">Policy Annual Month  is  required</p>}
 
                                         </div>

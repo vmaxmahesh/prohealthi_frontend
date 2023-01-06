@@ -67,6 +67,7 @@ import Prescriber from './pages/dashboard/prescriber/Prescriber';
 import ProviderTypeValidation from './pages/dashboard/exceptionlist/ProviderTypeValidation';
 
 import ProcedureCode from './pages/dashboard/exceptionlist/ProcedureCode';
+import ReasonCodes from './pages/dashboard/exceptionlist/ExceptionReason';
 import SuperBenefitList from './pages/dashboard/exceptionlist/SuperBenefitList';
 import MembersData, { ChangeLogTab, ClaimHistoryTab, CoverageHistoryTab, HealthConditionsTab, MemberTab, NotesTab, OverridesTab, PriorAuthorizationTab, ProviderSearchTab } from './pages/dashboard/membership/MembersData';
 import PriorAuthorization, { Authorization, PriorNotes, PriorPricing } from './pages/dashboard/membership/PriorAuthorization';
@@ -413,6 +414,11 @@ function App() {
           </Route>
 
 
+          <Route path="exception-list/reason-codes" element={<ReasonCodes />}>
+            
+          </Route>
+
+
           <Route path="exception-list/super-benefit-list" element={<SuperBenefitList />}>
             
             </Route>
@@ -433,7 +439,7 @@ function App() {
           <Route path="exception-list/procedure" element={<ExceptionProcedure />}>
           </Route>
 
-          <Route path="exception-list/reason" element={<ExceptionReason />}>
+          <Route path="exception-list/reason-codes" element={<ExceptionReason />}>
           </Route>
 
           <Route path="exception-list/benefit-list" element={<BenefitList />}>

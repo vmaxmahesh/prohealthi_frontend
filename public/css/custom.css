@@ -668,7 +668,9 @@ marquee p{
     border-radius: 0px;
     padding: 8px 15px;
 }
-
+.p-relative {
+    position: relative;
+}
 .tab-scroll{
     width: 98%;
     position: absolute;

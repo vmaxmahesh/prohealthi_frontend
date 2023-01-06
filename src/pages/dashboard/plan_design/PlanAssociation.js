@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 export default function PlanAssociation()
 {
     return(
@@ -35,7 +36,7 @@ function SearchPlanAssociation()
 {
     return(
         <>
-        <div className="card mt-3 mb-3">
+            <div className="card mt-3 mb-3">
                 <div className="card-body">
                     <div className="row mb-2">
                         <div className="col-md-12 mb-3">

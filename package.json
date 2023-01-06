@@ -12,6 +12,7 @@
     "little-state-machine": "^4.8.0",
     "moment": "^2.29.4",
     "react": "^18.2.0",
+    "react-async-select": "^0.2.6",
     "react-bootstrap": "^2.5.0",
     "react-bootstrap-sidebar-menu": "^2.0.3",
     "react-datepicker": "^4.8.0",
