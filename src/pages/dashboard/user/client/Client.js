@@ -19,12 +19,14 @@ export default function Client() {
     const currentpath = location.pathname.split('/').pop();
 
     const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
+    const [adding, setAdding] = useState(false);
+
 
     const [count, setCount] = useState(null);
     const [displaynav, setDisplayNav] = useState();
     const [identificationcount, setidentificationCount] = useState(null);
 
-    const [client, setClient] = useState([]);
+    const [client, setClient] = useState(false);
 
     const [clientlist, setClientList] = useState([]);
 
@@ -42,6 +44,19 @@ export default function Client() {
 
 
     }
+
+    
+    useEffect(() => {
+        if (client) {
+            setAdding(false);
+
+        } else {
+            setAdding(true);
+        }
+
+        document.title = 'Benefit Code | ProHealthi';
+
+    }, [client, adding]);
 
     const searchClient = (fdata) => {
 
@@ -120,9 +135,7 @@ export default function Client() {
 
     return (
         <>
-        <div>
-            mahesh
-        </div>
+       
             <div className="row">
 
                 <div className="col-md-6 mb-3">
@@ -221,7 +234,7 @@ export default function Client() {
 
 
 
-            <ClientForm formData={client} />
+            <ClientForm   formData={client} adding={adding} selected={client}/>
 
 
 
@@ -438,6 +451,26 @@ function ClientForm(props) {
         e.preventDefault();
     }
 
+    useEffect(() => {
+
+
+        if (props.adding) {
+            reset({ rx_network_rule_id: '', rx_network_rule_name: '', new: 1 }, {
+                keepValues: false,
+            })
+        } else {
+            reset(props.selected);
+        }
+
+        if (!props.selected) {
+            reset({ rx_network_rule_id: '', rx_network_rule_name: '', description: '', pharm_type_variation_ind: '', network_part_variation_ind: '', claim_type_variation_ind: '', plan_accum_deduct_id: '', new: 1 }, {
+                keepValues: false,
+            })
+        }
+
+
+    }, [props.selected, props.adding]);
+
 
     return (
         <>
@@ -464,13 +497,13 @@ function ClientForm(props) {
                                                 <div class="col-md-6">
                                                     <div class="form-group mb-2">
                                                         <small>Customer ID</small>
-                                                        <input type="text" class="form-control" {...register('customer_id')} name="" id="" placeholder="Customer ID" readonly="" />
+                                                        <input type="text" class="form-control" {...register('customer_id')} name="customer_id" id="" placeholder="Customer ID" />
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group mb-2">
                                                         <small>Client ID</small>
-                                                        <input type="text"  {...register('client_id')} class="form-control" name="" id="" placeholder="Client ID" readonly="" />
+                                                        <input type="text"  {...register('client_id')} class="form-control" name="client_id" id="" placeholder="Client ID"  />
                                                     </div>
                                                 </div>
                                             </div>
@@ -1396,7 +1429,7 @@ function Cutomer(props) {
         <>
             <tr onClick={() => props.getCustomer(props.customer.client_id)}>
                 <td>{props.customer.customerid}</td>
-                <td>{props.customer.customername}</td>
+                {/* <td>{props.customer.customername}</td> */}
                 <td>{props.customer.client_id}</td>
                 <td>{props.customer.client_name}</td>
                 <td>{props.customer.clienteffectivedate}</td>
