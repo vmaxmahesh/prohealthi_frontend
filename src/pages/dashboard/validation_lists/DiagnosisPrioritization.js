@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { render } from 'react-dom';
 import { useForm } from 'react-hook-form';
-import { Link, Outlet, useLocation, useOutletContext } from 'react-router-dom';
 import { Col, Row } from 'react-bootstrap';
 import DraggableList from "react-draggable-lists";
+import LoadingSpinner from '../../../loader/loader';
+import EmptyRowComponent from '../../../shared/NoDataFound';
+import Footer from '../../../shared/Footer';
+import {useAuth} from '../../../hooks/AuthProvider';
 
 export default function DiagnosisPrioritization() {
 
@@ -104,9 +106,6 @@ export default function DiagnosisPrioritization() {
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
-                //  console.log(response);
-                // console.log(data.data);
-
                 // check for error response
                 if (!response.ok) {
                     // get error message from body or default to response status
@@ -231,10 +230,9 @@ function DiagnosisPrioritizationList(props) {
                 <div className="card-body">
                     <div className="row">
                         <div className="col-md-8 mb-2">
-                            <h5>Diagnosis Validation List</h5>
+                            <h5>Prioritize Diagnosis List</h5>
                         </div>
                         <div className="col-md-4 mb-3 text-end">
-                            {/* <button className="btn btn-sm btn-warning" id="show" onClick={e => handleShow()}><i className="fa plus-circle"></i> Add NDC List</button> */}
                         </div>
                         <div className="col-md-12">
                             <div className="card mt-3 mb-3">
@@ -269,9 +267,9 @@ function DiagPrioritizeForm(props) {
 
     const { register, reset, handleSubmit, watch, formState: { errors } } = useForm();
 
-    // const [selctedNdc, setSelctedNdc] = useOutletContext() 
+    // const [selctedNdc, setSelctedNdc] = useOutletContext()
 
-   
+
 
     // useEffect(() => {  [props.viewDiagnosisFormdata]});
 
@@ -336,13 +334,13 @@ function DiagPrioritizeForm(props) {
 
 
 
-                                                
 
 
 
 
 
-                                    
+
+
 
 
                             </DraggableList> */}
@@ -411,9 +409,3 @@ function DiagPrioritizeDragable(props) {
         </>
     )
 }
-
-
-
-
-
-

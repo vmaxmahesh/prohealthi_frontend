@@ -475,13 +475,6 @@ function ProviderValidationForm(props) {
                     progress: undefined
                 });
                 props.resetForm();
-                // reset({
-                //     pharmacy_list: '',
-                //     exception_name: '',
-                //     pharmacy_nabp: '',
-                //     pharmacy_status: '',
-                //     new: 1
-                // }, {keepValues: false})
             }
         }).catch(error => {
             console.error('There was an error !', error);

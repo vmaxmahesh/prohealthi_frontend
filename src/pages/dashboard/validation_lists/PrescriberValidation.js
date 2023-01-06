@@ -1,52 +1,65 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm , Controller} from 'react-hook-form';
 import AsyncSelect from 'react-select';
+import LoadingSpinner from '../../../loader/loader';
+import EmptyRowComponent from '../../../shared/NoDataFound';
+import Footer from '../../../shared/Footer';
+import {useAuth} from '../../../hooks/AuthProvider';
+import {toast} from 'react-toastify';
 
 export default function PrescriberValidation()
 {
     const scollToRef = useRef();
-    const [ndcData, setNdcData] = useState([]);
-    const [ndcClass, setNdClass] = useState([]);
+    const [presciberExceptionData, setPresciberExceptionData] = useState([]);
+    const [prescriberValidationData, setPrescriberValidationData] = useState([]);
+    const [presciberData, setPresciberData] = useState([]);
+    const [selctedPrescriberException, setSelctedPrescriberException] = useState('');
+    const [selectedPreciberValidation, setSelectedPreciberValidation] = useState('');
 
-    const [selctedNdc, setSelctedNdc] = useState('');
+    //loaders
+    const [loading, setLoading] = useState(false);
+    const [loader, setLoader] = useState(false);
+
+    const [adding, setAdding] = useState(false);
+
+    const clearForm = (e) => {
+        setAdding(false);
+        setSelectedPreciberValidation('');
+        document.getElementById('prescriberForm').reset();
+    }
+    const resetForm = (e) => {
+        setAdding(false);
+        setSelctedPrescriberException('');
+        setSelectedPreciberValidation('');
+        setPresciberData([]);
+        document.getElementById('prescriberForm').reset();
+    }
 
 
-
-    const getNDCItems = (ndcid) => {
-        // ndc_exception_list
-
+    const getPresciberValidationData = (presciber_list) => {
+        setLoader(true);
         var test = {};
-        test.ndc_exception_list = ndcid;
-        setSelctedNdc(test);
-
-        // //  console.log(customerid);
+        test.presciber_list = presciber_list;
+        setSelctedPrescriberException(test);
         const requestOptions = {
             method: 'GET',
             // mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
             // body: encodeURIComponent(data)
         };
-        // //  console.log(watch(fdata));
-
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/prescriber/get/${ndcid}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/prescriber/get/${presciber_list}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
-                //  console.log(response);
-
                 // check for error response
                 if (!response.ok) {
                     // get error message from body or default to response status
                     const error = (data && data.message) || response.status;
-                    setNdClass([]);
+                    setPrescriberValidationData([]);
                     return Promise.reject(error);
                 } else {
-                    setNdClass(data.data);
-                    // scollToRef.current.scrollIntoView()
-                }
-
-
-                if (response === '200') {
+                    setPrescriberValidationData(data.data);
+                    setLoader(false);
                 }
             })
             .catch(error => {
@@ -55,37 +68,35 @@ export default function PrescriberValidation()
     }
 
 
-    const getNDCItemDetails = (ndcid) => {
-         console.log(ndcid);
+    const getPreciberDetails = (preciber_data) => {
+        var preciber_list = preciber_data.physician_list;
+        var preciber_id = preciber_data.physician_id;
+        var test = {};
+        test.preciber_id = preciber_id
+        setSelectedPreciberValidation(test);
         const requestOptions = {
             method: 'GET',
             // mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
             // body: encodeURIComponent(data)
         };
-        // //  console.log(watch(fdata));
 
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/prescriber/details/${ndcid}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/prescriber/details/${preciber_list}/${preciber_id}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
-                //  console.log(response);
-
                 // check for error response
                 if (!response.ok) {
                     // get error message from body or default to response status
                     const error = (data && data.message) || response.status;
                     return Promise.reject(error);
                 } else {
-                    setSelctedNdc(data.data);
-                    console.log(selctedNdc);
-                    scollToRef.current.scrollIntoView()
+                    setPresciberData(data.data);
+                    scollToRef.current.scrollIntoView();
+                    setAdding(true);
                     return;
                 }
 
-
-                if (response === '200') {
-                }
             })
             .catch(error => {
                 console.error('There was an error!', error);
@@ -93,8 +104,8 @@ export default function PrescriberValidation()
     }
 
 
-    const searchException = (fdata) => {
-
+    const searchPrescriber = (fdata) => {
+        setLoading(true);
         const requestOptions = {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
@@ -104,23 +115,20 @@ export default function PrescriberValidation()
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
-                //  console.log(response);
-                console.log(data.data);
-
                 // check for error response
                 if (!response.ok) {
                     // get error message from body or default to response status
                     const error = (data && data.message) || response.status;
-                    setNdcData([]);
+                    setPresciberExceptionData([]);
                     return Promise.reject(error);
 
                 } else {
-                    setNdcData(data.data);
+                    setPresciberExceptionData(data.data);
+                    setLoading(false);
+                    setSelctedPrescriberException('');
+                    setPrescriberValidationData('');
                     return;
                 }
-
-
-
             })
             .catch(error => {
                 console.error('There was an error!', error);
@@ -148,11 +156,13 @@ export default function PrescriberValidation()
                     </div>
                 </div>
             </div>
-            <SearchPrescriber searchException={searchException} />
+            <SearchPrescriber searchPrescriber={searchPrescriber} />
+            <PrescriberList key='prescriber_list' prescriberExceptionListData={presciberExceptionData} prescriberValidationListData={prescriberValidationData} getPresciberValidationData={getPresciberValidationData} getPreciberDetails={getPreciberDetails} selctedPrescriberException={selctedPrescriberException} loading={loading} loader={loader} selectedPreciberValidation={selectedPreciberValidation} />
+            <div ref={scollToRef}>
+                <PrescriberForm viewPresciberData={presciberData} adding={adding} clearForm={clearForm} resetForm={resetForm} />
+            </div>
 
-
-            <PrescriberList ndcListData={ndcData} ndcClassData={ndcClass} getNDCItem={getNDCItems} getNDCItemDetails={getNDCItemDetails} selctedNdc={selctedNdc} />
-            <PrescriberForm  viewDiagnosisFormdata={selctedNdc} />
+            <Footer/>
 
 
         </>
@@ -161,11 +171,8 @@ export default function PrescriberValidation()
 
 function SearchPrescriber(props)
 {
-
-    const searchException = (fdata) => {
-        // alert(fdata);
-
-        props.searchException(fdata);
+    const searchPrescriber = (fdata) => {
+        props.searchPrescriber(fdata);
     }
     return(
         <>
@@ -175,51 +182,49 @@ function SearchPrescriber(props)
                         <div className="col-md-12 mb-3">
                             <div className="form-group">
                                 <small>Prescriber Validation ID/Name</small>
-                                <input type="text"  onKeyUp={(e) => searchException(e)}   className="form-control" placeholder='Start typing presciber validation ID/name to search'
+                                <input type="text"  onKeyUp={(e) => searchPrescriber(e)}   className="form-control" placeholder='Start typing presciber validation ID/name to search'
                                 />
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            {/* <PrescriberList /> */}
         </>
     )
 }
 
 function PrescriberList(props)
 {
-
-
-
-    const scollToRef = useRef();
-
     useEffect(() => { }, [props.selctedNdc]);
-    // //  console.log(props.selctedNdc);
-
-    const getNDCItem = (ndciemid) => {
-        // alert(ndciemid);
-        props.getNDCItem(ndciemid);
+    const getPresciberValidationData = (preciber_id) => {
+        props.getPresciberValidationData(preciber_id);
     }
 
-    const getNDCItemDetails = (ndciemid) => {
-        props.getNDCItemDetails(ndciemid);
+    const getPreciberDetails = (presciber_data) => {
+        props.getPreciberDetails(presciber_data);
     }
 
 
-    const ndcListArray = [];
-    for (let i = 0; i < props.ndcListData.length; i++) {
-        ndcListArray.push(<NdcRow ndcRow={props.ndcListData[i]} getNDCItem={getNDCItem} selected={props.selctedNdc} />);
+    const prescriberExceptionListArray = [];
+    if (props.prescriberExceptionListData.length > 0) {
+        for (let i = 0; i < props.prescriberExceptionListData.length; i++) {
+            prescriberExceptionListArray.push(<PrescriberExceptionRow key={'PrescriberExceptionRow'+i} preciberExceptionRowData={props.prescriberExceptionListData[i]} getPresciberValidationData={getPresciberValidationData} selected={props.selctedPrescriberException} />);
+        }
+    } else {
+        prescriberExceptionListArray.push(<EmptyRowComponent key='EmptyRowComponent' colSpan='2'/>)
     }
 
-    const ndcClassArray = [];
-    for (let j = 0; j < props.ndcClassData.length; j++) {
-        ndcClassArray.push(<NdcClassRow ndcClassRow={props.ndcClassData[j]} getNDCItemDetails={getNDCItemDetails} selected={props.selctedNdc} />);
+
+    const prescriberValidationListArray = [];
+    if (props.prescriberValidationListData.length > 0) {
+        for (let j = 0; j < props.prescriberValidationListData.length; j++) {
+            prescriberValidationListArray.push(<PrescriberValidationRow key={'PrescriberValidationRow'+j} prescriberValidationRowData={props.prescriberValidationListData[j]} getPreciberDetails={getPreciberDetails} selected={props.selectedPreciberValidation} />);
+        }
+    } else {
+        prescriberValidationListArray.push(<EmptyRowComponent key='EmptyRowComponent' colSpan='3'/>)
     }
 
-    const [ncdListData, setNcdListData] = useState();
-    const [show, setShow] = useState("none");
-    const handleShow = () => setShow("block");
+
     return(
         <>
          <div className="card mt-3 mb-3">
@@ -243,9 +248,7 @@ function PrescriberList(props)
                                                 </tr>
                                             </thead>
                                             <tbody>
-
-                                                {ndcListArray}
-
+                                                {props.loading?<LoadingSpinner colSpan='2'/>:prescriberExceptionListArray}
                                             </tbody>
                                         </table>
                                     </div>
@@ -266,7 +269,7 @@ function PrescriberList(props)
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {ndcClassArray}
+                                                {props.loader?<LoadingSpinner colSpan='3'/>:prescriberValidationListArray}
                                             </tbody>
                                         </table>
                                     </div>
@@ -276,58 +279,41 @@ function PrescriberList(props)
                     </div>
                 </div>
             </div>
-            {/* <PrescriberForm /> */}
         </>
     )
 }
 
 
 
-function NdcRow(props) {
-
-    useEffect(() => {
-
-    }, [props.selected]);
-
-
+function PrescriberExceptionRow(props) {
+    useEffect(() => { }, [props.selected]);
 
     return (
         <>
-            <tr className={(props.selected && props.ndcRow.physician_list == props.selected.physician_list ? ' tblactiverow ' : '')}
-
-                onClick={() => props.getNDCItem(props.ndcRow.physician_list)}
+            <tr className={(props.selected && props.preciberExceptionRowData.physician_list == props.selected.presciber_list ? ' tblactiverow ' : '')}
+                onClick={() => props.getPresciberValidationData(props.preciberExceptionRowData.physician_list)}
             >
-                <td>{props.ndcRow.physician_list}</td>
-                <td >{props.ndcRow.exception_name}</td>
-
-                {/* <td><button className="btn btn-sm btn-info" id="" ><i className="fa fa-eye"></i> View</button></td> */}
+                <td>{props.preciberExceptionRowData.physician_list}</td>
+                <td >{props.preciberExceptionRowData.exception_name}</td>
             </tr>
         </>
     )
 }
 
 
-function NdcClassRow(props) {
-
-    useEffect(() => {
-
-    }, [props.selected]);
+function PrescriberValidationRow(props) {
+    useEffect(() => { }, [props.selected]);
 
     return (
         <>
             <tr
-                className={(props.selected && props.ndcClassRow.physician_id == props.selected.physician_id ? ' tblactiverow ' : '')}
-                onClick={() => props.getNDCItemDetails(props.ndcClassRow.physician_id)}
+                className={(props.selected && props.prescriberValidationRowData.physician_id == props.selected.preciber_id ? ' tblactiverow ' : '')}
+                onClick={() => props.getPreciberDetails(props.prescriberValidationRowData)}
 
             >
-                <td>{props.ndcClassRow.physician_id}</td>
-                <td>{props.ndcClassRow.physician_status}</td>
-                <td>{props.ndcClassRow.physician_first_name}    {props.ndcClassRow.physician_last_name}</td>
-
-
-
-
-                {/* <td><button className="btn btn-sm btn-info" id="" ><i className="fa fa-eye"></i> View</button></td> */}
+                <td>{props.prescriberValidationRowData.physician_id}</td>
+                <td>{props.prescriberValidationRowData.physician_status}</td>
+                <td>{props.prescriberValidationRowData.physician_first_name}    {props.prescriberValidationRowData.physician_last_name}</td>
             </tr>
         </>
     )
@@ -336,78 +322,144 @@ function NdcClassRow(props) {
 function PrescriberForm(props)
 {
 
-    const { register,reset, handleSubmit, watch, formState: { errors } } = useForm();
+    const { register, reset, handleSubmit, control, formState: { errors } } = useForm();
 
-    useEffect(() => { reset(props.viewDiagnosisFormdata) }, [props.viewDiagnosisFormdata]);
-    //fetch prescriber data
-const [prescriberId, setPrescriberId] = useState([]);
+    const { user } = useAuth();
 
-const fetchClientId = () => {
-    fetch(process.env.REACT_APP_API_BASEURL +`/api/validationlist/prescriber/prescriber-list-drop-down`)
-    .then((res) => res.json())
-    .then((prescriberId) => {
-      const prescriberIdList = prescriberId.data.map((item) => ({
-        label: item.physician_id +' - '+ item.physician_last_name,
-        value: item.physician_id
-      }));
-      setPrescriberId(prescriberIdList);
-    });
-}
+        //fetch prescriber data
+        const [prescriberId, setPrescriberId] = useState([]);
+        const fetchPrescriberId = () => {
+            fetch(process.env.REACT_APP_API_BASEURL +`/api/validationlist/prescriber/prescriber-list-drop-down`)
+            .then((res) => res.json())
+            .then((prescriberId) => {
+            const prescriberIdList = prescriberId.data.map((item) => ({
+                label: item.physician_id +' - '+ item.physician_last_name,
+                value: item.physician_id
+            }));
+            setPrescriberId(prescriberIdList);
+            });
+        }
 
-const [prescriberData, setPrescriberData] = useState([]);
+        useEffect(() => {
+            fetchPrescriberId();
+        }, [])
 
-useEffect(() => {
-    fetchClientId();
-},[])
+        useEffect(() => {
+            if (!props.adding) {
+                reset({ physician_list: '',exception_name:'', physician_id:'', physician_status:'', new:1 },{keepValues:false})
+            } else {
+                reset(props.viewPresciberData)
+            }
+
+        }, [props.viewPresciberData]);
+
+    const addPrescriberData = (formData) => {
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        }
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/prescriber/submit-prescriber-form`, requestOptions).then(async response => {
+            const isJson = response.headers.get('Content-Type') ?. includes('application/json');
+            const data = isJson && await response.json();
+            if (!response.ok) {
+                toast.error("There was an error !", {
+                    position: 'top-right',
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    pauseOnHover: true,
+                    closeOnClick: true,
+                    draggable: true,
+                    progress: undefined
+                });
+            } else {
+                toast.success(data.message, {
+                    position: 'top-right',
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    pauseOnHover: true,
+                    closeOnClick: true,
+                    draggable: true,
+                    progress: undefined
+                });
+                props.resetForm();
+
+            }
+        }).catch(error => {
+            console.error('There was an error !', error);
+        });
+    }
 
 
     return(
         <>
          <div className="card mt-3 mb-3">
                     <div className="card-body">
-
+                    <form id="prescriberForm" name="prescriberForm" onSubmit={handleSubmit(addPrescriberData)}>
+                    <input type="hidden" name="user_name" value={user.name} {...register('user_name')} />
                         <div className="row">
                             <div className="col-md-3 mb-3">
                                 <div className="form-group">
                                     <small>Prescriber List ID</small>
-                                    <input type="text" className="form-control" name="physician_list" {...register('physician_list')} id="" placeholder="" required />
+                                    <input type="text" className="form-control" name="physician_list" {...register('physician_list', { required: true })} id="" placeholder="Prescriber List Id" />
+                                    {errors.physician_list && <span><p className="notvalid">Prescriber List Id is required.</p></span>}
                                 </div>
                             </div>
                             <div className="col-md-3 mb-3">
                                 <div className="form-group">
                                     <small>Prescriber List Name</small>
-                                    <input type="text" className="form-control" name="exception_name" {...register('exception_name')} id="" placeholder="" required />
+                                    <input type="text" className="form-control" name="exception_name" {...register('exception_name', { required: true })} id="" placeholder="Prescriber Name" />
+                                    {errors.exception_name && <span><p className="notvalid">Prescriber Name is required.</p></span>}
                                 </div>
                             </div>
                             <div className="col-md-3 mb-3">
                                 <div className="form-group ">
                                          <small> Prescriber ID </small>
-                                <div className="searchmodal">
-                                <AsyncSelect
-                                    placeholder= "Select Prescriber ID"
-                                    options={prescriberId}
-                                    noOptionsMessage={() => "Prescriber ID/Name Not Matched"}
-                                    name="client_id"
-                                    value={prescriberData}
-                                    onChange={(e) => setPrescriberData(e)}
-                                />
+                                    <div className="searchmodal">
+                                        <Controller name="physician_id"
+                                            control={control}
+                                            rules={{ required: true }}
+                                            render={({ field }) => (
+                                                <AsyncSelect
+                                                {...field}
+                                                    placeholder="Select Prescriber ID"
+                                                    options={prescriberId}
+                                                    noOptionsMessage={() => "Prescriber ID/Name Not Matched"}
+                                                />
+                                            )} />
+                                        {errors.physician_id && <span><p className="notvalid">Prescriber Id is required.</p></span>}
                                        </div>
                                     </div>
                             </div>
                             <div className="col-md-3 mb-3">
                                 <div className="form-group">
                                     <small>Prescriber Status</small>
-                                    <select className="form-select" name="physician_status" {...register('physician_status')}>
-                                    <option value=""></option>
-
+                                    <select className="form-select" name="physician_status" {...register('physician_status' , {required:true})}>
+                                    <option value="">--select--</option>
                                         <option value="A">Approved</option>
                                         <option value="R">Rejected</option>
                                     </select>
+                                    {errors.physician_status && <span><p className="notvalid">Prescriber status is required.</p></span>}
                                 </div>
                             </div>
 
-                        </div>
                     </div>
+                    <div className="col-md-12 text-end">
+                                <button  type="submit" className="btn btn-primary ">{ props.adding?'Update':'Add'}
+                                </button>&nbsp;&nbsp;&nbsp;
+                                <button onClick={
+                                        e => props.clearForm(e)
+                                    }
+                                    type="button"
+                                    className="btn btn-danger">
+                                    Clear
+                                </button>
+                        </div>
+                        </form>
+                    </div>
+
                 </div>
         </>
     )
