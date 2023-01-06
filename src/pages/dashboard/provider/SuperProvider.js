@@ -50,7 +50,7 @@ export default function SuperProvider() {
             headers: { 'Content-Type': 'application/json' },
         };
 
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/provider/supernetwork/search?search=${fdata.target.value}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/providerdata/supernetwork/search?search=${fdata.target.value}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
@@ -94,7 +94,7 @@ export default function SuperProvider() {
         };
         // //  console.log(watch(fdata));
 
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/provider/supernetwork/get/${ndcid}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/providerdata/supernetwork/get/${ndcid}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
@@ -137,7 +137,7 @@ export default function SuperProvider() {
         };
         //  console.log(watch(fdata));
 
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/provider/supernetwork/get/${ndcid}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/providerdata/supernetwork/get/${ndcid}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
@@ -408,7 +408,7 @@ function SuperProviderForm(props)
 
             });
         } else {
-            fetch(process.env.REACT_APP_API_BASEURL + `/api/provider/prioritize/add`, requestOptions)
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/providerdata/superprovider/add`, requestOptions)
                 .then(async response => {
                     const isJson = response.headers.get('content-type')?.includes('application/json');
                     const data = isJson && await response.json();
@@ -447,8 +447,29 @@ function SuperProviderForm(props)
 
     }
     const onSubmit = (e) => {
+        
         e.preventDefault();
     }
+
+    useEffect(() => {
+
+
+        if (props.adding) {
+            reset({ accum_bene_strategy_name: '', description: '', new: 1 }, {
+                keepValues: false,
+            })
+        } else {
+            reset(props.selected);
+        }
+
+        if (!props.selected) {
+            reset({ accum_bene_strategy_name: '', accum_bene_strategy_id: '', description: '', pharm_type_variation_ind: '', network_part_variation_ind: '', claim_type_variation_ind: '', plan_accum_deduct_id: '', new: 1 }, {
+                keepValues: false,
+            })
+        }
+
+
+    }, [props.selected, props.adding]);
 
 
     useEffect(() => { reset(props.viewDiagnosisFormdata) }, [props.viewDiagnosisFormdata]);

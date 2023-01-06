@@ -1,13 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/AuthProvider';
+import { useForm } from 'react-hook-form';
 
 export default function Dashboard() {
     const location = useLocation();
     const currentpath = location.pathname.split('/')[3];
+    const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
+
+    const [title,setTitle]=useState('')
+
+    
+    useEffect(() => 
+
+    {
+
+        if(currentpath === "traditionalnetworks"){
+            setTitle('Traditional Networks')
+      }
+        
+        
+        reset(title) }, [title]);
 
 
-  
+ 
+
+  useEffect
 
     console.log(currentpath);
     // const user  = useAuth();
@@ -30,7 +48,7 @@ export default function Dashboard() {
                             <Link to="" className='dashboard-nav-item dashboard-nav-dropdown-toggle'>
                                 <i className="fas fa-clipboard-list"></i> Exception Lists</Link>
                             <div className='dashboard-nav-dropdown-menu'>
-                                <Link to="/dashboard/exception-list/ndc" className={'dashboard-nav-dropdown-item' + (currentpath == 'ndc' ? ' active' : '')}>NDC</Link>
+                                <Link  to="/dashboard/exception-list/ndc" className={'dashboard-nav-dropdown-item' + (currentpath == 'ndc' ? ' active' : '')}>NDC</Link>
                                 <Link to="/dashboard/exception-list/gpi" className={'dashboard-nav-dropdown-item' + (currentpath == 'pgpiath' ? ' active' : '')}>GPI</Link>
                                 <Link to="/dashboard/exception-list/therapy-class" className={'dashboard-nav-dropdown-item' + (currentpath == 'therapy-class' ? ' active' : '')}>Therapy Class</Link>
                                 <a href="/dashboard/exception-list/drug-classification" className={'dashboard-nav-dropdown-item' + (currentpath == 'path' ? ' active' : '')}>Drug Classification</a>
@@ -207,7 +225,7 @@ export default function Dashboard() {
 
                         <div className="col-md-2 d-flex align-items-center">
                             <a href="#!" className="menu-toggle"><i className="fa-solid fa-bars-staggered"></i></a>
-                            <h3 className="page-title">{currentpath}</h3>
+                            <h3 className="page-title">{title}</h3>
                         </div>
                         <div className="col-md-10 ms-auto">
                             <ul className="menu-items align-items-center">

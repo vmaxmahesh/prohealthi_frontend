@@ -409,7 +409,7 @@ function CustomerForm(props) {
 
 
         if (props.adding) {
-            reset({ rx_network_rule_id: '', rx_network_rule_name: '', new: 1 }, {
+            reset({ rx_network_rule_id: '',city:'', rx_network_rule_name: '', new: 1 }, {
                 keepValues: false,
             })
         } else {
@@ -511,10 +511,10 @@ function CustomerForm(props) {
                                                         <small>Country</small>
 
 
-                                                        <Controller name="rule_id"
+                                                        <Controller name="city"
                                                             control={control}
                                                             render={({ field }) => (
-                                                                <AsyncSelect
+                                                                <AsyncSelect {...register('city')}
                                                                     {...field}
                                                                     cacheOptions
                                                                     defaultOptions
@@ -540,10 +540,10 @@ function CustomerForm(props) {
                                                     <div className="form-group mb-2">
                                                         <small>City / State</small>
 
-                                                        <Controller name="rule_id"
+                                                        <Controller name="rule_id" {...register('mahesh')}
                                                             control={control}
                                                             render={({ field }) => (
-                                                                <AsyncSelect
+                                                                <AsyncSelect name="mahesh" {...register('mahesh')}
                                                                     {...field}
                                                                     cacheOptions
                                                                     defaultOptions

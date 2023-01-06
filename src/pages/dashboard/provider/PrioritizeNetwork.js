@@ -32,7 +32,7 @@ export default function PrioritizeNetwork()
             headers: { 'Content-Type': 'application/json' },
         };
 
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/provider/prioritize/search?search=${fdata.target.value}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/providerdata/prioritize/search?search=${fdata.target.value}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
@@ -93,7 +93,7 @@ export default function PrioritizeNetwork()
         };
         // //  console.log(watch(fdata));
 
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/provider/prioritize/get/${ndcid}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/providerdata/prioritize/get/${ndcid}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
@@ -307,7 +307,7 @@ function PrioritizeForm(props)
 
             });
         } else {
-            fetch(process.env.REACT_APP_API_BASEURL + `/api/provider/prioritize/add`, requestOptions)
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/providerdata/prioritize/add`, requestOptions)
                 .then(async response => {
                     const isJson = response.headers.get('content-type')?.includes('application/json');
                     const data = isJson && await response.json();
@@ -356,13 +356,13 @@ function PrioritizeForm(props)
 
 
 
-    // useEffect(() => { reset(props.viewDiagnosisFormdata) }, [props.viewDiagnosisFormdata]);
+    useEffect(() => { reset(props.benifitsData) }, [props.benifitsData]);
 
      useEffect(() => {
 
 
         if (props.adding) {
-            reset({ super_rx_network_id: '', super_rx_network_id_name: '',effective_date:'', new: 1 }, {
+            reset({ super_rx_network_id: '',super_rx_network_priority:'', super_rx_network_id_name: '',effective_date:'', new: 1 }, {
                 keepValues: false,
             })
         } else {
@@ -370,7 +370,7 @@ function PrioritizeForm(props)
         }
 
         if (!props.selected) {
-            reset({ super_rx_network_id: '',super_rx_network_id_name:'',effective_date:'', description: '',pharm_type_variation_ind:'',network_part_variation_ind:'',claim_type_variation_ind:'',plan_accum_deduct_id:'', new: 1 }, {
+            reset({ super_rx_network_id: '',super_rx_network_id_name:'',super_rx_network_priority:'',effective_date:'', description: '',pharm_type_variation_ind:'',network_part_variation_ind:'',claim_type_variation_ind:'',plan_accum_deduct_id:'', new: 1 }, {
                 keepValues: false,
             })
         }
@@ -443,8 +443,7 @@ function PrioritizeForm(props)
                                 <div className="col-md-3 mb-3">
                                     <div className="form-group">
                                         <small>Priority</small>
-                                        <input type="text" className="form-control" name="" id="" placeholder=""  />
-                                        <a href=""><span className="fa fa-search form-icon"></span></a>
+                                        <input type="text" name="super_rx_network_priority" {...register('super_rx_network_priority')} className="form-control" id="" placeholder=""  />
                                     </div>
                                 </div>
                                 <div className="clearfix"></div>
