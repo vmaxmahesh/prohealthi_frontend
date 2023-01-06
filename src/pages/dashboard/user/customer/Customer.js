@@ -805,856 +805,856 @@ function CustomerForm(props) {
 
                         <div class="tab-pane fade" id="strategy" role="tabpanel" aria-labelledby="nav-profile-tab">
 
-<div className="card mt-3 mb-3">
-    <div className="card-body">
-        <div className='row'>
-            <div className="col-md-11 mb-1">
-                <h5 className="mb-2">Coverage Strategy</h5>
-            </div>
-            <div className="col-md-1 mb-1">
-                <a href="" className="btn btn-theme btn-sm p-1" style={{ width: '100%' }}>Add <i className="fa fa-plus"></i></a>
-            </div>
-        </div>
-        <div className="row align-items-center">
-            <div className="col-md-3 align-items-center">
-                <p className="mt-2">Coverage
+                            <div className="card mt-3 mb-3">
+                                <div className="card-body">
+                                    <div className='row'>
+                                        <div className="col-md-11 mb-1">
+                                            <h5 className="mb-2">Coverage Strategy</h5>
+                                        </div>
+                                        <div className="col-md-1 mb-1">
+                                            <a href="" className="btn btn-theme btn-sm p-1" style={{ width: '100%' }}>Add <i className="fa fa-plus"></i></a>
+                                        </div>
+                                    </div>
+                                    <div className="row align-items-center">
+                                        <div className="col-md-3 align-items-center">
+                                            <p className="mt-2">Coverage
 
-                    Effective Date:</p>
+                                                Effective Date:</p>
 
-            </div>
-            <div className="col-md-3">
-                <div className="form-group">
-                    <small>Tier 1</small>
-                    <input type="date"  {...register("coverage_eff_date_1", {
-                        // required: true,
-                    })} className="form-control" name="coverage_eff_date_1" id="" />
-                    {errors.coverage_eff_date_1?.type === 'required' && <p role="alert" className="notvalid">Tier 1 date  required</p>}
+                                        </div>
+                                        <div className="col-md-3">
+                                            <div className="form-group">
+                                                <small>Tier 1</small>
+                                                <input type="date"  {...register("coverage_eff_date_1", {
+                                                    // required: true,
+                                                })} className="form-control" name="coverage_eff_date_1" id="" />
+                                                {errors.coverage_eff_date_1?.type === 'required' && <p role="alert" className="notvalid">Tier 1 date  required</p>}
 
-                </div>
-            </div>
-            <div className="col-md-3">
-                <div className="form-group ">
-                    <small>Tier 2</small>
-                    <input type="date" {...register("coverage_eff_date_2", {
-                        // required: true,
-                    })} className="form-control" name="coverage_eff_date_2" id="" />
-                    {errors.coverage_eff_date_2?.type === 'required' && <p role="alert" className="notvalid">Tier 2 date  required</p>}
+                                            </div>
+                                        </div>
+                                        <div className="col-md-3">
+                                            <div className="form-group ">
+                                                <small>Tier 2</small>
+                                                <input type="date" {...register("coverage_eff_date_2", {
+                                                    // required: true,
+                                                })} className="form-control" name="coverage_eff_date_2" id="" />
+                                                {errors.coverage_eff_date_2?.type === 'required' && <p role="alert" className="notvalid">Tier 2 date  required</p>}
 
-                </div>
-            </div>
-            <div className="col-md-3">
-                <div className="form-group ">
-                    <small>Tier 3</small>
-                    <input type="date" {...register("coverage_eff_date_3", {
-                        // required: true,
-                    })} className="form-control" name="coverage_eff_date_3" id="" />
-                    {errors.coverage_eff_date_3?.type === 'required' && <p role="alert" className="notvalid">Tier 3 date  required</p>}
+                                            </div>
+                                        </div>
+                                        <div className="col-md-3">
+                                            <div className="form-group ">
+                                                <small>Tier 3</small>
+                                                <input type="date" {...register("coverage_eff_date_3", {
+                                                    // required: true,
+                                                })} className="form-control" name="coverage_eff_date_3" id="" />
+                                                {errors.coverage_eff_date_3?.type === 'required' && <p role="alert" className="notvalid">Tier 3 date  required</p>}
 
 
-                </div>
-            </div>
+                                            </div>
+                                        </div>
 
-            <div className="col-md-3 align-items-center">
-                <p>Plan ID</p>
+                                        <div className="col-md-3 align-items-center">
+                                            <p>Plan ID</p>
 
-            </div>
-            <div className="col-md-3">
-                <div className="form-group mb-3">
-                    <small>&nbsp;</small>
+                                        </div>
+                                        <div className="col-md-3">
+                                            <div className="form-group mb-3">
+                                                <small>&nbsp;</small>
 
-                    {/* <input type="text" {...register("plan_id_1", {
+                                                {/* <input type="text" {...register("plan_id_1", {
                     // required: true,
                     pattern: /^(0|[1-9][0-9]*)$/,
                 })} className="form-control" name="plan_id_1" id="" />
                 <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal"><span className="fa fa-search form-icon"></span></a> */}
 
 
-                    <Controller name="plan_id_1"
-                        control={control}
-                        render={({ field }) => (
-                            <AsyncSelect
-                                {...field}
-                                cacheOptions
-                                defaultOptions
-                                // value={selectedValue}
-                                getOptionLabel={e => e.plan_id_label}
-                                getOptionValue={e => e.plan_id_value}
-                                loadOptions={loadPlanIDS}
-                                // onInputChange={handlePriceScheduleInput}
-                                // onChange={handleChange}
-                                placeholder="Plan Id "
-                            // value={{ plan_id_label: props.formData.plan_id, plan_id_value: props.formData.country_code }}
+                                                <Controller name="plan_id_1"
+                                                    control={control}
+                                                    render={({ field }) => (
+                                                        <AsyncSelect
+                                                            {...field}
+                                                            cacheOptions
+                                                            defaultOptions
+                                                            // value={selectedValue}
+                                                            getOptionLabel={e => e.plan_id_label}
+                                                            getOptionValue={e => e.plan_id_value}
+                                                            loadOptions={loadPlanIDS}
+                                                            // onInputChange={handlePriceScheduleInput}
+                                                            // onChange={handleChange}
+                                                            placeholder="Plan Id "
+                                                        // value={{ plan_id_label: props.formData.plan_id, plan_id_value: props.formData.country_code }}
 
-                            />
-                        )} />
+                                                        />
+                                                    )} />
 
-                    {/* <a className="btn  btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                {/* <a className="btn  btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal">
     Add Benifit Code <i className="fa fa-search form-icon"></i></a> */}
 
 
-                    {/* {errors.plan_id_1?.type === 'required' && <p role="alert" className="notvalid">Plan id is  required</p>}
+                                                {/* {errors.plan_id_1?.type === 'required' && <p role="alert" className="notvalid">Plan id is  required</p>}
         {errors.plan_id_1?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>} */}
 
-                </div>
-
-
-            </div>
-            <div className="col-md-3">
-                <div className="form-group mb-3">
-                    <div className="form-group mb-3">
-                        <small>&nbsp;</small>
-                        <Controller name="plan_id_1"
-                            control={control}
-                            render={({ field }) => (
-                                <AsyncSelect
-                                    {...field}
-                                    cacheOptions
-                                    defaultOptions
-                                    // value={selectedValue}
-                                    getOptionLabel={e => e.plan_id_label}
-                                    getOptionValue={e => e.plan_id_value}
-                                    loadOptions={loadPlanIDS}
-                                    // onInputChange={handlePriceScheduleInput}
-                                    // onChange={handleChange}
-                                    placeholder="Plan Id "
-                                // value={{ plan_id_label: props.formData.plan_id, plan_id_value: props.formData.country_code }}
-
-                                />
-                            )} />
-                        {errors.plan_id_2?.type === 'required' && <p role="alert" className="notvalid">Plan id is  required</p>}
-                        {errors.plan_id_2?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
-                    </div>
-                </div>
-            </div>
-            <div className="col-md-3">
-                <div className="form-group mb-3">
-                    <div className="form-group mb-3">
-                        <small>&nbsp;</small>
-
-                        <Controller name="plan_id_1"
-                            control={control}
-                            render={({ field }) => (
-                                <AsyncSelect
-                                    {...field}
-                                    cacheOptions
-                                    defaultOptions
-                                    // value={selectedValue}
-                                    getOptionLabel={e => e.plan_id_label}
-                                    getOptionValue={e => e.plan_id_value}
-                                    loadOptions={loadPlanIDS}
-                                    // onInputChange={handlePriceScheduleInput}
-                                    // onChange={handleChange}
-                                    placeholder="Plan Id "
-                                // value={{ plan_id_label: props.formData.plan_id, plan_id_value: props.formData.country_code }}
-
-                                />
-                            )} />
-                        {errors.plan_id_3?.type === 'required' && <p role="alert" className="notvalid">Plan id is  required</p>}
-                        {errors.plan_id_3?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
-                    </div>
-                </div>
-            </div>
-
-            <div className="col-md-3 align-items-center">
-                <p>Miscellaneous Data</p>
-            </div>
-            <div className="col-md-3">
-                <div className="form-group mb-3">
-                    <input type="text" {...register("misc_data_1", {
-                        // required: true,
-                    })} className="form-control" name="misc_data_1" id="" />
-                    {errors.misc_data_1?.type === 'required' && <p role="alert" className="notvalid">miscellaneous data is  required</p>}
-
-                </div>
-            </div>
-            <div className="col-md-3">
-                <div className="form-group mb-3">
-                    <input type="text" {...register("misc_data_2", {
-                        // required: true,
-                    })} className="form-control" name="misc_data_2" id="" />
-                    {errors.misc_data_2?.type === 'required' && <p role="alert" className="notvalid">miscellaneous data is  required</p>}
-
-                </div>
-            </div>
-            <div className="col-md-3">
-                <div className="form-group mb-3">
-                    <input type="text" {...register("misc_data_3", {
-                        // required: true,
-                    })} className="form-control" name="misc_data_3" id="" />
-                    {errors.misc_data_3?.type === 'required' && <p role="alert" className="notvalid">miscellaneous data is  required</p>}
-
-                </div>
-            </div>
-
-            <div className="clearfix mb-3"></div>
-
-            <div className="col-md-12">
-                <h5 className="mb-2">Provider Verification Options :</h5>
-            </div>
-            <div className="col-md-6">
-                <div className="form-group mb-3">
-                    <small>Provider Options</small>
-                    {/* Column not there in customer table */}
-                    <select className="form-select" {...register("pharmacy_exceptions_flag", {
-                        // required: true
-                    })} name="pharmacy_exceptions_flag">
-                        <option value="">--select--</option>
-                        <option value="1">No Provider Check</option>
-                        <option value="2">Validate Provider Format</option>
-                        <option value="3">Provider must exist within Provider Master</option>
-                        <option value="4">Must exist in Provider Network</option>
-                        <option value="5">Validate Provider In/Out of Network</option>
-                    </select>
-                    {errors.pharmacy_exceptions_flag?.type === 'required' && <p role="alert" className="notvalid">Provider Options is  required</p>}
-                </div>
-            </div>
-            <div className="col-md-6">
-                <div className="form-group mb-3">
-                    <small>Super Provider Networks</small>
-                    <Controller name="rule_id"
-                        control={control}
-                        render={({ field }) => (
-                            <AsyncSelect
-                                {...field}
-                                cacheOptions
-                                defaultOptions
-                                // value={selectedValue}
-                                getOptionLabel={e => e.super_label}
-                                getOptionValue={e => e.super_value}
-                                loadOptions={loadSuperProviderNetworksOptions}
-                                // onInputChange={handlePriceScheduleInput}
-                                // onChange={handleChange}
-                                placeholder="Rule Id "
-                            // value={{ country_label: props.formData.country_code, country_value: props.formData.country_code }}
-
-                            />
-                        )} />
-                    {errors.super_rx_network_id?.type === 'required' && <p role="alert" className="notvalid">Super Provider Networks field is   required</p>}
-
-                </div>
-            </div>
-
-            <div className="clearfix mb-2"></div>
-
-            <div className="col-md-12">
-                <h5 className="mb-2">Prescriber Verification Options</h5>
-            </div>
-            <div className="col-md-4">
-                <div className="form-group mb-3">
-                    <small>Prescriber Options</small>
-                    <select className="form-select" {...register("prescriber_exceptions_flag", {
-                        // required: true,
-                    })} name="prescriber_exceptions_flag" >
-                        <option value="">--select--</option>
-                        <option value="1">None</option>
-                        <option value="2">Validate DEA Code</option>
-                        <option value="3">primary Prescriber Validation</option>
-                        <option value="4">Must Exist in Prescriber Master</option>
-
-                    </select>
-                    {errors.prescriber_exceptions_flag?.type === 'required' && <p role="alert" className="notvalid">Prescriber Options is   required</p>}
-
-                </div>
-            </div>
-            <div className="col-md-4">
-                <div className="form-group mb-3">
-                    <small>Prescriber Options 2</small>
-                    <select className="form-select" {...register("prescriber_exceptions_flag", {
-                        // required: true,
-                    })} name="prescriber_exceptions_flag">
-                        <option value="">--select--</option>
-                        <option value="1">None</option>
-                        <option value="2">Validate DEA Code</option>
-                        <option value="3">primary Prescriber Validation</option>
-                        <option value="4">Must Exist in Prescriber Master</option>
-                    </select>
-                    {errors.prescriber_exceptions_flag?.type === 'required' && <p role="alert" className="notvalid">Prescriber Options is   required</p>}
-
-                </div>
-            </div>
-            <div className="col-md-4">
-                <div className="form-group mb-3">
-                    <small>Prescriber Grouping ID</small>
-
-
-                    {/* // not included in DB */}
-                    <select className="form-select" {...register("Prescriber_Grouping_id", {
-                        // required: true,
-                    })} name="Prescriber_Grouping_id">
-                        <option value="">--Select--</option>
-                        <option value="1">None</option>
-                        <option value="2">Validate DEA Code</option>
-                        <option value="3">primary Prescriber Validation</option>
-                        <option value="4">Must Exist in Prescriber Master</option>
-                    </select>
-                    {errors.Prescriber_Grouping_id?.type === 'required' && <p role="alert" className="notvalid">Prescriber Grouping ID  required</p>}
-                    {errors.policyanday?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
-
-                </div>
-            </div>
-
-
-        </div>
-    </div>
-</div>
-
-</div>
-
-
-<div class="tab-pane fade" id="eligibility" role="tabpanel" aria-labelledby="nav-profile-tab">
-<div className="card mt-3 mb-3">
-    <div className="card-body">
-        <div className='row'>
-            <div className="col-md-12 mb-1">
-                <h5 className="mb-2">Eligibility Load Parameters</h5>
-            </div>
-            <div className="col-md-4 mb-2">
-                <small>Auto Termination Level</small>
-
-
-                <select className="form-select" {...register("auto_term_level", {
-                    // required: true,
-                })} name="auto_term_level" >
-                    <option value="">--select--</option>
-                    <option value="0">Overlap Allowed Within Database</option>
-                    <option value="1">Automated Termination within client</option>
-                    <option value="2">Automated Termination within Customer</option>
-                    <option value="3">Automated Termination within database</option>
-                    <option value="4">No Automated Termination-Reject-within database</option>
-
-                </select>
-                {errors.auto_term_level?.type === 'required' && <p role="alert" className="notvalid">Auto Termination Level field is  required</p>}
-                <p className="input-hint">Overlap Allowed Within Database</p>
-            </div>
-            <div className="col-md-4 mb-2">
-                <small>Auto Family Member Terminate</small>
-                <select className="form-select"  {...register("auto_fam_member_term", {
-                    // required: true,
-                })} name="auto_fam_member_term">
-                    <option value="">--select--</option>
-
-                    <option value="0">No Automated Termination</option>
-                    <option value="1">Terminate family member if Termination received for cardholder</option>
-
-                </select>
-                {errors.auto_family_member_terminate?.type === 'required' && <p role="alert" className="notvalid">Auto Family Member Terminate field is  required</p>}
-
-                <p className="input-hint">No Automated Family Member Terminations</p>
-            </div>
-            <div className="col-md-4 mb-2">
-                <small>Eligibility Type</small>
-                <select className="form-select" {...register("elig_type", {
-                    // required: true,
-
-                })} name="elig_type">
-                    <option value="">--select--</option>
-                    <option value="1">Not Specified </option>
-                    <option value="2"> Individual Member Records Exist</option>
-                    <option value="3">Family Member Records Exist</option>
-                </select>
-                {errors.elig_type?.type === 'required' && <p role="alert" className="notvalid">Eligibility Type field is  required</p>}
-
-            </div>
-
-            <div className="clearfix mb-2"></div>
-
-            <div className="col-md-12 mb-1">
-                <h5 className="mb-2">Eligibility Processing Parameters:</h5>
-            </div>
-            <div className="col-md-4 mb-2">
-                <small>Membership Processing Flag</small>
-                <select className="form-select" {...register("membership_processing_flag", {
-                    // required: true,
-                })} name="membership_processing_flag">
-                    <option value="">--Select--</option>
-                    <option value="1">Membership Processing Will Be Done</option>
-                </select>
-                {errors.membership_processing_flag?.type === 'required' && <p role="alert" className="notvalid">Membership Processing Flag field is  required</p>}
-
-                <p className="input-hint">Membership Processing Will Be Done</p>
-            </div>
-            <div className="col-md-4 mb-2">
-                <small>Overlap Coverage Tie Breaker</small>
-                <select className="form-select" {...register("overlap_coverage_tie_breaker", {
-                    // required: true,
-
-                })} name="overlap_coverage_tie_breaker">
-                    <option value="">--select--</option>
-                    <option value="1">use group submitted by provider .if Nomatch -use last added</option>
-                    <option value="2">use member record last added</option>
-                    <option value="3">use member record last updated</option>
-                </select>
-                {errors.membership_processing_willbe_done?.type === 'required' && <p role="alert" className="notvalid">Overlap Coverage Tie Breaker field is  required</p>}
-
-            </div>
-
-            <div className="clearfix mb-2"></div>
-
-            <div className="col-md-12 mb-1">
-                <h5 className="mb-2">Eligibility Verification Options:</h5>
-            </div>
-            <div className="col-md-4 mb-2">
-                <small>Eligibility Options</small>
-                <select className="form-select" {...register("elig_date_edit_ovr_flag", {
-                    // required: true,
-                })} name="elig_date_edit_ovr_flag">
-                    <option value="">--Select--</option>
-                    <option value="0">Not Specified</option>
-                    <option value="1">No Eligibility Check</option>
-                    <option value="2">Validate Patent by PIN</option>
-                    <option value="3">Check Eligibility By Member</option>
-                    <option value="4">Check Eligibility By Birth Year</option>
-                    <option value="5">Check Eligibility By Birth Month and Year</option>
-                    <option value="6">Check Eligibility By Member Date of Birth</option>
-                    <option value="7">Check Eligibility By Member Gender</option>
-                    <option value="8">Check Eligibility By Member Date of Birth & Gender</option>
-
-
-                </select>
-                {errors.eligibility_options?.type === 'required' && <p role="alert" className="notvalid">Eligibility Options is  required</p>}
-
-                <p className="input-hint">Check Eligibility By Member:</p>
-            </div>
-            <div className="col-md-4 mb-2">
-                <small>Eligibility Validation List ID</small>
-                <div className="form-group mb-3">
-
-                    <Controller name="rule_id"
-                        control={control}
-                        render={({ field }) => (
-                            <AsyncSelect
-                                {...field}
-                                cacheOptions
-                                defaultOptions
-                                // value={selectedValue}
-                                getOptionLabel={e => e.elig_label}
-                                getOptionValue={e => e.elig_value}
-                                loadOptions={loadEligibilityValidationIds}
-                                // onInputChange={handlePriceScheduleInput}
-                                // onChange={handleChange}
-                                placeholder="Eligibility Validation Id "
-                            // value={{ elig_label: props.formData.elig_validation_id, elig_value: props.formData.elig_validation_id }}
-
-                            />
-                        )} />
-
-
-                </div>
-                {errors.eligibility_validation_list?.type === 'required' && <p role="alert" className="notvalid">Eligibility Validation List ID is  required</p>}
-                {errors.eligibility_validation_list?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
-
-            </div>
-            <div className="col-md-4 mb-2">
-                <small>Authorization Transfer</small>
-
-                <select className="form-select"  {...register("auth_xfer_ind", {
-                    // required: true,
-                })} name="auth_xfer_ind">
-                    <option value="">--select--</option>
-                    <option value="0">Not Specified</option>
-                    <option value="1">Customer</option>
-                    <option value="2">Customer/Client</option>
-                    <option value="3">Customer/Client/Group</option>
-                </select>
-                {errors.auth_xfer_ind?.type === 'required' && <p role="alert" className="notvalid">Authorization Transfer is  required</p>}
-
-            </div>
-
-
-            <div className="clearfix mb-2"></div>
-
-            <div className="col-md-12 mb-1">
-                <h5 className="mb-2">Eligibility Change Logging</h5>
-            </div>
-            <div className="col-md-4 mb-2">
-                {/* column not found in db */}
-                <small>Eligibility Change Log Indicator</small>
-                <select className="form-select" {...register("member_change_log_opt", {
-                })} name="member_change_log_opt">
-                    <option value="">--Select--</option>
-                    <option value="1">Not Specified</option>
-                    <option value="2">Member Record changes will NOT be logged </option>
-                    <option value="3">Member Record changes will be logged</option>
-                </select>
-            </div>
-            {errors.eligibility_change_log_indicator?.type === 'required' && <p role="alert" className="notvalid">Eligibility Change Log Indicator is  required</p>}
-
-        </div>
-    </div>
-</div>
-</div>
-
-<div class="tab-pane fade" id="indicators" role="tabpanel" aria-labelledby="nav-profile-tab">
-<div className="card mt-3 mb-3">
-    <div className="card-body">
-        <div className='row'>
-            <div className="col-md-12 mb-1">
-                <h5 className="mb-2">Indicators:</h5>
-            </div>
-            <div className="col-md-6 mb-2">
-                <small>Secondary Coverage indicator</small>
-                <select className="form-select" {...register("other_cov_proc_flag", {
-                    // required: true,
-                })} name="other_cov_proc_flag">
-                    <option value="">--Select--</option>
-                    <option value="1">Not applicable</option>
-                    <option value="2">Reject transactions</option>
-                    <option value="3">pay and report transactions</option>
-                </select>
-                {errors.other_cov_proc_flag?.type === 'required' && <p role="alert" className="notvalid">Secondary Coverage indicator is  required</p>}
-
-            </div>
-            <div className="col-md-6 mb-2">
-                <small>Accumulated Benefits Indicator</small>
-                <select className="form-select" {...register("accum_bene_fam_sum_ind", {
-                    // required: true,
-                })} name="accum_bene_fam_sum_ind">
-                    <option value="">--Select--</option>
-                    <option value="1">Not Specified</option>
-                    <option value="2">Family Accumulation By Patient PIN Number </option>
-                    <option value="3">Family Accumulation By Member ID</option>
-                </select>
-
-                <p className="input-hint">Family Accumulation By Member ID</p>
-                {errors.accum_bene_fam_sum_ind?.type === 'required' && <p role="alert" className="notvalid">Accumulated Benefits Indicator is  required</p>}
-
-            </div>
-
-            <div className="clearfix mb-2"></div>
-
-            <div className="col-md-12 mb-1">
-                <h5 className="mb-2">Interim Member Maximums</h5>
-            </div>
-            <div className="col-md-6 mb-2">
-                <small>Maximum Number Of Transactions Allowed For An Interim..</small>
-                <select className="form-select" {...register("max_num_trans_interim_elig", {
-                    required: true,
-                })} name='max_num_trans_interim_elig'>
-                    <option value="">--select-- </option>
-                    <option value="1">option 1</option>
-                    <option value="2">option 2</option>
-                    <option value="3">option 3</option>
-                </select>
-                {errors.max_num_trans_interim_elig?.type === 'required' && <p role="alert" className="notvalid">Maximum Number Of Transactions Allowed For An Interim field  is  required</p>}
-
-            </div>
-            <div className="col-md-6 mb-2">
-                <small>Maximum Number Of Days That An Interim Member Will Be..</small>
-                <select className="form-select" {...register("max_days_interim_elig", {
-                    required: true,
-                })} name="max_days_interim_elig">
-                    <option value="">--select--</option>
-                    <option value="1">option 1</option>
-                    <option value="2">option 2</option>
-                    <option value="3">option 3</option>
-                </select>
-                {errors.max_days_interim_elig?.type === 'required' && <p role="alert" className="notvalid">Maximum Number Of Days That An Interim Member Will Be field is  required</p>}
-
-            </div>
-
-            <div className="clearfix mb-2"></div>
-
-            <div className="col-md-12 mb-1">
-                <h5 className="mb-2">Data Entry</h5>
-            </div>
-            <div className="col-md-12 mb-1">
-                <div className="form-group">
-                    {/* DB COLUMN NOT FOUND */}
-                    <input type="checkbox" name="elig_date_edit_ovr_flag" {...register("elig_date_edit_ovr_flag", {
-                        // required: true,
-                    })} id="html" className="d-none" />
-                    <label for="html">Bypass Member Eligibility Date Edits Against Customer Effective Dates</label>
-
-                </div>
-            </div>
-
-            <div className="clearfix mb-3"></div>
-
-            <div className="col-md-12 mb-1">
-                <h5 className="mb-2">Miscellaneous</h5>
-            </div>
-            <div className="col-md-4">
-                <div className="form-group mb-2">
-                    <small>Number of Days from Date Written to First Fill</small>
-                    <input type="text" className="form-control" name="date_written_to_first_fill" {...register("date_written_to_first_fill")} id="" placeholder="" required="" />
-
-                    {errors.date_written_to_first_fill?.type === 'required' && <p role="alert" className="notvalid">Number of Days from Date Written to First Fill is   required</p>}
-
-                </div>
-            </div>
-            <div className="col-md-4">
-                <div className="form-group mb-2">
-                    <small>Number of Days from Date Filled to Date Submitted</small>
-                    <input type="text" className="form-control" {...register("date_filled_to_sub_online", {
-                        // required: true,
-                    })} name="date_filled_to_sub_online" id="" placeholder="" required="" />
-                    {errors.date_filled_to_sub_online?.type === 'required' && <p role="alert" className="notvalid">Number of Days from Date Filled to Date Submitted field  is   required</p>}
-
-                </div>
-            </div>
-            <div className="col-md-4">
-                <div className="form-group mb-2">
-                    <small>Number of Days from Date Filled to Submitted (Manual)</small>
-                    <input type="text" className="form-control"  {...register("date_filled_to_sub_dmr", {
-                        // required: true,
-                    })} name="date_filled_to_sub_dmr" id="" placeholder="" required="" />
-                    {errors.date_filled_to_sub_dmr?.type === 'required' && <p role="alert" className="notvalid">Number of Days from Date Filled to Submitted (Manual) field  is   required</p>}
-
-                </div>
-            </div>
-            <div className="col-md-4">
-                <div className="form-group mb-2">
-                    <small>Number of Days from DateFilled to Future Fill Date</small>
-                    <input type="text" className="form-control"  {...register("date_sub_to_filled_future", {
-                        // required: true,
-                    })} name="date_sub_to_filled_future" id="" placeholder="" required="" />
-                    {errors.no_of_days_from_date_filled_to_future?.type === 'required' && <p role="alert" className="notvalid">Number of Days from DateFilled to Future Fill Date field  is   required</p>}
-
-                </div>
-            </div>
-            <div className="col-md-4">
-                <div className="form-group mb-2">
-                    <small>Number of Days for Reversal</small>
-                    <input type="text" className="form-control" name="days_for_reversals" {...register("days_for_reversals", {
-                        // required: true,
-                    })} id="" placeholder="" required="" />
-                    {errors.no_of_days_reversal?.type === 'required' && <p role="alert" className="notvalid">Number of Days for Reversal field  is   required</p>}
-
-                </div>
-            </div>
-
-
-
-
-            <div className="col-md-4">
-                <div className="form-group mb-2">
-                    <small>Tax Status</small>
-                    {/* <input type="text" className="form-control" name="no_of_days_reversal" {...register("no_of_days_reversal", {
+                                            </div>
+
+
+                                        </div>
+                                        <div className="col-md-3">
+                                            <div className="form-group mb-3">
+                                                <div className="form-group mb-3">
+                                                    <small>&nbsp;</small>
+                                                    <Controller name="plan_id_1"
+                                                        control={control}
+                                                        render={({ field }) => (
+                                                            <AsyncSelect
+                                                                {...field}
+                                                                cacheOptions
+                                                                defaultOptions
+                                                                // value={selectedValue}
+                                                                getOptionLabel={e => e.plan_id_label}
+                                                                getOptionValue={e => e.plan_id_value}
+                                                                loadOptions={loadPlanIDS}
+                                                                // onInputChange={handlePriceScheduleInput}
+                                                                // onChange={handleChange}
+                                                                placeholder="Plan Id "
+                                                            // value={{ plan_id_label: props.formData.plan_id, plan_id_value: props.formData.country_code }}
+
+                                                            />
+                                                        )} />
+                                                    {errors.plan_id_2?.type === 'required' && <p role="alert" className="notvalid">Plan id is  required</p>}
+                                                    {errors.plan_id_2?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-3">
+                                            <div className="form-group mb-3">
+                                                <div className="form-group mb-3">
+                                                    <small>&nbsp;</small>
+
+                                                    <Controller name="plan_id_1"
+                                                        control={control}
+                                                        render={({ field }) => (
+                                                            <AsyncSelect
+                                                                {...field}
+                                                                cacheOptions
+                                                                defaultOptions
+                                                                // value={selectedValue}
+                                                                getOptionLabel={e => e.plan_id_label}
+                                                                getOptionValue={e => e.plan_id_value}
+                                                                loadOptions={loadPlanIDS}
+                                                                // onInputChange={handlePriceScheduleInput}
+                                                                // onChange={handleChange}
+                                                                placeholder="Plan Id "
+                                                            // value={{ plan_id_label: props.formData.plan_id, plan_id_value: props.formData.country_code }}
+
+                                                            />
+                                                        )} />
+                                                    {errors.plan_id_3?.type === 'required' && <p role="alert" className="notvalid">Plan id is  required</p>}
+                                                    {errors.plan_id_3?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="col-md-3 align-items-center">
+                                            <p>Miscellaneous Data</p>
+                                        </div>
+                                        <div className="col-md-3">
+                                            <div className="form-group mb-3">
+                                                <input type="text" {...register("misc_data_1", {
+                                                    // required: true,
+                                                })} className="form-control" name="misc_data_1" id="" />
+                                                {errors.misc_data_1?.type === 'required' && <p role="alert" className="notvalid">miscellaneous data is  required</p>}
+
+                                            </div>
+                                        </div>
+                                        <div className="col-md-3">
+                                            <div className="form-group mb-3">
+                                                <input type="text" {...register("misc_data_2", {
+                                                    // required: true,
+                                                })} className="form-control" name="misc_data_2" id="" />
+                                                {errors.misc_data_2?.type === 'required' && <p role="alert" className="notvalid">miscellaneous data is  required</p>}
+
+                                            </div>
+                                        </div>
+                                        <div className="col-md-3">
+                                            <div className="form-group mb-3">
+                                                <input type="text" {...register("misc_data_3", {
+                                                    // required: true,
+                                                })} className="form-control" name="misc_data_3" id="" />
+                                                {errors.misc_data_3?.type === 'required' && <p role="alert" className="notvalid">miscellaneous data is  required</p>}
+
+                                            </div>
+                                        </div>
+
+                                        <div className="clearfix mb-3"></div>
+
+                                        <div className="col-md-12">
+                                            <h5 className="mb-2">Provider Verification Options :</h5>
+                                        </div>
+                                        <div className="col-md-6">
+                                            <div className="form-group mb-3">
+                                                <small>Provider Options</small>
+                                                {/* Column not there in customer table */}
+                                                <select className="form-select" {...register("pharmacy_exceptions_flag", {
+                                                    // required: true
+                                                })} name="pharmacy_exceptions_flag">
+                                                    <option value="">--select--</option>
+                                                    <option value="1">No Provider Check</option>
+                                                    <option value="2">Validate Provider Format</option>
+                                                    <option value="3">Provider must exist within Provider Master</option>
+                                                    <option value="4">Must exist in Provider Network</option>
+                                                    <option value="5">Validate Provider In/Out of Network</option>
+                                                </select>
+                                                {errors.pharmacy_exceptions_flag?.type === 'required' && <p role="alert" className="notvalid">Provider Options is  required</p>}
+                                            </div>
+                                        </div>
+                                        <div className="col-md-6">
+                                            <div className="form-group mb-3">
+                                                <small>Super Provider Networks</small>
+                                                <Controller name="rule_id"
+                                                    control={control}
+                                                    render={({ field }) => (
+                                                        <AsyncSelect
+                                                            {...field}
+                                                            cacheOptions
+                                                            defaultOptions
+                                                            // value={selectedValue}
+                                                            getOptionLabel={e => e.super_label}
+                                                            getOptionValue={e => e.super_value}
+                                                            loadOptions={loadSuperProviderNetworksOptions}
+                                                            // onInputChange={handlePriceScheduleInput}
+                                                            // onChange={handleChange}
+                                                            placeholder="Rule Id "
+                                                        // value={{ country_label: props.formData.country_code, country_value: props.formData.country_code }}
+
+                                                        />
+                                                    )} />
+                                                {errors.super_rx_network_id?.type === 'required' && <p role="alert" className="notvalid">Super Provider Networks field is   required</p>}
+
+                                            </div>
+                                        </div>
+
+                                        <div className="clearfix mb-2"></div>
+
+                                        <div className="col-md-12">
+                                            <h5 className="mb-2">Prescriber Verification Options</h5>
+                                        </div>
+                                        <div className="col-md-4">
+                                            <div className="form-group mb-3">
+                                                <small>Prescriber Options</small>
+                                                <select className="form-select" {...register("prescriber_exceptions_flag", {
+                                                    // required: true,
+                                                })} name="prescriber_exceptions_flag" >
+                                                    <option value="">--select--</option>
+                                                    <option value="1">None</option>
+                                                    <option value="2">Validate DEA Code</option>
+                                                    <option value="3">primary Prescriber Validation</option>
+                                                    <option value="4">Must Exist in Prescriber Master</option>
+
+                                                </select>
+                                                {errors.prescriber_exceptions_flag?.type === 'required' && <p role="alert" className="notvalid">Prescriber Options is   required</p>}
+
+                                            </div>
+                                        </div>
+                                        <div className="col-md-4">
+                                            <div className="form-group mb-3">
+                                                <small>Prescriber Options 2</small>
+                                                <select className="form-select" {...register("prescriber_exceptions_flag", {
+                                                    // required: true,
+                                                })} name="prescriber_exceptions_flag">
+                                                    <option value="">--select--</option>
+                                                    <option value="1">None</option>
+                                                    <option value="2">Validate DEA Code</option>
+                                                    <option value="3">primary Prescriber Validation</option>
+                                                    <option value="4">Must Exist in Prescriber Master</option>
+                                                </select>
+                                                {errors.prescriber_exceptions_flag?.type === 'required' && <p role="alert" className="notvalid">Prescriber Options is   required</p>}
+
+                                            </div>
+                                        </div>
+                                        <div className="col-md-4">
+                                            <div className="form-group mb-3">
+                                                <small>Prescriber Grouping ID</small>
+
+
+                                                {/* // not included in DB */}
+                                                <select className="form-select" {...register("Prescriber_Grouping_id", {
+                                                    // required: true,
+                                                })} name="Prescriber_Grouping_id">
+                                                    <option value="">--Select--</option>
+                                                    <option value="1">None</option>
+                                                    <option value="2">Validate DEA Code</option>
+                                                    <option value="3">primary Prescriber Validation</option>
+                                                    <option value="4">Must Exist in Prescriber Master</option>
+                                                </select>
+                                                {errors.Prescriber_Grouping_id?.type === 'required' && <p role="alert" className="notvalid">Prescriber Grouping ID  required</p>}
+                                                {errors.policyanday?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
+
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="tab-pane fade" id="eligibility" role="tabpanel" aria-labelledby="nav-profile-tab">
+                            <div className="card mt-3 mb-3">
+                                <div className="card-body">
+                                    <div className='row'>
+                                        <div className="col-md-12 mb-1">
+                                            <h5 className="mb-2">Eligibility Load Parameters</h5>
+                                        </div>
+                                        <div className="col-md-4 mb-2">
+                                            <small>Auto Termination Level</small>
+
+
+                                            <select className="form-select" {...register("auto_term_level", {
+                                                // required: true,
+                                            })} name="auto_term_level" >
+                                                <option value="">--select--</option>
+                                                <option value="0">Overlap Allowed Within Database</option>
+                                                <option value="1">Automated Termination within client</option>
+                                                <option value="2">Automated Termination within Customer</option>
+                                                <option value="3">Automated Termination within database</option>
+                                                <option value="4">No Automated Termination-Reject-within database</option>
+
+                                            </select>
+                                            {errors.auto_term_level?.type === 'required' && <p role="alert" className="notvalid">Auto Termination Level field is  required</p>}
+                                            <p className="input-hint">Overlap Allowed Within Database</p>
+                                        </div>
+                                        <div className="col-md-4 mb-2">
+                                            <small>Auto Family Member Terminate</small>
+                                            <select className="form-select"  {...register("auto_fam_member_term", {
+                                                // required: true,
+                                            })} name="auto_fam_member_term">
+                                                <option value="">--select--</option>
+
+                                                <option value="0">No Automated Termination</option>
+                                                <option value="1">Terminate family member if Termination received for cardholder</option>
+
+                                            </select>
+                                            {errors.auto_family_member_terminate?.type === 'required' && <p role="alert" className="notvalid">Auto Family Member Terminate field is  required</p>}
+
+                                            <p className="input-hint">No Automated Family Member Terminations</p>
+                                        </div>
+                                        <div className="col-md-4 mb-2">
+                                            <small>Eligibility Type</small>
+                                            <select className="form-select" {...register("elig_type", {
+                                                // required: true,
+
+                                            })} name="elig_type">
+                                                <option value="">--select--</option>
+                                                <option value="1">Not Specified </option>
+                                                <option value="2"> Individual Member Records Exist</option>
+                                                <option value="3">Family Member Records Exist</option>
+                                            </select>
+                                            {errors.elig_type?.type === 'required' && <p role="alert" className="notvalid">Eligibility Type field is  required</p>}
+
+                                        </div>
+
+                                        <div className="clearfix mb-2"></div>
+
+                                        <div className="col-md-12 mb-1">
+                                            <h5 className="mb-2">Eligibility Processing Parameters:</h5>
+                                        </div>
+                                        <div className="col-md-4 mb-2">
+                                            <small>Membership Processing Flag</small>
+                                            <select className="form-select" {...register("membership_processing_flag", {
+                                                // required: true,
+                                            })} name="membership_processing_flag">
+                                                <option value="">--Select--</option>
+                                                <option value="1">Membership Processing Will Be Done</option>
+                                            </select>
+                                            {errors.membership_processing_flag?.type === 'required' && <p role="alert" className="notvalid">Membership Processing Flag field is  required</p>}
+
+                                            <p className="input-hint">Membership Processing Will Be Done</p>
+                                        </div>
+                                        <div className="col-md-4 mb-2">
+                                            <small>Overlap Coverage Tie Breaker</small>
+                                            <select className="form-select" {...register("overlap_coverage_tie_breaker", {
+                                                // required: true,
+
+                                            })} name="overlap_coverage_tie_breaker">
+                                                <option value="">--select--</option>
+                                                <option value="1">use group submitted by provider .if Nomatch -use last added</option>
+                                                <option value="2">use member record last added</option>
+                                                <option value="3">use member record last updated</option>
+                                            </select>
+                                            {errors.membership_processing_willbe_done?.type === 'required' && <p role="alert" className="notvalid">Overlap Coverage Tie Breaker field is  required</p>}
+
+                                        </div>
+
+                                        <div className="clearfix mb-2"></div>
+
+                                        <div className="col-md-12 mb-1">
+                                            <h5 className="mb-2">Eligibility Verification Options:</h5>
+                                        </div>
+                                        <div className="col-md-4 mb-2">
+                                            <small>Eligibility Options</small>
+                                            <select className="form-select" {...register("elig_date_edit_ovr_flag", {
+                                                // required: true,
+                                            })} name="elig_date_edit_ovr_flag">
+                                                <option value="">--Select--</option>
+                                                <option value="0">Not Specified</option>
+                                                <option value="1">No Eligibility Check</option>
+                                                <option value="2">Validate Patent by PIN</option>
+                                                <option value="3">Check Eligibility By Member</option>
+                                                <option value="4">Check Eligibility By Birth Year</option>
+                                                <option value="5">Check Eligibility By Birth Month and Year</option>
+                                                <option value="6">Check Eligibility By Member Date of Birth</option>
+                                                <option value="7">Check Eligibility By Member Gender</option>
+                                                <option value="8">Check Eligibility By Member Date of Birth & Gender</option>
+
+
+                                            </select>
+                                            {errors.eligibility_options?.type === 'required' && <p role="alert" className="notvalid">Eligibility Options is  required</p>}
+
+                                            <p className="input-hint">Check Eligibility By Member:</p>
+                                        </div>
+                                        <div className="col-md-4 mb-2">
+                                            <small>Eligibility Validation List ID</small>
+                                            <div className="form-group mb-3">
+
+                                                <Controller name="rule_id"
+                                                    control={control}
+                                                    render={({ field }) => (
+                                                        <AsyncSelect
+                                                            {...field}
+                                                            cacheOptions
+                                                            defaultOptions
+                                                            // value={selectedValue}
+                                                            getOptionLabel={e => e.elig_label}
+                                                            getOptionValue={e => e.elig_value}
+                                                            loadOptions={loadEligibilityValidationIds}
+                                                            // onInputChange={handlePriceScheduleInput}
+                                                            // onChange={handleChange}
+                                                            placeholder="Eligibility Validation Id "
+                                                        // value={{ elig_label: props.formData.elig_validation_id, elig_value: props.formData.elig_validation_id }}
+
+                                                        />
+                                                    )} />
+
+
+                                            </div>
+                                            {errors.eligibility_validation_list?.type === 'required' && <p role="alert" className="notvalid">Eligibility Validation List ID is  required</p>}
+                                            {errors.eligibility_validation_list?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
+
+                                        </div>
+                                        <div className="col-md-4 mb-2">
+                                            <small>Authorization Transfer</small>
+
+                                            <select className="form-select"  {...register("auth_xfer_ind", {
+                                                // required: true,
+                                            })} name="auth_xfer_ind">
+                                                <option value="">--select--</option>
+                                                <option value="0">Not Specified</option>
+                                                <option value="1">Customer</option>
+                                                <option value="2">Customer/Client</option>
+                                                <option value="3">Customer/Client/Group</option>
+                                            </select>
+                                            {errors.auth_xfer_ind?.type === 'required' && <p role="alert" className="notvalid">Authorization Transfer is  required</p>}
+
+                                        </div>
+
+
+                                        <div className="clearfix mb-2"></div>
+
+                                        <div className="col-md-12 mb-1">
+                                            <h5 className="mb-2">Eligibility Change Logging</h5>
+                                        </div>
+                                        <div className="col-md-4 mb-2">
+                                            {/* column not found in db */}
+                                            <small>Eligibility Change Log Indicator</small>
+                                            <select className="form-select" {...register("member_change_log_opt", {
+                                            })} name="member_change_log_opt">
+                                                <option value="">--Select--</option>
+                                                <option value="1">Not Specified</option>
+                                                <option value="2">Member Record changes will NOT be logged </option>
+                                                <option value="3">Member Record changes will be logged</option>
+                                            </select>
+                                        </div>
+                                        {errors.eligibility_change_log_indicator?.type === 'required' && <p role="alert" className="notvalid">Eligibility Change Log Indicator is  required</p>}
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="indicators" role="tabpanel" aria-labelledby="nav-profile-tab">
+                            <div className="card mt-3 mb-3">
+                                <div className="card-body">
+                                    <div className='row'>
+                                        <div className="col-md-12 mb-1">
+                                            <h5 className="mb-2">Indicators:</h5>
+                                        </div>
+                                        <div className="col-md-6 mb-2">
+                                            <small>Secondary Coverage indicator</small>
+                                            <select className="form-select" {...register("other_cov_proc_flag", {
+                                                // required: true,
+                                            })} name="other_cov_proc_flag">
+                                                <option value="">--Select--</option>
+                                                <option value="1">Not applicable</option>
+                                                <option value="2">Reject transactions</option>
+                                                <option value="3">pay and report transactions</option>
+                                            </select>
+                                            {errors.other_cov_proc_flag?.type === 'required' && <p role="alert" className="notvalid">Secondary Coverage indicator is  required</p>}
+
+                                        </div>
+                                        <div className="col-md-6 mb-2">
+                                            <small>Accumulated Benefits Indicator</small>
+                                            <select className="form-select" {...register("accum_bene_fam_sum_ind", {
+                                                // required: true,
+                                            })} name="accum_bene_fam_sum_ind">
+                                                <option value="">--Select--</option>
+                                                <option value="1">Not Specified</option>
+                                                <option value="2">Family Accumulation By Patient PIN Number </option>
+                                                <option value="3">Family Accumulation By Member ID</option>
+                                            </select>
+
+                                            <p className="input-hint">Family Accumulation By Member ID</p>
+                                            {errors.accum_bene_fam_sum_ind?.type === 'required' && <p role="alert" className="notvalid">Accumulated Benefits Indicator is  required</p>}
+
+                                        </div>
+
+                                        <div className="clearfix mb-2"></div>
+
+                                        <div className="col-md-12 mb-1">
+                                            <h5 className="mb-2">Interim Member Maximums</h5>
+                                        </div>
+                                        <div className="col-md-6 mb-2">
+                                            <small>Maximum Number Of Transactions Allowed For An Interim..</small>
+                                            <select className="form-select" {...register("max_num_trans_interim_elig", {
+                                                required: true,
+                                            })} name='max_num_trans_interim_elig'>
+                                                <option value="">--select-- </option>
+                                                <option value="1">option 1</option>
+                                                <option value="2">option 2</option>
+                                                <option value="3">option 3</option>
+                                            </select>
+                                            {errors.max_num_trans_interim_elig?.type === 'required' && <p role="alert" className="notvalid">Maximum Number Of Transactions Allowed For An Interim field  is  required</p>}
+
+                                        </div>
+                                        <div className="col-md-6 mb-2">
+                                            <small>Maximum Number Of Days That An Interim Member Will Be..</small>
+                                            <select className="form-select" {...register("max_days_interim_elig", {
+                                                required: true,
+                                            })} name="max_days_interim_elig">
+                                                <option value="">--select--</option>
+                                                <option value="1">option 1</option>
+                                                <option value="2">option 2</option>
+                                                <option value="3">option 3</option>
+                                            </select>
+                                            {errors.max_days_interim_elig?.type === 'required' && <p role="alert" className="notvalid">Maximum Number Of Days That An Interim Member Will Be field is  required</p>}
+
+                                        </div>
+
+                                        <div className="clearfix mb-2"></div>
+
+                                        <div className="col-md-12 mb-1">
+                                            <h5 className="mb-2">Data Entry</h5>
+                                        </div>
+                                        <div className="col-md-12 mb-1">
+                                            <div className="form-group">
+                                                {/* DB COLUMN NOT FOUND */}
+                                                <input type="checkbox" name="elig_date_edit_ovr_flag" {...register("elig_date_edit_ovr_flag", {
+                                                    // required: true,
+                                                })} id="html" className="d-none" />
+                                                <label for="html">Bypass Member Eligibility Date Edits Against Customer Effective Dates</label>
+
+                                            </div>
+                                        </div>
+
+                                        <div className="clearfix mb-3"></div>
+
+                                        <div className="col-md-12 mb-1">
+                                            <h5 className="mb-2">Miscellaneous</h5>
+                                        </div>
+                                        <div className="col-md-4">
+                                            <div className="form-group mb-2">
+                                                <small>Number of Days from Date Written to First Fill</small>
+                                                <input type="text" className="form-control" name="date_written_to_first_fill" {...register("date_written_to_first_fill")} id="" placeholder="" required="" />
+
+                                                {errors.date_written_to_first_fill?.type === 'required' && <p role="alert" className="notvalid">Number of Days from Date Written to First Fill is   required</p>}
+
+                                            </div>
+                                        </div>
+                                        <div className="col-md-4">
+                                            <div className="form-group mb-2">
+                                                <small>Number of Days from Date Filled to Date Submitted</small>
+                                                <input type="text" className="form-control" {...register("date_filled_to_sub_online", {
+                                                    // required: true,
+                                                })} name="date_filled_to_sub_online" id="" placeholder="" required="" />
+                                                {errors.date_filled_to_sub_online?.type === 'required' && <p role="alert" className="notvalid">Number of Days from Date Filled to Date Submitted field  is   required</p>}
+
+                                            </div>
+                                        </div>
+                                        <div className="col-md-4">
+                                            <div className="form-group mb-2">
+                                                <small>Number of Days from Date Filled to Submitted (Manual)</small>
+                                                <input type="text" className="form-control"  {...register("date_filled_to_sub_dmr", {
+                                                    // required: true,
+                                                })} name="date_filled_to_sub_dmr" id="" placeholder="" required="" />
+                                                {errors.date_filled_to_sub_dmr?.type === 'required' && <p role="alert" className="notvalid">Number of Days from Date Filled to Submitted (Manual) field  is   required</p>}
+
+                                            </div>
+                                        </div>
+                                        <div className="col-md-4">
+                                            <div className="form-group mb-2">
+                                                <small>Number of Days from DateFilled to Future Fill Date</small>
+                                                <input type="text" className="form-control"  {...register("date_sub_to_filled_future", {
+                                                    // required: true,
+                                                })} name="date_sub_to_filled_future" id="" placeholder="" required="" />
+                                                {errors.no_of_days_from_date_filled_to_future?.type === 'required' && <p role="alert" className="notvalid">Number of Days from DateFilled to Future Fill Date field  is   required</p>}
+
+                                            </div>
+                                        </div>
+                                        <div className="col-md-4">
+                                            <div className="form-group mb-2">
+                                                <small>Number of Days for Reversal</small>
+                                                <input type="text" className="form-control" name="days_for_reversals" {...register("days_for_reversals", {
+                                                    // required: true,
+                                                })} id="" placeholder="" required="" />
+                                                {errors.no_of_days_reversal?.type === 'required' && <p role="alert" className="notvalid">Number of Days for Reversal field  is   required</p>}
+
+                                            </div>
+                                        </div>
+
+
+
+
+                                        <div className="col-md-4">
+                                            <div className="form-group mb-2">
+                                                <small>Tax Status</small>
+                                                {/* <input type="text" className="form-control" name="no_of_days_reversal" {...register("no_of_days_reversal", {
             required: true,
         })} id="" placeholder="" required="" /> */}
 
-                    <select className="form-select" {...register("non_profit_tax_exempt_flag", {
-                        // required: true,
-                    })} name="non_profit_tax_exempt_flag">
-                        <option value="">--Select--</option>
-                        <option value="1">Not Specified </option>
-                        <option value="2">Taxable</option>
-                        <option value="3">Tax Exempt</option>
-                    </select>
-                    {errors.non_profit_tax_exempt_flag?.type === 'required' && <p role="alert" className="notvalid">Tax status field is    required</p>}
+                                                <select className="form-select" {...register("non_profit_tax_exempt_flag", {
+                                                    // required: true,
+                                                })} name="non_profit_tax_exempt_flag">
+                                                    <option value="">--Select--</option>
+                                                    <option value="1">Not Specified </option>
+                                                    <option value="2">Taxable</option>
+                                                    <option value="3">Tax Exempt</option>
+                                                </select>
+                                                {errors.non_profit_tax_exempt_flag?.type === 'required' && <p role="alert" className="notvalid">Tax status field is    required</p>}
 
-                </div>
-            </div>
-
-
-
-            <div className="clearfix mb-2"></div>
-
-            <div className="col-md-4 mb-1">
-                <div className="form-group">
-                    <input type="checkbox" id="Tax" {...register("non_profit_tax_exempt_flag", {
-                        // required: true,
-                    })} name="non_profit_tax_exempt_flag" className="d-none" />
-                    <label for="Tax">Tax Exempty Entity</label>
-                    {errors.non_profit_tax_exempt_flag?.type === 'required' && <p role="alert" className="notvalid">Tax Exempty Entity field  is   required</p>}
-
-                </div>
-            </div>
-
-            <div className="col-md-4 mb-1">
-                <div className="form-group">
-                    <input type="checkbox" id="u&c" {...register("reqd_u_and_c_flag", {
-                        // required: true,
-                    })} name="reqd_u_and_c_flag" className="d-none" />
-                    <label for="u&c">Mandatory U and C</label>
-
-                </div>
-                {errors.mandatory_u_c?.type === 'required' && <p role="alert" className="notvalid">Mandatory U and C  is   required</p>}
-
-            </div>
-        </div>
-    </div>
-</div>
-</div>
+                                            </div>
+                                        </div>
 
 
-<div class="tab-pane fade" id="charges" role="tabpanel" aria-labelledby="nav-profile-tab">
-<div className="card mt-3 mb-3">
-    <div className="card-body">
-        <div className='row'>
-            <div className="col-md-12 mb-1">
-                <h5 className="mb-2">Exception List Processing</h5>
-            </div>
-            <div className="col-md-6 mb-1">
-                <div className="form-group">
-                    <input type="checkbox" id="Plan" className="d-none" {...register("excl_plan_ndc_gpi_excep_flag", {
-                        // required: true,
-                    })} name="excl_plan_ndc_gpi_excep_flag" />
-                    <label for="Plan">Bypass Plan NDC/GPI Exception List Processing</label>
-                    {errors.bypass_plan_ndc_gpi?.type === 'required' && <p role="alert" className="notvalid">Bypass Plan NDC/GPI Exception List Processing field   is   required</p>}
 
-                </div>
-            </div>
-            <div className="col-md-6 mb-1">
-                <div className="form-group">
-                    <input type="checkbox" id="System" className="d-none" {...register('excl_sys_ndc_gpi_excep_flag', {
-                        // required: true,
-                    })} name="excl_sys_ndc_gpi_excep_flag" />
-                    <label for="System">Bypass System NDC/GPI Exception List Processing</label>
-                    {errors.excl_sys_ndc_gpi_excep_flag?.type === 'required' && <p role="alert" className="notvalid">Bypass System NDC/GPI Exception List Processing  field   is   required</p>}
+                                        <div className="clearfix mb-2"></div>
 
-                </div>
-            </div>
+                                        <div className="col-md-4 mb-1">
+                                            <div className="form-group">
+                                                <input type="checkbox" id="Tax" {...register("non_profit_tax_exempt_flag", {
+                                                    // required: true,
+                                                })} name="non_profit_tax_exempt_flag" className="d-none" />
+                                                <label for="Tax">Tax Exempty Entity</label>
+                                                {errors.non_profit_tax_exempt_flag?.type === 'required' && <p role="alert" className="notvalid">Tax Exempty Entity field  is   required</p>}
 
-            <div className="clearfix mb-3"></div>
+                                            </div>
+                                        </div>
 
-            <div className="col-md-12 mb-1">
-                <h5 className="mb-2">Major Medical</h5>
-            </div>
-            <div className="col-md-6">
-                <div className="form-group mb-2">
-                    <small>SMBPP</small>
-                    <input type="text" className="form-control" {...register('smbpp', {
-                        // required: true,
-                    })} name="smbpp" id="" placeholder="" required="" />
-                    {errors.smbpp?.type === 'required' && <p role="alert" className="notvalid">SMBPP  field   is   required</p>}
+                                        <div className="col-md-4 mb-1">
+                                            <div className="form-group">
+                                                <input type="checkbox" id="u&c" {...register("reqd_u_and_c_flag", {
+                                                    // required: true,
+                                                })} name="reqd_u_and_c_flag" className="d-none" />
+                                                <label for="u&c">Mandatory U and C</label>
 
-                </div>
-            </div>
-            <div className="col-md-6 mb-2">
-                <small>RVA List ID</small>
-                <div className="form-group mb-3">
-                    <Controller name="rule_id"
-                        control={control}
-                        render={({ field }) => (
-                            <AsyncSelect
-                                {...field}
-                                cacheOptions
-                                defaultOptions
-                                // value={selectedValue}
-                                getOptionLabel={e => e.rva_label}
-                                getOptionValue={e => e.rva_value}
-                                loadOptions={loadRvaListIds}
-                                // onInputChange={handlePriceScheduleInput}
-                                // onChange={handleChange}
-                                placeholder="Rva List Id "
-                            // value={{ elig_label: props.formData.elig_validation_id, elig_value: props.formData.elig_validation_id }}
+                                            </div>
+                                            {errors.mandatory_u_c?.type === 'required' && <p role="alert" className="notvalid">Mandatory U and C  is   required</p>}
 
-                            />
-                        )} />
-
-                    <a href="" data-bs-toggle="modal" data-bs-target="#rvalistidModal"><span className="fa fa-search form-icon"></span></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
 
-                </div>
-                {errors.rva_list_id?.type === 'required' && <p role="alert" className="notvalid">RVA List ID  field   is   required</p>}
+                        <div class="tab-pane fade" id="charges" role="tabpanel" aria-labelledby="nav-profile-tab">
+                            <div className="card mt-3 mb-3">
+                                <div className="card-body">
+                                    <div className='row'>
+                                        <div className="col-md-12 mb-1">
+                                            <h5 className="mb-2">Exception List Processing</h5>
+                                        </div>
+                                        <div className="col-md-6 mb-1">
+                                            <div className="form-group">
+                                                <input type="checkbox" id="Plan" className="d-none" {...register("excl_plan_ndc_gpi_excep_flag", {
+                                                    // required: true,
+                                                })} name="excl_plan_ndc_gpi_excep_flag" />
+                                                <label for="Plan">Bypass Plan NDC/GPI Exception List Processing</label>
+                                                {errors.bypass_plan_ndc_gpi?.type === 'required' && <p role="alert" className="notvalid">Bypass Plan NDC/GPI Exception List Processing field   is   required</p>}
 
-            </div>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-6 mb-1">
+                                            <div className="form-group">
+                                                <input type="checkbox" id="System" className="d-none" {...register('excl_sys_ndc_gpi_excep_flag', {
+                                                    // required: true,
+                                                })} name="excl_sys_ndc_gpi_excep_flag" />
+                                                <label for="System">Bypass System NDC/GPI Exception List Processing</label>
+                                                {errors.excl_sys_ndc_gpi_excep_flag?.type === 'required' && <p role="alert" className="notvalid">Bypass System NDC/GPI Exception List Processing  field   is   required</p>}
 
-            <div className="clearfix"></div>
+                                            </div>
+                                        </div>
 
-            <div className="col-md-12 mb-1">
-                <h5 className="mb-2">Other Charges</h5>
-            </div>
+                                        <div className="clearfix mb-3"></div>
 
-            <div className="col-md-3">
-                <div className="form-group mb-2">
-                    <small>Admin Fee</small>
-                    <input type="text" className="form-control" id="" name="admin_fee" {...register('admin_fee', {
-                        // required: true,
-                        pattern: /^(0|[1-9][0-9]*)$/,
+                                        <div className="col-md-12 mb-1">
+                                            <h5 className="mb-2">Major Medical</h5>
+                                        </div>
+                                        <div className="col-md-6">
+                                            <div className="form-group mb-2">
+                                                <small>SMBPP</small>
+                                                <input type="text" className="form-control" {...register('smbpp', {
+                                                    // required: true,
+                                                })} name="smbpp" id="" placeholder="" required="" />
+                                                {errors.smbpp?.type === 'required' && <p role="alert" className="notvalid">SMBPP  field   is   required</p>}
 
-                    })} placeholder="" required="" />
-                    {errors.admin_fee?.type === 'required' && <p role="alert" className="notvalid">Admin Fee  field   is   required</p>}
-                    {errors.admin_fee?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
+                                            </div>
+                                        </div>
+                                        <div className="col-md-6 mb-2">
+                                            <small>RVA List ID</small>
+                                            <div className="form-group mb-3">
+                                                <Controller name="rule_id"
+                                                    control={control}
+                                                    render={({ field }) => (
+                                                        <AsyncSelect
+                                                            {...field}
+                                                            cacheOptions
+                                                            defaultOptions
+                                                            // value={selectedValue}
+                                                            getOptionLabel={e => e.rva_label}
+                                                            getOptionValue={e => e.rva_value}
+                                                            loadOptions={loadRvaListIds}
+                                                            // onInputChange={handlePriceScheduleInput}
+                                                            // onChange={handleChange}
+                                                            placeholder="Rva List Id "
+                                                        // value={{ elig_label: props.formData.elig_validation_id, elig_value: props.formData.elig_validation_id }}
 
+                                                        />
+                                                    )} />
 
-                </div>
-            </div>
-            <div className="col-md-3">
-                <div className="form-group mb-2">
-                    <small>Admin %</small>
-                    <input type="text" className="form-control" name="admin_percent" {...register('admin_percent', {
-                        // required: true,
-                        pattern: /^(0|[1-9][0-9]*)$/,
-
-                    })} id="" placeholder="" required="" />
-                    {errors.admin_percentage?.type === 'required' && <p role="alert" className="notvalid">Admin percentage  field   is   required</p>}
-                    {errors.admin_percentage?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
-
-                </div>
-            </div>
-            <div className="col-md-3">
-                <div className="form-group mb-2">
-                    <small>DMR Fee</small>
-                    <input type="text" className="form-control" name="dmr_fee"   {...register("dmr_fee", {
-                        // required: true,
-                        pattern: /^(0|[1-9][0-9]*)$/,
-                    })} id="" placeholder="" required="" />
-                    {errors.dmr_fee?.type === 'required' && <p role="alert" className="notvalid">DMR Fee  field   is   required</p>}
-                    {errors.dmr_fee?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
-
-                </div>
-            </div>
-            <div className="col-md-3">
-                <div className="form-group mb-2">
-                    <small>UCF Claim Fee</small>
-                    <input type="text" className="form-control" name="ucf_fee"   {...register("ucf_fee", {
-                        // required: true,
-                        pattern: /^(0|[1-9][0-9]*)$/,
-                    })} id="" placeholder="" required="" />
-                    {errors.ucf_fee?.type === 'required' && <p role="alert" className="notvalid">UCF Claim Fee  field   is   required</p>}
-                    {errors.ucf_fee?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
-                </div>
-            </div>
-            <div className="col-md-3">
-                <div className="form-group mb-2">
-                    <small>Elig Update Fee</small>
-                    <input type="text" className="form-control" name="elig_upd_fee"   {...register('elig_upd_fee', {
-                        // required: true,
-                        pattern: /^(0|[1-9][0-9]*)$/,
-
-
-                    })} id="" placeholder="" required="" />
-                    {errors.elig_upd_fee?.type === 'required' && <p role="alert" className="notvalid">Elig Update Fee  is   required</p>}
-                    {errors.elig_upd_fee?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
-
-                </div>
-            </div>
-            <div className="col-md-3">
-                <div className="form-group mb-2">
-                    <small>Prior Auth Fee</small>
-                    <input type="text" className="form-control" name="prior_auth_fee" {...register("prior_auth_fee", {
-                        // required: true,
-                        pattern: /^(0|[1-9][0-9]*)$/,
-
-                    })} id="" placeholder="" required="" />
-                    {errors.prior_auth_fee?.type === 'required' && <p role="alert" className="notvalid">Prior Auth Fee  is   required</p>}
-                    {errors.prior_auth_fee?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
-
-                </div>
-            </div>
-            <div className="col-md-3">
-                <div className="form-group mb-2">
-                    <small>Mail Srv Ltr Prd Fee</small>
-                    <input type="text" className="form-control"  {...register('mail_ord_letter_fee', {
-                        // required: true,
-                        pattern: /^(0|[1-9][0-9]*)$/,
-
-                    })} name="mail_ord_letter_fee" id="" placeholder="" required="" />
-                    {errors.mail_ord_letter_fee?.type === 'required' && <p role="alert" className="notvalid">Mail Srv Ltr Prd Fee  is   required</p>}
-                    {errors.mail_ord_letter_fee?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
-
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>
-</div>
+                                                <a href="" data-bs-toggle="modal" data-bs-target="#rvalistidModal"><span className="fa fa-search form-icon"></span></a>
 
 
-                       
+                                            </div>
+                                            {errors.rva_list_id?.type === 'required' && <p role="alert" className="notvalid">RVA List ID  field   is   required</p>}
+
+                                        </div>
+
+                                        <div className="clearfix"></div>
+
+                                        <div className="col-md-12 mb-1">
+                                            <h5 className="mb-2">Other Charges</h5>
+                                        </div>
+
+                                        <div className="col-md-3">
+                                            <div className="form-group mb-2">
+                                                <small>Admin Fee</small>
+                                                <input type="text" className="form-control" id="" name="admin_fee" {...register('admin_fee', {
+                                                    // required: true,
+                                                    pattern: /^(0|[1-9][0-9]*)$/,
+
+                                                })} placeholder="" required="" />
+                                                {errors.admin_fee?.type === 'required' && <p role="alert" className="notvalid">Admin Fee  field   is   required</p>}
+                                                {errors.admin_fee?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
+
+
+                                            </div>
+                                        </div>
+                                        <div className="col-md-3">
+                                            <div className="form-group mb-2">
+                                                <small>Admin %</small>
+                                                <input type="text" className="form-control" name="admin_percent" {...register('admin_percent', {
+                                                    // required: true,
+                                                    pattern: /^(0|[1-9][0-9]*)$/,
+
+                                                })} id="" placeholder="" required="" />
+                                                {errors.admin_percentage?.type === 'required' && <p role="alert" className="notvalid">Admin percentage  field   is   required</p>}
+                                                {errors.admin_percentage?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
+
+                                            </div>
+                                        </div>
+                                        <div className="col-md-3">
+                                            <div className="form-group mb-2">
+                                                <small>DMR Fee</small>
+                                                <input type="text" className="form-control" name="dmr_fee"   {...register("dmr_fee", {
+                                                    // required: true,
+                                                    pattern: /^(0|[1-9][0-9]*)$/,
+                                                })} id="" placeholder="" required="" />
+                                                {errors.dmr_fee?.type === 'required' && <p role="alert" className="notvalid">DMR Fee  field   is   required</p>}
+                                                {errors.dmr_fee?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
+
+                                            </div>
+                                        </div>
+                                        <div className="col-md-3">
+                                            <div className="form-group mb-2">
+                                                <small>UCF Claim Fee</small>
+                                                <input type="text" className="form-control" name="ucf_fee"   {...register("ucf_fee", {
+                                                    // required: true,
+                                                    pattern: /^(0|[1-9][0-9]*)$/,
+                                                })} id="" placeholder="" required="" />
+                                                {errors.ucf_fee?.type === 'required' && <p role="alert" className="notvalid">UCF Claim Fee  field   is   required</p>}
+                                                {errors.ucf_fee?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
+                                            </div>
+                                        </div>
+                                        <div className="col-md-3">
+                                            <div className="form-group mb-2">
+                                                <small>Elig Update Fee</small>
+                                                <input type="text" className="form-control" name="elig_upd_fee"   {...register('elig_upd_fee', {
+                                                    // required: true,
+                                                    pattern: /^(0|[1-9][0-9]*)$/,
+
+
+                                                })} id="" placeholder="" required="" />
+                                                {errors.elig_upd_fee?.type === 'required' && <p role="alert" className="notvalid">Elig Update Fee  is   required</p>}
+                                                {errors.elig_upd_fee?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
+
+                                            </div>
+                                        </div>
+                                        <div className="col-md-3">
+                                            <div className="form-group mb-2">
+                                                <small>Prior Auth Fee</small>
+                                                <input type="text" className="form-control" name="prior_auth_fee" {...register("prior_auth_fee", {
+                                                    // required: true,
+                                                    pattern: /^(0|[1-9][0-9]*)$/,
+
+                                                })} id="" placeholder="" required="" />
+                                                {errors.prior_auth_fee?.type === 'required' && <p role="alert" className="notvalid">Prior Auth Fee  is   required</p>}
+                                                {errors.prior_auth_fee?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
+
+                                            </div>
+                                        </div>
+                                        <div className="col-md-3">
+                                            <div className="form-group mb-2">
+                                                <small>Mail Srv Ltr Prd Fee</small>
+                                                <input type="text" className="form-control"  {...register('mail_ord_letter_fee', {
+                                                    // required: true,
+                                                    pattern: /^(0|[1-9][0-9]*)$/,
+
+                                                })} name="mail_ord_letter_fee" id="" placeholder="" required="" />
+                                                {errors.mail_ord_letter_fee?.type === 'required' && <p role="alert" className="notvalid">Mail Srv Ltr Prd Fee  is   required</p>}
+                                                {errors.mail_ord_letter_fee?.type === 'pattern' && <p role="alert" className="notvalid">This field Must be a Number!</p>}
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
 
 
 

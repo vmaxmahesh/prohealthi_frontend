@@ -5,7 +5,11 @@ import { useAuth } from '../../hooks/AuthProvider';
 export default function Dashboard() {
     const location = useLocation();
     const currentpath = location.pathname.split('/')[3];
-    // console.log(currentpath);
+
+
+  
+
+    console.log(currentpath);
     // const user  = useAuth();
 
     // if (!user) {
@@ -199,10 +203,11 @@ export default function Dashboard() {
                             </div>
                         </div> */}
 
+                      
 
                         <div className="col-md-2 d-flex align-items-center">
                             <a href="#!" className="menu-toggle"><i className="fa-solid fa-bars-staggered"></i></a>
-                            <h3 className="page-title"></h3>
+                            <h3 className="page-title">{currentpath}</h3>
                         </div>
                         <div className="col-md-10 ms-auto">
                             <ul className="menu-items align-items-center">
