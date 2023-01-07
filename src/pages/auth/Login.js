@@ -1,32 +1,54 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/AuthProvider';
 
 
 
 async function loginUser(credentials) {
-    return fetch('http://localhost:8080/users/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(credentials)
+    return fetch(process.env.REACT_APP_API_BASEURL + '/api/users/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(credentials)
     })
-      .then(data => data.json())
-   }
-   
+        .then(data => data.json())
+        .catch(e => console.log(e))
+}
+
 export default function Login({ setToken }) {
     const [username, setUserName] = useState();
     const [password, setPassword] = useState();
+    const { login, errors, user } = useAuth();
+    let navigate = useNavigate();
+
+    useEffect(() => {
+
+        if (user) {
+            navigate("/dashboard");
+        }
+    });
 
     const handleSubmit = async e => {
         e.preventDefault();
-        const token = await loginUser({
-          username,
-          password
+
+        console.log('logging>>>>>>')
+
+        login({
+            USER_ID: username,
+            USER_PASSWORD: password
         });
-        setToken(token);
-      }
-    
+
+        console.log('code completed');
+    }
+
+    useEffect(() => {
+        // if (errors) {
+            console.log(errors);
+        // }
+    }, [errors]);
+
     return (
         <>
             <div className="login-left">
@@ -39,13 +61,13 @@ export default function Login({ setToken }) {
                         </div>
                         <div className="carousel-inner">
                             <div className="carousel-item active">
-                                <img src="images/login-slide1.png" className="d-block w-100" alt="..."/>
+                                <img src="images/login-slide1.png" className="d-block w-100" alt="..." />
                             </div>
                             <div className="carousel-item">
-                                <img src="images/login-slide2.png" className="d-block w-100" alt="..."/>
+                                <img src="images/login-slide2.png" className="d-block w-100" alt="..." />
                             </div>
                             <div className="carousel-item">
-                                <img src="images/login-slide3.png" className="d-block w-100" alt="..."/>
+                                <img src="images/login-slide3.png" className="d-block w-100" alt="..." />
                             </div>
                         </div>
                         <button className="carousel-control-prev d-none" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
@@ -65,7 +87,7 @@ export default function Login({ setToken }) {
                             <p className="news-title">Latest News</p>
                         </div>
                         <div className="col-md-9 p-0 bg-white">
-                        {/* onMouseOver="this.stop()" onMouseOut="this.start()" */}
+                            {/* onMouseOver="this.stop()" onMouseOut="this.start()" */}
                             <marquee>
                                 <p>In healthcare, the ability to diagnose early can be the difference between life and death </p>
                             </marquee>
@@ -92,12 +114,12 @@ export default function Login({ setToken }) {
                             </select>
                         </div>
                         <div className="gorm-group">
-                            <input type="text" name="username" id="username" onChange={e => setUserName(e.target.value)} className="form-control" placeholder="Username" required />
+                            <input type="text" name="USER_ID" id="username" onChange={e => setUserName(e.target.value)} className="form-control" placeholder="Username" required />
                         </div>
                         <div className="gorm-group mb-4">
-                            <input type="text" name="password" id="password" onChange={e => setPassword(e.target.value)} className="form-control" placeholder="Password" required />
+                            <input type="password" name="USER_PASSWORD" id="password" onChange={e => setPassword(e.target.value)} className="form-control" placeholder="Password" required />
                         </div>
-                        <button type="submit" className="btn btn-theme" value="" style={{width: '100%'}}>login</button>
+                        <button type="submit" className="btn btn-theme" value="" style={{ width: '100%' }}>login</button>
                     </form>
                 </div>
 
@@ -113,4 +135,4 @@ export default function Login({ setToken }) {
 
 Login.propTypes = {
     setToken: PropTypes.func.isRequired
-  }
+}
