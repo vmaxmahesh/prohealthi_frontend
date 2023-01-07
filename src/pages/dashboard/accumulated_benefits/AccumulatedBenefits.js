@@ -5,6 +5,8 @@ import { Link, Outlet, Route, Routes, useLocation, useNavigate, useOutletContext
 
 import { Col, Row } from 'react-bootstrap';
 import DraggableList from "react-draggable-lists";
+import { Controller } from 'react-hook-form';
+import AsyncSelect from 'react-select/async';
 
 export default function AccumulatedBenefits() {
 
@@ -162,7 +164,9 @@ export default function AccumulatedBenefits() {
 
             <AccumulatedBenefitList ndcListData={ndcData} ndcClassData={ndcClass} getNDCItem={getNDCItems} getNDCItemDetails={getNDCItemDetails} selctedNdc={selctedNdc} />
 
-            <div className="data">
+            <AccumelatedForm />
+
+            {/* <div className="data">
                 <div className="nav nav-tabs" id="nav-tab" role="tablist">
                     <Link to="exclusion-limitation" className={'nav-link' + (currentpath == 'exclusion-limitation' ? ' active' : '')}>Exclusion Limitation</Link>
                     <Link to="deductible" className={'nav-link' + (currentpath == 'deductible' ? ' active' : '')}>Deductible</Link>
@@ -174,7 +178,7 @@ export default function AccumulatedBenefits() {
 
 
                 </div>
-            </div>
+            </div> */}
 
 
         </>
@@ -207,6 +211,55 @@ function SearchAccumulatedBenefit(props) {
                 </div>
             </div>
             {/* <AccumulatedBenefitList /> */}
+        </>
+    )
+}
+
+
+
+function AccumelatedForm(props){
+
+
+    const { register, handleSubmit,control, watch, reset, formState: { errors } } = useForm();
+
+    
+
+    return (
+        <>
+             <form onSubmit={handleSubmit(addCode)} >
+                <div class="data">
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#exclusion" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Exclusion Limitation</button>
+                        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#deductable" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Deductable</button>
+                       
+                    </div>
+
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="identification" role="tabpanel" aria-labelledby="nav-home-tab">
+                           
+                        </div>
+
+
+                        <div class="tab-pane fade" id="strategy" role="tabpanel" aria-labelledby="nav-profile-tab">
+
+                           
+
+                        </div>
+
+
+                        <div class="tab-pane fade" id="eligibility" role="tabpanel" aria-labelledby="nav-profile-tab">
+                          
+                        </div>
+
+                    
+
+                    </div>
+
+                    <Button type='submit' variant="primary">{props.adding ? ' Add' : 'Update'}</Button>
+
+                </div>
+
+            </form>
         </>
     )
 }
