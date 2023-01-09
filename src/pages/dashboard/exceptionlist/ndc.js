@@ -482,10 +482,10 @@ useEffect(() => { reset(props.selected) }, [props.selected]);
                                 <div className="col-md-12">
                                     <div className="form-group mb-2">
                                         <small>ID</small>
-                                        <input type="text"  {...register("exception_list", {
-                                            required:true,
+                                        <input type="text" name="ndc_exception_list"  {...register("ndc_exception_list", {
+                                            // required:true,
                                         })} className="form-control" name="" id="" placeholder="Enter ID" />
-                                    {errors.exception_list?.type === 'required' && <p role="alert" className="notvalid">SMBPP  field   is   required</p>}
+                                    {/* {errors.ndc_exception_list?.type === 'required' && <p role="alert" className="notvalid">SMBPP  field   is   required</p>} */}
 
                                     </div>
                                 </div>
@@ -1018,7 +1018,7 @@ export function ProcessRule(props) {
                                         <input type="text"    {...register("exception_list", {
                                             required:true,
                                         })} className="form-control" name="" id="" placeholder="Enter ID" />
-                                     {errors.exception_list?.type === 'required' && <p role="alert" className="notvalid">SMBPP  field   is   required</p>}
+                                     {/* {errors.exception_list?.type === 'required' && <p role="alert" className="notvalid">SMBPP  field   is   required</p>} */}
 
                                     </div>
                                 </div>
