@@ -484,7 +484,7 @@ useEffect(() => { reset(props.selected) }, [props.selected]);
                                         <small>ID</small>
                                         <input type="text" name="ndc_exception_list"  {...register("ndc_exception_list", {
                                             // required:true,
-                                        })} className="form-control" name="" id="" placeholder="Enter ID" />
+                                        })} className="form-control"  id="" placeholder="Enter ID" />
                                     {/* {errors.ndc_exception_list?.type === 'required' && <p role="alert" className="notvalid">SMBPP  field   is   required</p>} */}
 
                                     </div>

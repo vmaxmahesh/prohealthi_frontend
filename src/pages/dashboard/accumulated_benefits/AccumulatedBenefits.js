@@ -7,12 +7,13 @@ import { Button, Col, Row } from 'react-bootstrap';
 import DraggableList from "react-draggable-lists";
 import { Controller } from 'react-hook-form';
 import AsyncSelect from 'react-select/async';
+import { toast } from 'react-toastify';
 
 export default function AccumulatedBenefits() {
 
 
     const scollToRef = useRef();
-    const [customer, setCustomer] = useState([]);
+    const [accum, setAccum] = useState([]);
 
     const location = useLocation();
     const currentpath = location.pathname.split('/')[4];
@@ -22,6 +23,10 @@ export default function AccumulatedBenefits() {
     const [ndcClass, setNdClass] = useState([]);
 
     const [selctedNdc, setSelctedNdc] = useState('');
+
+    const [accumlatedData, setAccumlatedData] = useState(false);
+
+    const [adding, setAdding] = useState(false);
 
 
 
@@ -64,7 +69,7 @@ export default function AccumulatedBenefits() {
         test.ndc_exception_list = ndcid;
         setSelctedNdc(test);
 
-        // //  console.log(customerid);
+        // //  console.log(accumid);
         const requestOptions = {
             method: 'GET',
             // mode: 'no-cors',
@@ -83,11 +88,11 @@ export default function AccumulatedBenefits() {
                 if (!response.ok) {
                     // get error message from body or default to response status
                     const error = (data && data.message) || response.status;
-                    setCustomer([]);
+                    setAccum([]);
                     return Promise.reject(error);
                 } else {
                     console.log(data.data);
-                    setCustomer(data.data);
+                    setAccum(data.data);
 
                     // scollToRef.current.scrollIntoView()
                 }
@@ -111,7 +116,7 @@ export default function AccumulatedBenefits() {
         };
         //  console.log(watch(fdata));
 
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/speciality/details/${ndcid}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/accumulated/benifit/details/${ndcid}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
@@ -123,7 +128,7 @@ export default function AccumulatedBenefits() {
                     const error = (data && data.message) || response.status;
                     return Promise.reject(error);
                 } else {
-                    setSelctedNdc(data.data);
+                    setAccumlatedData(data.data);
                     // scollToRef.current.scrollIntoView()
                     // return;
                 }
@@ -136,6 +141,28 @@ export default function AccumulatedBenefits() {
                 console.error('There was an error!', error);
             });
     }
+
+
+    useEffect(() => {
+        if (accumlatedData) {
+            setAdding(false);
+
+        } else {
+            setAdding(true);
+        }
+
+        document.title = 'Benefit Code | ProHealthi';
+
+    }, [accumlatedData, adding]);
+
+
+
+
+
+
+
+
+
     return (
         <>
             <div className="row">
@@ -164,7 +191,7 @@ export default function AccumulatedBenefits() {
 
             <AccumulatedBenefitList ndcListData={ndcData} ndcClassData={ndcClass} getNDCItem={getNDCItems} getNDCItemDetails={getNDCItemDetails} selctedNdc={selctedNdc} />
 
-            <AccumelatedForm />
+            <AccumelatedForm formData={accumlatedData}  selected={accumlatedData}  adding={adding} />
 
             {/* <div className="data">
                 <div className="nav nav-tabs" id="nav-tab" role="tablist">
@@ -173,7 +200,7 @@ export default function AccumulatedBenefits() {
                 </div>
                 <div className="tab-content" id="nav-tabContent">
 
-                    <Outlet context={[customer, setCustomer]} />
+                    <Outlet context={[accum, setAccum]} />
 
 
 
@@ -245,7 +272,7 @@ function AccumelatedForm(props) {
 
             });
         } else {
-            fetch(process.env.REACT_APP_API_BASEURL + `/api/providerdata/flexiblenetwork/add`, requestOptions)
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/accumulated/benifit/add`, requestOptions)
                 .then(async response => {
                     const isJson = response.headers.get('content-type')?.includes('application/json');
                     const data = isJson && await response.json();
@@ -287,6 +314,29 @@ function AccumelatedForm(props) {
         e.preventDefault();
     }
 
+
+    useEffect(() => { reset(props.formData) }, [props.formData]);
+
+
+    useEffect(() => {
+
+
+        if (props.adding) {
+            reset({ rx_network_rule_id: '', rx_network_rule_name: '', new: 1 }, {
+                keepValues: false,
+            })
+        } else {
+            reset(props.selected);
+        }
+
+        if (!props.selected) {
+            reset({ rx_network_rule_id: '', rx_network_rule_name: '', description: '', pharm_type_variation_ind: '', network_part_variation_ind: '', claim_type_variation_ind: '', plan_accum_deduct_id: '', new: 1 }, {
+                keepValues: false,
+            })
+        }
+
+
+    }, [props.selected, props.adding]);
 
 
 
@@ -1041,7 +1091,7 @@ function NdcRow(props) {
         <>
             <tr className={(props.selected && props.ndcRow.plan_accum_deduct_id == props.selected.plan_accum_deduct_id ? ' tblactiverow ' : '')}
 
-                onClick={() => props.getNDCItem(props.ndcRow.plan_accum_deduct_id)}
+                onClick={() => props.getNDCItemDetails(props.ndcRow.plan_accum_deduct_id)}
             >
                 <td>{props.ndcRow.plan_accum_deduct_id}</td>
                 <td >{props.ndcRow.plan_accum_deduct_name}</td>
@@ -1054,28 +1104,6 @@ function NdcRow(props) {
     )
 }
 
-
-function NdcClassRow(props) {
-
-    useEffect(() => {
-
-    }, [props.selected]);
-
-    return (
-        <>
-            <tr
-                className={(props.selected && props.ndcClassRow.specialty_id == props.selected.specialty_id ? ' tblactiverow ' : '')}
-                onClick={() => props.getNDCItemDetails(props.ndcClassRow.specialty_id)}
-
-            >
-                <td>{props.ndcClassRow.priority}</td>
-                <td>{props.ndcClassRow.specialty_status}</td>
-
-                {/* <td><button className="btn btn-sm btn-info" id="" ><i className="fa fa-eye"></i> View</button></td> */}
-            </tr>
-        </>
-    )
-}
 
 function AccumulatedBenefitList(props) {
 
@@ -1096,13 +1124,13 @@ function AccumulatedBenefitList(props) {
 
     const ndcListArray = [];
     for (let i = 0; i < props.ndcListData.length; i++) {
-        ndcListArray.push(<NdcRow ndcRow={props.ndcListData[i]} getNDCItem={getNDCItem} selected={props.selctedNdc} />);
+        ndcListArray.push(<NdcRow ndcRow={props.ndcListData[i]} getNDCItem={getNDCItem} getNDCItemDetails={getNDCItemDetails} selected={props.selctedNdc} />);
     }
 
-    const ndcClassArray = [];
-    for (let j = 0; j < props.ndcClassData.length; j++) {
-        ndcClassArray.push(<NdcClassRow ndcClassRow={props.ndcClassData[j]} getNDCItemDetails={getNDCItemDetails} selected={props.selctedNdc} />);
-    }
+    // const ndcClassArray = [];
+    // for (let j = 0; j < props.ndcClassData.length; j++) {
+    //     ndcClassArray.push(<NdcClassRow ndcClassRow={props.ndcClassData[j]} getNDCItemDetails={getNDCItemDetails} selected={props.selctedNdc} />);
+    // }
 
     const [ncdListData, setNcdListData] = useState();
     const [show, setShow] = useState("none");
@@ -1178,11 +1206,11 @@ export function ExclusionLimitation(props) {
 
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
-    const [customer, setCustomer] = useOutletContext();
+    const [accum, setAccum] = useOutletContext();
 
-    console.log(customer);
+    console.log(accum);
 
-    useEffect(() => { reset(customer) }, [customer]);
+    useEffect(() => { reset(accum) }, [accum]);
 
 
     return (
@@ -1588,11 +1616,11 @@ export function Deductible(props) {
 
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
-    const [customer, setCustomer] = useOutletContext();
+    const [accum, setAccum] = useOutletContext();
 
-    console.log(customer);
+    console.log(accum);
 
-    useEffect(() => { reset(customer) }, [customer]);
+    useEffect(() => { reset(accum) }, [accum]);
     return (
         <>
             <div className="card mt-3 mb-3">
