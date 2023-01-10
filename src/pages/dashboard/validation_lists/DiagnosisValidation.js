@@ -31,6 +31,10 @@ export default function DiagnosisValidation()
         // setLimitationFormData([]);
         document.getElementById('diagnisisIdForm').reset();
     }
+    const resetForm = (e) => {
+        setAdding(false);
+        document.getElementById('diagnisisIdForm').reset();
+    }
 
 
 //get priority data here name is different
@@ -182,7 +186,7 @@ export default function DiagnosisValidation()
             <DiagnosisList key='DiagnosisList' diagnosisListData={ndcData} ndcClassData={ndcClass} getDiagnosisLimitationsList={getDiagnosisLimitation} getPriorityDiagnosisId={getPriorityDiagnosisId} selctedNdc={priorityDiagnosisFromData} loading={loading} loader={loader} selected={SelectedDiagnosisList} getpriorityDiagnosisFromData={getpriorityDiagnosisFromData}  />
 
             <div ref={scollToRef}>
-                <DiagnosisForm key='DiagnosisForm' viewDiagnosisFormdata={priorityDiagnosisFromData} limitationListData={selectLimitationLists} adding={adding} clearForm={clearForm} />
+                <DiagnosisForm key='DiagnosisForm' viewDiagnosisFormdata={priorityDiagnosisFromData} limitationListData={selectLimitationLists} adding={adding} clearForm={clearForm} resetForm={resetForm} />
             </div>
             <Footer />
 
@@ -276,13 +280,18 @@ function DiagnosisList(props)
             diagnosisListArray.push(<DiagnosisExceptionRow key={'DiagnosisExceptionRow'+i} ndcRow={props.diagnosisListData[i]} getDiagnosisLimitationsList={getDiagnosisLimitationsList} selected={props.selected} />);
         }
     } else {
-        diagnosisListArray.push(<EmptyRowComponent colspan='2' key='EmptyRowComponent'/>)
+        diagnosisListArray.push(<EmptyRowComponent colSpan='2' key='EmptyRowComponent'/>)
     }
 
-const priorityDiagnosisArray = [];
-    for (let j = 0; j < props.ndcClassData.length; j++) {
-        priorityDiagnosisArray.push(<PriorityDiagnosisRow   ndcClassRow={props.ndcClassData[j]} getPriorityDiagnosisId={getPriorityDiagnosisId} selected={props.selctedNdc} getpriorityDiagnosisFromData={props.getpriorityDiagnosisFromData} />);
+    const priorityDiagnosisArray = [];
+    if (props.ndcClassData.length > 0) {
+        for (let j = 0; j < props.ndcClassData.length; j++) {
+            priorityDiagnosisArray.push(<PriorityDiagnosisRow   ndcClassRow={props.ndcClassData[j]} getPriorityDiagnosisId={getPriorityDiagnosisId} selected={props.selctedNdc} getpriorityDiagnosisFromData={props.getpriorityDiagnosisFromData} />);
+        }
+    } else {
+        priorityDiagnosisArray.push(<EmptyRowComponent colSpan='2'/>)
     }
+
 
 
     return(
@@ -483,10 +492,10 @@ function DiagnosisForm(props)
                         progress: undefined,
                     });
 
+                    props.resetForm();
+
                 }
-                reset({ diagnosis_list: '',exception_name:'',diagnosis_id:'',priority:'',diagnosis_status:'' }, {
-                    keepValues: false,
-                });
+
 
 
             })
@@ -557,7 +566,7 @@ function DiagnosisForm(props)
                                 <div className="col-md-4 mb-3">
                                     <div className="form-group">
                                     <small> Diagnosis List ID:</small>
-                                    {props.viewDiagnosisFormdata?<input type="text" name="diagnosis_list" {...register('diagnosis_list',{required:true})}  placeholder="" className="form-control" readonly='readonly' />:<input  type="text" name="diagnosis_list" {...register('diagnosis_list',{required:true})}  placeholder="" className="form-control" />}
+                                    {props.viewDiagnosisFormdata?<input  type="text" name="diagnosis_list" {...register('diagnosis_list',{required:true})}  placeholder="" className="form-control" readonly='readonly' />:<input maxLength='10'  type="text" name="diagnosis_list" {...register('diagnosis_list',{required:true})}  placeholder="Diagnosis List Id" className="form-control" />}
 
                                     <input type="hidden" className="form-control" name="user_name" {...register('user_name')} value={user.name} />
                                     {errors.diagnosis_list && <span><p className="notvalid">This field is required!</p></span>}
@@ -615,7 +624,7 @@ function DiagnosisForm(props)
                             </div>
                             <div class="col-md-12 text-end mt-3 mb-3" >
                                 <button type="submit" className="btn btn-primary "> {props.viewDiagnosisFormdata.diagnosis_list ? 'Update' : 'Add'} </button>
-                                    <button type="button" className="btn btn-warning" > Remove </button>
+                                    {/* <button type="button" className="btn btn-warning" > Remove </button> */}
                                 <button type="button" className="btn btn-danger" onClick={e => props.clearForm(e)}> Clear </button>
                                 </div>
                             </form>
@@ -668,7 +677,7 @@ function DiagnosisForm(props)
 
                                 <div className="col-md-12 text-end">
                                     <button type="submit" className="btn btn-primary "> { limitationFormData ?'Update':'Add'} </button>
-                                    <button type="button" className="btn btn-warning" > Remove </button>
+                                    {/* <button type="button" className="btn btn-warning" > Remove </button> */}
                                      <button type="button" className="btn btn-danger" onClick={e=> props.clearForm(e)}> Clear </button>
                                 </div>
                         </div>

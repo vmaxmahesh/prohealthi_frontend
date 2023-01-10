@@ -1,25 +1,34 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { render } from 'react-dom';
 import { useForm } from 'react-hook-form';
-import { Link, Outlet, useLocation, useOutletContext } from 'react-router-dom';
+import LoadingSpinner from '../../../loader/loader';
+import EmptyRowComponent from '../../../shared/NoDataFound';
+import { toast } from 'react-toastify';
+import {useAuth} from '../../../hooks/AuthProvider';
 
 
 export default function EligibilityValidation() {
-
-
-
-
     const scollToRef = useRef();
+    const [eligibilityDataList, setEligibilityDataList] = useState([]);
+    const [selectedEligbility, setSelectedEligbility] = useState('');
+    const [adding, setAdding] = useState(false);
 
+    //loaders
+    const [loading, setLoading] = useState(false);
 
-    const [ndcData, setNdcData] = useState([]);
-    const [ndcClass, setNdClass] = useState([]);
+    const clearForm = () => {
+        setAdding(false);
+        setSelectedEligbility('');
+        document.getElementById('eligibilityForm').reset();
+    }
 
-    const [selctedNdc, setSelctedNdc] = useState('');
+    const resetForm = () => {
+        setAdding(false);
+        setSelectedEligbility('');
+        document.getElementById('eligibilityForm').reset();
+    }
 
-
-    const searchException = (fdata) => {
-
+    const searchEligibility = (fdata) => {
+        setLoading(true);
         const requestOptions = {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
@@ -29,18 +38,16 @@ export default function EligibilityValidation() {
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
-                //  console.log(response);
-                console.log(data.data);
-
                 // check for error response
                 if (!response.ok) {
                     // get error message from body or default to response status
                     const error = (data && data.message) || response.status;
-                    setNdcData([]);
+                    setEligibilityDataList([]);
                     return Promise.reject(error);
 
                 } else {
-                    setNdcData(data.data);
+                    setEligibilityDataList(data.data);
+                    setLoading(false);
                     return;
                 }
 
@@ -52,89 +59,38 @@ export default function EligibilityValidation() {
             });
     }
 
-    const getNDCItems = (ndcid) => {
-        // ndc_exception_list
+    const getEligibilityItem = (elig_list_id) => {
 
         var test = {};
-        test.ndc_exception_list = ndcid;
-       
+        test.ndc_exception_list = elig_list_id;
 
-        // alert(ndcid);
-
-        // //  console.log(customerid);
         const requestOptions = {
             method: 'GET',
             // mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
             // body: encodeURIComponent(data)
         };
-        // //  console.log(watch(fdata));
 
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/eligibility/details/${ndcid}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/eligibility/details/${elig_list_id}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
-                //  console.log(response);
 
                 // check for error response
                 if (!response.ok) {
                     // get error message from body or default to response status
                     const error = (data && data.message) || response.status;
-                    setSelctedNdc([]);
+                    setSelectedEligbility([]);
                     return Promise.reject(error);
                 } else {
-                    setSelctedNdc(data.data);
-                    // scollToRef.current.scrollIntoView()
-                }
-
-
-                if (response === '200') {
+                    setSelectedEligbility(data.data);
+                    setAdding(true);
                 }
             })
             .catch(error => {
                 console.error('There was an error!', error);
             });
     }
-
-    // getNDCItemList
-    const getNDCItemDetails = (ndcid) => {
-        //  console.log(ndcid);
-        const requestOptions = {
-            method: 'GET',
-            // mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            // body: encodeURIComponent(data)
-        };
-        // //  console.log(watch(fdata));
-
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/diagnosis/details/${ndcid}`, requestOptions)
-            .then(async response => {
-                const isJson = response.headers.get('content-type')?.includes('application/json');
-                const data = isJson && await response.json();
-                //  console.log(response);
-
-                // check for error response
-                if (!response.ok) {
-                    // get error message from body or default to response status
-                    const error = (data && data.message) || response.status;
-                    return Promise.reject(error);
-                } else {
-                    setSelctedNdc(data.data);
-                    console.log(selctedNdc);
-                    scollToRef.current.scrollIntoView()
-                    return;
-                }
-
-
-                if (response === '200') {
-                }
-            })
-            .catch(error => {
-                console.error('There was an error!', error);
-            });
-    }
-
-
 
 
     return (
@@ -160,9 +116,9 @@ export default function EligibilityValidation() {
                 </div>
             </div>
 
-            <SearchEligibility searchException={searchException} />
+            <SearchEligibility searchEligibility={searchEligibility} />
 
-            <EligibilityList ndcListData={ndcData} ndcClassData={ndcClass} getNDCItem={getNDCItems} selctedNdc={selctedNdc} />
+            <EligibilityList key='EligibilityList' eligibilityListData={eligibilityDataList} getEligibilityItem={getEligibilityItem} selectedEligbility={selectedEligbility} loading={loading} clearForm={clearForm} adding={adding} resetForm={resetForm} />
 
 
         </>
@@ -172,10 +128,8 @@ export default function EligibilityValidation() {
 function SearchEligibility(props) {
 
 
-    const searchException = (fdata) => {
-        // alert(fdata);
-
-        props.searchException(fdata);
+    const searchEligibility = (fdata) => {
+        props.searchEligibility(fdata);
     }
 
     return (
@@ -186,14 +140,13 @@ function SearchEligibility(props) {
                         <div className="col-md-12 mb-3">
                             <div className="form-group">
                                 <small>Eligibility Validation ID/Name</small>
-                                <input type="text" onKeyUp={(e) => searchException(e)} className="form-control" placeholder='Start typing eligibility validation ID/name to search'
+                                <input type="text" onKeyUp={(e) => searchEligibility(e)} className="form-control" placeholder='Start typing eligibility validation ID/name to search'
                                 />
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            {/* <EligibilityList /> */}
         </>
     )
 }
@@ -202,30 +155,25 @@ function EligibilityList(props) {
 
     const scollToRef = useRef();
 
-    useEffect(() => { }, [props.selctedNdc]);
-    // //  console.log(props.selctedNdc);
+    useEffect(() => { }, [props.selectedEligbility]);
 
-    const getNDCItem = (ndciemid) => {
-        props.getNDCItem(ndciemid);
+    const getEligibilityItem = (ndciemid) => {
+        props.getEligibilityItem(ndciemid);
     }
 
     const getNDCItemDetails = (ndciemid) => {
         props.getNDCItemDetails(ndciemid);
     }
 
-    const ndcListArray = [];
-    for (let i = 0; i < props.ndcListData.length; i++) {
-        ndcListArray.push(<NdcRow ndcRow={props.ndcListData[i]} getNDCItem={getNDCItem} selected={props.selctedNdc} />);
+    const eligibilityListArray = [];
+    if (props.eligibilityListData.length > 0) {
+        for (let i = 0; i < props.eligibilityListData.length; i++) {
+            eligibilityListArray.push(<EligibilityRow key={'EligibilityRow'+i} eligibilityListRow={props.eligibilityListData[i]} getEligibilityItem={getEligibilityItem} selected={props.selectedEligbility} loading={props.loading} />);
+        }
+    } else {
+        eligibilityListArray.push(<EmptyRowComponent key='EmptyRowComponent' colSpan='2' />);
     }
 
-    // const ndcClassArray = [];
-    // for (let j = 0; j < props.ndcClassData.length; j++) {
-    //     ndcClassArray.push(<NdcClassRow ndcClassRow={props.ndcClassData[j]} getNDCItemDetails={getNDCItemDetails} selected={props.selctedNdc} />);
-    // }
-
-    const [ncdListData, setNcdListData] = useState();
-    const [show, setShow] = useState("none");
-    const handleShow = () => setShow("block");
     return (
         <>
             <div className="card mt-3 mb-3">
@@ -249,7 +197,7 @@ function EligibilityList(props) {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {ndcListArray}
+                                                {props.loading?<LoadingSpinner colSpan='2'/>:eligibilityListArray}
 
                                             </tbody>
                                         </table>
@@ -258,7 +206,7 @@ function EligibilityList(props) {
                             </div>
                         </div>
 
-                        <DiagnosisForm viewDiagnosisFormdata={props.selctedNdc} />
+                        <EligibilityForm viewEligibilityFormdata={props.selectedEligbility} clearForm={props.clearForm} adding={props.adding} resetForm={props.resetForm} />
 
 
                     </div>
@@ -274,48 +222,88 @@ function EligibilityList(props) {
 }
 
 
-function NdcRow(props) {
+function EligibilityRow(props) {
 
     useEffect(() => {
-        console.log(props.selected);
     }, [props.selected]);
-
-
 
     return (
         <>
-            <tr className={(props.selected && props.ndcRow.elig_validation_id == props.selected.elig_validation_id && props.ndcRow.elig_validation_name == props.selected.elig_validation_name   ? ' tblactiverow ' : '')}
+            <tr className={(props.selected && props.eligibilityListRow.elig_validation_id == props.selected.elig_validation_id  ? ' tblactiverow ' : '')}
 
-                onClick={() => props.getNDCItem(props.ndcRow.elig_validation_id)}
+                onClick={() => props.getEligibilityItem(props.eligibilityListRow.elig_validation_id)}
             >
-                <td>{props.ndcRow.elig_validation_id}</td>
-                <td >{props.ndcRow.elig_validation_name}</td>
-
-                {/* <td><button className="btn btn-sm btn-info" id="" ><i className="fa fa-eye"></i> View</button></td> */}
+                <td>{props.eligibilityListRow.elig_validation_id}</td>
+                <td >{props.eligibilityListRow.elig_validation_name}</td>
             </tr>
         </>
     )
 }
 
+function EligibilityForm(props) {
 
+    const { register, reset, handleSubmit,  formState: { errors } } = useForm();
+    const { user } = useAuth();
 
-
-function DiagnosisForm(props) {
-
-    const { register, reset, handleSubmit, watch, formState: { errors } } = useForm();
-
-    // const [selctedNdc, setSelctedNdc] = useOutletContext();
+    const setFamily = () => {
+        reset({cardholder_covd:true, spouse_covd:true, child_covd:true, student_covd:true, disabled_dep_covd:true })
+    }
+    const setAll = () => {
+        reset({cardholder_covd:true, spouse_covd:true, child_covd:true, student_covd:true, disabled_dep_covd:true,adult_dep_covd:true, sig_other_covd:true })
+    }
 
     useEffect(() => {
-        reset(props.viewDiagnosisFormdata);
-        console.log(props.viewDiagnosisFormdata);
-    }, [props.viewDiagnosisFormdata]);
+        if (!props.adding) {
+            reset({ elig_validation_id: '', elig_validation_name: '', age_limit_opt:'', agelimit_month:'', age_limit_day:'', cardholder_covd:'',  spouse_covd:'', child_covd:'', child_age_limit:'', student_covd:'', student_age_limit:'', disabled_dep_covd:'', dis_dep_age_limit:'' , adult_dep_covd:'', sig_other_covd:'', new:1},{keepValues:false});
+        } else {
+            reset(props.viewEligibilityFormdata);
+        }
+    },[props.viewEligibilityFormdata])
+
+    const addEligibilityFormData = (formData) => {
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        }
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/eligibility/submit-eligiblity-form`, requestOptions).then(async response => {
+            const isJson = response.headers.get('Content-Type') ?. includes('application/json');
+            const data = isJson && await response.json();
+            if (!response.ok) {
+                toast.error("There was an error !", {
+                    position: 'top-right',
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    pauseOnHover: true,
+                    closeOnClick: true,
+                    draggable: true,
+                    progress: undefined
+                });
+            } else {
+                toast.success(data.message, {
+                    position: 'top-right',
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    pauseOnHover: true,
+                    closeOnClick: true,
+                    draggable: true,
+                    progress: undefined
+                });
+                props.resetForm();
+
+            }
+        }).catch(error => {
+            console.error('There was an error !', error);
+        });
+    }
 
     return (
         <>
-
-
             <div className="col-md-8">
+                <form id="eligibilityForm" name="eligibilityForm" onSubmit={handleSubmit(addEligibilityFormData)}>
+                <input type="hidden" name="user_name" value={user.name} {...register('user_name')} />
                 <div className="col-md-6">
                     <h5 className="mb-2">Eligibility Identification</h5>
                 </div>
@@ -323,13 +311,15 @@ function DiagnosisForm(props) {
                     <div className="col-md-3 mb-3">
                         <div className="form-group">
                             <small> Eligibility Validation ID: </small>
-                            <input type="text" name="elig_validation_id" {...register('elig_validation_id')} placeholder="" className="form-control" />
+                                <input type="text" name="elig_validation_id" {...register('elig_validation_id', {required:true})} placeholder="Eligibility Validation Id" className="form-control" />
+                                {errors.elig_validation_id && <span><p className="notvalid">This field is required!</p></span>}
                         </div>
                     </div>
                     <div className="col-md-4 mb-3">
                         <div className="form-group">
                             <small>Eligibility Validation Name: </small>
-                            <input type="text" name="elig_validation_name"  {...register('elig_validation_name')} placeholder="100PC" className="form-control" />
+                                <input type="text" name="elig_validation_name"  {...register('elig_validation_name',{required:true})} placeholder="Eligibility Validation Name" className="form-control" />
+                                {errors.elig_validation_name && <span><p className="notvalid">This field is required!</p></span>}
                         </div>
                     </div>
                 </div>
@@ -341,28 +331,43 @@ function DiagnosisForm(props) {
                     <div className="col-md-4 mb-3">
                         <div className="form-group">
                             <small> Age Limit Verification: </small>
-                            <select className="form-select" name="age_limit_opt" {...register('age_limit_opt')}>
-                                <option value="1">Through Birthday</option>
-                                <option value="2">Up to birth day</option>
-                                <option value="3">Through week that birth day occurs</option>
+                            <select className="form-select" name="age_limit_opt" {...register('age_limit_opt', {required:true})}>
+                                <option value="">--Select--</option>
+                                <option value="0">Through Birthday</option>
+                                <option value="1">Up to birth day</option>
+                                <option value="2">Through week that birth day occurs</option>
                                 <option value="3">Through month that birth day occurs</option>
                                 <option value="4">Through year that birth day occurs</option>
                                 <option value="5">Through specified date</option>
-                            </select>
+                                </select>
+                                {errors.age_limit_opt && <span><p className="notvalid">This field is required!</p></span>}
                         </div>
                     </div>
                     <div className="col-md-4 mb-3">
                         <div className="form-group">
                             <small> Age Limit Month: </small>
                             <select className="form-select" name="agelimit_month" {...register('agelimit_month')} >
-                                <option value="1">Through Birthday</option>
-                            </select>
+                                <option value="">--Select--</option>
+                                <option value="1">January</option>
+                                <option value="2">Febrauary</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                                </select>
+                                {errors.agelimit_month && <span><p className="notvalid">This field is required!</p></span>}
                         </div>
                     </div>
                     <div className="col-md-4 mb-3">
                         <div className="form-group">
                             <small>Age Limit Day: </small>
-                            <input type="text" name="age_limit_day"  {...register('age_limit_day')} placeholder="100PC" className="form-control" />
+                            <input type="text" name="age_limit_day"  {...register('age_limit_day')} placeholder="Age Limit Day" className="form-control" maxLength='2'/>
                         </div>
                     </div>
                 </div>
@@ -385,14 +390,12 @@ function DiagnosisForm(props) {
                             <td>Cardholder</td>
                             <td>
                                 <div className="form-group mt-2">
-                                    <input type="checkbox" name="cardholder_covd" {...register('cardholder_covd')} id="Return2" className="d-none" />
+                                    <input type="checkbox" name="cardholder_covd" {...register('cardholder_covd')} id="Return2" className="d-none"  />
                                     <label htmlFor="Return2"></label>
                                 </div>
                             </td>
                             <td> </td>
-
                         </tr>
-
                         <tr>
                             <td>2</td>
                             <td>Spouse</td>
@@ -403,9 +406,7 @@ function DiagnosisForm(props) {
                                 </div>
                             </td>
                             <td> </td>
-
                         </tr>
-
                         <tr>
                             <td>3</td>
                             <td>Child</td>
@@ -420,10 +421,7 @@ function DiagnosisForm(props) {
                                     <input type="text" className="form-control" name="child_age_limit"  {...register('child_age_limit')} />
                                 </div>
                             </td>
-
                         </tr>
-
-
                         <tr>
                             <td>4</td>
                             <td>Student </td>
@@ -438,10 +436,7 @@ function DiagnosisForm(props) {
                                     <input type="text" className="form-control" name="student_age_limit" {...register('student_age_limit')} />
                                 </div>
                             </td>
-
                         </tr>
-
-
                         <tr>
                             <td>5</td>
                             <td>Disabled Dependent</td>
@@ -456,9 +451,7 @@ function DiagnosisForm(props) {
                                     <input type="text" className="form-control" name="dis_dep_age_limit" {...register('dis_dep_age_limit')} />
                                 </div>
                             </td>
-
                         </tr>
-
                         <tr>
                             <td>7</td>
                             <td>Adult Dependent</td>
@@ -469,9 +462,7 @@ function DiagnosisForm(props) {
                                 </div>
                             </td>
                             <td></td>
-
                         </tr>
-
                         <tr>
                             <td>6</td>
                             <td>Significant Other</td>
@@ -482,25 +473,17 @@ function DiagnosisForm(props) {
                                 </div>
                             </td>
                             <td></td>
-
                         </tr>
-
-
-
                     </tbody>
                 </table>
-
-                <div className="col-md-6 ms-auto text-end mb-3">
-                    <button href="" className="btn btn-primary">Set Family</button>&nbsp;&nbsp;
-                    <button href="" className="btn btn-danger">Set All</button>&nbsp;&nbsp;
-                    <button href="" className="btn btn-warning ">Clear</button>&nbsp;&nbsp;
-                </div>
+                    <div className="col-md-6 ms-auto text-end mb-3">
+                        <button type='button' onClick={e => setFamily(e)}  className="btn btn-primary">Set Family</button>&nbsp;&nbsp;
+                        <button type='button' onClick={e => setAll(e)} className="btn btn-danger">Set All</button>&nbsp;&nbsp;
+                        <button type='button' className="btn btn-warning " onClick={e => props.clearForm(e)}>Clear</button>&nbsp;&nbsp;
+                        <button type='submit' className="btn btn-primary">{ props.adding?'Update':'Add'}</button>
+                    </div>
+                </form>
             </div>
-
-
-
-
-
 
         </>
     )

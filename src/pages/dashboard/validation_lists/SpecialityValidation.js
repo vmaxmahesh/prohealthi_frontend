@@ -238,7 +238,7 @@ function SpecialityDataRow(props) {
 
             >
                 <td>{props.specialityDataRow.specialty_id}</td>
-                <td>{props.specialityDataRow.specialty_status}</td>
+                <td>{props.specialityDataRow.specialty_status == 'A'?'Approved':'Rejected'}</td>
             </tr>
         </>
     )

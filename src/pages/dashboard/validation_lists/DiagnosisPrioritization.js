@@ -5,51 +5,60 @@ import DraggableList from "react-draggable-lists";
 import LoadingSpinner from '../../../loader/loader';
 import EmptyRowComponent from '../../../shared/NoDataFound';
 import Footer from '../../../shared/Footer';
-import {useAuth} from '../../../hooks/AuthProvider';
+import { useAuth } from '../../../hooks/AuthProvider';
+import { toast } from 'react-toastify';
 
 export default function DiagnosisPrioritization() {
 
-
-    const [ndcData, setNdcData] = useState([]);
+    const scollToRef = useRef();
+    const scollToRef2 = useRef();
+    //loaders
+    const [loading, setLoading] = useState('');
+    const [prioritizationDiagnosisData, setPrioritizationDiagnosisData] = useState([]);
     const [ndcClass, setNdClass] = useState([]);
 
-    const [selctedNdc, setSelctedNdc] = useState('');
+    const [selectedDiagnosis, setSelectedDiagnosis] = useState(false);
+    const [selectedDiagnosisRow, setSelectedDiagnosisRow] = useState()
+    const [diagnosisValidationData, setDiagnosisValidationData] = useState([]);
+    const [diagnosisDetails, setDiagnosisDetails] = useState([]);
+    const [adding, setAdding] = useState(false);
 
-    const getNDCItems = (ndcid) => {
-        // ndc_exception_list
+    const clearForm = () => {
+        setAdding(false);
+        document.getElementById('DiagnosisForm').reset();
+    }
 
+    const resetForm = () => {
+        setAdding(false);
+        document.getElementById('DiagnosisForm').reset();
+    }
+
+
+    // getDiagnosisvalidationList
+    const getDiagnosisvalidationList = (diagnosis_list) => {
         var test = {};
-        test.ndc_exception_list = ndcid;
-        setSelctedNdc(test);
-
-        // //  console.log(customerid);
+        test.diagnosis_list = diagnosis_list;
+        setSelectedDiagnosis(test);
         const requestOptions = {
             method: 'GET',
             // mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
             // body: encodeURIComponent(data)
         };
-        // //  console.log(watch(fdata));
-
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/diagnosis/get/${ndcid}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/diagnosisvalidation/validation-list/${diagnosis_list}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
-                //  console.log(response);
 
                 // check for error response
                 if (!response.ok) {
                     // get error message from body or default to response status
                     const error = (data && data.message) || response.status;
-                    setNdClass([]);
                     return Promise.reject(error);
                 } else {
-                    setNdClass(data.data);
-                    // scollToRef.current.scrollIntoView()
-                }
-
-
-                if (response === '200') {
+                    setDiagnosisValidationData(data.data);
+                    scollToRef.current.scrollIntoView()
+                    return;
                 }
             })
             .catch(error => {
@@ -57,22 +66,23 @@ export default function DiagnosisPrioritization() {
             });
     }
 
-    // getNDCItemList
-    const getNDCItemDetails = (ndcid) => {
-        //  console.log(ndcid);
+    // getDiagnosisDetails
+    const getDiagnosisDetails = (diagnosis_data) => {
+        var diagnosis_list = diagnosis_data.diagnosis_list;
+        var diagnosis_id = diagnosis_data.diagnosis_id
+        var test = {};
+        test.diagnosis_id = diagnosis_id;
+        setSelectedDiagnosisRow(test);
         const requestOptions = {
             method: 'GET',
             // mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
             // body: encodeURIComponent(data)
         };
-        // //  console.log(watch(fdata));
-
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/diagnosisvalidation/details/${ndcid}`, requestOptions)
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/diagnosisvalidation/details/${diagnosis_list}/${diagnosis_id}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
-                //  console.log(response);
 
                 // check for error response
                 if (!response.ok) {
@@ -80,14 +90,10 @@ export default function DiagnosisPrioritization() {
                     const error = (data && data.message) || response.status;
                     return Promise.reject(error);
                 } else {
-                    setSelctedNdc(data.data);
-                    // console.log(selctedNdc);
-                    scollToRef.current.scrollIntoView()
+                    setDiagnosisDetails(data.data);
+                    setAdding(true);
+                    scollToRef2.current.scrollIntoView()
                     return;
-                }
-
-
-                if (response === '200') {
                 }
             })
             .catch(error => {
@@ -96,7 +102,7 @@ export default function DiagnosisPrioritization() {
     }
 
     const searchException = (fdata) => {
-
+        setLoading(true)
         const requestOptions = {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
@@ -110,15 +116,14 @@ export default function DiagnosisPrioritization() {
                 if (!response.ok) {
                     // get error message from body or default to response status
                     const error = (data && data.message) || response.status;
-                    setNdcData([]);
+                    setPrioritizationDiagnosisData([]);
                     return Promise.reject(error);
 
                 } else {
-                    setNdcData(data.data);
+                    setPrioritizationDiagnosisData(data.data);
+                    setLoading(false)
                     return;
                 }
-
-
 
             })
             .catch(error => {
@@ -149,16 +154,11 @@ export default function DiagnosisPrioritization() {
             </div>
 
             <SearchDiagPrioritization searchException={searchException} />
+            <DiagnosisPrioritizationList prioritizationDiagnosisListData={prioritizationDiagnosisData} ndcClassData={ndcClass} getDiagnosisvalidationList={getDiagnosisvalidationList} selectedDiagnosis={selectedDiagnosis} loading={loading} diagnosisValidationData={diagnosisValidationData} getDiagnosisDetails={getDiagnosisDetails} selectedDiagnosisRow={selectedDiagnosisRow} scollToRef={scollToRef} />
 
-
-
-            <DiagnosisPrioritizationList ndcListData={ndcData} ndcClassData={ndcClass} getNDCItem={getNDCItems} getNDCItemDetails={getNDCItemDetails} selctedNdc={selctedNdc} />
-
-
-
-
-            <DiagPrioritizeForm viewDiagnosisFormdata={selctedNdc} />
-
+            <div ref={scollToRef2}>
+                <DiagPrioritizeForm viewDiagnosisFormdata={diagnosisDetails} clearForm={clearForm} adding={adding} resetForm={resetForm} />
+            </div>
 
         </>
     )
@@ -172,10 +172,6 @@ function SearchDiagPrioritization(props) {
 
         props.searchException(fdata);
     }
-
-
-
-
 
     return (
         <>
@@ -192,38 +188,48 @@ function SearchDiagPrioritization(props) {
                     </div>
                 </div>
             </div>
-            {/* <DiagnosisPrioritizationList /> */}
         </>
     )
 }
 
 function DiagnosisPrioritizationList(props) {
 
-
+    // console.log(props.diagnosisValidationData);
     const scollToRef = useRef();
 
-    useEffect(() => { }, [props.selctedNdc]);
-    // //  console.log(props.selctedNdc);
+    useEffect(() => { }, [props.selectedDiagnosis]);
 
     const getNDCItem = (ndciemid) => {
         props.getNDCItem(ndciemid);
     }
 
-    const getNDCItemDetails = (ndciemid) => {
-        props.getNDCItemDetails(ndciemid);
+    const getDiagnosisvalidationList = (diagnosis_data) => {
+        props.getDiagnosisvalidationList(diagnosis_data);
+    }
+    const getDiagnosisDetails = (diagnosis_data) => {
+        props.getDiagnosisDetails(diagnosis_data);
     }
 
-    const ndcListArray = [];
-    for (let i = 0; i < props.ndcListData.length; i++) {
-        ndcListArray.push(<NdcRow ndcRow={props.ndcListData[i]} getNDCItemDetails={getNDCItemDetails} selected={props.selctedNdc} />);
+    const priorityDiagnosisListArray = [];
+    if (props.prioritizationDiagnosisListData.length > 0) {
+        for (let i = 0; i < props.prioritizationDiagnosisListData.length; i++) {
+            priorityDiagnosisListArray.push(<PrioritizeDiagnosisRow prioritizeDiagnosisRow={props.prioritizationDiagnosisListData[i]} getDiagnosisvalidationList={getDiagnosisvalidationList} selected={props.selectedDiagnosis} />);
+        }
+    } else {
+        priorityDiagnosisListArray.push(<EmptyRowComponent colSpan='2'/>)
     }
 
-    const ndcClassArray = [];
-    for (let j = 0; j < props.ndcClassData.length; j++) {
-        ndcClassArray.push(<NdcClassRow ndcClassRow={props.ndcClassData[j]} getNDCItemDetails={getNDCItemDetails} selected={props.selctedNdc} />);
+
+    const diagnosisValidationArray = [];
+    if(props.diagnosisValidationData.length>0){
+        for (let j = 0; j < props.diagnosisValidationData.length; j++) {
+            diagnosisValidationArray.push(<DiagnosisValidationRow diagnosisValidationRow={props.diagnosisValidationData[j]} getDiagnosisvalidationList={getDiagnosisvalidationList} selected={props.selectedDiagnosisRow} getDiagnosisDetails={getDiagnosisDetails} />);
+        }
+    } else {
+        diagnosisValidationArray.push(<EmptyRowComponent colSpan='5'/>)
     }
 
-    const [ncdListData, setNcdListData] = useState();
+
     return (
         <>
             <div className="card mt-3 mb-3">
@@ -247,8 +253,41 @@ function DiagnosisPrioritizationList(props) {
                                             </thead>
                                             <tbody>
 
-                                                {ndcListArray}
+                                                {props.loading?<LoadingSpinner colSpan='2'/>: priorityDiagnosisListArray}
 
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="card mt-3 mb-3" ref={props.scollToRef}>
+                <div className="card-body">
+                    <div className="row">
+                        <div className="col-md-8 mb-2">
+                            <h5>Validations Diagnosis List</h5>
+                        </div>
+                        <div className="col-md-4 mb-3 text-end">
+                        </div>
+                        <div className="col-md-12">
+                            <div className="card mt-3 mb-3">
+                                <div className="card-body">
+                                    <div style={{ height: '400px', overflowY: 'scroll' }}>
+                                        <table className="table table-striped table-bordered" style={{ position: 'relative' }}>
+                                            <thead className='stickt-thead'>
+                                                <tr>
+                                                    <th>Diagnosis Validation ID</th>
+                                                    <th>Diagnosis Validation Name</th>
+                                                    <th>Diagnosis Status</th>
+                                                    <th>Diagnosis Priority</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {props.loading?<LoadingSpinner colSpan='5'/>: diagnosisValidationArray}
                                             </tbody>
                                         </table>
                                     </div>
@@ -264,88 +303,105 @@ function DiagnosisPrioritizationList(props) {
 }
 
 function DiagPrioritizeForm(props) {
-
     const { register, reset, handleSubmit, watch, formState: { errors } } = useForm();
 
-    // const [selctedNdc, setSelctedNdc] = useOutletContext()
+    useEffect(() => {
+        if (!props.adding) {
+            reset({diagnosis_list:'', exception_name:'', diagnosis_id:'', diagnosis_status:'' })
+        } else {
+            reset(props.viewDiagnosisFormdata)
+        }
+    }, [props.viewDiagnosisFormdata]);
 
+    const updatePriorityData = (formData) => {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        }
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/diagnosisvalidation/submit-diagnosis-validation-form`, requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('Content-Type')?.includes('application/json');
+                const data = isJson && await response.json();
+                if (!response.ok) {
+                    toast.error("There was an error !", {
+                        position: 'top-right',
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        pauseOnHover: true,
+                        closeOnClick: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                }else {
+                    toast.success(data.message, {
+                        position: 'top-right',
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        pauseOnHover: true,
+                        closeOnClick: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                    props.resetForm();
 
+                }
+            })
+            .catch(error => {
+                console.error('There was an error !', error);
+            });
+    }
 
-    // useEffect(() => {  [props.viewDiagnosisFormdata]});
-
-    // useEffect(() => { }, [props.viewDiagnosisFormdata]);
-
-    useEffect(() => { reset(props.viewDiagnosisFormdata) }, [props.viewDiagnosisFormdata]);
-
-
-    // console.log(props.viewDiagnosisFormdata);
     return (
         <>
             <div className="card mt-3 mb-3">
                 <div className="card-body">
-
+                <form id='DiagnosisForm' name='DiagnosisForm' onSubmit={handleSubmit(updatePriorityData)}>
                     <div className="row">
                         <div className="col-md-6 mb-3">
                             <div className="form-group">
                                 <small>Priotrize Diagnosis List ID</small>
-                                <input type="text" className="form-control" name="diagnosis_id" {...register('diagnosis_id')} id="" placeholder="" required />
+                                <input type="text" className="form-control" name="diagnosis_list" {...register('diagnosis_list')} id="" placeholder="" readOnly />
                             </div>
                         </div>
                         <div className="col-md-6 mb-3">
                             <div className="form-group">
                                 <small>Priotrize Diagnosis List Name</small>
-                                <input type="text" className="form-control" name="exception_name" {...register('exception_name')} id="" placeholder="" required />
+                                <input type="text" className="form-control" name="exception_name" {...register('exception_name')} id="" placeholder="" readOnly />
                             </div>
                         </div>
                         <div className="col-md-6 mb-3">
                             <div className="form-group ">
                                 <small> Priotrize Diagnosis ID </small>
                                 <div className="searchmodal">
-                                    <input type="text" name="diagnosis_id" {...register('diagnosis_id')} className="form-control" placeholder="" />
-                                    <button className="btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal"><i className="fa-solid fa-magnifying-glass"></i></button>
+                                    <input type="text" name="diagnosis_id" {...register('diagnosis_id')} className="form-control" placeholder="" readOnly/>
+
                                 </div>
                             </div>
                         </div>
                         <div className="col-md-6 mb-3">
                             <div className="form-group">
                                 <small>Priotrize Diagnosis Status</small>
-                                <select className="form-select" name="diagnosis_status" {...register('diagnosis_status')}>
+                                <select className="form-select" name="diagnosis_status" {...register('diagnosis_status')} readOnly>
                                     <option value="">--select--</option>
                                     <option value="A">Approved</option>
                                     <option value="R">Rejected</option>
                                 </select>
                             </div>
+                            </div>
+                            <div className="col-md-6 mb-3">
+                            <div className="form-group">
+                                <small>Priotrize Diagnosis priority</small>
+                                <input type="text" name="priority" {...register('priority')} className="form-control" placeholder=""/>
+                            </div>
                         </div>
                     </div>
-                    <div>click on list and drag new position to assign new priority</div>
-                    <Row>
-                        <Col>
-                            {/* <DiagPrioritizeDragable  data={props.viewDiagnosisFormdata} /> */}
-                            {/* <DraggableList width={300} height={50} rowSize={1} className="draggablelist">
-                                {props.viewDiagnosisFormdata ?
-                                    props.viewDiagnosisFormdata.map((item, index) => (
-                                        // console.log(item.diagnosis_list)
 
-                                        <li key={index}>{`${index + 1}.  ${item.diagnosis_list}`}</li>
-                                        ))
-                                    : ''}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                            </DraggableList> */}
-                        </Col>
-                    </Row>
+                    <div className="col-md-12 text-end">
+                        <button type="submit" className="btn btn-primary ">{ props.viewDiagnosisFormdata ?'Update':'Add' } </button>&nbsp;&nbsp;
+                                     <button onClick={e=>props.clearForm(e)} type="button" className="btn btn-danger"> Clear </button>
+                        </div>
+                </form>
                 </div>
             </div>
 
@@ -356,56 +412,38 @@ function DiagPrioritizeForm(props) {
 }
 
 
-function NdcRow(props) {
+function PrioritizeDiagnosisRow(props) {
 
-    useEffect(() => {
-
-    }, [props.selected]);
-
-
-
+    useEffect(() => {  }, [props.selected]);
     return (
         <>
-            <tr className={(props.selected && props.ndcRow.diagnosis_list == props.selected.diagnosis_list ? ' tblactiverow ' : '')}
+            <tr className={(props.selected && props.prioritizeDiagnosisRow.diagnosis_list == props.selected.diagnosis_list ? ' tblactiverow ' : '')}
 
-                onClick={() => props.getNDCItemDetails(props.ndcRow.diagnosis_list)}
+                onClick={() => props.getDiagnosisvalidationList(props.prioritizeDiagnosisRow.diagnosis_list)}
             >
-                <td>{props.ndcRow.diagnosis_list}</td>
-                <td >{props.ndcRow.exception_name}</td>
-
-                {/* <td><button className="btn btn-sm btn-info" id="" ><i className="fa fa-eye"></i> View</button></td> */}
+                <td>{props.prioritizeDiagnosisRow.diagnosis_list}</td>
+                <td >{props.prioritizeDiagnosisRow.exception_name}</td>
             </tr>
         </>
     )
 }
 
-function DiagPrioritizeDragable(props) {
-
-    const listItems = [
-        "Entertainment",
-        "Private Time",
-        "Rest",
-        "Meal",
-        "Exercise",
-        "Work",
-        "Home Projects",
-        "Family"
-    ];
-
-    const index = 0;
-
-
-
+function DiagnosisValidationRow(props) {
     useEffect(() => {
 
-        if (props.data == '') {
-
-        }
-
-    }, [props.data]);
+    }, [props.selected]);
     return (
         <>
+            <tr className={(props.selected && props.diagnosisValidationRow.diagnosis_id == props.selected.diagnosis_id ? ' tblactiverow ' : '')}
 
+                onClick={() => props.getDiagnosisDetails(props.diagnosisValidationRow)}
+            >
+                <td>{props.diagnosisValidationRow.diagnosis_id}</td>
+                <td >{props.diagnosisValidationRow.diagnosis_list}</td>
+                <td >{props.diagnosisValidationRow.diagnosis_status=='A'?'Approved':'Rejected'}</td>
+                <td >{props.diagnosisValidationRow.priority}</td>
+
+            </tr>
         </>
     )
 }
