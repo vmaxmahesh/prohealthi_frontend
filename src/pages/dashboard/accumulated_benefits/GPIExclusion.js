@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Button } from 'react-bootstrap';
 import { render } from 'react-dom';
 import { useForm } from 'react-hook-form';
 import { Link, Outlet, useLocation, useOutletContext } from 'react-router-dom';
+import { toast } from 'react-toastify';
 export default function GPIExclusion()
 {
 
@@ -10,6 +12,24 @@ export default function GPIExclusion()
     const [ndcClass, setNdClass] = useState([]);
 
     const [selctedNdc, setSelctedNdc] = useState('');
+    const [gpiecclusiondata, setGpiData] = useState(false);
+    const [adding, setAdding] = useState(false);
+
+
+  
+
+
+    useEffect(() => {
+        if (gpiecclusiondata) {
+            setAdding(false);
+
+        } else {
+            setAdding(true);
+        }
+
+        document.title = 'Benefit Code | ProHealthi';
+
+    }, [gpiecclusiondata, adding]);
 
 
     const searchException = (fdata) => {
@@ -109,7 +129,7 @@ export default function GPIExclusion()
                     const error = (data && data.message) || response.status;
                     return Promise.reject(error);
                 } else {
-                    setSelctedNdc(data.data);
+                    setGpiData(data.data);
                     // scollToRef.current.scrollIntoView()
                     // return;
                 }
@@ -150,7 +170,7 @@ export default function GPIExclusion()
             <GPIExclusionList ndcListData={ndcData} ndcClassData={ndcClass} getNDCItem={getNDCItems} getNDCItemDetails={getNDCItemDetails} selctedNdc={selctedNdc} />
 
 
-            <GPIExclusionForm  viewDiagnosisFormdata={selctedNdc} />
+            <GPIExclusionForm  viewDiagnosisFormdata={gpiecclusiondata} selected={gpiecclusiondata} adding={adding} />
 
 
         </>
@@ -337,10 +357,101 @@ function GPIExclusionForm(props)
 
     // const [selctedNdc, setSelctedNdc] = useOutletContext();
 
+
+
+    const addCode = (data) => {
+        // console.log(data);
+        const requestOptions = {
+            method: 'POST',
+            // mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+
+        };
+        // console.log(watch(data)); 
+        if (process.env.REACT_APP_API_BASEURL == 'NOT') {
+            toast.success('Added Successfully...!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+
+            });
+        } else {
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/gpiExclusion/add`, requestOptions)
+                .then(async response => {
+                    const isJson = response.headers.get('content-type')?.includes('application/json');
+                    const data = isJson && await response.json();
+                    // console.log(response);
+
+                    // check for error response
+                    if (!response.ok) {
+                        // get error message from body or default to response status
+                        const error = (data && data.message) || response.status;
+                        return Promise.reject(error);
+                    } else {
+                        reset(data.data);
+                        console.log(data.data);
+                        var msg = props.adding ? 'Added Successfully...!' : 'Updated Successfully..'
+                        toast.success(msg, {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+
+                        });
+                    }
+
+
+                    if (response === '200') {
+                    }
+
+                })
+                .catch(error => {
+                    console.error('There was an error!', error);
+                });
+        }
+
+    }
+    const onSubmit = (e) => {
+        e.preventDefault();
+    }
+
+
+    useEffect(() => {
+
+
+        if (props.adding) {
+            reset({ gpi_exclusion_list: '', exclusion_name: '',generic_product_id:'', new: 1 }, {
+                keepValues: false,
+            })
+        } else {
+            reset(props.selected);
+        }
+
+        if (!props.selected) {
+            reset({ rx_network_rule_id: '', rx_network_rule_name: '', description: '', pharm_type_variation_ind: '', network_part_variation_ind: '', claim_type_variation_ind: '', plan_accum_deduct_id: '', new: 1 }, {
+                keepValues: false,
+            })
+        }
+
+
+    }, [props.selected, props.adding]);
+
+
+
     useEffect(() => { reset(props.viewDiagnosisFormdata) }, [props.viewDiagnosisFormdata]);
     return(
         <>
-         <div className="card mt-3 mb-3">
+            <form onSubmit={handleSubmit(addCode)} >
+
+        <div className="card mt-3 mb-3">
                     <div className="card-body">
                         <div className="col-md-12">
                                 <h5 className="mb-2">GPI Exclusion</h5>
@@ -370,6 +481,13 @@ function GPIExclusionForm(props)
                             </div>
                         </div>
                     </div>
+
+
+                    <Button type='submit' variant="primary">{props.adding ? ' Add' : 'Update'}</Button>
+
+
+        </form>
+      
         </>
     )
 }
