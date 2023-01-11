@@ -48,7 +48,24 @@ body {
     color: #100f0c;
     font-size: 14px;
 }
-
+.form-select-options li {
+    list-style: none !important;
+    background: #d7d9da;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 5px;
+}
+.form-select-input {
+    padding: 7px 10px;
+    background-color: #d7d9da;
+    border: none;
+    border-radius: 0px;
+    width: 100%;
+}
+.form-select-option {
+    background: #d7d9da;
+    border: 0;
+}
 .login-left {
     width: 50%;
     background: #efeffb;

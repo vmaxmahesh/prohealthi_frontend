@@ -198,24 +198,15 @@ function EligibilityList(props) {
                                             </thead>
                                             <tbody>
                                                 {props.loading?<LoadingSpinner colSpan='2'/>:eligibilityListArray}
-
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                         <EligibilityForm viewEligibilityFormdata={props.selectedEligbility} clearForm={props.clearForm} adding={props.adding} resetForm={props.resetForm} />
-
-
                     </div>
                 </div>
-
-
-
-
-
             </div>
         </>
     )
@@ -298,6 +289,9 @@ function EligibilityForm(props) {
             console.error('There was an error !', error);
         });
     }
+    const [isReadonlyChild, setIsReadonlyChild] = useState(true);
+    const [isReadonlyStudent, setIsReadonlyStudent] = useState(true);
+    const [isReadonlyDisabled, setIsReadonlyDisabled] = useState(true);
 
     return (
         <>
@@ -349,7 +343,7 @@ function EligibilityForm(props) {
                             <select className="form-select" name="agelimit_month" {...register('agelimit_month')} >
                                 <option value="">--Select--</option>
                                 <option value="1">January</option>
-                                <option value="2">Febrauary</option>
+                                <option value="2">February</option>
                                 <option value="3">March</option>
                                 <option value="4">April</option>
                                 <option value="5">May</option>
@@ -412,13 +406,14 @@ function EligibilityForm(props) {
                             <td>Child</td>
                             <td>
                                 <div className="form-group mt-2">
-                                    <input type="checkbox" id="Return4" nam="child_covd" {...register('child_covd')} className="d-none" />
+                                        <input onClick={() => { setIsReadonlyChild(prevState => !prevState) }} type="checkbox" id="Return4" {...register('child_covd')} className="d-none" />
                                     <label htmlFor="Return4"></label>
                                 </div>
                             </td>
                             <td>
-                                <div className="form-group">
-                                    <input type="text" className="form-control" name="child_age_limit"  {...register('child_age_limit')} />
+                                    <div className="form-group">
+                                        <input readOnly={props.viewEligibilityFormdata.child_covd == true || props.viewEligibilityFormdata.child_covd == undefined ?isReadonlyChild:''} maxLength='3' type="text" className="form-control" name="child_age_limit"  {...register('child_age_limit')} />
+                                        {errors.child_age_limit && <span><p className="notvalid">This field is required!</p></span>}
                                 </div>
                             </td>
                         </tr>
@@ -427,13 +422,13 @@ function EligibilityForm(props) {
                             <td>Student </td>
                             <td>
                                 <div className="form-group mt-2">
-                                    <input type="checkbox" id="Return8" name="student_covd" {...register('student_covd')} className="d-none" />
+                                    <input type="checkbox" id="Return8" name="student_covd" {...register('student_covd')} className="d-none" onClick={()=>{setIsReadonlyStudent(prevState =>! prevState)}} />
                                     <label htmlFor="Return8"></label>
                                 </div>
                             </td>
                             <td>
                                 <div className="form-group">
-                                    <input type="text" className="form-control" name="student_age_limit" {...register('student_age_limit')} />
+                                    <input readOnly={props.viewEligibilityFormdata.student_age_limit == true || props.viewEligibilityFormdata.student_age_limit == undefined ?isReadonlyStudent:''} type="text" className="form-control" name="student_age_limit" {...register('student_age_limit')} maxLength='3' />
                                 </div>
                             </td>
                         </tr>
@@ -442,13 +437,13 @@ function EligibilityForm(props) {
                             <td>Disabled Dependent</td>
                             <td>
                                 <div className="form-group mt-2">
-                                    <input type="checkbox" id="Return5" name="disabled_dep_covd" {...register('disabled_dep_covd')} className="d-none" />
+                                    <input type="checkbox" id="Return5" name="disabled_dep_covd" {...register('disabled_dep_covd')} className="d-none" onClick={() =>{setIsReadonlyDisabled(prevState => !prevState)} } />
                                     <label htmlFor="Return5"></label>
                                 </div>
                             </td>
                             <td>
                                 <div className="form-group">
-                                    <input type="text" className="form-control" name="dis_dep_age_limit" {...register('dis_dep_age_limit')} />
+                                    <input readOnly={props.viewEligibilityFormdata.dis_dep_age_limit == true || props.viewEligibilityFormdata.dis_dep_age_limit == undefined ?isReadonlyDisabled:''} type="text" className="form-control" name="dis_dep_age_limit" {...register('dis_dep_age_limit')} maxLength='3'/>
                                 </div>
                             </td>
                         </tr>

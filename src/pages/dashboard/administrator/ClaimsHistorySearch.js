@@ -3,7 +3,6 @@ import { Link, Outlet, useLocation } from 'react-router-dom';
 
 function ClaimsHistorySearch() {
     const location = useLocation();
-
     const currentpath = location.pathname.split('/').pop();
     return (
 

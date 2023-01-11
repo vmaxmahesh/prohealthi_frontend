@@ -193,8 +193,6 @@ function SearchDiagPrioritization(props) {
 }
 
 function DiagnosisPrioritizationList(props) {
-
-    // console.log(props.diagnosisValidationData);
     const scollToRef = useRef();
 
     useEffect(() => { }, [props.selectedDiagnosis]);

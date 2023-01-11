@@ -639,13 +639,13 @@ function DiagnosisForm(props)
                                 <div className="col-md-4 mb-3">
                                     <div className="form-group">
                                         <small>Effective Date:</small>
-                                          <input type="text" name="effective_date" {...register('effective_date')} placeholder="Effective Date" className="form-control" />
+                                          <input type="date" name="effective_date" {...register('effective_date')} placeholder="Effective Date" className="form-control" />
                                     </div>
                                 </div>
                                  <div className="col-md-4 mb-3">
                                     <div className="form-group">
                                         <small>Termination Date:</small>
-                                          <input type="text" name="termination_date" {...register('termination_date')} placeholder="Termination Date" className="form-control" />
+                                          <input type="date" name="termination_date" {...register('termination_date')} placeholder="Termination Date" className="form-control" />
                                     </div>
                                 </div>
                                  <div className="col-md-4 mb-3">
