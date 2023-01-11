@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { json, Link, Outlet, useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import SelectSearch, { useSelect } from 'react-select-search';
 import { toast } from "react-toastify";
-import 'react-select-search/style.css'
+import 'react-select-search/style.css';
+import AsyncSelect from 'react-select';
 
 
 export default function UserDefinition() {
@@ -19,7 +20,6 @@ export default function UserDefinition() {
         setGroupRowData(group);
         // navigate('/dashboard/administrator/user-definition/group');
         navigate('/dashboard/administrator/user-definition/group', { state: { group_id: group.group_id, group_name: group.group_name, type: 'groupForm' } });
-
 
     }
 
@@ -188,16 +188,7 @@ function UserDefinitionList(props) {
                         </tr>
                     </thead>
                     <tbody>
-                        {/* <tr onClick={e => props.loadUserDefinitionForm(e)}>
-                            <td>User ID 1</td>
-                            <td>User Last Name 1</td>
-                            <td>User First Name 1</td>
-                        </tr>
-                        <tr onClick={e => props.loadUserDefinitionForm(e)}>
-                            <td>User ID 2</td>
-                            <td>User Last Name 2</td>
-                            <td>User First Name 2</td>
-                        </tr> */}
+
                         {userArry}
                     </tbody>
                 </table>
@@ -268,32 +259,13 @@ export function UserDF(props) {
     useEffect(() => { reset(props.formData) }, [props.formData]);
     return (
         <>
-            {/* <div className="card mt-3 mb-3">
-                <div className="row">
-                    <div className="col-md-12">
-                        <div className="card mt-3 mb-3">
-                            <div className="card-body"> */}
-            {/* <div className="col-md-8 mb-2">
-                                        <h5></h5>
-                                    </div> */}
-            {/* {currentpath == 'definition' ? ( */}
+
             <div className="data">
                 <div className="nav nav-tabs" id="nav-tab" role="tablist">
                     <Link to="definition" className={'nav-link' + (currentpath == 'definition' ? ' active' : '')}>Definition</Link>
                     <Link to="data-access" className={'nav-link' + (currentpath == 'data-access' ? ' active' : '')}>Data Access</Link>
                 </div>
-                {/* <hr /> */}
-                {/* <div className="tab-content" id="nav-tabContent">
-                    <Outlet />
-                </div> */}
             </div>
-            {/* ) : <GroupForm />} */}
-            {/* </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div> */}
         </>
     )
 }
@@ -433,7 +405,7 @@ export function UDefinitionTab() {
         <>
             <div className="card mt-3 mb-3">
                 <div className="card-body">
-                    <form onSubmit={handleSubmit(addUser)}>
+                    <form  onSubmit={handleSubmit(addUser)}>
                         <div className="col-md-12 mb-2">
                             <h5>User Information</h5>
                         </div>
@@ -586,23 +558,14 @@ export function UDefinitionTab() {
 
 export function DataAccessTab() {
     const [formData, setFormData] = useOutletContext();
-    const { register, handleSubmit, reset, watch, formState: { errors } } = useForm();
+    const { register, handleSubmit, reset, control, formState: { errors } } = useForm();
     const [custData, setCustData] = useState([]);
 
 
     const getCustomers = (user_id) => {
-        // axios
-        //     .get('https://cataas.com/cat?json=true')
-        //     .then((res) => {
-        //         console.log(res);
-        //         setCatUrl('https://cataas.com' + res.data.url);
-        //     })
-        //     .catch((err) => {
-        //         console.error('Error:', err);
-        //         setError(err);
-        //     });
 
-        return new Promise((resolve, reject) => {
+
+        return new Promise((resolve) => {
             const requestOptions = {
                 method: 'GET',
                 headers: { 'content-type': 'application/json' }
@@ -612,48 +575,14 @@ export function DataAccessTab() {
                     const isJson = response.headers.get('content-type')?.includes('application/json');
                     const data = isJson && await response.json();
                     setCustData(data.data);
-                    console.log(custData);
-                    // custData.map(opt => ({ label: data.data.customer_name, value: data.data.customer_id }));
-                    // custData.map(opt => { console.log(opt); });
-
-                    // let printFish = custData.map(individualFish => ({label: individualFish.customer_name, value: individualFish.customer_id                        
-                    // }));
 
                     resolve(custData.map(({ label, value }) => ({
                         value: custData.value, label: custData.label
                     })));
-                    console.log(custData);
+
                 });
         });
     }
-
-
-
-
-
-    const customers = [
-        { value: '123', label: 'lab1' },
-        { value: '1234', label: 'lab2' },
-        { value: '1235', label: 'lab3' },
-        { value: '1236', label: 'lab4' },
-    ];
-
-
-    const clients = [
-        { value: '123', label: 'client1' },
-        { value: '1234', label: 'client2' },
-        { value: '1235', label: 'client3' },
-        { value: '1236', label: 'client4' },
-    ];
-
-    const client_groups = [
-        { value: '123', label: 'client_groups1' },
-        { value: '1234', label: 'client_groups2' },
-        { value: '1235', label: 'client_groups3' },
-        { value: '1236', label: 'client_groups4' },
-    ];
-
-    const custListArray = [];
 
     useEffect(() => {
         reset(formData)
@@ -664,17 +593,54 @@ export function DataAccessTab() {
         getCustomers(formData.user_id);
     }, []);
 
-    const options = [
-        { name: 'Swedish', value: 'sv' },
-        { name: 'English', value: 'en' },
-        {
-            type: 'group',
-            name: 'Group name',
-            items: [
-                { name: 'Spanish', value: 'es' },
-            ]
-        },
-    ];
+
+
+    //fetch customer data
+    const [customerId, setCustomerId] = useState([]);
+    const fetchCustomerId = () => {
+        fetch(process.env.REACT_APP_API_BASEURL +`/api/administrator/user-defination/get-customers-list`)
+        .then((res) => res.json())
+        .then((customerId) => {
+        const customerIdList = customerId.data.map((item) => ({
+            label: item.customer_id +' - '+ item.customer_name,
+            value: item.customer_id
+        }));
+        setCustomerId(customerIdList);
+        });
+    }
+    //fetch client data
+    const [clientId, setClientId] = useState([]);
+    const fetchClientId = () => {
+        fetch(process.env.REACT_APP_API_BASEURL +`/api/administrator/user-defination/get-clients`)
+        .then((res) => res.json())
+        .then((clientId) => {
+        const clientIdList = clientId.data.map((item) => ({
+            label: item.client_id +' - '+ item.client_name,
+            value: item.client_id
+        }));
+        setClientId(clientIdList);
+        });
+    }
+
+    //fetch client group data
+    const [clientGroupId, setClientGroupId] = useState([]);
+    const fetchClientGroupId = () => {
+        fetch(process.env.REACT_APP_API_BASEURL +`/api/administrator/user-defination/get-client-groups`)
+        .then((res) => res.json())
+        .then((clientGroupId) => {
+        const clientGroupIdList = clientGroupId.data.map((item) => ({
+            label: item.client_group_id +' - '+ item.group_name,
+            value: item.client_group_id
+        }));
+        setClientGroupId(clientGroupIdList);
+        });
+    }
+
+    useEffect(() => {
+        fetchCustomerId();
+        fetchClientId();
+        fetchClientGroupId();
+    }, [])
 
     return (
         <>
@@ -688,98 +654,56 @@ export function DataAccessTab() {
                             <div className="col-md-4 mb-2">
                                 <div className="form-group">
                                     <small>Customer</small>
-                                    <SelectSearch {...register("customer_id", { required: true })}
-                                        options={[]}
-                                        multiple
-                                        getOptions={(query) => {
-                                            return new Promise((resolve, reject) => {
-                                                fetch(
-                                                    process.env.REACT_APP_API_BASEURL + `/api/administrator/user-defination/get-customers?search=${query}&user_id=${formData.user_id}`
-                                                )
-                                                    .then((response) => response.json())
-                                                    .then(({ data }) => {
-                                                        resolve(
-                                                            data.map(({ value, label }) => ({
-                                                                value: value,
-                                                                name: label,
-                                                            })),
-                                                        );
-                                                    })
-                                                    .catch(reject);
-                                            });
-                                        }}
-                                        search
-                                        placeholder="Enter Customer ID/Name"
-                                    />
-                                    {/* {console.log(custData)} */}
+                                    <Controller name="customer_id"
+                                            control={control}
+                                            rules={{ required: true }}
+                                            render={({ field }) => (
+                                                <AsyncSelect
+                                                {...field}
+                                                    placeholder="Select Customer ID"
+                                                    options={customerId}
+                                                    noOptionsMessage={() => "Customer ID/Name Not Matched"}
+                                                />
+                                            )} />
 
-                                     {/* <Select {...register("client_id", { required: true })}
-                                        className="form-select" defaultValue={{ label: "Select Client", value: "" }}
-                                        options={clients} /> */}
+
                                 </div>
                             </div>
                             <div className="col-md-4 mb-2">
                                 <div className="form-group">
                                     <small>Client</small>
-                                    {/* <Select {...register("client_id", { required: true })}
-                                        className="form-select" defaultValue={{ label: "Select Client", value: "" }}
-                                        options={clients} /> */}
 
-                                    <SelectSearch {...register("client_id", { required: true })}
-                                        options={[]}
-                                        multiple
-                                        getOptions={(query) => {
-                                            return new Promise((resolve, reject) => {
-                                                fetch(
-                                                    process.env.REACT_APP_API_BASEURL + `/api/administrator/user-defination/get-clients?search=${query}&user_id=${formData.user_id}`
-                                                )
-                                                    .then((response) => response.json())
-                                                    .then(({ data }) => {
-                                                        resolve(
-                                                            data.map(({ value, label }) => ({
-                                                                value: value,
-                                                                name: label,
-                                                            })),
-                                                        );
-                                                    })
-                                                    .catch(reject);
-                                            });
-                                        }}
-                                        search
-                                        placeholder="Enter Client ID/Name"
-                                    />
+                                    <Controller name="client_id"
+                                            control={control}
+                                            rules={{ required: true }}
+                                            render={({ field }) => (
+                                                <AsyncSelect
+                                                {...field}
+                                                    placeholder="Select Client ID"
+                                                    options={clientId}
+                                                    noOptionsMessage={() => "Client ID/Name Not Matched"}
+                                                />
+                                            )} />
+
+
+
                                 </div>
                             </div>
                             <div className="col-md-4 mb-2">
                                 <div className="form-group">
                                     <small>Client Group</small>
-                                    {/* <Select  {...register("client_groups", { required: true })}
-                                        className="form-select" defaultValue={{ label: "Select Client Group", value: "" }}
-                                        options={client_groups} /> */}
+                                    <Controller name="client_groups"
+                                            control={control}
+                                            rules={{ required: true }}
+                                            render={({ field }) => (
+                                                <AsyncSelect
+                                                {...field}
+                                                    placeholder="Select Client Group ID"
+                                                    options={clientGroupId}
+                                                    noOptionsMessage={() => "Client Group ID/Name Not Matched"}
+                                                />
+                                            )} />
 
-                                    <SelectSearch {...register("client_groups", { required: true })}
-                                        options={[]}
-                                        multiple
-                                        getOptions={(query) => {
-                                            return new Promise((resolve, reject) => {
-                                                fetch(
-                                                    process.env.REACT_APP_API_BASEURL + `/api/administrator/user-defination/get-client-groups?search=${query}&user_id=${formData.user_id}`
-                                                )
-                                                    .then((response) => response.json())
-                                                    .then(({ data }) => {
-                                                        resolve(
-                                                            data.map(({ value, label }) => ({
-                                                                value: value,
-                                                                name: label,
-                                                            })),
-                                                        );
-                                                    })
-                                                    .catch(reject);
-                                            });
-                                        }}
-                                        search
-                                        placeholder="Enter Client Group ID/Name"
-                                    />
 
                                 </div>
                             </div>
@@ -788,6 +712,8 @@ export function DataAccessTab() {
                                     <small>Status</small>
                                     <select className="form-select" {...register("customer_id", { required: true })}>
                                         <option value="">Select</option>
+                                        <option value="A">Active</option>
+                                        <option value="I">In Active</option>
                                     </select>
                                 </div>
                             </div>
@@ -796,6 +722,9 @@ export function DataAccessTab() {
                                     <small>Exclude Flag</small>
                                     <select className="form-select" {...register("customer_id", { required: true })}>
                                         <option value="">Select</option>
+                                        <option value="Y">Yes</option>
+                                        <option value="N">No</option>
+                                        <option value="R">Restricted</option>
                                     </select>
                                 </div>
                             </div>
