@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useRef } from 'react';
-import { Tab, Tabs } from 'react-bootstrap';
 import { Controller, useForm } from 'react-hook-form';
 import { Link, Outlet, resolvePath, useLocation, useOutletContext } from 'react-router-dom';
 import AsyncSelect from 'react-select/async';
 import { toast } from 'react-toastify';
 import LoadingSpinner from '../../../loader/loader';
 
-
 export default function PlanEdit() {
-    const { register, handleSubmit } = useForm();
 
     const [planEditList, setPlanEditList] = useState([]);
     const [planEditForm, setPlanEditForm] = useState(false);
@@ -74,7 +71,7 @@ export default function PlanEdit() {
 
         scollToRef.current.scrollIntoView()
     }
-    console.log(planEditForm.plan_id, "planEditForm");
+
     useEffect(() => { }, [planEditList, planEditForm, selected]);
 
     return (
@@ -199,7 +196,6 @@ function EditListRow(props) {
 
 export function PlanFormulary() {
     const [planEditForm, setPlanEditForm] = useOutletContext();
-    // const [planEditForm, setPlanEditForm] = useState();
     const { register, handleSubmit, watch, reset, control, formState: { error } } = useForm();
     const [planClassification, setPlanClassification] = useState('');
     const [expFlag, setExpFlag] = useState('');
@@ -207,7 +203,6 @@ export function PlanFormulary() {
     const [priscExpFlag, setPriscExpFlag] = useState('');
     const [exhausted, setExhausted] = useState('');
     const [formulary, setFormulary] = useState('');
-    const [planFormData, setPlanFormData] = useState('');
 
     const handlePlanClassificationInput = (pclass_input) => {
         setPlanClassification(pclass_input);
@@ -323,27 +318,7 @@ export function PlanFormulary() {
         })
     }
 
-    const getPlanFormData = (pFormData) => {
-        setPlanFormData(pFormData);
-    }
-
-    const updateId = (id) => {      
-      setPlanEditForm({
-        'plan_id' : id.target.value
-      });
-    }
-
-    const updateName = (name) => {      
-            setPlanEditForm({
-                'name' : name.target.value,
-                'plan_id' : planEditForm.plan_id
-              });       
-      }
-
-
-      console.log(planEditForm);
-    
-    useEffect(() => { reset(planEditForm) }, [planEditForm, planFormData]);
+    useEffect(() => { reset(planEditForm) }, [planEditForm]);
     return (
         <>
             <div className="card mt-3 mb-3">
@@ -353,12 +328,12 @@ export function PlanFormulary() {
                             <h5 className="mb-2">Plan</h5>
                             <div className="form-group mb-2">
                                 <small> ID</small>
-                                <input type="text" className="form-control" onKeyUp={(e) => updateId(e)} placeholder="" {...register("plan_id", { required: true })} />
+                                <input type="text" className="form-control" placeholder="" {...register("plan_id", { required: true })} />
                             </div>
                             <div className="row">
                                 <div className="col-md-12">
                                     <h5 className="mb-1">Name</h5>
-                                    <input type="text" className="form-control" onKeyUp={(e) => updateName(e)} placeholder="" {...register("plan_name", { required: true })} />
+                                    <input type="text" className="form-control" placeholder="" {...register("plan_name", { required: true })} />
                                 </div>
                                 <div className="col-md-6">
                                     <div className="form-group mb-2">
@@ -376,7 +351,7 @@ export function PlanFormulary() {
                                                     {...field}
                                                     cacheOptions
                                                     defaultOptions
-                                                    // value={{pclass_label:props.planFormData.}}
+                                                    // value={selectedValue}
                                                     getOptionLabel={e => e.pclass_label}
                                                     getOptionValue={e => e.pclass_value}
                                                     loadOptions={loadPlanClassificationOptions}
@@ -597,6 +572,14 @@ export function PlanFormulary() {
                                 <div className="col-md-3">
                                     <div className="form-group mb-2">
                                         <small>Formularly Type</small>
+                                        {/* <select className="form-select" {...register("plan_id", { required: true })}>
+                                            <option value="">Select </option>
+                                            <option value="FA">Approved, Formularly</option>
+                                            <option value="NF">Approved, Non Formularly</option>
+                                            <option value="CF">Rejected</option>
+                                            <option value="NR">Rejected-No Rx Coverage</option>
+                                        </select> */}
+
                                         <Controller name="plan_id"
                                             control={control}
                                             render={({ field }) => (
@@ -615,6 +598,9 @@ export function PlanFormulary() {
                                             )} />
                                     </div>
                                 </div>
+
+
+
                                 <div className="col-md-3">
                                     <div className="form-group mb-2">
                                         <small>Price Schedule</small>
@@ -635,17 +621,16 @@ export function PlanFormulary() {
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
-
         </>
     )
 }
 
 export function RxLimitations() {
     const [planEditForm, setPlanEditForm] = useOutletContext();
-    // const [planEditForm, setPlanEditForm] = useState('');
     const { register, handleSubmit, watch, reset, formState: { error } } = useForm();
     useEffect(() => { reset(planEditForm) }, [planEditForm]);
     return (
@@ -882,7 +867,6 @@ export function RxLimitations() {
 
 export function DateLimitations() {
     const [planEditForm, setPlanEditForm] = useOutletContext();
-    // const [planEditForm, setPlanEditForm] = useState('');
     const { register, handleSubmit, watch, control, reset, formState: { error } } = useForm();
     const [tax, setTax] = useState('');
     const [uCPlan, setUCPlan] = useState('');

@@ -305,14 +305,10 @@ function AddBenefit(props) {
                             <div className="col-md-12 mb-2">
                                 <div className="form-group">
                                     <small>Benefit Code</small>
-
-
                                     {props.adding ?
                                         <input type="text" className="form-control" name="benefit_code" id=""  {...register("benefit_code", { required: true })} />
                                         // errors.benefit_code && <span><p className='notvalid'>This field is required</p></span>
-
                                         :
-
                                         <input type="text" readOnly className="form-control" name="benefit_code" id=""  {...register("benefit_code", { required: true })} />
                                     }
                                 </div>

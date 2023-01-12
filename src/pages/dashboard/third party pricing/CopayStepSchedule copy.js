@@ -12,16 +12,14 @@ export default function CopayStepSchedule() {
     const [type, setType] = useState(false);
     const [adding, setAdding] = useState(false);
     const [isError, setIsError] = useState(false);
-    const [isCopayListExist, setIsCopayListExist] = useState(false);
-    const [isFormDisable, setIsFormDisable] = useState(false);
 
     const checkLengh = (suffix) => {
         if (suffix.target.value.length > 3) {
             setIsError(true);
-            setIsFormDisable(true);
+            // setSubmitDisable(true);
         } else {
             setIsError(false);
-            setIsFormDisable(false);
+            // setSubmitDisable(false);
         }
     }
 
@@ -51,32 +49,7 @@ export default function CopayStepSchedule() {
         setFormData(false);
         setAdding(true);
     }
-
-    const checkCopayListExisting = (copay_list) => {
-
-        const requestOptions = {
-            method: 'GET',
-            headers: { 'content-type': 'application/json' }
-        }
-
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/third-party-pricing/copay-step-schedule/check-copay-list-existing?copay_list=${copay_list.target.value}`, requestOptions)
-            .then(async response => {
-                const isJson = response.headers.get('content-type')?.includes('application/json');
-                const data = isJson && await response.json();
-                console.log(data.data);
-                if(data.data > 0)
-                {
-                    setIsCopayListExist(true);
-                    setIsFormDisable(true);
-                }else{
-                    setIsCopayListExist(false);
-                    setIsFormDisable(false);
-                }
-            })
-
-    }
-
-    useEffect(() => { }, [copayStepData, formData, type, adding, isError, isCopayListExist, isFormDisable]);
+    useEffect(() => { }, [copayStepData, formData, type, adding, isError]);
     return (
         <>
             <div className='dashboard-content clearfix'>
@@ -139,8 +112,7 @@ export default function CopayStepSchedule() {
                         <GetStepScheduleTable copayStepData={copayStepData} dataType={type} showData={showData} />
                     </div>
                     <div className="col-md-8">
-                        <DataForm formData={formData} dataType={type} clearForm={clearForm} adding={adding} checkLengh={checkLengh} isError={isError}
-                            checkCopayListExisting={checkCopayListExisting} isCopayListExist={isCopayListExist} isFormDisable={isFormDisable}/>
+                        <DataForm formData={formData} dataType={type} clearForm={clearForm} adding={adding} checkLengh={checkLengh} isError={isError}/>
                     </div>
                 </div>
 
@@ -201,27 +173,8 @@ function CopayStepRow(props) {
 function DataForm(props) {
     const { register, handleSubmit, reset, watch, formState: { errors } } = useForm();
 
-    const RepeatCharacters = ({ times, children }) => {
-        return React.cloneElement(children, {
-            // This will override the original ASCIIChar in the text.
-            ASCIIChar: children.props.ASCIIChar.repeat(times),
-        })
-    }
-
-    const CreateTextWithProps = ({ text, ASCIIChar, ...props }) => {
-        return (
-            <>
-                <span {...props}>
-                    {text}{ASCIIChar}
-                </span>
-                <button type='button' className='btn btn-warning' >Add + </button>
-            </>
-        )
-    };
-
     const submitForm = (fdata) => {
         console.log(fdata);
-        fdata.preventDefault()
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -245,16 +198,16 @@ function DataForm(props) {
                         progress: undefined,
                     });
                 } else {
-                    toast.success(data.message, {
-                        position: "top-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
-                }
+                toast.success(data.message, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
             })
             .catch(error => {
                 console.error('There was an error!', error);
@@ -266,7 +219,7 @@ function DataForm(props) {
             reset({
                 copay_list: '', copay_amount: '', copay_percentage: '', days_supply: '', max_cost: '', new: 1, max_cost: ''
             },
-                { keepValues: false, });
+                { keepValues: false,  });
         }
         reset(props.formData)
     }, [props.formData]);
@@ -281,9 +234,8 @@ function DataForm(props) {
                                 <div className="form-group">
                                     <small>Copay List</small>
                                     <input type="text" className="form-control" {...register("copay_list", { required: true })} autoComplete="off"
-                                        readOnly={props.formData.copay_list ? true : false} onKeyUp={e => props.checkCopayListExisting(e)} />
+                                        readOnly={props.formData.copay_list ? true : false} />
                                     {errors.copay_list && <span><p className='notvalid'>This field is required</p></span>}
-                                    {props.isCopayListExist ? <span><p className='notvalid'>Copay already existed !</p></span> : ''}
                                 </div>
                             </div>
                             <div className="col-md-8 mb-3">
@@ -292,25 +244,44 @@ function DataForm(props) {
                                     <textarea rows="1" cols="2" className="form-control"  ></textarea>
                                 </div>
                             </div>
-                            {!props.formData.copay_list ? <><div className="col-md-12">
+                            { ! props.formData.copay_list ? <><div className="col-md-12">
                                 <div className=""><span>Schedule Type:</span></div>
                                 <div className="form-check">
                                     <input className="form-check-input" type="radio"
-                                        {...register("step_schedule_indicator", { required: true })} readOnly={!props.formData.copay_list ? false : true} value="d" />
+                                        {...register("step_schedule_indicator", { required: true })} disabled={!props.formData.copay_list ? false : true} value="d" />
                                     <label className="form-check-label" >
                                         Days Supply
                                     </label>
                                 </div>
-                            </div>
-                                <div className="col-md-6 ">
-                                    <div className="form-check">
-                                        <input className="form-check-input" type="radio"
-                                            {...register("step_schedule_indicator", { required: true })} readOnly={!props.formData.copay_list ? false : true} value="m" />
-                                        <label className="form-check-label" >
-                                            Max Cost
-                                        </label>
-                                    </div>
-                                </div> </> : ''}
+                            </div> 
+                            <div className="col-md-6 ">
+                                <div className="form-check">
+                                    <input className="form-check-input" type="radio"
+                                        {...register("step_schedule_indicator", { required: true })} disabled={!props.formData.copay_list ? false : true} value="m" />
+                                    <label className="form-check-label" >
+                                        Max Cost
+                                    </label>
+                                </div>
+                            </div> </> : ''}
+                             {/* <div className="col-md-12">
+                                <div className=""><span>Schedule Type:</span></div>
+                                <div className="form-check">
+                                    <input className="form-check-input" type="radio"
+                                        {...register("step_schedule_indicator", { required: true })} disabled={props.adding ? false : true} value="d" />
+                                    <label className="form-check-label" htmlFor="flexRadioDefault1" >
+                                        Days Supply
+                                    </label>
+                                </div>
+                            </div> 
+                            <div className="col-md-6 ">
+                                <div className="form-check">
+                                    <input className="form-check-input" type="radio"
+                                        {...register("step_schedule_indicator", { required: true })} disabled={props.adding ? false : true} value="m" />
+                                    <label className="form-check-label" htmlFor="flexRadioDefault1">
+                                        Max Cost
+                                    </label>
+                                </div>
+                            </div> */}
 
                             {errors.step_schedule_indicator && <span><p className='notvalid'>This field is required</p></span>}
                         </div>
@@ -335,48 +306,63 @@ function DataForm(props) {
                                 <div className="form-group">
                                     <small>%</small>
                                     <input type="text" className="form-control" {...register("copay_percentage", { required: true })} autoComplete="off"
-                                        onKeyUp={e => props.checkLengh(e)} />
+                                       onKeyUp={e => props.checkLengh(e)}/>
                                     {errors.copay_percentage && <span><p className='notvalid'>This field is required</p></span>}
                                     {props.isError ? <span><p className='notvalid'>Invalid Percentage !</p></span> : ""}
                                 </div>
                             </div>
-                            <div className="col-md-3 mb-3">
-                                <div className="form-group">
-                                    {/* <button type='submit' className='btn btn-primary' disabled={props.adding ? false : true}>{props.adding ? 'Add' : 'Update'} Item</button> */}
-                                    {/* <button type='button' className='btn btn-warning' >Add + </button> */}
-                                    <RepeatCharacters times={10}>
-                                        <CreateTextWithProps
-                                            text="Habdul Hazeez"
-                                            ASCIIChar=' @ '
-                                        />
-                                    </RepeatCharacters>
+                            <div className="col-md-3 ">
+                                <div className="col-md-12 mb-3">
+                                    <div className="form-group">
+                                        {/* <button type='submit' className='btn btn-primary' disabled={props.adding ? false : true}>{props.adding ? 'Add' : 'Update'} Item</button> */}
+                                        <button type='submit' className='btn btn-primary' >{props.formData.copay_list ? 'Update' : 'Add'} Item</button>
+                                    </div>
+                                </div>
+                                <div className="col-md-12 mb-3">
+                                    <div className="form-group">
+                                        <button type='button' className='btn btn-danger' disabled={props.adding ? true : false}>Remove Item</button>
+                                    </div>
+                                </div>
+                               
+                                <div className="col-md-12 mb-3">
+                                    <div className="form-group">
+                                        <button type='button' onClick={e => props.clearForm(e)} className='btn btn-info'>Clear Item</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
-                        <div id="newRow"></div>
-
-                        <div className="col-md-3 ">
-                            <div className="col-md-12 mb-3">
-                                <div className="form-group">
-                                    <button type='submit' className='btn btn-primary' disabled={props.isFormDisable ? true : false}>{props.formData.copay_list && ! props.adding? 'Update' : 'Add'} Item</button>
-                                </div>
-                            </div>
-                            <div className="col-md-12 mb-3">
-                                <div className="form-group">
-                                    <button type='button' className='btn btn-danger' disabled={props.adding ? true : false}>Remove Item</button>
-                                </div>
-                            </div>
-
-                            <div className="col-md-12 mb-3">
-                                <div className="form-group">
-                                    <button type='button' onClick={e => props.clearForm(e)} className='btn btn-info'>Clear Item</button>
-                                </div>
-                            </div>
-                        </div>
-                        {/* </div> */}
                     </form>
 
+
+                    {/* <div className="row mb-2 ">
+                        <div className="col-md-9 mb-3">
+                            <table className="table  table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Maximum Cost</th>
+                                        <th>$</th>
+                                        <th>%</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>20000</td>
+                                        <td>80</td>
+                                        <td>90</td>
+                                    </tr>
+                                    <tr>
+                                        <td>30000</td>
+                                        <td>60</td>
+                                        <td>85</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* <div className="col-md-3 mb-3">
+                            <button className='btn btn-danger'>Delete</button>
+                        </div> 
+                    </div> */}
                 </div>
             </div >
 

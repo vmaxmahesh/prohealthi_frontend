@@ -4,8 +4,6 @@ import AsyncSelect from 'react-select/async';
 import AsyncSelectNew from 'react-select';
 import { toast } from 'react-toastify';
 import LoadingSpinner from '../../../loader/loader';
-import axios from 'axios';
-import { PropagateLoader } from 'react-spinners';
 
 export default function PlanAssociation() {
     const scollToRef = useRef();
@@ -32,8 +30,6 @@ export default function PlanAssociation() {
     const [customerData, setCustomerData] = useState([]);
     const [clientGroup, setClientGroup] = useState([]);
     const [clientGroupData, setClientGroupData] = useState([]);
-    const [planId, setPlanId] = useState([]);
-    const [planData, setPlanData] = useState([]);
 
     const clearForm = () => {
         setAdding(true);
@@ -54,7 +50,7 @@ export default function PlanAssociation() {
                 setPlanList(data.data);
                 setLoading(false);
                 //setSelectedClientGroupValue(data.data.client_group_id)
-                // console.log(data.data.client_group_id)
+                console.log(data.data.client_group_id)
                 toast.success(response.message, {
                     position: "top-right",
                     autoClose: 5000,
@@ -71,7 +67,6 @@ export default function PlanAssociation() {
     }
 
     const getFormData = (plan_data) => {
-        // console.log(plan_data, "plan data");
         setPlanForm(plan_data);
         scollToRef.current.scrollIntoView()
 
@@ -79,158 +74,120 @@ export default function PlanAssociation() {
             method: 'GET',
             headers: { 'content-type': 'application/json' }
         }
-
-
-
-
-        //client
         fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-client-group-label?search=${plan_data.client_group_id}`, requestOptions)
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
-                setSelectedClientGroupLabel(data.group_name, "label");
-                // setLoading(false);                
+                setSelectedClientGroupLabel(data.data.group_name, "label");
+                // setLoading(false);
             })
 
         //Pharmacy Chain
-        if (plan_data.pharmacy_chain) {
-            fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-pharmacy-chain`)
-                .then(async (res) => res.json())
-                .then((pharmacyChain) => {
-                    const arraypharmacyChain = pharmacyChain.data.map((item) => ({
-                        label: item.pharmacy_chain,
-                        value: item.pharmacy_chain
-                    }));
-                    setPharmacyChain(arraypharmacyChain);
-                    const pharmacy_chain_exists = arraypharmacyChain.some(v => (v.value == plan_data.pharmacy_chain));
-                    if (pharmacy_chain_exists) {
-                        var pharmacy_chain_data = arraypharmacyChain.filter(item => item.value === plan_data.pharmacy_chain)
-                        setPharmacyChainData(pharmacy_chain_data[0]);
-                    }
-                });
-        }
-
-        //Plan Id
-        if (plan_data.plan_id) {
-            fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-plan-id`)
-                .then(async (res) => res.json())
-                .then((planId) => {
-                    const arrayPlanId = planId.data.map((item) => ({
-                        label: item.pharmacy_chain,
-                        value: item.pharmacy_chain
-                    }));
-                    setPlanId(arrayPlanId);
-                    const plan_id_exists = arrayPlanId.some(v => (v.value == plan_data.plan_id));
-                    if (plan_id_exists) {
-                        var plan_id_data = arrayPlanId.filter(item => item.value === plan_data.plan_id)
-                        setPlanData(plan_id_data[0]);
-                    }
-                });
-        }
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-pharmacy-chain`)
+            .then((res) => res.json())
+            .then((pharmacyChain) => {
+                const arraypharmacyChain = pharmacyChain.data.map((item) => ({
+                    label: item.pharmacy_chain,
+                    value: item.pharmacy_chain
+                }));
+                // setPharmacyChain(arraypharmacyChain);
+                const pharmacy_chain_exists = arraypharmacyChain.some(v => (v.value == plan_data.pharmacy_chain));
+                if (pharmacy_chain_exists) {
+                    var pharmacy_chain_data = arraypharmacyChain.filter(item => item.value === plan_data.pharmacy_chain)
+                    setPharmacyChainData(pharmacy_chain_data);
+                }
+            });
 
         //Membership Proc Flag
-        if (plan_data.membership_processing_flag) {
-            fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-membership-process-flag`)
-                .then((res) => res.json())
-                .then((memProcFlag) => {
-                    const arrayformId = memProcFlag.data.map((item) => ({
-                        label: item.label,
-                        value: item.membership_processing_flag
-                    }));
-                    setMemProcFlag(arrayformId);
-                    const form_id_exists = arrayformId.some(v => (v.value == plan_data.membership_processing_flag));
-                    if (form_id_exists) {
-                        var form_id_data = arrayformId.filter(item => item.value === plan_data.membership_processing_flag)
-                        setMemProcFlagData(form_id_data[0]);
-                    }
-                });
-        }
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-membership-process-flag`)
+            .then((res) => res.json())
+            .then((memProcFlag) => {
+                const arrayformId = memProcFlag.data.map((item) => ({
+                    label: item.label,
+                    value: item.membership_processing_flag
+                }));
+                setMemProcFlag(arrayformId);
+                const form_id_exists = arrayformId.some(v => (v.value == plan_data.membership_processing_flag));
+                if (form_id_exists) {
+                    var form_id_data = arrayformId.filter(item => item.value === plan_data.membership_processing_flag)
+                    setMemProcFlagData(form_id_data);
+                }
+            });
 
-        //Transaction Type Data
-        if (plan_data.transaction_type) {
-            fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-transaction-type`)
-                .then((res) => res.json())
-                .then((transactionType) => {
-                    const arraytransactionType = transactionType.data.map((item) => ({
-                        label: item.trans_type_label,
-                        value: item.trans_type_value
-                    }));
-                    const transaction_type_exists = arraytransactionType.some(v => (v.value == plan_data.transaction_type));
-                    if (transaction_type_exists) {
-                        var data = arraytransactionType.filter(item => item.value === plan_data.transaction_type)
-                        setTransactionTypeData(data[0]);
-                    }
-                });
-        }
+        //Transaction Type
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-transaction-type`)
+            .then((res) => res.json())
+            .then((transactionType) => {
+                const arraytransactionType = transactionType.data.map((item) => ({
+                    label: item.trans_type_label,
+                    value: item.trans_type_value
+                }));
+                const transaction_type_exists = arraytransactionType.some(v => (v.value == plan_data.transaction_type));
+                if (transaction_type_exists) {
+                    var data = arraytransactionType.filter(item => item.value === plan_data.transaction_type)
+                    setTransactionTypeData(data);
+                }
+            });
 
-        //Transaction Association Data
-        if (plan_data.use_default_ccg) {
-            fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-transaction-association`)
-                .then((res) => res.json())
-                .then((transactionAssociation) => {
-                    const arrayTransactionAssociation = transactionAssociation.data.map((item) => ({
-                        label: item.trans_ass_label,
-                        value: item.trans_ass_value
-                    }));
-                    const transaction_association_exists = arrayTransactionAssociation.some(v => (v.value == plan_data.use_default_ccg));
-                    if (transaction_association_exists) {
-                        var data = arrayTransactionAssociation.filter(item => item.value === plan_data.use_default_ccg)
-                        setTransactionAssociationData(data[0]);
-                    }
-                });
-        }
+        //Transaction Association
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-transaction-association`)
+            .then((res) => res.json())
+            .then((transactionAssociation) => {
+                const arrayTransactionAssociation = transactionAssociation.data.map((item) => ({
+                    label: item.trans_ass_label,
+                    value: item.trans_ass_value
+                }));
+                const transaction_association_exists = arrayTransactionAssociation.some(v => (v.value == plan_data.use_default_ccg));
+                if (transaction_association_exists) {
+                    var data = arrayTransactionAssociation.filter(item => item.value === plan_data.use_default_ccg)
+                    setTransactionAssociationData(data);
+                }
+            });
 
-        //Customer
-        if (plan_data.customer_id) {
-            fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-customer`)
-                .then((res) => res.json())
-                .then((customer) => {
-                    const arrayCustomer = customer.data.map((item) => ({
-                        label: item.customer_name,
-                        value: item.customer_id
-                    }));
-                    const customer_exists = arrayCustomer.some(v => (v.value == plan_data.customer_id));
-                    if (customer_exists) {
-                        var data = arrayCustomer.filter(item => item.value === plan_data.customer_id)
-                        setCustomerData(data[0]);
-                    }
-                });
-        }
+        //Customer 
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-customer`)
+            .then((res) => res.json())
+            .then((customer) => {
+                const arrayCustomer = customer.data.map((item) => ({
+                    label: item.customer_name,
+                    value: item.customer_id
+                }));
+                const customer_exists = arrayCustomer.some(v => (v.value == plan_data.customer_id));
+                if (customer_exists) {
+                    var data = arrayCustomer.filter(item => item.value === plan_data.customer_id)
+                    setCustomerData(data);
+                }
+            });
 
         //Client ID
-        if (plan_data.client_id) {
-            fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-client`)
-                .then((res) => res.json())
-                .then((clientId) => {
-                    const userClientId = clientId.data.map((item) => ({
-                        label: item.client_name,
-                        value: item.client_id
-                    }));
-                    const client_id_exists = userClientId.some(v => (v.value == plan_data.client_id));
-                    if (client_id_exists) {
-                        var data = userClientId.filter(item => item.value === plan_data.client_id)
-                        setClientData(data[0]);
-                    }
-                });
-        }
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-client`)
+            .then((res) => res.json())
+            .then((clientId) => {
+                const userClientId = clientId.data.map((item) => ({
+                    label: item.client_name,
+                    value: item.client_id
+                }));
+                const client_id_exists = userClientId.some(v => (v.value == plan_data.client_id));
+                if (client_id_exists) {
+                    var data = userClientId.filter(item => item.value === plan_data.client_id)
+                    setClientData(data);
+                }
+            });
 
         //Client Group 
-        if (plan_data.client_group_id) {
-            fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-client-group`)
-                .then((res) => res.json())
-                .then((clientGroup) => {
-                    const arrayClientGroup = clientGroup.data.map((item) => ({
-                        label: item.group_name,
-                        value: item.client_group_id
-                    }));
-                    const client_group_exists = arrayClientGroup.some(v => (v.value == plan_data.client_group_id));
-                    if (client_group_exists) {
-                        var data = arrayClientGroup.filter(item => item.value === plan_data.client_group_id)
-                        setClientGroupData(data[0]);
-                    }
-                });
-        }
-
+        fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-client-group`)
+            .then((res) => res.json())
+            .then((clientGroup) => {
+                const arrayClientGroup = clientGroup.data.map((item) => ({
+                    label: item.group_name,
+                    value: item.client_group_id
+                }));
+                const client_group_exists = arrayClientGroup.some(v => (v.value == plan_data.client_group_id));
+                if (client_group_exists) {
+                    var data = arrayClientGroup.filter(item => item.value === plan_data.client_group_id)
+                    setClientGroupData(data);
+                }
+            });
     }
 
     const loadPharmacyChailOptions = () => {
@@ -284,9 +241,10 @@ export default function PlanAssociation() {
                 setTransactionType(arraytransactionType);
             });
     }
+
     const loadTransactionAssociationOptions = () => {
         fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-transaction-association`)
-            .then(async (res) => res.json())
+            .then((res) => res.json())
             .then((transactionAssociation) => {
                 const arrayTransactionAssociation = transactionAssociation.data.map((item) => ({
                     label: item.trans_ass_label,
@@ -295,6 +253,7 @@ export default function PlanAssociation() {
                 setTransactionAssociation(arrayTransactionAssociation);
             });
     }
+
 
     const loadClientOptionsfetch = () => {
         fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-client`)
@@ -321,27 +280,6 @@ export default function PlanAssociation() {
 
     }
 
-    const loadPlanId = () => {
-        fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-plan-id`)
-            .then((res) => res.json())
-            .then((planId) => {
-                const arrayPlanId = planId.data.map((item) => ({
-                    label: item.id,
-                    value: item.id
-                }));
-                setPlanId(arrayPlanId);
-            });
-    }
-
-    useEffect(() => {
-        if (!planForm) {
-
-        }
-
-    }, [planList, planForm, adding, clientData, pharmacyChainData, memProcFlagData, transactionTypeData, transactionAssociationData, customerData, clientGroupData,
-        // }, [planList, planForm, adding
-    ]);
-
     useEffect(() => {
         loadPharmacyChailOptions();
         // loadFormIdOptions();
@@ -351,8 +289,7 @@ export default function PlanAssociation() {
         loadTransactionAssociationOptions();
         loadClientOptionsfetch();
         loadClientGroupOptions();
-        loadPlanId();
-    }, []);
+    }, [planList, planForm, adding]);
     return (
         <>
             <div className="row">
@@ -382,10 +319,9 @@ export default function PlanAssociation() {
                     clientId={clientId} clientData={clientData} pharmacyChain={pharmacyChain} pharmacyChainData={pharmacyChainData} memProcFlag={memProcFlag} memProcFlagData={memProcFlagData}
                     transactionType={transactionType} transactionTypeData={transactionTypeData} transactionAssociation={transactionAssociation}
                     transactionAssociationData={transactionAssociationData} customer={customer} customerData={customerData} clientGroup={clientGroup} clientGroupData={clientGroupData}
-                    planId={planId} planData={planData}
                     setPharmacyChainData={setPharmacyChainData} setMemProcFlagData={setMemProcFlagData} setTransactionTypedata={setTransactionTypeData}
                     setTransactionAssociationData={setTransactionAssociationData} setCustomerData={setCustomerData} setClientData={setClientData}
-                    setClientGroupData={setClientGroupData} setPlanData={setPlanData} adding={adding} />
+                    setClientGroupData={setClientGroupData} />
             </div>
         </>
     )
@@ -474,8 +410,37 @@ function PlanRow(props) {
 
 function PlanAssociationForm(props) {
     const { register, handleSubmit, watch, reset, control, formState: { errors } } = useForm();
+    const [pharmacyChainInput, setPharmacyChainInput] = useState('');
+    const [formId, setFormId] = useState('');
+    // const [memProcFlag, setMemProcFlag] = useState('');
+    // const [customer, setCustomer] = useState('');
+    const [client, setClient] = useState('');
+    // const [clientGroup, setClientGroup] = useState('');
+    // const [transactionType, setTransactionType] = useState('');
+    // const [transactionAssociation, setTransactionAssociation] = useState('');
+    const [memProcFlagSelected, setMemProcFlagSelected] = useState('');
+    const [mobile, setmobile] = useState('');
     const [isError, setIsError] = useState(false);
+    // const [pinSuffixValue, setPinSuffixValue] = useState('');
     const [submitDisable, setSubmitDisable] = useState(false);
+    const [selectedClientGroupValue, setSelectedClientGroupValue] = useState('');
+    const [selectedClientGroupLabel, setSelectedClientGroupLabel] = useState('');
+    const [isClientGroupChanged, setIsClientGroupChanged] = useState(false);
+
+    // const [clientId, setClientId] = useState([]);
+    // const [clientData, setClientData] = useState([]);
+    // const [pharmacyChain, setPharmacyChain] = useState([]);
+    // const [pharmacyChainData, setPharmacyChainData] = useState([]);
+    // const [memProcFlag, setMemProcFlag] = useState([]);
+    // const [memProcFlagData, setMemProcFlagData] = useState([]);
+    // const [transactionType, setTransactionType] = useState([]);
+    // const [transactionTypeData, setTransactionTypeData] = useState([]);
+    // const [transactionAssociation, setTransactionAssociation] = useState([]);
+    // const [transactionAssociationData, setTransactionAssociationData] = useState([]);
+    // const [customer, setCustomer] = useState([]);
+    // const [customerData, setCustomerData] = useState([]);
+    // const [clientGroup, setClientGroup] = useState([]);
+    // const [clientGroupData, setClientGroupData] = useState([]);
 
     const checkLengh = (suffix) => {
         if (suffix.target.value.length > 4) {
@@ -487,79 +452,290 @@ function PlanAssociationForm(props) {
         }
     }
 
-    const submitPlanAssociation = (planAssociationData) => {
-        // console.log(props.customerData);
-        // console.log(props.transactionAssociationData, "props.transactionAssociationData");
-        // console.log(planAssociationData, "planAssociationData");
-        // console.log(props,"props");
-        // console.log(props.customerData['value'], "props.customerData['value']")
-        // console.log(props.transactionTypeData['value']," props.transactionTypeData['value']")
-        const bin_number = planAssociationData.bin_number != null ? planAssociationData.bin_number : null;
-        const process_control_number = planAssociationData.process_control_number != null ? planAssociationData.process_control_number : null;
-        const group_number = planAssociationData.group_number != null ? planAssociationData.group_number : null;
-        const pin_number_suffix = planAssociationData.pin_number_suffix != null ? planAssociationData.pin_number_suffix : null;
-        const pharmacy_chain = props.pharmacyChainData['value'] != null ? props.pharmacyChainData['value'] : props.pharmacyChainData['value'];
-        const membership_processing_flag = props.memProcFlagData['value'] != null ? props.memProcFlagData['value'] : props.memProcFlagData['value'];
-        const transaction_type = props.transactionTypeData['value'] != null ? props.transactionTypeData['value'] : props.transactionTypeData['value'];
-        const use_default_ccg = props.transactionAssociationData['value'] != null ? props.transactionAssociationData['value'] : '';
-        const customer_id = props.customerData['value'] != null ? props.customerData['value'] : '';
-        const client_id = props.clientData['value'] != null ? props.clientData['value'] : '';
-        const client_group_id = props.clientGroupData['value'] != null ? props.clientGroupData['value'] : props.clientGroupData['value'];
-        const plan_id = props.planData['value'] != null ? props.planData['value'] : props.planData['value'];
+    // const loadPharmacyChailOptions = () => {
+    //     fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-pharmacy-chain`)
+    //         .then((res) => res.json())
+    //         .then((pharmacyChain) => {
+    //             const arraypharmacyChain = pharmacyChain.data.map((item) => ({
+    //                 label: item.pharmacy_chain,
+    //                 value: item.pharmacy_chain
+    //             }));
+    //             setPharmacyChain(arraypharmacyChain);
+    //         });
+    // }
+
+    // const loadFormIdOptions = (form_input) => {
+    //     setFormId(form_input);
+    // }
+
+    // const loadMemProcFlagOptions = () => {
+    //     fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-membership-process-flag`)
+    //         .then((res) => res.json())
+    //         .then((memProcFlag) => {
+    //             const arraymemProcFlag = memProcFlag.data.map((item) => ({
+    //                 label: item.label,
+    //                 value: item.membership_processing_flag
+    //             }));
+    //             setMemProcFlag(arraymemProcFlag);
+    //         });
+    // }
+
+   const submitPlanAssociation = (planAssociationData) => {
+    // const submitHandler = (planAssociationData) => {
+        console.log(planAssociationData.target.client_id.value);
+
+        // const requestOptions = {
+        //     method: 'POST',
+        //     headers: { 'content-type': 'application/json' },
+        //     body: JSON.stringify(planAssociationData)
+        // }
+
+        // fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/submit-form`, requestOptions)
+        //     .then(async response => {
+        //         const isJson = response.headers.get('content-type')?.includes('application/json');
+        //         const data = isJson && await response.json();
+        //         if (!response.ok) {
+        //             // get error message from body or default to response status
+        //             const error = (data && data.message) || response.status;
+        //             return Promise.reject(error);
+        //         } else {
+        //             toast.success(data.message, {
+        //                 position: "top-right",
+        //                 autoClose: 5000,
+        //                 hideProgressBar: false,
+        //                 closeOnClick: true,
+        //                 pauseOnHover: true,
+        //                 draggable: true,
+        //                 progress: undefined,
+        //             });
+        //         }
+
+        //     })
+
+        // planAssociationData.preventDefault();
+        // console.log(planAssociationData.target.client_id.value)
+
+
+        // const client_id = planAssociationData.target.client_id.value;
+        // const customer_id = planAssociationData.target.customer_id.value;
+        // const client_group_id = planAssociationData.target.client_group_id.value;
+        // const plan_id = planAssociationData.target.plan_id.value;
         // const add_new = '1';
-        console.log(props.adding)
-        const add_new = (props.planForm.bin_number == null ? "1" : "0");
-        const data = {
-            bin_number, process_control_number, group_number, pin_number_suffix, pharmacy_chain, membership_processing_flag, transaction_type,
-            use_default_ccg, customer_id, client_id, client_group_id, add_new, plan_id
-        };
-
-        console.log(data, "post data");
-
-        axios.post(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/submit-form`, data)
-            // fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/submit-form`, requestOptions)
-            .then((response) => {
-                console.log(response);
-                toast.success(response.message, {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-                // planAssociationData.target.reset();
-                reset({
-                    bin_number: '', process_control_number: '', group_number: '', pharmacy_chain: '', plan_id: '', form_id: '',
-                    membership_processing_flag: '', pin_number_suffix: '', transaction_type: '', customer_id: '', client_id: '',
-                    use_default_ccg: '', client_group_id: '', add_new: 1, plan_id: ''
-                },
-                    { keepValues: false });
-            })
-            .catch(error => {
-                // console.log(error)
-            })
+        // const data = { client_id, customer_id, client_group_id, plan_id, add_new };
+        // console.log(data);
+        // // axios.post("http://localhost:8000/api/plan-design/plan-association/submit-form", data)
+        // fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/submit-form`, data)
+        //     .then((response) => {
+        //         console.log(response);
+        //         // planAssociationData.target.reset();
+        //     })
+        //     .catch(error => {
+        //         console.log(error)
+        //     })
     }
+
+    // const loadCustomerOptions = () => {
+    //     fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-customer`)
+    //         .then((res) => res.json())
+    //         .then((customer) => {
+    //             const arrayCustomer = customer.data.map((item) => ({
+    //                 label: item.customer_name,
+    //                 value: item.customer_id
+    //             }));
+    //             setCustomer(arrayCustomer);
+    //         });
+    // }
+
+    // const loadTransactionTypeOptions = () => {
+    //     fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-transaction-type`)
+    //         .then((res) => res.json())
+    //         .then((transactionType) => {
+    //             const arraytransactionType = transactionType.data.map((item) => ({
+    //                 label: item.trans_type_label,
+    //                 value: item.trans_type_value
+    //             }));
+    //             setTransactionType(arraytransactionType);
+    //         });
+    // }
+
+    // const loadTransactionAssociationOptions = () => {
+    //     fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-transaction-association`)
+    //         .then((res) => res.json())
+    //         .then((transactionAssociation) => {
+    //             const arrayTransactionAssociation = transactionAssociation.data.map((item) => ({
+    //                 label: item.trans_ass_label,
+    //                 value: item.trans_ass_value
+    //             }));
+    //             setTransactionAssociation(arrayTransactionAssociation);
+    //         });
+    // }
+
+
+    // const loadClientOptionsfetch = () => {
+    //     fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-client`)
+    //         .then((res) => res.json())
+    //         .then((clientId) => {
+    //             const userClientId = clientId.data.map((item) => ({
+    //                 label: item.client_name,
+    //                 value: item.client_id
+    //             }));
+    //             setClientId(userClientId);
+    //         });
+    // }
+
+    // const loadClientGroupOptions = () => {
+    //     fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-client-group`)
+    //         .then((res) => res.json())
+    //         .then((clientGroup) => {
+    //             const arrayClientGroup = clientGroup.data.map((item) => ({
+    //                 label: item.group_name,
+    //                 value: item.client_group_id
+    //             }));
+    //             setClientGroup(arrayClientGroup);
+    //         });
+
+    // }
 
 
     useEffect(() => {
+        // if (props.planForm) {
+        //     //Pharmacy Chain
+        //     fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-pharmacy-chain`)
+        //         .then((res) => res.json())
+        //         .then((pharmacyChain) => {
+        //             const arraypharmacyChain = pharmacyChain.data.map((item) => ({
+        //                 label: item.pharmacy_chain,
+        //                 value: item.pharmacy_chain
+        //             }));
+        //             // setPharmacyChain(arraypharmacyChain);
+        //             const pharmacy_chain_exists = arraypharmacyChain.some(v => (v.value == props.planForm.pharmacy_chain));
+        //             if (pharmacy_chain_exists) {
+        //                 var pharmacy_chain_data = arraypharmacyChain.filter(item => item.value === props.planForm.pharmacy_chain)
+        //                 setPharmacyChainData(pharmacy_chain_data);
+        //             }
+        //         });
+
+        //     //Membership Proc Flag
+        //     fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-membership-process-flag`)
+        //         .then((res) => res.json())
+        //         .then((memProcFlag) => {
+        //             const arrayformId = memProcFlag.data.map((item) => ({
+        //                 label: item.label,
+        //                 value: item.membership_processing_flag
+        //             }));
+        //             setMemProcFlag(arrayformId);
+        //             const form_id_exists = arrayformId.some(v => (v.value == props.planForm.membership_processing_flag));
+        //             if (form_id_exists) {
+        //                 var form_id_data = arrayformId.filter(item => item.value === props.planForm.membership_processing_flag)
+        //                 setMemProcFlagData(form_id_data);
+        //             }
+        //         });
+
+        //     //Transaction Type
+        //     fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-transaction-type`)
+        //         .then((res) => res.json())
+        //         .then((transactionType) => {
+        //             const arraytransactionType = transactionType.data.map((item) => ({
+        //                 label: item.trans_type_label,
+        //                 value: item.trans_type_value
+        //             }));
+        //             const transaction_type_exists = arraytransactionType.some(v => (v.value == props.planForm.transaction_type));
+        //             if (transaction_type_exists) {
+        //                 var data = arraytransactionType.filter(item => item.value === props.planForm.transaction_type)
+        //                 setTransactionTypeData(data);
+        //             }
+        //         });
+
+        //     //Transaction Association
+        //     fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-transaction-association`)
+        //         .then((res) => res.json())
+        //         .then((transactionAssociation) => {
+        //             const arrayTransactionAssociation = transactionAssociation.data.map((item) => ({
+        //                 label: item.trans_ass_label,
+        //                 value: item.trans_ass_value
+        //             }));
+        //             const transaction_association_exists = arrayTransactionAssociation.some(v => (v.value == props.planForm.use_default_ccg));
+        //             if (transaction_association_exists) {
+        //                 var data = arrayTransactionAssociation.filter(item => item.value === props.planForm.use_default_ccg)
+        //                 setTransactionAssociationData(data);
+        //             }
+        //         });
+
+        //     //Customer 
+        //     fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-customer`)
+        //         .then((res) => res.json())
+        //         .then((customer) => {
+        //             const arrayCustomer = customer.data.map((item) => ({
+        //                 label: item.customer_name,
+        //                 value: item.customer_id
+        //             }));
+        //             const customer_exists = arrayCustomer.some(v => (v.value == props.planForm.customer_id));
+        //             if (customer_exists) {
+        //                 var data = arrayCustomer.filter(item => item.value === props.planForm.customer_id)
+        //                 setCustomerData(data);
+        //             }
+        //         });
+
+        //     //Client ID
+        //     fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-client`)
+        //         .then((res) => res.json())
+        //         .then((clientId) => {
+        //             const userClientId = clientId.data.map((item) => ({
+        //                 label: item.client_name,
+        //                 value: item.client_id
+        //             }));
+        //             const client_id_exists = userClientId.some(v => (v.value == props.planForm.client_id));
+        //             if (client_id_exists) {
+        //                 var data = userClientId.filter(item => item.value === props.planForm.client_id)
+        //                 setClientData(data);
+        //             }
+        //         });
+
+        //     //Client Group 
+        //     fetch(process.env.REACT_APP_API_BASEURL + `/api/plan-design/plan-association/get-client-group`)
+        //         .then((res) => res.json())
+        //         .then((clientGroup) => {
+        //             const arrayClientGroup = clientGroup.data.map((item) => ({
+        //                 label: item.group_name,
+        //                 value: item.client_group_id
+        //             }));
+        //             const client_group_exists = arrayClientGroup.some(v => (v.value == props.planForm.client_group_id));
+        //             if (client_group_exists) {
+        //                 var data = arrayClientGroup.filter(item => item.value === props.planForm.client_group_id)
+        //                 setClientGroupData(data);
+        //             }
+        //         });
+        // }
+
         if (!props.adding) {
             reset({
                 bin_number: '', process_control_number: '', group_number: '', pharmacy_chain: '', plan_id: '', form_id: '',
                 membership_processing_flag: '', pin_number_suffix: '', transaction_type: '', customer_id: '', client_id: '',
-                use_default_ccg: '', client_group_id: '', add_new: 1, plan_id: ''
+                client_group_id: '', new: 1
             },
                 { keepValues: false });
 
+        } else {
+
         }
         reset(props.planForm)
-    }, [props.planForm]);
+    }, [props.planForm,
+    ]);
+
+    // useEffect(() => {
+    //     props.loadClientOptionsfetch();
+    //     props.loadPharmacyChailOptions();
+    //     props.loadMemProcFlagOptions();
+    //     props.loadTransactionTypeOptions();
+    //     props.loadTransactionAssociationOptions();
+    //     props.loadCustomerOptions();
+    //     props.loadClientGroupOptions();
+    // }, []);
 
     return (
         <>
             <form onSubmit={handleSubmit(submitPlanAssociation)}>
-                {/* <form onSubmit={submitHandler}> */}
+            {/* <form onSubmit={submitHandler}> */}
                 <div className="card mt-3 mb-3">
                     <div className="card-body">
                         <div className="row">
@@ -610,13 +786,8 @@ function PlanAssociationForm(props) {
                                     <div className="col-md-3 mb-2">
                                         <div className="form-group">
                                             <small>Plan ID</small>
-                                            <AsyncSelectNew
-                                                placeholder="Select Plan ID"
-                                                options={props.planId}
-                                                name="plan_id"
-                                                value={props.planData}
-                                                onChange={(e) => props.setPlanData(e)}
-                                            />
+                                            <input type="text" className="form-control" {...register("plan_id")} />
+                                            <a href=""><span className="fa fa-search form-icon"></span></a>
                                         </div>
                                     </div>
                                     <div className="col-md-3 mb-2">
@@ -654,7 +825,7 @@ function PlanAssociationForm(props) {
                                     </div>
                                     <div className="col-md-3 mb-2">
                                         <div className="form-group">
-                                            <small className="required">Transaction Type </small>
+                                            <small className="required">Transaction Type</small>
                                             <AsyncSelectNew
                                                 placeholder="Select Transaction Type"
                                                 options={props.transactionType}
@@ -666,16 +837,16 @@ function PlanAssociationForm(props) {
                                     </div>
                                     <div className="col-md-3 mb-2">
                                         <div className="form-group">
-                                            <small className="required">Transaction Association </small>
+                                            <small className="required">Transaction Association</small>
                                             <AsyncSelectNew
                                                 placeholder="Select Transaction Association"
                                                 options={props.transactionAssociation}
-                                                name="use_default_ccg"
-                                                // name="transaction_association"
+                                                //name="use_default_ccg"
+                                                name="transaction_association"
                                                 value={props.transactionAssociationData}
                                                 onChange={(e) => props.setTransactionAssociationData(e)}
                                             />
-                                            {errors.transaction_association && <span><p className='notvalid'>This field is required!</p></span>}
+                                            {errors.use_default_ccg && <span><p className='notvalid'>This field is required!</p></span>}
                                         </div>
                                     </div>
 
@@ -707,6 +878,26 @@ function PlanAssociationForm(props) {
                                     <div className="col-md-3 mb-2">
                                         <div className="form-group">
                                             <small>Group</small>
+                                            {/* <Controller name="client_group_id"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <AsyncSelect
+                                                        {...field}
+                                                        cacheOptions
+                                                        defaultOptions
+                                                        // value={selectedClientGroup}
+                                                        //value={{ client_group_label: props.planForm.client_group_id, client_group_value: props.planForm.client_group_id }}
+                                                        value={{ client_group_label: props.selectedClientGroupLabel, client_group_value: selectedClientGroupValue }}
+                                                        getOptionLabel={e => e.client_group_label}
+                                                        getOptionValue={e => e.client_group_value}
+                                                        loadOptions={loadClientGroupOptions}
+                                                        onInputChange={handleClientGroupInput}
+                                                        onChange={handleClientGroupChange}
+                                                        search={true}
+                                                        placeholder="Select Client Group"
+                                                    />
+                                                )} /> */}
+
                                             <AsyncSelectNew
                                                 placeholder="Select Client Group"
                                                 options={props.clientGroup}

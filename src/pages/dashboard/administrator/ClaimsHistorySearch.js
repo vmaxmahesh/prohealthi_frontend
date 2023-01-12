@@ -10,7 +10,6 @@ function ClaimsHistorySearch() {
     const location = useLocation();
     const currentpath = location.pathname.split('/').pop();
     return (
-
         <>
             <div className="row">
                 <div className="col-md-6 mb-3">
