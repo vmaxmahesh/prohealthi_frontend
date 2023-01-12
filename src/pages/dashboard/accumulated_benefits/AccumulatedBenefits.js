@@ -191,7 +191,7 @@ export default function AccumulatedBenefits() {
 
             <AccumulatedBenefitList ndcListData={ndcData} ndcClassData={ndcClass} getNDCItem={getNDCItems} getNDCItemDetails={getNDCItemDetails} selctedNdc={selctedNdc} />
 
-            <AccumelatedForm formData={accumlatedData}  selected={accumlatedData}  adding={adding} />
+            <AccumelatedForm formData={accumlatedData} selected={accumlatedData} adding={adding} />
 
             {/* <div className="data">
                 <div className="nav nav-tabs" id="nav-tab" role="tablist">
@@ -397,7 +397,7 @@ function AccumelatedForm(props) {
                                             </div>
                                         </div>
 
-                                        
+
 
 
                                         <div class="col-md-12">
@@ -571,29 +571,7 @@ function AccumelatedForm(props) {
                                                     </div>
 
 
-                                                    <div class="col-md-3">
-                                                        <div class="form-group mb-2 mt-4">
-                                                            <p>Exclude Maintenance Drugs:</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-3">
-                                                        <div class="form-group mt-3">
-                                                            <input type="checkbox" id="Return16" name="exclude_maint_drug_ded" {...register('exclude_maint_drug_ded')} class="d-none" />
-                                                            <label for="Return16"></label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-3">
-                                                        <div class="form-group mt-3">
-                                                            <input type="checkbox" name="exclude_maint_drug_mop" {...register('exclude_maint_drug_mop')} id="Return17" class="d-none" />
-                                                            <label for="Return17"></label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-3">
-                                                        <div class="form-group mt-3">
-                                                            <input type="checkbox" id="Return18" name="exclude_maintenance_drugs" {...register('exclude_maintenance_drugs')} class="d-none" />
-                                                            <label for="Return18"></label>
-                                                        </div>
-                                                    </div>
+                                                   
 
                                                     <div class="col-md-3">
                                                         <div class="form-group mb-2 mt-4">
@@ -652,12 +630,12 @@ function AccumelatedForm(props) {
                                                     </div>
                                                     <div class="col-md-3">
                                                         <div class="form-group mb-2">
-                                                            <input type="text" class="form-control" name="gpi_exclusion_list_ded" {...register('gpi_exclusion_list_ded')} id="" placeholder="" />
+                                                            <input type="text" class="form-control" name="gpi_exclusion_list_ded" {...register('gpi_exclusion_list_ded')} id="ty " placeholder="" />
                                                         </div>
                                                     </div>
                                                     <div class="col-md-3">
                                                         <div class="form-group mb-2">
-                                                            <input type="text" class="form-control" name="gpi_exclusion_list_mop" {...register('gpi_exclusion_list_mop')} id="" placeholder="" />
+                                                            <input type="text" class="form-control" name="gpi_exclusion_list_mop" {...register('gpi_exclusion_list_mop')} id="546" placeholder="" />
                                                         </div>
                                                     </div>
                                                     <div class="col-md-3">

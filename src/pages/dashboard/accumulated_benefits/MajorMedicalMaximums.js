@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Button } from 'react-bootstrap';
 import { render } from 'react-dom';
 import { useForm } from 'react-hook-form';
 import { Link, Outlet, useLocation, useOutletContext } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 export default function MajorMedicalMaximums()
 {
@@ -18,11 +20,28 @@ export default function MajorMedicalMaximums()
     const[formData,setformData]=useState([]);
 
 
+    const [accumlatedData, setAccumlatedData] = useState(false);
+
+    const [adding, setAdding] = useState(false);
+    
+
+
     const [selctedNdc, setSelctedNdc] = useState('');
 
     const[selectedgroupNdc,setGroupNdc]=useState('');
 
     
+    useEffect(() => {
+        if (accumlatedData) {
+            setAdding(false);
+
+        } else {
+            setAdding(true);
+        }
+
+        document.title = 'Benefit Code | ProHealthi';
+
+    }, [accumlatedData, adding]);
 
 
     const searchException = (fdata) => {
@@ -169,7 +188,7 @@ export default function MajorMedicalMaximums()
                 } else {
                     // setSelctedNdc(data.data);
 
-                    setformData(data.data);
+                    setAccumlatedData(data.data);
                     // scollToRef.current.scrollIntoView()
                     // return;
                 }
@@ -214,7 +233,7 @@ export default function MajorMedicalMaximums()
 
             <MajorMedicalMaximumsList ndcListData={ndcData} ndcClassData={ndcClass} ndcGroupData={ndcGroup} getNDCItem={getNDCItems}   getOneItemDetails={getOneItemDetails }    getNDCItemDetails={getNDCItemDetails} selctedNdc={selctedNdc} />
 
-            <MajorMedicalMaximumForms  viewDiagnosisFormdata={formData} />
+            <MajorMedicalMaximumForms  selected={accumlatedData}   formData={accumlatedData} adding={adding}  />
 
         </>
     )
@@ -483,20 +502,114 @@ function MajorMedicalMaximumForms(props)
 
     const { register,reset, handleSubmit, watch, formState: { errors } } = useForm();
 
-    // const [selctedNdc, setSelctedNdc] = useOutletContext();
-    console.log(props.viewDiagnosisFormdata);
+   
+    const addCode = (data) => {
+        // console.log(data);
+        const requestOptions = {
+            method: 'POST',
+            // mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
 
-    useEffect(() => { reset(props.viewDiagnosisFormdata) }, [props.viewDiagnosisFormdata]);
+        };
+        // console.log(watch(data)); 
+        if (process.env.REACT_APP_API_BASEURL == 'NOT') {
+            toast.success('Added Successfully...!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+
+            });
+        } else {
+            fetch(process.env.REACT_APP_API_BASEURL + `/api/validationlist/major/medical/add`, requestOptions)
+                .then(async response => {
+                    const isJson = response.headers.get('content-type')?.includes('application/json');
+                    const data = isJson && await response.json();
+                    // console.log(response);
+
+                    // check for error response
+                    if (!response.ok) {
+                        // get error message from body or default to response status
+                        const error = (data && data.message) || response.status;
+                        return Promise.reject(error);
+                    } else {
+                        reset(data.data);
+                        console.log(data.data);
+                        var msg = props.adding ? 'Added Successfully...!' : 'Updated Successfully..'
+                        toast.success(msg, {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+
+                        });
+                    }
+
+
+                    if (response === '200') {
+                    }
+
+                })
+                .catch(error => {
+                    console.error('There was an error!', error);
+                });
+        }
+
+    }
+    const onSubmit = (e) => {
+        e.preventDefault();
+    }
+
+
+    useEffect(() => { reset(props.formData) }, [props.formData]);
+
+
+    useEffect(() => {
+
+
+        if (props.adding) {
+            reset({ rx_network_rule_id: '', rx_network_rule_name: '', new: 1 }, {
+                keepValues: false,
+            })
+        } else {
+            reset(props.selected);
+        }
+
+        if (!props.selected) {
+            reset({ rx_network_rule_id: '', rx_network_rule_name: '', description: '', pharm_type_variation_ind: '', network_part_variation_ind: '', claim_type_variation_ind: '', plan_accum_deduct_id: '', new: 1 }, {
+                keepValues: false,
+            })
+        }
+
+
+    }, [props.selected, props.adding]);
+
+  
     return(
         <>
-         <div className="card mt-3 mb-3">
+
+
+<form onSubmit={handleSubmit(addCode)} >
+
+        <div className="card mt-3 mb-3">
                     <div className="card-body">
                                     <div className="row comparis-ionn mt-3">
                                         <div className=""><span>Major Medical Maximums:</span></div>
                                         <div className="col-md-4">
                                             <div className="form-group mb-2">
                                                 <small>Customer ID</small>
-                                                  <input className="form-control" type="text" name="customer_id" {...register('customer_id')} id="" />
+                                                  <input className="form-control" type="text" name="customer_id" {...register('customer_id',{
+                                                    // required:true,
+                                                  })} id="" />
+                                                  {errors.customer_id && <span><p className='notvalid'>This field is required</p></span>}
+
                                                 </div>
                                           </div>
                                          <div className="col-md-4">
@@ -530,35 +643,47 @@ function MajorMedicalMaximumForms(props)
                                          <div className="col-md-4">
                                             <div className="form-group mb-2">
                                                 <small>Major Medical Claim Max</small>
-                                                  <input className="form-control" type="date" name="max_days_interim_elig" {...register('max_days_interim_elig')} id="" />
+                                                  <input className="form-control" type="text" name="mm_claim_max" {...register('mm_claim_max')}    id="" />
                                                 </div>
                                           </div>
                                            <div className="col-md-4">
                                             <div className="form-group mb-2">
                                                 <small>Major Medical Claim Max Grouping</small>
-                                                  <select className="form-select">
-                                                      <option>1</option>
+                                                  <select className="form-select" {...register('mm_claim_max_group_type')} name="mm_claim_max_group_type">
+                                                    <option value="">--select--</option>
+                                                    <option value="C">Customer</option>
+                                                      <option value="L">Customer/Client</option>
+                                                      <option value="G">Customer/Client Group</option>
+
                                                   </select>
                                                 </div>
                                           </div>
                                            <div className="col-md-4">
                                             <div className="form-group mb-2">
                                                 <small>Major Medical Lifetime Max</small>
-                                                  <input className="form-control" type="date" name="" id="" />
+                                                  <input className="form-control" type="text" {...register('mm_life_maximum')} name="mm_life_maximum" id="" />
                                                 </div>
                                           </div>
 
                                            <div className="col-md-4">
                                             <div className="form-group mb-2">
                                                 <small>Grouping Type:</small>
-                                                  <select className="form-select">
-                                                      <option>1</option>
+                                                  <select className="form-select" name="grouping_type" {...register('grouping_type')}>
+                                                    <option value="" >--select--</option>
+                                                      <option value="C">Customer</option>
+                                                      <option value="L">Customer/Client</option>
+                                                      <option value="G">Customer/Client Group</option>
+
                                                   </select>
                                                 </div>
                                           </div>
                                   </div>
                         </div>
                     </div>
+        <Button type='submit' variant="primary">{props.adding ? ' Add' : 'Update'}</Button>
+
+        </form>
+         
         </>
     )
 }
